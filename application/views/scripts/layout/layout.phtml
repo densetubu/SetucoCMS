@@ -1,0 +1,34 @@
+<?php
+$this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/xhtml; charset=UTF-8');
+$this->headTitle('SetucoCMS')->setSeparator(' / ');
+$this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+?>
+<?php echo $this->doctype(); ?>
+<html>
+    <head>
+        <?php echo $this->headMeta() ?>
+        <?php echo $this->headTitle() ?>
+        <?php echo $this->headScript() ?>
+        <?php echo $this->headLink() ?>
+        <?php echo $this->headStyle() ?>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header">
+                <?php echo $this->render('layout/header.phtml') ?>
+            </div>
+            <div id="container">
+                <div id="navi">
+                <?php echo $this->render('layout/navi.phtml') ?>
+                </div>
+                <div id="contents">
+                    <?php echo $this->layout()->content ?>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <?php echo $this->render('layout/footer.phtml') ?>
+        </div>
+    </body>
+</html>
