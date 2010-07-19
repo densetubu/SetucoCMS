@@ -1,34 +1,62 @@
 <?php
 $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
-$this->headMeta()->appendHttpEquiv('Content-Type', 'text/xhtml; charset=UTF-8');
-$this->headTitle('SetucoCMS')->setSeparator(' / ');
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8');
+$this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
+$this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
+$this->headTitle('SetucoCMS')->setSeparator(' / ');     // TODO SetucoCMS でいい？
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
 ?>
-<?php echo $this->doctype(); ?>
-<html>
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <?php echo $this->headMeta() ?>
+        <meta name="author" content="xxxxx" />        <?php // TODO author ?>        
+        <meta name="copyright" content="SetucoCMS" />   <?php // TODO SetucoCMS? ?>   
+        <meta http-equiv="imagetoolbar" content="no" />
         <?php echo $this->headTitle() ?>
         <?php echo $this->headScript() ?>
         <?php echo $this->headLink() ?>
         <?php echo $this->headStyle() ?>
     </head>
     <body>
-        <div id="wrapper">
+    
+        <!-- container START -->
+        <div id="container">
+        
+            <!-- header START -->
             <div id="header">
                 <?php echo $this->render('layout/header.phtml') ?>
             </div>
-            <div id="container">
-                <div id="navi">
-                <?php echo $this->render('layout/navi.phtml') ?>
+            <!-- header END -->
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+
+                    <!-- mainContentInner START -->
+                    <div id="mainContentInner">
+                        <?php echo $this->layout()->content ?>
+                    </div>
+                    <!-- mainContentInner END -->
+                    
                 </div>
-                <div id="contents">
-                    <?php echo $this->layout()->content ?>
+                <!-- mainContent END -->
+        
+                <!-- sidebar START -->
+                <div id="sidebar">
+                    <?php echo $this->render('layout/navi.phtml') ?>
                 </div>
+                <!-- sidebar END -->
+
             </div>
-        </div>
-        <div id="footer">
+            <!-- content END -->
+
             <?php echo $this->render('layout/footer.phtml') ?>
+
         </div>
+        <!-- container END -->
+        
     </body>
 </html>
