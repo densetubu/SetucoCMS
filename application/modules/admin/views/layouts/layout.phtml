@@ -25,7 +25,7 @@ $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
         
             <!-- header START -->
             <div id="header">
-                <?php echo $this->render('layout/header.phtml') ?>
+                <?php echo $this->render('header.phtml') ?>
             </div>
             <!-- header END -->
 
@@ -46,14 +46,14 @@ $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
         
                 <!-- sidebar START -->
                 <div id="sidebar">
-                    <?php echo $this->render('layout/navi.phtml') ?>
+                    <?php echo $this->render('navi.phtml') ?>
                 </div>
                 <!-- sidebar END -->
 
             </div>
             <!-- content END -->
 
-            <?php echo $this->render('layout/footer.phtml') ?>
+            <?php echo $this->render('footer.phtml') ?>
 
         </div>
         <!-- container END -->
