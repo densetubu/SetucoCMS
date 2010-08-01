@@ -1,1 +1,51 @@
-login/index.phtml
+<?php
+$this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8');
+$this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
+$this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
+$this->headTitle('SetucoCMS')->setSeparator(' / ');     // TODO SetucoCMS でいい？
+$this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+?>
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <?php echo $this->headMeta() ?>
+        <meta name="author" content="xxxxx" />        <?php // TODO author ?>        
+        <meta name="copyright" content="SetucoCMS" />   <?php // TODO SetucoCMS? ?>   
+        <meta http-equiv="imagetoolbar" content="no" />
+        <?php echo $this->headTitle() ?>
+        <?php echo $this->headScript() ?>
+        <?php echo $this->headLink() ?>
+        <?php echo $this->headStyle() ?>
+    </head>
+    <body id="loginBoad">
+    
+    <!-- container START -->
+    <div id="container">
+    
+        <h1><img src="<?php echo $this->baseUrl('') ?>images/loginLogo.gif" width="268" height="67" alt="せつこCMS" /></h1>    <?php // TODO せつこCMS？ ?>
+        
+        <p id="catch"><img src="<?php echo $this->baseUrl('') ?>images/catch.gif" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" /></p>
+    
+        
+        <form action="login_check.php" method="post">
+        
+            <dl class="straight">
+                <dt><label for="user_name">アカウント名</label></dt>
+                    <dd><input type="text" id="user_name" name="user_name" value="" /></dd>
+                <dt><label for="user_pass">パスワード</label></dt>
+    
+                    <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
+            </dl>
+            
+            <p><input type="submit" id="sub" name="sub" value="ログイン" /></p>
+        
+        </form>
+        
+        <p id='copyright'>Copyright &copy; 2010 <a href='#'>SetucoCMS</a>.AllRights reserved.</p>   <?php // TODO <a href='#'>SetucoCMS</a>を直す ?>
+    
+    </div>
+    <!-- container END -->
+    
+    </body>
+</html>
