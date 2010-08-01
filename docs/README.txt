@@ -16,9 +16,6 @@ The following is a sample VHOST you might want to consider for your project.
 <VirtualHost *:80>
    DocumentRoot "/path/to/SetucoCMS/public"
    ServerName localhost
-
-   # This should be omitted in the production environment
-   SetEnv APPLICATION_ENV development
     
    <Directory "/path/to/SetucoCMS/public">
        Options Indexes MultiViews FollowSymLinks

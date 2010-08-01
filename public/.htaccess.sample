@@ -6,5 +6,5 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule ^.*$ index.php [NC,L]
 
-RewriteBase /setucocms
+#RewriteBase /setucocms
 SetEnv APPLICATION_ENV development
