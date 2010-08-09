@@ -25,9 +25,12 @@ class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
             return;
         }
         
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
-            $this->getResponse()->setRedirect('/admin/login');
+        if (Zend_Auth::getInstance()->hasIdentity()) {
             return;
         }
+
+        $redirector = Zend_Controller_Action_HelperBroker::
+                getStaticHelper('redirector');
+        $redirector->goToSimple('index', 'login', 'admin');
     }
 }
