@@ -14,6 +14,16 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path(),
 )));
 
+/**
+ * デバッグ用関数
+ * 
+ * @param mixed $var デバッグしたい変数
+ * @param string $label デバッグ表示の際のラベル
+ */
+function d($var, $label = null) {
+    Zend_Debug::dump($var, $label);
+}
+
 /** Zend_Application */
 require_once 'Zend/Application.php';
 

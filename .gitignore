@@ -1,1 +1,4 @@
 public/.htaccess
+.buildpath
+.project
+.settings

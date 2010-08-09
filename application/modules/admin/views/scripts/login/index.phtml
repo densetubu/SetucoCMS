@@ -17,30 +17,40 @@ $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
         <?php echo $this->headScript() ?>
         <?php echo $this->headLink() ?>
         <?php echo $this->headStyle() ?>
+        <style>
+        .errors {
+            color: red;
+        }
+        body#loginBoad #container > ul.errors {
+            text-align: center;
+            margin: -10px 0 10px;
+        }
+        body#loginBoad dd {
+            margin-bottom: 15px;
+        }
+        body#loginBoad dd input {
+            margin-bottom: 0px;
+        }
+        body#loginBoad input#submit {
+            float: right;
+            width: 80px;
+            margin-bottom: 30px;            
+        }
+        </style>
     </head>
     <body id="loginBoad">
     
     <!-- container START -->
     <div id="container">
     
-        <h1><img src="<?php echo $this->baseUrl('') ?>images/loginLogo.gif" width="268" height="67" alt="せつこCMS" /></h1>    <?php // TODO せつこCMS？ ?>
+        <h1><img src="<?php echo $this->baseUrl('images/loginLogo.gif') ?>" width="268" height="67" alt="せつこCMS" /></h1>    <?php // TODO せつこCMS？ ?>
         
-        <p id="catch"><img src="<?php echo $this->baseUrl('') ?>images/catch.gif" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" /></p>
+        <p id="catch"><img src="<?php echo $this->baseUrl('images/catch.gif') ?>" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" /></p>
     
-        
-        <form action="login_check.php" method="post">
-        
-            <dl class="straight">
-                <dt><label for="user_name">アカウント名</label></dt>
-                    <dd><input type="text" id="user_name" name="user_name" value="" /></dd>
-                <dt><label for="user_pass">パスワード</label></dt>
-    
-                    <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
-            </dl>
-            
-            <p><input type="submit" id="sub" name="sub" value="ログイン" /></p>
-        
-        </form>
+        <?php if ($this->errors) : ?>
+        <?php echo $this->htmlList($this->errors, false, array('class' => 'errors')) ?>
+        <?php endif; ?>
+        <?php echo $this->form ?>
         
         <p id='copyright'>Copyright &copy; 2010 <a href='#'>SetucoCMS</a>.AllRights reserved.</p>   <?php // TODO <a href='#'>SetucoCMS</a>を直す ?>
     
