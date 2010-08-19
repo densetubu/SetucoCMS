@@ -1,0 +1,78 @@
+<!-- topicPath START --> 
+<div id="topicPath"> 
+    <p><a href="/admin/index">トップ</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p> 
+    <p>タグの追加・編集・削除</p> 
+</div> 
+<!-- topicpath END --> 
+
+<!-- section START --> 
+<div class="section"> 
+
+    <div id="topichAreaL"> 
+
+        <div id="topichAreaR"> 
+
+            <div id="topichArea"> 
+
+            <h3><img src="/images/h_tagAll.jpg" width="168" height="18" alt="タグの追加・編集・削除" /></h3> 
+
+       </div> 
+
+    </div> 
+
+    </div> 
+
+    <form action="tag_edit.php" method="post"> 
+
+        <p style="margin-bottom:10px;"><input type="text" id="tag_name" name="tag_name" value="新規タグ" /><input type="submit" id="sub" name="sub" value="追加" /></p> 
+
+        <table summary="タグ一覧の表です。タグの追加・編集・削除ができます。" cellpadding="0" cellspacing="0"> 
+
+           <thead> 
+               <tr> 
+                   <th scope="col" width="80%" id="tableFirst">タグ名<a href="#">▼</a><a href="#">▲</a></th> 
+                   <th scope="col" width="10%">編集</th> 
+                   <th scope="col" width="10%">削除</th> 
+               </tr> 
+           </thead> 
+
+           <tbody> 
+               <tr> 
+                   <td>タグ1</td>
+                   <td><a href='index.php?edit=1'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
+                   <input type='hidden' id='tag_id' name='tag_id' value='1' />
+                   <input type='hidden' id='tag_no' name='tag_no' value='' />
+                   <td><a href='#' onclick='flg(1);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
+               </tr> 
+               <tr class='checkG'> 
+                   <td>タグ2</td>
+                   <td><a href='index.php?edit=2'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
+                   <input type='hidden' id='tag_id' name='tag_id' value='2' /><input type='hidden' id='tag_no' name='tag_no' value='' />
+                   <td><a href='#' onclick='flg(2);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
+               </tr> 
+               <tr> 
+                   <td>新規タグ</td>
+                   <td><a href='index.php?edit=4'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
+                   <input type='hidden' id='tag_id' name='tag_id' value='4' />
+                   <input type='hidden' id='tag_no' name='tag_no' value='' />
+                   <td><a href='#' onclick='flg(4);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
+               </tr> 
+           </tbody> 
+        </table> 
+
+    </form> 
+
+    <div id="pageNav"> 
+        <ul> 
+            <li><a href="#">前へ</a></li> 
+            <li class="navNumber"><a href="#">1</a></li> 
+            <li class="navNumber current"><a href="#">2</a></li> 
+            <li class="navNumber"><a href="#">3</a></li> 
+            <li class="navNumber"><a href="#">4</a></li> 
+            <li class="navNumber"><a href="#">5</a></li> 
+            <li><a href="#">次へ</a></li> 
+        </ul> 
+    </div> 
+
+</div> 
+<!-- section END --> 

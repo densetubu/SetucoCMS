@@ -1,0 +1,758 @@
+@charset "utf-8";
+
+/*--------------------------------------------------------------/
+/ Theme Name: SetucoCMS                                            /
+/ Author: 三上絵利菜                                            /
+---------------------------------------------------------------*/
+
+/*------------------------------------------------------------*/
+/*    reset style                                                     */
+/*------------------------------------------------------------*/
+* {
+    margin: 0;
+    padding: 0;
+}
+img {
+    border: 0;
+    vertical-align: bottom;
+}
+ul li {
+    list-style: none;
+}
+
+/*------------------------------------------------------------*/
+/*    base style                                                   */
+/*------------------------------------------------------------*/
+html {
+    overflow-y: scroll;
+}
+body {
+    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    font-size: 80%;
+    color: #535c5c;
+    text-align: center;
+    line-height: 1.5;
+}
+em {
+    font-style: normal;
+    font-weight: bold;
+}
+form {
+    zoom: 1;
+}
+input {
+    padding: 2px;
+}
+
+/*------------------------------------------------------------*/
+/*    link style                                                  */
+/*------------------------------------------------------------*/
+a:link, a:visited {
+    color: #535c5c;
+}
+a:hover, a:active {
+    color: #ffa200;
+}
+a:hover img {
+    filter: Alpha(opacity=80%);
+    opacity: 0.8;
+}
+
+/*------------------------------------------------------------*/
+/*    clearfix style                                              */
+/*------------------------------------------------------------*/
+div#container div#header:after ,
+div#container div#content:after ,
+div.section div#topichArea:after ,
+div#mainContent div.section:after ,
+dl.straight:after ,
+dl.check:after ,
+dl#designs:after ,
+div#mainContent div.hArea:after ,
+div#mainContent dl.contentsListK:after ,
+div#mainContent dl.contentsListG:after ,
+div#topicPath:after ,
+div#messageArea:after ,
+dl.editArea:after ,
+div#mainContent ul:after ,
+div#pageNav ul:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
+}
+
+/*------------------------------------------------------------*/
+/*    container style                                              */
+/*------------------------------------------------------------*/
+div#container {
+    text-align: left;
+    margin: 0 auto;
+    width: 90%;
+    min-width: 750px;
+}
+
+/*------------------------------------------------------------*/
+/*    header style                                              */
+/*------------------------------------------------------------*/
+div#container div#header {
+    position: relative;
+    margin-bottom: 15px;
+    zoom: 100%;
+}
+div#header div {
+    float: left;
+    width: auto;
+}
+div#header h1 {
+    line-height: 0;
+    margin-bottom: 20px;
+}
+div#header h1 a {
+    display: block;
+    width: 152px;
+    height: 29px;
+}
+div#header h1 a img {
+    vertical-align: top;
+}
+div#header h2 {
+    float: left;
+    font-size: 190%;
+    font-weight: normal;
+    margin-right: 10px;
+	padding-left: 5px;
+}
+div#header h2 a span {
+	border-bottom: solid 1px #535c5c;
+}
+div#header h2 a:hover span {
+	border-bottom: solid 1px #ffa200;
+}
+div#header h2 a ,
+div#header h2 a:hover {
+	text-decoration: none;
+}
+div#header h2 a img {
+	vertical-align: top;
+	padding: 5px 0 0 10px;
+}
+div#header p {
+    float: left;
+    margin-top: 5px;
+}
+div#header ul {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+    width: auto;
+}
+div#header ul li {
+    margin-bottom: 29px;
+    float: right;
+}
+div#header ul li#utilAccount ,
+div#header ul li#utilLogout {
+    padding-right: 15px;
+}
+div#header ul li#utilManual a {
+    background-image: url(../images/bg_manual.gif);
+}
+div#header ul li#utilAccount a {
+    background-image: url(../images/bg_nowLogin.gif);
+}
+div#header ul li#utilManual a ,
+div#header ul li#utilAccount a {
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 12px;
+}
+div#header li#utilLogout input ,
+div#header li#utilLogout input.logoutNormal {
+    background: none;
+    background-image: url(../images/bg_logout.gif);
+    background-repeat: no-repeat;
+    background-position: left center;
+    border: none;
+    display: block;
+    width: 75px;
+	text-indent: -999px;
+}
+div#header li#utilLogout input.logoutOver {
+    background-image: url(../images/bg_logout_over.gif);
+    cursor: pointer;
+}
+
+/*------------------------------------------------------------*/
+/*    content style                                              */
+/*------------------------------------------------------------*/
+div#container div#content {
+    background-color: #f1f1f1;
+    padding: 10px;
+    zoom: 100%;
+}
+
+/*------------------------------------------------------------*/
+/*    mainContent style                                          */
+/*------------------------------------------------------------*/
+div #content div#mainContent {
+    width: 100%;
+    float: right;
+}
+div#mainContent div#mainContentInner {
+    background: url(../images/bg_borderLine.gif) repeat-y left;
+    margin-left: 160px;
+    padding-left: 12px;
+}
+
+/*------------------------------------------------------------*/
+/*    gNav style                                                  */
+/*------------------------------------------------------------*/
+div #content ul#gNav {
+    background: url(../images/bg_borderLine.gif) repeat-y right;
+    float: left;
+    padding-right: 12px;
+    width: 150px;
+    margin-right: -162px;
+}
+ul#gNav li {
+    margin-bottom: 15px;
+}
+ul#gNav li dl {
+    background-color: #fff;
+}
+ul#gNav li dl dd {
+    border-bottom: dashed 1px #d7d7d7;
+    padding-left: 8px;
+}
+ul#gNav li dl dd a {
+    background: url(../images/bg_menuLink.gif) no-repeat left center;
+    padding: 8px 8px 8px 16px;
+    display: block;
+    width: auto;
+    height: auto;
+}
+ul#gNav li dl dd a:hover {
+    background: url(../images/bg_menuLink_over.gif) no-repeat left center;
+}
+ul#gNav li dl dd#active a ,
+ul#gNav li dl dd#active a:hover {
+    background: url(../images/bg_menuLink_act.gif) no-repeat left center;
+}
+
+/*------------------------------------------------------------*/
+/*    topicPath style                                              */
+/*------------------------------------------------------------*/
+div#topicPath {
+    background-color: #fff;
+    border: solid 1px #cfcfcf;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    zoom: 100%;
+}
+div#topicPath p {
+    float: left;
+    font-size: 90%;
+    margin-right: 10px;
+}
+div#topicPath p img {
+    padding-left: 10px;
+    padding-bottom: 2px;
+}
+
+/*------------------------------------------------------------*/
+/*    section style                                              */
+/*------------------------------------------------------------*/
+div#mainContent div.section {
+    background-color: #fff;
+    border: solid 1px #cfcfcf;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+    zoom: 100%;
+}
+
+/*------------------------------------------------------------*/
+/*    topicSection style                                          */
+/*------------------------------------------------------------*/
+div#mainContent div#topicSection {
+    background-color: #fff;
+    border: solid 1px #cfcfcf;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+div#topicSection div#topichAreaL {
+    background: url(../images/bg_topic_l.jpg) no-repeat left top;
+    margin-bottom: 5px;
+    padding-left: 5px;
+    height: 38px;
+}
+div#topicSection div#topichAreaR {
+    background: url(../images/bg_topic_r.jpg) no-repeat right top;
+    padding-right: 5px;
+    height: 38px;
+}
+div#topicSection div#topichArea {
+    background: url(../images/bg_topic.jpg) repeat-x top;
+    padding: 10px 5px;
+    height: 38px;
+    zoom: 100%;
+}
+div#topicSection div#topichArea h3 {
+    float: left;
+}
+div#topicSection div#topichArea p {
+    float: right;
+    margin-top: 2px;
+}
+div#topicSection div#topichArea p a {
+    background: url(../images/bg_topicLink.gif) no-repeat left center;
+    padding-left: 18px;
+}
+
+/* -- 横並びdl -- */
+dl.check {
+    zoom: 100%
+}
+dl.check dt {
+    float:left;
+    clear: left;
+}
+dl.check dd {
+    margin-left: 8em;
+}
+div#topicSection dl.check {
+    background-color: #f4f4f4;
+    zoom: 100%;
+}
+div#topicSection dl.straight dt ,
+div#topicSection dl.straight dd ,
+div#topicSection dl.check dt ,
+div#topicSection dl.check dd {
+    padding: 5px 10px;
+}
+
+
+/*------------------------------------------------------------*/
+/*    hArea style                                                  */
+/*------------------------------------------------------------*/
+div#mainContent div.hArea {
+    zoom: 100%;
+    border-bottom: solid 1px #5dc0e9;
+    margin: 0 10px 15px;
+    padding: 5px 5px 5px;
+}
+div#mainContent div.hArea h3 {
+    float: left;
+    background: url(../images/bg_hArea.gif) no-repeat left center;
+    font-size: 120%;
+    font-weight: normal;
+    padding-left: 20px;
+}
+div#mainContent div.hArea h3#recentry {
+    background: none;
+    padding-left: 0;
+}
+div.hArea p {
+    float: right;
+    margin-top: 2px;
+}
+div.hArea p a {
+    background: url(../images/bg_hLink.gif) no-repeat left center;
+    padding-left: 18px;
+}
+
+/*------------------------------------------------------------*/
+/*    section topichArea style                                  */
+/*------------------------------------------------------------*/
+div.section div#topichAreaL {
+    background: url(../images/bg_topicB_l.jpg) no-repeat left top;
+    margin-bottom: 20px;
+    padding-left: 5px;
+    height: 38px;
+}
+div.section div#topichAreaR {
+    background: url(../images/bg_topicB_r.jpg) no-repeat right top;
+    padding-right: 5px;
+    height: 38px;
+}
+div.section div#topichArea {
+    background: url(../images/bg_topicB.jpg) repeat-x top;
+    padding: 9px 10px;
+    height: 38px;
+    zoom: 100%;
+}
+div.section div#topichArea h3 {
+    float: left;
+    font-size: 110%;
+    font-weight: normal;
+}
+
+/*------------------------------------------------------------*/
+/*    contentsList style                                          */
+/*------------------------------------------------------------*/
+div#mainContent dl.contentsListK ,
+div#mainContent dl.contentsListG {
+    padding: 10px 15px;
+    zoom: 100%;
+}
+div#mainContent dl.contentsListK {
+    background-color: #f4f4f4;
+}
+div#mainContent dl.contentsListK dt ,
+div#mainContent dl.contentsListK dd ,
+div#mainContent dl.contentsListG dt ,
+div#mainContent dl.contentsListG dd {
+    float: left;
+}
+div#mainContent dl.contentsListK dt ,
+div#mainContent dl.contentsListG dt {
+    margin-right: 5px;
+}
+div#mainContent dl.contentsListK dd ,
+div#mainContent dl.contentsListG dd {
+    margin-right: 20px;
+}
+div#mainContent dl.contentsListK dt.pageDate ,
+div#mainContent dl.contentsListG dt.pageDate {
+    float: none;
+    margin-bottom: 10px;
+}
+div#mainContent dl.contentsListK dd.pageTitle ,
+div#mainContent dl.contentsListG dd.pageTitle {
+    float: none;
+    background: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+/*------------------------------------------------------------*/
+/*    pageNav style                                           */
+/*------------------------------------------------------------*/
+div#pageNav {
+	text-align: center;
+}
+div#pageNav ul {
+	margin: 0 auto;
+}
+div#pageNav ul li {
+	display:inline;
+	margin-right: 4px;
+	margin-left: 4px;
+}
+div#pageNav ul li.navNumber a {
+    background-color: #eaeaea;
+	padding: 4px 7px;
+	text-decoration: none;
+	border:solid 1px #dedede;
+}
+div#pageNav ul li.navNumber a:hover {
+    background-color: #f4f4f4;
+	border:solid 1px #dedede;
+}
+div#pageNav ul li.current a {
+    background-color: #dedede;
+	border:solid 1px #d0d0d0;
+	font-weight: bold;
+}
+
+
+/*------------------------------------------------------------*/
+/*    designs style                                           */
+/*------------------------------------------------------------*/
+dl#designs {
+    margin-left: 5px;
+    zoom: 100%
+}
+dl#designs dt ,
+dl#designs dd {
+    float:left;
+    font-size: 120%;
+}
+dl#designs dt {
+    margin-right: 7px;
+}
+dl#designs dd {
+    width: 70%;
+}
+dl#designs dd em {
+    margin-right: 5px;
+}
+dl#designs dd em input {
+    width: 70%;
+}
+
+/*------------------------------------------------------------*/
+/*    dl style                                                  */
+/*------------------------------------------------------------*/
+div#mainContent dl dd {
+    background: url(../images/bg_dlLine.gif) no-repeat left center;
+    padding-left: 10px;
+    zoom: 1;
+}
+div#mainContent dl dd.noLine {
+    background: none;
+    padding-left: 0;
+}
+
+/* -- 横並びdl -- */
+dl.straight {
+    zoom: 100%
+}
+dl.straight dt {
+    float:left;
+    clear: left;
+}
+dl.straight dd {
+    margin-left: 8em;
+}
+
+/*------------------------------------------------------------*/
+/*    copyright style                                              */
+/*------------------------------------------------------------*/
+p#copyright {
+    text-align: right;
+    margin: 10px 0;
+}
+
+/*------------------------------------------------------------*/
+/*    table style                                                  */
+/*------------------------------------------------------------*/
+table {
+    width: 100%;
+    margin-bottom: 20px;
+}
+thead tr {
+    height: 30px;
+}
+tr.checkG {
+    background-color: #f4f4f4;
+}
+th {
+    background-color: #ebebeb;
+    border: solid 1px #c2c2c2;
+    border-left: none;
+    font-weight: normal;
+    padding: 5px 5px 5px 15px;
+}
+th#tableFirst {
+    border-left: solid 1px #c2c2c2;
+}
+td {
+    border-right: solid 1px #f6f6f6;
+    padding: 7px 5px 7px 15px;
+}
+tr.checkG td {
+    border-right: solid 1px #fff;
+}
+td span#autoCatMessage ,
+div#mainContent div.section dl.editArea dt span {
+    font-size: 80%;
+    color: #dd0000;
+    padding-left: 5px;
+}
+span.attentionMessage {
+    font-size: 80%;
+    color: #dd0000;
+    padding-left: 5px;
+}
+td.thumb {
+	text-align: center;
+}
+td.thumb a {
+	display: block;
+}
+
+/*------------------------------------------------------------*/
+/*    messageArea style                                          */
+/*------------------------------------------------------------*/
+div#messageArea {
+    clear: both;
+    background-color: #fff0d6;
+    border: solid 1px #ffd68e;
+    margin: -10px 0 10px;
+    padding: 5px 15px;
+    zoom: 100%;
+}
+div#messageArea p {
+    float: left;
+    margin-right: 20px;
+}
+div#messageArea p.nonF {
+    float: none;
+    margin-right: 20px;
+}
+
+/*------------------------------------------------------------*/
+/*    dl.editArea style                                          */
+/*------------------------------------------------------------*/
+dl.editArea {
+    margin-left: 5px;
+    width: 70%;
+    zoom: 100%
+}
+dl.editArea dt {
+    float:left;
+    clear: left;
+    background-color: #f6f6f6;
+    margin-bottom: 10px;
+    padding: 5px 15px;
+    width: 20%;
+    height: 3em;
+    display: block;
+}
+dl.editArea dt span {
+    font-size: 90%;
+}
+div#mainContent dl.editArea dd {
+    background: none;
+    margin-left: 25%;
+    margin-bottom: 10px;
+    padding: 5px 15px;
+    width: 60%;
+    height: 3em;
+}
+div#mainContent dl.editArea dd input {
+    padding: 4px;
+    width: 100%;
+}
+div#mainContent dl.editArea dt#site_description_h {
+    height: 4em;
+}
+div#mainContent dl.editArea dd#site_description_d {
+    height: 4em;
+}
+div#mainContent dl.editArea dd textarea {
+    margin-top: -2px;
+    padding: 4px;
+    font-size: 100%;
+    width: 100%;
+}
+div#mainContent p.editAreaP input {
+    margin: 10px 0 10px 5px;
+    width: 120px;
+}
+input#cat_new {
+    width: 50%;
+}
+
+/*------------------------------------------------------------*/
+/*    form.accountEdit style                                      */
+/*------------------------------------------------------------*/
+form.accountEdit {
+    margin-bottom: 30px;
+}
+
+/*------------------------------------------------------------*/
+/*    dl#inputArea style                                            */
+/*------------------------------------------------------------*/
+dl#inputArea {
+    width: 70%;
+    max-width: 50em;
+    margin-left: 15px;
+}
+dl#inputArea input ,
+dl#inputArea textarea {
+    font-size: 100%;
+    padding: 4px;
+    width: 100%;
+}
+dl#inputArea select {
+    padding: 2px;
+}
+dl#inputArea input#page_date {
+    width: 10em;
+}
+dl#inputArea dt {
+    clear: both;
+    margin-top: 10px;
+}
+div#mainContent dl#inputArea dd {
+    background: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+div#mainContent ul {
+    margin: 30px 15px 10px;
+    zoom: 100%;
+}
+div#mainContent ul li.inputAreaL input {
+    float: left;
+    margin-right: 25px;
+    padding: 4px;
+    width: 140px;
+}
+div#mainContent dl dd.upload {
+    float: left;
+}
+div#mainContent dl dd.upload input {
+    height: 25px;
+}
+div#mainContent dl dd.upload input.upSub {
+    width: 80px;
+    margin-left: 20px;
+    padding: 0;
+}
+div#mainContent dl dd.tags {
+    float: left;
+    margin-right: 10px;
+}
+div#mainContent dl dd.tags input.tag {
+    width: 60px;
+    padding: 2px 4px;
+}
+
+/*------------------------------------------------------------*/
+/*    loginBoard container style                                  */
+/*------------------------------------------------------------*/
+body#loginBoad {
+    background-color: #f7f7f7;
+}
+body#loginBoad div#container {
+    background-color: #fff;
+    border: solid 1px #cfcfcf;
+    margin-top: 20px;
+    padding: 20px 20px 10px;
+    width: 310px;
+    min-width: 0;
+}
+*html body#loginBoad div#container {
+    width: 270px;
+}
+body#loginBoad div#messageArea {
+    margin-bottom: 30px;
+}
+body#loginBoad h1 {
+    margin-bottom: 15px;
+    margin-left: 10px;
+}
+body#loginBoad p#catch {
+    margin-bottom: 45px;
+}
+body#loginBoad dt {
+    margin-bottom: 10px;
+}
+body#loginBoad dd {
+    background: url(../images/bg_dlLine.gif) no-repeat left 5px;
+    margin-left: 6em;
+    padding-left: 15px;
+    zoom: 1;
+}
+body#loginBoad dd input {
+    margin-bottom: 15px;
+    width: 210px;
+}
+body#loginBoad p input {
+    float: right;
+    margin-bottom: 40px;
+    width: 80px;
+}
+body#loginBoad p#copyright {
+    clear: right;
+    text-align: left;
+}
+
