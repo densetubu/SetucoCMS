@@ -240,7 +240,7 @@ ul#gNav li dl dd a:hover {
     background: url(../images/bg_menuLink_over.gif) no-repeat left center;
 }
 ul#gNav li dl dd#active {
-    background: #daefff;
+    background: #e4f6ff;
 }
 ul#gNav li dl dd#active a ,
 ul#gNav li dl dd#active a:hover {
