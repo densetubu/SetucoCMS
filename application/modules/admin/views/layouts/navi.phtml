@@ -5,47 +5,47 @@
 <!-- gNav START -->
 <ul id="gNav">
 
-    <li><a href="<?php echo $this->baseUrl('') ?>index.php" title="管理画面のトップに戻ります"><img src="<?php echo $this->baseUrl('') ?>images/btn_menu_top.jpg" alt="トップ" width="150" height="30" /></a></li>
+    <li><a href="<?php echo $this->baseUrl('admin') ?>" title="管理画面のトップに戻ります"><img src="<?php echo $this->baseUrl('images/btn_menu_top.jpg') ?>" alt="トップ" width="150" height="30" /></a></li>
 
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>directory/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_directory.jpg" alt="サイト構造" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'directory') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>directory/index.php">カテゴリー・ページの一覧</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/directory') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_directory.jpg') ?>" alt="サイト構造" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'directory') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/directory') ?>">カテゴリー・ページの一覧</a></dd>
         </dl>
     </li>
 
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>category/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_category.jpg" alt="カテゴリー" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'category') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>category/index.php">追加・編集・削除</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/category') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_category.jpg') ?>" alt="カテゴリー" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'category') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/category') ?>">追加・編集・削除</a></dd>
         </dl>
     </li>
 
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>page/contribution/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_page.jpg" alt="ページ" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'pageContribution') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>page/contribution/index.php">新規作成</a></dd>
-                <dd<?php if ($active == 'page') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>page/index.php">編集・削除</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/page/form') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_page.jpg') ?>" alt="ページ" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'pageContribution') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/page/form') ?>">新規作成</a></dd>
+                <dd<?php if ($active == 'page') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/page') ?>">編集・削除</a></dd>
         </dl>
     </li>
 
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>tag/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_tag.jpg" alt="タグ" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'tag') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>tag/index.php">追加・編集・削除</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/tag') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_tag.jpg') ?>" alt="タグ" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'tag') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/tag') ?>">追加・編集・削除</a></dd>
         </dl>
     </li>
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>file/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_file.jpg" alt="ファイル" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'file') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>file/index.php">追加・編集・削除</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/media') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_file.jpg') ?>" alt="ファイル" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'media') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/media') ?>">追加・編集・削除</a></dd>
         </dl>
     </li>
 
     <li>
         <dl>
-            <dt><a href="<?php echo $this->baseUrl('') ?>site/index.php"><img src="<?php echo $this->baseUrl('') ?>images/h_menu_site.jpg" alt="サイト全般" width="150" height="30" /></a></dt>
-                <dd<?php if ($active == 'site') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('') ?>site/index.php">サイト情報の編集</a></dd>
+            <dt><a href="<?php echo $this->baseUrl('admin/site') ?>"><img src="<?php echo $this->baseUrl('images/h_menu_site.jpg') ?>" alt="サイト全般" width="150" height="30" /></a></dt>
+                <dd<?php if ($active == 'site') echo ' id="active"'; ?>><a href="<?php echo $this->baseUrl('admin/site') ?>">サイト情報の編集</a></dd>
         </dl>
     </li>
 
