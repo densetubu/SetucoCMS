@@ -11,8 +11,8 @@
         </a>
     </h1>
     <h2>
-        <span><?php echo $siteName ?></span>
         <a href="<?php echo $siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
+            <span><?php echo $siteName ?></span>
             <img src="<?php echo $this->baseUrl('') ?>images/btn_watchSite.jpg" alt="サイトを確認する" width="108" height="29" />
         </a>
     </h2>
@@ -22,7 +22,7 @@
 <form action="<?php echo $this->baseUrl('/admin/login/logout') ?>" method="post">
     <ul>
         <li id="utilLogout">
-            <input onMouseOver="this.className='logoutOver'" 
+            <input onMouseOver="this.className='logoutOver'"
                    onMouseOut="this.className='logoutNormal'"
                    type="submit" id="sub" name="sub" value="ログアウト" />
         </li>
