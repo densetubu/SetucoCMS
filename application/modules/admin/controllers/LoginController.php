@@ -1,14 +1,43 @@
 <?php
+/**
+ * ログイン処理をするコントローラーです
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category 	Setuco
+ * @package 	Admin
+ * @subpackage  Controller
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.
+ * @license
+ * @version
+ * @link
+ * @since       File available since Release 0.1.0
+ * @author     
+ */
+
 
 /**
- * ログイン画面
- * 
- * @author Yuu Yamanaka
+ * @category    Setuco
+ * @package     Admin
+ * @subpackage  Controller
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.
+ * @license
+ * @author      Yuu Yamanaka
  */
-class Admin_LoginController extends Zend_Controller_Action
+class Admin_LoginController extends Setuco_Controller_Action_Admin
 {
+    /** 
+     *
+     * コントローラーの共通設定をしています 
+     *
+     * @return void
+     * @author Yuu Yamanaka suzuki_mar
+     */
     public function init()
     {
+        //親クラスの設定を引き継ぐ
+        parent::init();
+
         // レイアウトを無効にする
         Zend_Layout::getMvcInstance()->disableLayout();
     }
@@ -17,17 +46,20 @@ class Admin_LoginController extends Zend_Controller_Action
      * ログインフォーム
      * 
      * @return void
+     * @author Yuu Yamanaka
      */
     public function indexAction()
     {
         $this->view->errors = $this->_getParam('errors');
         $this->view->form = $this->_getParam('form', $this->_createLoginForm());
     }
-    
+
     /**
      * ログイン処理
+     * indexコントローラーのindexアクションに遷移します
      * 
      * @return void
+     * @author Yuu Yamanaka
      */
     public function authAction()
     {
@@ -36,10 +68,10 @@ class Admin_LoginController extends Zend_Controller_Action
             $this->_setParam('form', $form);
             return $this->_forward('index');
         }
-        
+
         $authModel = new Admin_Model_Auth();
         if (!$authModel->login($form->getValue('loginId'),
-                               $form->getValue('password'))) {
+                    $form->getValue('password'))) {
             $this->_setParam('form', $form);
             $this->_setParam('errors',
                     array('ログインIDまたはパスワードが間違っています'));
@@ -51,38 +83,41 @@ class Admin_LoginController extends Zend_Controller_Action
 
     /**
      * ログアウト処理
+     * indexアクションに遷移します
      * 
      * @return void
+     * @author Yuu Yamanaka
      */
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_redirect('/admin/login');        
     }
-    
+
     /**
      * ログインフォームオブジェクトを作成して返す
      * 
      * @return Setuco_Form
+     * @author Yuu Yamanaka
      */
     private function _createLoginForm()
     {
         $form = new Setuco_Form();
         $form->setMethod('post');
         $form->setAction($this->_helper->url('auth'));
-        
+
         $form->addElement('text', 'loginId', array(
-            'label'    => 'アカウント名',
-            'required' => true,
-            'filters'  => array('StringTrim')
-        ));
+                    'label'    => 'アカウント名',
+                    'required' => true,
+                    'filters'  => array('StringTrim')
+                    ));
         $form->addElement('password', 'password', array(
-            'label'    => 'パスワード',
-            'required' => true
-        ));
+                    'label'    => 'パスワード',
+                    'required' => true
+                    ));
         $form->addElement('submit', 'submit', array(
-            'label'    => 'ログイン'
-        ));
+                    'label'    => 'ログイン'
+                    ));
 
         // デコレータの調整
         $form->setMinimalDecoratorElements('submit');

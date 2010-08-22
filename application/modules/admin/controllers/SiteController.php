@@ -4,23 +4,23 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category Setuco
- * @package Admin
- * @subpackage Controller
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
+ * @category 	Setuco
+ * @package 	Admin
+ * @subpackage  Controller
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @version
  * @link
- * @since      File available since Release 0.1.0
+ * @since       File available since Release 0.1.0
  * @author     
  */
 
 
 /**
- * @category Setuco
- * @package  Admin
- * @subpackage Controller
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
+ * @category    Setuco
+ * @package     Admin
+ * @subpackage  Controller
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @author 
  */
@@ -29,7 +29,7 @@ class Admin_SiteController extends Setuco_Controller_Action_Admin
 
 
     /** 
-     * トップページのアクションです
+     * サイト情報を表示するアクションです
      *
      * @return void
      * @author 
@@ -41,7 +41,8 @@ class Admin_SiteController extends Setuco_Controller_Action_Admin
     }
 
     /**
-     * 更新処理のアクションです。
+     * サイト情報の更新処理のアクションです。
+     * indexアクションに遷移します
      *
      * @return void
      * @author 
