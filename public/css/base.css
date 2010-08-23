@@ -160,10 +160,10 @@ div#header ul li#utilLogout {
     padding-right: 15px;
 }
 div#header ul li#utilManual a {
-    background-image: url(../images/bg_manual.gif);
+    background-image: url(../images/header/bg_manual.gif);
 }
 div#header ul li#utilAccount a {
-    background-image: url(../images/bg_nowLogin.gif);
+    background-image: url(../images/header/bg_nowLogin.gif);
 }
 div#header ul li#utilManual a ,
 div#header ul li#utilAccount a {
@@ -174,7 +174,7 @@ div#header ul li#utilAccount a {
 div#header li#utilLogout input ,
 div#header li#utilLogout input.logoutNormal {
     background: none;
-    background-image: url(../images/bg_logout.gif);
+    background-image: url(../images/header/bg_logout.gif);
     background-repeat: no-repeat;
     background-position: left center;
     border: none;
@@ -183,7 +183,7 @@ div#header li#utilLogout input.logoutNormal {
 	text-indent: -999px;
 }
 div#header li#utilLogout input.logoutOver {
-    background-image: url(../images/bg_logout_over.gif);
+    background-image: url(../images/header/bg_logout_over.gif);
     cursor: pointer;
 }
 
@@ -230,21 +230,21 @@ ul#gNav li dl dd {
     padding-left: 8px;
 }
 ul#gNav li dl dd a {
-    background: url(../images/bg_menuLink.gif) no-repeat left center;
+    background: url(../images/gNav/bg_menuLink.gif) no-repeat left center;
     padding: 8px 8px 8px 16px;
     display: block;
     width: auto;
     height: auto;
 }
 ul#gNav li dl dd a:hover {
-    background: url(../images/bg_menuLink_over.gif) no-repeat left center;
+    background: url(../images/gNav/bg_menuLink_over.gif) no-repeat left center;
 }
 ul#gNav li dl dd#active {
     background: #e4f6ff;
 }
 ul#gNav li dl dd#active a ,
 ul#gNav li dl dd#active a:hover {
-    background: url(../images/bg_menuLink_act.gif) no-repeat left center;
+    background: url(../images/gNav/bg_menuLink_act.gif) no-repeat left center;
 	font-weight:bold;
 	color:#5f5f5f;
 	text-decoration:none;
