@@ -54,6 +54,18 @@ class IndexController extends Setuco_Controller_Action_Default
 
     }
 
+    /**
+     * カテゴリーの記事を表示するアクションです
+     *
+     * @return void
+     * @author 
+     * @todo 内容を実装する　現在はスケルトン
+     */
+    public function categoryAction()
+    {
+
+    }
+
 
 }
 
