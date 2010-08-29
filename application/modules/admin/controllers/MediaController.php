@@ -37,26 +37,6 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     public function indexAction()
     {
 
-        /* リクエスト取得 */
-        $req = $this->getRequest();
-
-        /* ファイルのデータ取得 */
-        // 絞込条件の有無
-        $fileType = $req->getUserParam('fileType');
-        $media = new Admin_Model_Media();
-        if ($fileType !== null) {
-
-        } else {
-        }
-         
-
-        // paginator 設定
-        $currentPage = 1;
-        if ($req->getUserParam('page') !== null && is_numeric($req->getUserParam('page'))) {
-            $currentPage = $req->getUserParam('page');
-        }
-        echo $currentPage;
-
     }
 
     /** 
