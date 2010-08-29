@@ -1,0 +1,79 @@
+<!-- topicPath START -->
+<div id="topicPath">
+    <p><a href="../index.php">トップ</a><img src="../images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+    <p>カテゴリーの追加・編集・削除</p>
+</div>
+<!-- topicpath END -->
+
+<!-- section START -->
+<div class="section">
+
+    <div id="topichAreaL">
+
+        <div id="topichAreaR">
+
+            <div id="topichArea">
+
+                <h3><img src="../images/h_catAll.jpg" width="208" height="18" alt="カテゴリーの追加・編集・削除" /></h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+    <form action="cat_edit.php" method="post">
+
+                    <p style="margin-bottom:10px;"><input type="text" id="cat_name" name="cat_name" value="新規カテゴリー" /><input type="submit" id="sub" name="sub" value="追加" /></p>
+
+        <table summary="カテゴリー一覧の表です。カテゴリーの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
+
+            <thead>
+                <tr>
+                    <th scope="col" width="80%" id="tableFirst">カテゴリー名<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th>
+                    <th scope="col" width="10%">編集</th>
+                    <th scope="col" width="10%">削除</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                                <tr>
+<td>about</td><td><a href='index.php?edit=32'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='32' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(32);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr class='checkG'>
+<td>contents</td><td><a href='index.php?edit=12'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='12' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(12);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr>
+<td>link</td><td><a href='index.php?edit=19'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='19' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(19);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr class='checkG'>
+
+<td>report</td><td><a href='index.php?edit=42'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='42' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(42);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr>
+<td>test</td><td><a href='index.php?edit=46'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='46' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(46);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr class='checkG'>
+<td>新規カテゴリー</td><td><a href='index.php?edit=49'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='49' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(49);'><img src='../images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td></tr>
+<tr>
+<td>未分類<span id='autoCatMessage'>（※カテゴリー未選択時に自動選択されるカテゴリーです）</span></td><td><a href='index.php?edit=0'><img src='../images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td><td>&nbsp;</td></tr>
+            </tbody>
+
+        </table>
+
+    </form>
+
+    <div id="pageNav">
+        <ul>
+            <li><a href="#">前へ</a></li>
+            <li class="navNumber"><a href="#">1</a></li>
+            <li class="navNumber current"><a href="#">2</a></li>
+
+            <li class="navNumber"><a href="#">3</a></li>
+            <li class="navNumber"><a href="#">4</a></li>
+            <li class="navNumber"><a href="#">5</a></li>
+            <li><a href="#">次へ</a></li>
+        </ul>
+    </div>
+
+</div>
+<!-- section END -->
+
