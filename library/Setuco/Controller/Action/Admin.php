@@ -42,7 +42,6 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
         $layout = $this->_helper->layout();
         $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
         $layout->setLayout('layout');
-
     }   
 
 }
