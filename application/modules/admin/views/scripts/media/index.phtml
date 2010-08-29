@@ -1,6 +1,24 @@
+<?php
+/**
+ * ファイルのアップロードや編集、一覧表示の画面
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Media
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link       
+ * @version    
+ * @since      File available since Release 0.1.0
+ * @author     akitsukada
+ */
+?>
+
 <!-- topicPath START -->
 <div id="topicPath">
-    <p><a href="../index.php">トップ</a><img src="../images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+<p><a href="../index.php">トップ</a><img src="<?php echo $this->baseUrl('images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
     <p>ファイルの追加・編集・削除</p>
 </div>
 <!-- topicpath END -->
@@ -14,7 +32,7 @@
 
 	    <div id="topichArea">
 
-		<h3><img src="../images/h_file.jpg" width="193" height="18" alt="ファイルの追加・編集・削除" /></h3>
+        <h3><img src="<?php echo $this->baseUrl('images/h_file.jpg') ?>" width="193" height="18" alt="ファイルの追加・編集・削除" /></h3>
 
 	    </div>
 
@@ -84,49 +102,22 @@
 
 	    <tbody>
 		<tr>
-		    <td class="thumb"><a href="#" onclick="openFile(../images/logo.jpg);"><img src="../images/logo.jpg" width="120" height="auto" /></a></td>
+        <td class="thumb"><a href="#" onclick="openFile(../images/logo.jpg);"><img src="<?php echo $this->baseUrl('/images/logo.jpg') ?>" width="120" height="auto" /></a></td>
 		    <td>logo[jpg]</td>
 
 		    <td>06月12日</td>
 		    <td>12月24日</td>
-		    <td><a href="edit/index.php"><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></td>
-		    <td><a href='#' onclick='flg({$page_id});'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
+            <td><a href="media/form"><img src="<?php echo $this->baseUrl('images/btn_edit.png') ?>" alt='編集' width='27' height='27' /></td>
+            <td><a href="#" onclick='flg({$page_id});'><img src="<?php echo $this->baseUrl('images/btn_delete.png') ?>" alt='削除' width='27' height='27' /></a></td>
 		</tr>
 		<tr class="checkG">
-		    <td class="thumb"><a href="upload/HTMLmanual.pdf" target="_blank"><img src="../images/icn_pdf.gif" width="48" height="48" /></a></td>
+		    <td class="thumb"><a href="upload/HTMLmanual.pdf" target="_blank"><img src="<?php echo $this->baseUrl('images/icn_pdf.gif') ?>" width="48" height="48" /></a></td>
 		    <td>HTML基礎マニュアル[pdf]</td>
 
 		    <td>06月12日</td>
 		    <td>12月24日</td>
-		    <td><a href="edit/index.php"><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></td>
-		    <td><a href='#' onclick='flg({$page_id});'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
-		</tr>
-		<tr>
-		    <td class="thumb"><a href="#"><img src="../images/logo.jpg" width="120" height="auto" /></a></td>
-		    <td>logo[jpg]</td>
-
-		    <td>06月12日</td>
-		    <td>12月24日</td>
-		    <td><a href="edit/index.php"><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></td>
-		    <td><a href='#' onclick='flg({$page_id});'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
-		</tr>
-		<tr class="checkG">
-		    <td class="thumb"><a href="#"><img src="../images/logo.jpg" width="120" height="auto" /></a></td>
-		    <td>logo[jpg]</td>
-
-		    <td>06月12日</td>
-		    <td>12月24日</td>
-		    <td><a href="edit/index.php"><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></td>
-		    <td><a href='#' onclick='flg({$page_id});'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
-		</tr>
-		<tr>
-		    <td class="thumb"><a href="#"><img src="../images/logo.jpg" width="120" height="auto" /></a></td>
-		    <td>logo[jpg]</td>
-
-		    <td>06月12日</td>
-		    <td>12月24日</td>
-		    <td><a href="edit/index.php"><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></td>
-		    <td><a href='#' onclick='flg({$page_id});'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
+            <td><a href="media/form"><img src="<?php echo $this->baseUrl('images/btn_edit.png') ?>" alt='編集' width='27' height='27' /></td>
+            <td><a href="#" onclick='flg({$page_id});'><img src="<?php echo $this->baseUrl('images/btn_delete.png') ?>" alt='削除' width='27' height='27' /></a></td>
 		</tr>
 	    </tbody>
 	</table>

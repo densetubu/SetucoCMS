@@ -1,0 +1,56 @@
+<?php
+/**
+ * アップロード済みのファイルを編集する画面
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Media
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link       
+ * @version    
+ * @since      File available since Release 0.1.0
+ * @author     akitsukada
+ */
+?>
+<!-- topicPath START --> 
+<div id="topicPath"> 
+    <p><a href="/admin/">トップ</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p> 
+    <p><a href="/admin/media">ファイルの追加・編集・削除</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p> 
+    <p>「logo.jpg」の編集</p> 
+</div> 
+<!-- topicpath END --> 
+
+<!-- section START --> 
+<div class="section"> 
+
+    <div class="hArea"> 
+
+        <h3 id="textType">「logo.jpg」の編集</h3> 
+
+    </div> 
+
+
+    <form action="#" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
+
+        <dl id="inputArea"> 
+
+            <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル**KB、合計**MBまでです。</span></dt> 
+                <dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd> 
+                <dd>ファイル名:<input type="text" id="file_name" name="file_name" value="" /></dd> 
+                <dd>説明:<input type="text" id="file_name" name="file_name" value="" /></dd> 
+                <dd class="upload">ファイル:<input type="file" name="upload_img" id="upload_img" size="55" /></dd> 
+            <dt><span class="attentionMessage">**MB</span></dt> 
+
+                <dd ><input type="submit" class="upSub" id="up" name="up" value="編集を保存する" /></dd> 
+        </dl> 
+
+    </form> 
+
+
+
+
+</div> 
+<!-- section END --> 

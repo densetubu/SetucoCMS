@@ -12,11 +12,8 @@ class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
         if ($this->getRequest()->getModuleName() == 'admin') {
             $this->_checkAdminLogin();
         }
-        // ディスパッチループの最後にメニュー表示用アクションへ遷移
-        $actionStack = new Zend_Controller_Action_Helper_ActionStack();
-        $actionStack->actionToStack('navigation', 'navigation');
     }
-
+    
     /**
      * 管理画面におけるログイン状態をチェックする
      * 
