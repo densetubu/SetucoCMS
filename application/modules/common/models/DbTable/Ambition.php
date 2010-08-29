@@ -27,6 +27,7 @@
  */
 class Common_Model_DbTable_Ambition extends Zend_Db_Table_Abstract
 {
+    
     /**
      * テーブル名
      * 
@@ -34,16 +35,11 @@ class Common_Model_DbTable_Ambition extends Zend_Db_Table_Abstract
      */
     protected $_name = 'ambition';
 
-    protected function _setup()
-    {
-        $options = array('host'     => '127.0.0.1',
-                         'username' => 'setuco',
-                         'password' => 'setuco',
-                         'dbname'   => 'setucocms');
-
-        $adapter = Zend_Db::factory('Pdo_Mysql', $options);
-
-        $this->_setAdapter($adapter);
-    }
+    /**
+     * プライマリーキーのカラム名
+     *
+     * @var String
+     */
+    protected $_primary = 'id';
 }
 
