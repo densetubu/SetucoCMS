@@ -55,28 +55,28 @@ div#wrapper {
 /*-- HEADER style -----------------------------------------------*/
 /*---------------------------------------------------------------*/
 div#header_innerL{
-    background: url(../images/bg_headerL.jpg) no-repeat left top;
+    background: url(../images/front/bg_headerL.jpg) no-repeat left top;
     height: 100px;
     padding-left: 20px;
     margin-bottom: 20px;
     zoom: 100%;
 }
 div#header_innerL:after {
-    content: ".";  
-    display: block;  
-    visibility: hidden;  
-    height: 0.1px;  
-    font-size: 0.1em;  
-    line-height: 0;  
-    clear: both; 
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
 }
 div#header_innerL div#header_innerR {
-    background: url(../images/bg_headerR.jpg) no-repeat right top;
+    background: url(../images/front/bg_headerR.jpg) no-repeat right top;
     padding-right: 20px;
     height: 100px;
 }
 div#header_innerL div#header_innerR div#header_inner {
-    background: url(../images/bg_header.jpg) repeat-x;
+    background: url(../images/front/bg_header.jpg) repeat-x;
     height: 100px;
 }
 
@@ -106,13 +106,13 @@ div#header_inner div#utility {
     zoom: 100%;
 }
 div#header_inner div#utility:after {
-    content: ".";  
-    display: block;  
-    visibility: hidden;  
-    height: 0.1px;  
-    font-size: 0.1em;  
-    line-height: 0;  
-    clear: right; 
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: right;
 }
 div#header_inner ul {
     float: right;
@@ -124,7 +124,7 @@ div#header_inner ul li {
     display: inline;
 }
 div#header_inner ul li#RSS {
-    background: url(../images/bg_RSS.gif) no-repeat left center;
+    background: url(../images/front/bg_RSS.gif) no-repeat left center;
 }
 div#header_inner ul li#RSS a {
     padding-left: 20px;
@@ -136,14 +136,14 @@ div#header_inner ul li#RSS a {
 /*---------------------------------------------------------------*/
 div#header_inner form {
     float: right;
-    margin-top: 12px;
+    margin-top: 50px;
 }
 div#header_inner dl {
     float: left;
 }
 div#header_inner dl dt ,
 div#header_inner dl dd ,
-div#header_inner p 
+div#header_inner p
 {
     float: left;
 }
@@ -170,11 +170,11 @@ div#content {
 div#content:after {
     content: ".";
     display: block;
-    visibility: hidden;  
-    height: 0.1px;  
-    font-size: 0.1em;  
-    line-height: 0;  
-    clear: both; 
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
 }
 
 /*---------------------------------------------------------------*/
@@ -211,11 +211,11 @@ div.entryHead {
 div.entryHead:after {
     content: ".";
     display: block;
-    visibility: hidden;  
-    height: 0.1px;  
-    font-size: 0.1em;  
-    line-height: 0;  
-    clear: both; 
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
 }
 div.entryHead h2 {
     float: left;
@@ -225,7 +225,7 @@ div.entryHead h2 {
 div.entryHead h2 a {
     text-decoration: none;
     color: #3399cc;
-    background: url(../images/bg_entryTitle.gif) no-repeat left center;
+    background: url(../images/front/bg_entryTitle.gif) no-repeat left center;
     padding-left: 24px;
     display: block;
 }
@@ -353,7 +353,7 @@ div#navArea div.navList h3 {
     margin-bottom: 10px;
 }
 div#navArea div.navList ul li a {
-    background: url(../images/bg_linkList.gif) no-repeat left 0.4em;
+    background: url(../images/front/bg_linkList.gif) no-repeat left 0.4em;
     padding-left: 16px;
     margin-bottom: 6px;
     display: block;
