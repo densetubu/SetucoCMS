@@ -39,6 +39,6 @@ class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
      *
      * @var String
      */
-    protected $_primary = 'name';
+    protected $_primary = 'id';
 }
 

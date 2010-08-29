@@ -38,6 +38,6 @@ class Common_Model_DbTable_Goal extends Zend_Db_Table_Abstract
      *
      * @var String
      */
-    protected $_primary = 'target_month';
+    protected $_primary = 'id';
 }
 

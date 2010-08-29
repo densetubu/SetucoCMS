@@ -27,6 +27,7 @@
  */
 class Common_Model_DbTable_Ambition extends Zend_Db_Table_Abstract
 {
+    
     /**
      * テーブル名
      * 
@@ -39,6 +40,6 @@ class Common_Model_DbTable_Ambition extends Zend_Db_Table_Abstract
      *
      * @var String
      */
-    protected $_primary = 'ambition';
+    protected $_primary = 'id';
 }
 
