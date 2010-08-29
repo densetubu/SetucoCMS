@@ -45,13 +45,13 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
         //親クラスのメソッドを実行する
         parent::init();
 
+        // ナビゲーションの設定
+        $this->_navigation = $this->_initNavigation();
+
         //モジュール間の共通レイアウトの設定
         $layout = $this->_helper->layout();
         $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
         $layout->setLayout('layout');
-
-        // ナビゲーションの設定
-        $this->_navigation = $this->_initNavigation();
     }
 
     /**

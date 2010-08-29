@@ -33,11 +33,5 @@ class Common_Model_DbTable_Goal extends Zend_Db_Table_Abstract
      */
     protected $_name = 'goal';
 
-    /**
-     * プライマリーキーのカラム名
-     *
-     * @var String
-     */
-    protected $_primary = 'target_month';
-}
+
 

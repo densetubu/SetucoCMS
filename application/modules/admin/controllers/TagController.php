@@ -15,6 +15,7 @@
  * @author     
  */
 
+require_once '../application/modules/common/models/DbTable/Site.php';
 
 /**
  * @category    Setuco
@@ -36,6 +37,16 @@ class Admin_TagController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
+        echo '<pre>';
+
+        $dbtable = new Common_Model_DbTable_Site();
+        var_dump($dbtable->find('1')->toArray());
+
+        echo '</pre>';
+
+        exit;  
+
+
 
     }
 

@@ -34,11 +34,5 @@ class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
      */
     protected $_name = 'site';
 
-    /**
-     * プライマリーキーのカラム名
-     *
-     * @var String
-     */
-    protected $_primary = 'name';
 }
 
