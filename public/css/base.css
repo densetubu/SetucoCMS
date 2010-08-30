@@ -396,6 +396,14 @@ div.section div#topichArea h3 {
     font-size: 110%;
     font-weight: normal;
 }
+div.section div#topichArea p {
+    float: right;
+    margin-top: 2px;
+}
+div#topichArea p a {
+    background: url(../images/bg_hLink.gif) no-repeat left center;
+    padding-left: 18px;
+}
 
 /*------------------------------------------------------------*/
 /*    contentsList style                                          */
