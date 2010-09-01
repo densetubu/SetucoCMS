@@ -5,6 +5,7 @@ $this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
 $this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
 $this->headTitle('SetucoCMS')->setSeparator(' / ');     // TODO SetucoCMS でいい？
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+$this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 ?>
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
@@ -14,11 +15,12 @@ $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
         <meta name="copyright" content="SetucoCMS" />   <?php // TODO SetucoCMS? ?>   
         <meta http-equiv="imagetoolbar" content="no" />
         <?php echo $this->headTitle() ?>
+        <?php echo $this->dojo() ?>
         <?php echo $this->headScript() ?>
         <?php echo $this->headLink() ?>
         <?php echo $this->headStyle() ?>
     </head>
-    <body>
+    <body class="soria">
     
         <!-- container START -->
         <div id="container">

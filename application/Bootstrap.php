@@ -36,4 +36,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $fc = Setuco_Application_BootstrapUtil::extractResource($this, 'FrontController');
         $fc->registerPlugin(new Setuco_Controller_Plugin());
     }
+    
+    /**
+     * ビューを初期化
+     * 
+     * @return Zend_View
+     * @author charlesvineyard
+     */
+    protected function _initView()
+    {
+        $view = new Zend_View();
+        Zend_Dojo::enableView($view);
+        $view->dojo()->enable()
+                     ->setCdnBase(Zend_Dojo::CDN_BASE_GOOGLE)
+                     ->addStyleSheetModule('dijit.themes.soria');
+
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
+        $viewRenderer->setView($view);
+
+        return $view;
+    }
+    
 }

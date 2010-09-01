@@ -59,6 +59,10 @@ class Admin_IndexController extends Setuco_Controller_Action_Admin
      */
     public function formGoalAction()
     {
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->flashMessage = $flashMessages[0];
+        }
     }
 
     /** 
@@ -71,6 +75,7 @@ class Admin_IndexController extends Setuco_Controller_Action_Admin
      */
     public function updateGoalAction()
     {
+        $this->_helper->flashMessenger('更新目標を変更しました。');
         $this->_redirect('/admin/index/form-goal');
     }
 
