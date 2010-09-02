@@ -2,16 +2,27 @@
 
 class ErrorController extends Zend_Controller_Action
 {
+    /**
+     * クラスの共通設定 
+     *
+     */
+    public function init()
+    {
+
+        //モジュール毎に違うレイアウトを表示する
+        $this->_setLayout();
+
+    }
 
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');
-        
+
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-        
+
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
                 $this->view->message = 'Page not found';
@@ -22,17 +33,17 @@ class ErrorController extends Zend_Controller_Action
                 $this->view->message = 'Application error';
                 break;
         }
-        
+
         // Log exception, if logger available
         if ($log = $this->getLog()) {
             $log->crit($this->view->message, $errors->exception);
         }
-        
+
         // conditionally display exceptions
         if ($this->getInvokeArg('displayExceptions') == true) {
             $this->view->exception = $errors->exception;
         }
-        
+
         $this->view->request   = $errors->request;
     }
 
@@ -46,6 +57,26 @@ class ErrorController extends Zend_Controller_Action
         return $log;
     }
 
+    /**
+     * モジュール毎に違うレイアウトを表示する
+     *
+     * @return void
+     * @author suzuki_mar
+     */
+    private function _setLayout()
+    {
+        //request->getModuleNameではうまくうごかないので、URIからモジュールを判定する
+        if (preg_match('/^\/admin\/+/', $_SERVER['REQUEST_URI'])) {
+            $moduleName = "admin";
+        } else { // 該当するものがなかったらdefault
+            $moduleName = "default";
+        }
 
+        // レイアウトの適用がうまくできないので、initメソッド内で設定する
+        $options = array('layout' => 'layout',
+                'layoutPath' => APPLICATION_PATH . "/modules/{$moduleName}/views/layouts",
+                'content' => 'content');
+        Zend_Layout::startMvc($options);
+    }
 }
 
