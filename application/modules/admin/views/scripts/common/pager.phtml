@@ -1,0 +1,32 @@
+<?php if ($this->pageCount) : ?>
+<div id="pageNav">
+<ul>
+<!-- 前のページへのリンク -->
+<li>
+<?php if (isset($this->previous)) : ?>
+    <a href="<?php echo $this->url(array('page' => $this->pervious)); ?>">前へ</a>
+<?php else: ?>
+    <span class="disabled">前へ</span> 
+<?php endif; ?>
+</li>
+
+<!-- ページ番号へのリンク -->
+<?php foreach ($this->pagesInRange as $page) : ?>
+    <?php if ($page != $this->current) : ?>
+    <li class="navNumber"><a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a></li>
+    <?php else: ?>
+    <li class="navNumber current"><a href=""><?php echo $page; ?></a></li>
+    <?php endif; ?>
+<?php endforeach; ?>
+
+<!-- 次のページへのリンク -->
+<li>
+<?php if (isset($this->next)) : ?>
+    <a href="<?php echo $this->url(array('page' => $this->next)); ?>">次へ</a>
+<?php else: ?>
+    <span class="disabled">次へ</span>
+<?php endif; ?>
+</li>
+</ul>
+</div>
+<?php endif; ?>

@@ -36,7 +36,11 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
+        //ページャーの設定をする
+        $this->setPagerForView(50);
+
     }
+
 
     /** 
      * カテゴリーを新規作成するアクションです

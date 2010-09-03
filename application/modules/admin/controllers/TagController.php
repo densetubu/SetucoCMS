@@ -31,10 +31,12 @@ class Admin_TagController extends Setuco_Controller_Action_Admin
      *
      * @return void
      * @author 
-     * @todo 内容の実装 現在はスケルトン
+     * @todo モデルからデータを取得する
      */
     public function indexAction()
     {
+        //ページャーの設定をする
+        $this->setPagerForView(50);
 
     }
 
