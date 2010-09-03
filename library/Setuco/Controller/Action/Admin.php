@@ -44,4 +44,26 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
         $layout->setLayout('layout');
     }   
 
+    /**
+     * ページャーの設定をして、ビューで使用できるようにする
+     *
+     * @void
+     * @author suzuki-mar
+     */
+    public function setPagerForView($max)
+    {
+        
+        //共通のページャーの設定をする
+        Zend_Paginator::setDefaultScrollingStyle('Sliding');
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
+
+        //ページャークラスを生成する
+        $paginator = Zend_Paginator::factory($max);
+        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage('10');
+
+        //viewでpaginationControlを使用しなくても、表示できるようにする
+        $paginator->setView($this->view);
+
+        $this->view->paginator = $paginator;
+    }
 }
