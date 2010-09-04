@@ -40,10 +40,10 @@
 			   <?php foreach($this->tags as $value): ?>
                <tr> 
                    <td><?php echo $value["name"] ?></td>
-                   <td><a href='/admin/tag/update/id/<?php echo $value['id'] ?>'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
+                   <td><a href='/admin/tag/update/id/<?php echo $value['id'] ?>'><img src='/images/btn_edit.png' alt='編集' width='27' height='27' /></a></td>
                    <input type='hidden' id='tag_id' name='tag_id' value='<?php echo $value["id"] ?>' />
                    <input type='hidden' id='tag_no' name='tag_no' value='' />
-                   <td><a href='/admin/tag/delete/id/<?php echo $value['id'] ?>' onclick='flg(1);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
+                   <td><a href='/admin/tag/delete/id/<?php echo $value['id'] ?>' onclick='flg(1);'><img src='/images/btn_delete.png' alt='削除' width='27' height='27' /></a></td>
                </tr> 
 			   <?php endforeach; ?>
            </tbody> 
