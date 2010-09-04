@@ -59,7 +59,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
 
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
-        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage('10');
+        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage('10');  // TODO 10 を別出しに
 
         //viewでpaginationControlを使用しなくても、表示できるようにする
         $paginator->setView($this->view);
