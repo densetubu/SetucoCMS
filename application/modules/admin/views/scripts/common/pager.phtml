@@ -15,7 +15,7 @@
     <?php if ($page != $this->current) : ?>
     <li class="navNumber"><a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a></li>
     <?php else: ?>
-    <li class="navNumber current"><a href=""><?php echo $page; ?></a></li>
+    <li class="navNumber current"><span><?php echo $page; ?></span></li>
     <?php endif; ?>
 <?php endforeach; ?>
 
