@@ -11,7 +11,16 @@
  */
 class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
 {
+	/*
+	 * 	テーブル名
+	 *	@var String
+	 */
 	protected $_name = 'media';
+	
+	/*
+	 *	プライマリキーのフィールド名
+	 *	@var String
+	 */
 	protected $_primary = 'id';
 }
 

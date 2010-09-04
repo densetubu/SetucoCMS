@@ -11,7 +11,16 @@
  */
 class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 {
+	/*
+	 * 	テーブル名
+	 *	@var String
+	 */
 	protected $_name = 'page';
+	
+	/*
+	 *	プライマリキーのフィールド名
+	 *	@var String
+	 */
 	protected $_primary = 'id';
 }
 
