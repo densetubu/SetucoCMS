@@ -63,7 +63,7 @@ a:hover img {
 /*------------------------------------------------------------*/
 div#container div#header:after ,
 div#container div#content:after ,
-div.section div#topichArea:after ,
+div.section div.topichArea:after ,
 div#mainContent div.section:after ,
 dl.straight:after ,
 dl.check:after ,
@@ -290,31 +290,31 @@ div#mainContent div#topicSection {
     margin-bottom: 10px;
     padding: 5px;
 }
-div#topicSection div#topichAreaL {
+div#topicSection div.topichAreaL {
     background: url(../images/bg_topic_l.jpg) no-repeat left top;
     margin-bottom: 5px;
     padding-left: 5px;
     height: 38px;
 }
-div#topicSection div#topichAreaR {
+div#topicSection div.topichAreaR {
     background: url(../images/bg_topic_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
-div#topicSection div#topichArea {
+div#topicSection div.topichArea {
     background: url(../images/bg_topic.jpg) repeat-x top;
     padding: 10px 5px;
     height: 38px;
     zoom: 100%;
 }
-div#topicSection div#topichArea h3 {
+div#topicSection div.topichArea h3 {
     float: left;
 }
-div#topicSection div#topichArea p {
+div#topicSection div.topichArea p {
     float: right;
     margin-top: 2px;
 }
-div#topicSection div#topichArea p a {
+div#topicSection div.topichArea p a {
     background: url(../images/bg_topicLink.gif) no-repeat left center;
     padding-left: 18px;
 }
@@ -374,33 +374,33 @@ div.hArea p a {
 /*------------------------------------------------------------*/
 /*    section topichArea style                                  */
 /*------------------------------------------------------------*/
-div.section div#topichAreaL {
+div.section div.topichAreaL {
     background: url(../images/bg_topicB_l.jpg) no-repeat left top;
     margin-bottom: 15px;
     padding-left: 5px;
     height: 38px;
 }
-div.section div#topichAreaR {
+div.section div.topichAreaR {
     background: url(../images/bg_topicB_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
-div.section div#topichArea {
+div.section div.topichArea {
     background: url(../images/bg_topicB.jpg) repeat-x top;
     padding: 9px 10px;
     height: 38px;
     zoom: 100%;
 }
-div.section div#topichArea h3 {
+div.section div.topichArea h3 {
     float: left;
     font-size: 110%;
     font-weight: normal;
 }
-div.section div#topichArea p {
+div.section div.topichArea p {
     float: right;
     margin-top: 2px;
 }
-div#topichArea p a {
+div.topichArea p a {
     background: url(../images/bg_hLink.gif) no-repeat left center;
     padding-left: 18px;
 }
