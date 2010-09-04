@@ -35,7 +35,11 @@ class Admin_TagController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
-        //ページャーの設定をする
+        $service = new Admin_Model_Tag();
+
+		$this->view->tags = $service->getTags();
+		
+		//ページャーの設定をする
         $this->setPagerForView(50);
 
     }
@@ -63,7 +67,8 @@ class Admin_TagController extends Setuco_Controller_Action_Admin
      */
     public function updateAction()
     {
-        $this->_redirect('/admin/tag/index');        
+		
+		$this->_redirect('/admin/tag/index');        
     }
 
     /** 
