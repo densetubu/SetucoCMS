@@ -37,26 +37,15 @@
            </thead> 
 
            <tbody> 
+			   <?php foreach($this->tags as $value): ?>
                <tr> 
-                   <td>タグ1</td>
-                   <td><a href='index.php?edit=1'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
-                   <input type='hidden' id='tag_id' name='tag_id' value='1' />
+                   <td><?php echo $value["name"] ?></td>
+                   <td><a href='/admin/tag/update/id/<?php echo $value['id'] ?>'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
+                   <input type='hidden' id='tag_id' name='tag_id' value='<?php echo $value["id"] ?>' />
                    <input type='hidden' id='tag_no' name='tag_no' value='' />
-                   <td><a href='#' onclick='flg(1);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
+                   <td><a href='/admin/tag/delete/id/<?php echo $value['id'] ?>' onclick='flg(1);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
                </tr> 
-               <tr class='checkG'> 
-                   <td>タグ2</td>
-                   <td><a href='index.php?edit=2'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
-                   <input type='hidden' id='tag_id' name='tag_id' value='2' /><input type='hidden' id='tag_no' name='tag_no' value='' />
-                   <td><a href='#' onclick='flg(2);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
-               </tr> 
-               <tr> 
-                   <td>新規タグ</td>
-                   <td><a href='index.php?edit=4'><img src='/images/btn_edit.png' alt='編集' widrh='27' height='27' /></a></td>
-                   <input type='hidden' id='tag_id' name='tag_id' value='4' />
-                   <input type='hidden' id='tag_no' name='tag_no' value='' />
-                   <td><a href='#' onclick='flg(4);'><img src='/images/btn_delete.png' alt='削除' widrh='27' height='27' /></a></td>
-               </tr> 
+			   <?php endforeach; ?>
            </tbody> 
         </table> 
 
