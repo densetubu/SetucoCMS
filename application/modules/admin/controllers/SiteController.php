@@ -12,7 +12,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author     
+ * @author  ece_m   
  */
 
 
@@ -37,7 +37,21 @@ class Admin_SiteController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {   
-
+		$service = new Admin_Model_Site();
+		$this->view->sites = $service->getSiteInfo();
+		
+		
+		
+		$form = $this->_createForm();
+		$form->setDefaults($service->getSiteInfo());
+		$form->setDecorators( array(
+    'FormElements',
+    array('HtmlTag', array('tag' => 'dl')),
+    'Form',
+));
+		
+		$this->view->form = $form;
+		
     }
 
     /**
@@ -53,6 +67,47 @@ class Admin_SiteController extends Setuco_Controller_Action_Admin
         $this-_redirect('/admin/site/index');
     }
 
+    
+   /**
+    * フォームの雛形を作成します。
+    * 
+    * @return Zend_Form
+    */
+   private function _createForm()
+   {
+       $form = new Zend_Form();
+       $form->setMethod('post');
+       $form->addElement('text', 'name', array(
+           'label'    => 'サイト名',
+           'required' => true,
+           'filters'  => array('StringTrim'),
+       	   'class'	  => "tejkmnpijnpinomnpoijmopst"
+       ));
+       $form->addElement('text', 'url', array(
+           'label'    => 'サイトURL',
+           'required' => true,
+           'filters'  => array('StringTrim'),
+       ));
+       $form->addElement('text', 'comment', array(
+           'label'    => '説明',
+           'required' => true,
+           'filters'  => array('StringTrim'),
+       ));
+       $form->addElement('text', 'keyword', array(
+           'label'    => 'キーワード',
+           'required' => true,
+           'filters'  => array('StringTrim'),
+       ));
+
+       
+       
+       
+       // hiddenとボタン系のデコレータは必要最低限にする
+       $form->setElementDecorators(array('ViewHelper'), array('id', 'submit'));
+       
+       return $form;
+   }
+    
 }
 
 
