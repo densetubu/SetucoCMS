@@ -8,11 +8,11 @@
 <!-- section START --> 
 <div class="section"> 
 
-    <div id="topichAreaL"> 
+    <div class="topichAreaL"> 
 
-        <div id="topichAreaR"> 
+        <div class="topichAreaR"> 
 
-            <div id="topichArea"> 
+            <div class="topichArea"> 
 
                 <h3><img src="<?php echo $this->baseUrl('/images/h_pageAll.jpg'); ?>" width="135" height="18" alt="ページの編集・削除" /></h3> 
 
@@ -23,47 +23,48 @@
     </div> 
 
     
-    <form action="#" method="post" id="searchBox" style="margin-left:10px; margin-bottom:15px;"> 
+    <form action="#" method="post"> 
 
-        <dt> 
-            <label for="keyword">キーワード</label> 
-            <small> 
-                <input id="keyword" name="keyword" type="text" />　
-                <input id="oora1" type="radio" name="oora" checked="checked" /><label for="oora1">OR</label> 
-                <input id="oora2" type="radio" name="oora" /><label for="oora2">AND</label> 
-                <input id="qora1" type="checkbox" name="qora" /><label for="qora1">タイトル</label> 
-                <input id="qora2" type="checkbox" name="qora" /><label for="qora2">本文</label> 
-                <input id="qora3" type="checkbox" name="qora" /><label for="qora3">概要</label> 
-                <input id="qora4" type="checkbox" name="qora" /><label for="qora4">キーワード</label> 
-                <input id="qora5" type="checkbox" name="qora" /><label for="qora5">タグ</label> 
-            </small> 
-        </dt> 
+        <div id="pageSearch"> 
 
-        <div id="toggleArea"> 
-            <dt style="margin-top:10px;">カテゴリー
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">カテゴリー1</option> 
-                    <option value="2">カテゴリー2</option> 
-                    <option value="3">カテゴリー3</option> 
-                    <option value="4">カテゴリー4</option> 
-                </select> 
-            　制作者
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">1</option> 
-                    <option value="2">2</option> 
-                    <option value="3">3</option> 
-                    <option value="4">4</option> 
-                </select> 
-            　公開状態
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">公開</option> 
-                    <option value="2">非公開</option> 
-                </select> 
-            </dt> 
-            <p style="margin-top:15px;"><input type="button" value="検索" /></p> 
+            <dl class="over">
+                <dt><label for="keyword">キーワード</label></dt> 
+                    <dd><input id="keyword" name="keyword" type="text" class="defaultInput" /></dd> 
+                    <dd class="clear"><input id="oora1" type="radio" name="oora" checked="checked" /><label for="oora1">OR</label></dd> 
+                    <dd><input id="oora2" type="radio" name="oora" /><label for="oora2">AND</label></dd> 
+                    <dd><input id="qora1" type="checkbox" name="qora" /><label for="qora1">タイトル</label></dd> 
+                    <dd><input id="qora2" type="checkbox" name="qora" /><label for="qora2">本文</label></dd> 
+                    <dd><input id="qora3" type="checkbox" name="qora" /><label for="qora3">概要</label></dd> 
+                    <dd><input id="qora4" type="checkbox" name="qora" /><label for="qora4">キーワード</label></dd> 
+                    <dd><input id="qora5" type="checkbox" name="qora" /><label for="qora5">タグ</label></dd> 
+            </dl>
+            <dl class="under">
+                <dt>カテゴリー</dt>
+                    <dd><select>
+                        <option value="0"selected="selected">--指定なし--</option>
+                        <option value="1">カテゴリー1</option>
+                        <option value="2">カテゴリー2</option>
+                        <option value="3">カテゴリー3</option>
+                        <option value="4">カテゴリー4</option>
+                    </select></dd>
+
+                <dt>制作者</dt>
+                    <dd><select>
+                        <option value="0"selected="selected">--指定なし--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select></dd>
+
+                <dt>公開状態</dt>
+                    <dd><select>
+                    <option value="0"selected="selected">--指定なし--</option>
+                    <option value="1">公開</option>
+                    <option value="2">非公開</option>
+                    </select></dd>
+            </dl>
+                <p><input type="button" value="検索" /></p> 
         </div> 
 
     </form> 
@@ -71,22 +72,31 @@
     <form action="page_edit.php" method="post" name="form"> 
 
         <table summary="ページ一覧の表です。タイトルのリンクと編集ボタンから、ページの編集ができます。削除ボタンから削除ができます。" cellpadding="0" cellspacing="0"> 
+            <colgroup>
+                <col width="7%" />
+                <col width="38%" />
+                <col width="13%" />
+                <col width="10%" />
+                <col width="15%" />
+                <col width="10%" />
+                <col width="7%" />
+            </colgroup>
             <thead> 
                 <tr> 
-                    <th scope="col" width="7%" id="tableFirst">表示</th> 
-                    <th scope="col" width="38%">タイトル<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
-                    <th scope="col" width="13%">制作日<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
-                    <th scope="col" width="10%">制作者</th> 
-                    <th scope="col" width="15%">カテゴリー</th> 
-                    <th scope="col" width="10%">状態</th> 
-                    <th scope="col" width="7%">削除</th> 
+                    <th scope="col" id="tableFirst">表示</th> 
+                    <th scope="col">タイトル<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
+                    <th scope="col">制作日<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
+                    <th scope="col">制作者</th> 
+                    <th scope="col">カテゴリー</th> 
+                    <th scope="col">状態</th> 
+                    <th scope="col">削除</th> 
                 </tr> 
             </thead> 
 
             <tbody> 
 
                 <tr> 
-                <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=109' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=109' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=109'>くるくるくるくる</a></td> 
                         <td>2010/08/08</td> 
                         <td>admin</td> 
@@ -99,11 +109,11 @@
 </select></td> 
                         
 
-<td><a href='#' onclick='flg(109);'><img src="<?php echo $this->baseUrl('images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+<td><a href='#' onclick='flg(109);'><img src="<?php echo $this->baseUrl('images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr class='checkG'> 
-                    <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=107' target='_blank'><img src="<?php echo $this->baseUrl('../images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                    <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=107' target='_blank'><img src="<?php echo $this->baseUrl('../images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=107'>ええ</a></td> 
                         <td>2010/07/20</td> 
                         <td>admin</td> 
@@ -116,11 +126,11 @@
 </select></td> 
                         
 
-<td><a href='#' onclick='flg(107);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+<td><a href='#' onclick='flg(107);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr> 
-                        <td><img src="<?php echo $this->baseUrl('/images/btn_check_no.png'); ?>" alt='下書きは表示できません' widrh='27' height='27' /></td> 
+                        <td><img src="<?php echo $this->baseUrl('/images/btn_check_no.png'); ?>" alt='下書きは表示できません' width='27' height='27' /></td> 
                         <td><a href='edit/index.php?page_id=106'>test</a></td> 
                         <td>2010/07/20</td> 
                         <td>admin</td> 
@@ -133,11 +143,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(106);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(106);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr class='checkG'> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=105' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=105' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=105'>キーワード</a></td> 
                         <td>2010/07/06</td> 
                         <td>admin</td> 
@@ -150,11 +160,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(105);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(105);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=104' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=104' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=104'>aaa</a></td> 
                         <td>2010/06/10</td> 
                         <td>admin</td> 
@@ -167,11 +177,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(104);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(104);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr class='checkG'> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=103' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=103' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=103'>てすと</a></td> 
                         <td>2010/06/09</td> 
                         <td>admin</td> 
@@ -184,11 +194,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(103);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(103);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr> 
-                        <td><img src="<?php echo $this->baseUrl('/images/btn_check_no.png'); ?>" alt='下書きは表示できません' widrh='27' height='27' /></td> 
+                        <td><img src="<?php echo $this->baseUrl('/images/btn_check_no.png'); ?>" alt='下書きは表示できません' width='27' height='27' /></td> 
                         <td><a href='edit/index.php?page_id=101'>眠い</a></td> 
                         <td>2010/05/04</td> 
                         <td>admin</td> 
@@ -201,11 +211,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(101);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(101);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr class='checkG'> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=100' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=100' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=100'>なんとなく更新してみる</a></td> 
                         <td>2010/02/24</td> 
                         <td>admin</td> 
@@ -218,11 +228,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(100);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(100);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=99' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=99' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=99'>校長賞とりました。</a></td> 
                         <td>2010/02/13</td> 
                         <td>admin</td> 
@@ -235,11 +245,11 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(99);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(99);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     <tr class='checkG'> 
-                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=98' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' widrh='27' height='27' /></a></td> 
+                        <td><a href='http://design1.chu.jp/testsetuco/penguin//page.php?page_id=98' target='_blank'><img src="<?php echo $this->baseUrl('/images/btn_check.png'); ?>" alt='表示' width='27' height='27' /></a></td> 
                         <td><a href='edit/index.php?page_id=98'>制作展が(´ω｀)</a></td> 
                         <td>2010/02/12</td> 
                         <td>admin</td> 
@@ -252,7 +262,7 @@
 </select></td> 
                         
 
-                                                                <td><a href='#' onclick='flg(98);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' widrh='27' height='27' /></a></td> 
+                                                                <td><a href='#' onclick='flg(98);'><img src="<?php echo $this->baseUrl('/images/btn_delete.png'); ?>" alt='削除' width='27' height='27' /></a></td> 
                     </tr> 
 
                     

@@ -8,11 +8,11 @@
 <!-- section START --> 
 <div class="section"> 
 
-    <div id="topichAreaL"> 
+    <div class="topichAreaL"> 
 
-        <div id="topichAreaR"> 
+        <div class="topichAreaR"> 
 
-            <div id="topichArea"> 
+            <div class="topichArea"> 
 
                 <h3><img src="../images/h_goal.jpg" width="109" height="18" alt="更新目標の編集" /></h3> 
 
@@ -23,7 +23,10 @@
     </div> 
 
     <?php if (count($this->flashMessage)) : ?>
-    <div id='messageArea'><p><?php echo $this->flashMessage ?></p><p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p></div>
+        <div id='messageArea'>
+            <p><?php echo $this->flashMessage ?></p>
+            <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
+        </div>
     <?php endif; ?>    
     <form action="edit.php" method="post"> 
 

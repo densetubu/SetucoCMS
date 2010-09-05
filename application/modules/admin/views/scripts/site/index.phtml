@@ -8,11 +8,11 @@
     <!-- section START --> 
     <div class="section"> 
 
-        <div id="topichAreaL"> 
+        <div class="topichAreaL"> 
 
-            <div id="topichAreaR"> 
+            <div class="topichAreaR"> 
 
-                <div id="topichArea"> 
+                <div class="topichArea"> 
 
                     <h3><img src="../images/h_siteEdit.jpg" width="122" height="18" alt="サイト情報の編集" /></h3> 
 
@@ -21,24 +21,25 @@
             </div> 
 
         </div> 
-
-
+<!--  
+		<?php echo $this->form ?> 
+-->		
         <form action="/admin/site/update" method="post"> 
 
             <dl class="editArea"> 
 
                 <dt><label for="site_name">サイト名</label></dt> 
-                <dd><input type="text" id="site_name" name="site_name" value='日本電子専門学校 電設部?' onblur="if(this.value == '') { this.value='日本電子専門学校 電設部?'; }" /><br />サイト上に表示される名前です。</dd> 
+                <dd><input type="text" id="site_name" name="site_name" value=<?php echo $this->sites['name'];?> onblur="if(this.value == '') { this.value='日本電子専門学校 電設部?'; }" /><br />サイト上に表示される名前です。</dd> 
 
                 <dt><label for="site_name">サイトURL<br /><span>（リンク切れに注意）</span></label></dt> 
-                <dd><input type="text" id="site_url" name="site_url" value='http://design1.chu.jp/testsetuco/penguin/' onblur="if(this.value == '') { this.value='http://design1.chu.jp/testsetuco/penguin/'; }" /><br />サイトを表示するURLです。</dd> 
+                <dd><input type="text" id="site_url" name="site_url" value=<?php echo $this->sites['url'];?> onblur="if(this.value == '') { this.value='http://design1.chu.jp/testsetuco/penguin/'; }" /><br />サイトを表示するURLです。</dd> 
 
                 <dt id="site_description_h"><label for="site_description">説明</label></dt> 
-                <dd id="site_description_d"><textarea rows="2" id="site_description" name="site_description">日本電子専門学校電設部SetucoCMSプロジェクトです。</textarea><br />サイトの説明です。サイトの概要を入力してください。</dd> 
+                <dd id="site_description_d"><textarea rows="2" id="site_description" name="site_description"><?php echo $this->sites['comment'];?></textarea><br />サイトの説明です。サイトの概要を入力してください。</dd> 
 <!--<dd><input type="text" id="site_description" name="site_description" value='' /></dd>--> 
 
                 <dt><label for="site_keyword">キーワード<br /><span>（カンマ[&nbsp;,&nbsp;]で区切る）</span></label></dt> 
-                <dd><input type="text" id="site_keyword" name="site_keyword" value='せつこ,俺だ,結婚,してくれ' /><br />サイトのキーワードです。サイトに関連する単語を入力してください。</dd> 
+                <dd><input type="text" id="site_keyword" name="site_keyword" value=<?php echo $this->sites['keyword'];?> /><br />サイトのキーワードです。サイトに関連する単語を入力してください。</dd> 
 
             </dl> 
 
