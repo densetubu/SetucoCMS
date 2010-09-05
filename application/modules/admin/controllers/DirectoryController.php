@@ -35,5 +35,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
+        $directory = new Admin_Model_Directory();
+        $this->view->directory = $directory->load();
     }
 }

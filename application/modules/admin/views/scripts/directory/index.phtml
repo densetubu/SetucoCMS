@@ -1,71 +1,71 @@
 <!-- topicPath START -->
 <div id="topicPath">
-    <p><a href="/admin/index">トップ</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+    <p><a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
     <p>サイト構造（カテゴリー・ページの一覧）</p>
 </div>
 <!-- topicpath END -->
 
 <!-- section START -->
-    <div class="section">
-         <div class="topichAreaL">
-             <div class="topichAreaR">
-                 <div class="topichArea">
-                  <h3><img src="/images/directory/h_directory.jpg" width="283" height="18" alt="サイト構造（カテゴリー・ページの一覧）" /></h3>
-                 </div>
-             </div>
-         </div>
-
+<div class="section">
+    <div class="topichAreaL">
+        <div class="topichAreaR">
+            <div class="topichArea">
+                <h3>
+                    <img src="<?php echo $this->baseUrl('/images/directory/h_directory.jpg') ?>"
+                         width="283" height="18" alt="サイト構造（カテゴリー・ページの一覧）" />
+                </h3>
+            </div>
+        </div>
+    </div>
     <ul id="directory">
-        <li class="category check">
-        <div>
-            <p class="folder"><a href="#"><img src="/images/directory/icn_category_close.gif" width="36" height="19" alt="カテゴリーを開く" />電設部について</a></p>
-            <p><a href="#"><img src="/images/directory/icn_page.gif" width="11" height="12" alt="このカテゴリーに含まれるページ" />128</a></p>
-        </div>
-        </li>
-        <li class="category">
-        <div>
-            <p class="folder"><a href="#"><img src="/images/directory/icn_category_open.gif" width="36" height="19" alt="カテゴリーを閉じる" />電設部について</a></p>
-            <p><a href="#"><img src="/images/directory/icn_page.gif" width="11" height="12" alt="このカテゴリーに含まれるページ" />128</a></p>
-        </div>
+        <?php
+        foreach ($this->directory as $category):
+        $pageCount = $category->count();
+        ?>
+        <li class="category<?php echo $this->cycle(array('', ' check'))->next() ?>">
+            <div>
+                <p class="folder">
+                    <a href="<?php echo $category->getHref() ?>">
+                        <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" 
+                             width="36" height="19" alt="カテゴリーを開く" />
+                        <?php echo $category->getLabel() ?>
+                    </a>
+                </p>
+                <p>
+                    <a href="<?php echo $category->getHref() ?>">
+                        <img src="<?php echo $this->baseUrl('/images/directory/icn_page.gif') ?>" 
+                             width="11" height="12" alt="このカテゴリーに含まれるページ" />
+                        <?php echo $pageCount ?>
+                    </a>
+                </p>
+            </div>
             <ul>
-                <li class="page">
-                <div>
-                    <p><a href="#"><img src="/images/directory/icn_check.gif" width="18" height="15" alt="ページを確認" />OSCに参加しました</a></p>
-                    <p><a href="#"><img src="/images/directory/icn_edit.gif" width="17" height="17" alt="編集" /></a></p>
-                </div>
+                <?php
+                $i = 0; 
+                foreach ($category as $page):
+                $i++;
+                ?>
+                <li class="page<?php echo ($i == $pageCount) ? ' lastChild' : '' ?>">
+                    <div>
+                        <p>
+                            <a href="<?php echo $page->getViewHref() ?>">
+                                <img src="<?php echo $this->baseUrl('/images/directory/icn_check.gif') ?>" 
+                                     width="18" height="15" alt="ページを確認" />
+                                <?php echo $page->getLabel() ?>
+                            </a>
+                        </p>
+                        <p>
+                            <a href="<?php echo $page->getEditHref() ?>">
+                                <img src="<?php echo $this->baseUrl('/images/directory/icn_edit.gif') ?>" 
+                                     width="17" height="17" alt="編集" />
+                            </a>
+                        </p>
+                    </div>
                 </li>
-                <li class="page">
-                <div>
-                    <p><a href="#"><img src="/images/directory/icn_check.gif" width="18" height="15" alt="ページを確認" />OSCに参加しました</a></p>
-                    <p><a href="#"><img src="/images/directory/icn_edit.gif" width="17" height="17" alt="編集" /></a></p>
-                </div>
-                </li>
-                <li class="page lastChild">
-                <div>
-                    <p><a href="#"><img src="/images/directory/icn_check.gif" width="18" height="15" alt="ページを確認" />OSCに参加しました</a></p>
-                    <p><a href="#"><img src="/images/directory/icn_edit.gif" width="17" height="17" alt="編集" /></a></p>
-                </div>
-                </li>
+                <?php endforeach; ?>
             </ul>
         </li>
-        <li class="category check">
-        <div>
-            <p class="folder"><a href="#"><img src="/images/directory/icn_category_close.gif" width="36" height="19" alt="カテゴリーを開く" />電設部について</a></p>
-            <p><a href="#"><img src="/images/directory/icn_page.gif" width="11" height="12" alt="このカテゴリーに含まれるページ" />128</a></p>
-        </div>
-        </li>
-        <li class="category">
-        <div>
-            <p class="folder"><img src="/images/directory/icn_category_noChild.gif" width="36" height="19" alt="カテゴリーに何も入っていません" />電設部について</p>
-        </div>
-        </li>
-        <li class="category check">
-        <div>
-            <p class="folder"><a href="#"><img src="/images/directory/icn_category_close.gif" width="36" height="19" alt="カテゴリーを開く" />電設部について</a></p>
-            <p><a href="#"><img src="/images/directory/icn_page.gif" width="11" height="12" alt="このカテゴリーに含まれるページ" />128</a></p>
-        </div>
-        </li>
+        <?php endforeach; ?> 
     </ul>
-
-    </div>
+</div>
 <!-- section END -->
