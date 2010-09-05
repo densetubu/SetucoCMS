@@ -12,7 +12,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author     
+ * @author      charlesvineyard
  */
 
 
@@ -22,16 +22,15 @@
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
- * @author 
+ * @author      charlesvineyard
  */
 class Admin_DirectoryController extends Setuco_Controller_Action_Admin
 {
     /** 
-     * サイト構造(ディレクトリー)の一覧を表示するのアクションです
+     * サイト構造(ディレクトリー)の一覧を表示するのアクションです。
      *
      * @return void
-     * @author 
-     * @todo 内容の実装 現在はスケルトン
+     * @author charlesvineyard
      */
     public function indexAction()
     {
