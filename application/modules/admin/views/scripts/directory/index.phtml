@@ -22,7 +22,7 @@
         foreach ($this->directory as $category):
         $pageCount = $category->count();
         ?>
-        <li class="category<?php echo $this->cycle(array('', ' check'))->next() ?>">
+        <li class="category<?php echo $this->cycle(array(' check', ''))->next() ?>">
             <div>
                 <p class="folder">
                     <a href="<?php echo $category->getHref() ?>">
