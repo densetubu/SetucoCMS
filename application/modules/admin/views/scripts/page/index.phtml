@@ -23,47 +23,48 @@
     </div> 
 
     
-    <form action="#" method="post" id="searchBox" style="margin-left:10px; margin-bottom:15px;"> 
+    <form action="#" method="post"> 
 
-        <dt> 
-            <label for="keyword">キーワード</label> 
-            <small> 
-                <input id="keyword" name="keyword" type="text" />　
-                <input id="oora1" type="radio" name="oora" checked="checked" /><label for="oora1">OR</label> 
-                <input id="oora2" type="radio" name="oora" /><label for="oora2">AND</label> 
-                <input id="qora1" type="checkbox" name="qora" /><label for="qora1">タイトル</label> 
-                <input id="qora2" type="checkbox" name="qora" /><label for="qora2">本文</label> 
-                <input id="qora3" type="checkbox" name="qora" /><label for="qora3">概要</label> 
-                <input id="qora4" type="checkbox" name="qora" /><label for="qora4">キーワード</label> 
-                <input id="qora5" type="checkbox" name="qora" /><label for="qora5">タグ</label> 
-            </small> 
-        </dt> 
+        <div id="pageSearch"> 
 
-        <div id="toggleArea"> 
-            <dt style="margin-top:10px;">カテゴリー
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">カテゴリー1</option> 
-                    <option value="2">カテゴリー2</option> 
-                    <option value="3">カテゴリー3</option> 
-                    <option value="4">カテゴリー4</option> 
-                </select> 
-            　制作者
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">1</option> 
-                    <option value="2">2</option> 
-                    <option value="3">3</option> 
-                    <option value="4">4</option> 
-                </select> 
-            　公開状態
-                <select> 
-                    <option value="0" selected="selected">-- 指定なし --</option> 
-                    <option value="1">公開</option> 
-                    <option value="2">非公開</option> 
-                </select> 
-            </dt> 
-            <p style="margin-top:15px;"><input type="button" value="検索" /></p> 
+            <dl class="over">
+                <dt><label for="keyword">キーワード</label></dt> 
+                    <dd><input id="keyword" name="keyword" type="text" class="defaultInput" /></dd> 
+                    <dd class="clear"><input id="oora1" type="radio" name="oora" checked="checked" /><label for="oora1">OR</label></dd> 
+                    <dd><input id="oora2" type="radio" name="oora" /><label for="oora2">AND</label></dd> 
+                    <dd><input id="qora1" type="checkbox" name="qora" /><label for="qora1">タイトル</label></dd> 
+                    <dd><input id="qora2" type="checkbox" name="qora" /><label for="qora2">本文</label></dd> 
+                    <dd><input id="qora3" type="checkbox" name="qora" /><label for="qora3">概要</label></dd> 
+                    <dd><input id="qora4" type="checkbox" name="qora" /><label for="qora4">キーワード</label></dd> 
+                    <dd><input id="qora5" type="checkbox" name="qora" /><label for="qora5">タグ</label></dd> 
+            </dl>
+            <dl class="under">
+                <dt>カテゴリー</dt>
+                    <dd><select>
+                        <option value="0"selected="selected">--指定なし--</option>
+                        <option value="1">カテゴリー1</option>
+                        <option value="2">カテゴリー2</option>
+                        <option value="3">カテゴリー3</option>
+                        <option value="4">カテゴリー4</option>
+                    </select></dd>
+
+                <dt>制作者</dt>
+                    <dd><select>
+                        <option value="0"selected="selected">--指定なし--</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select></dd>
+
+                <dt>公開状態</dt>
+                    <dd><select>
+                    <option value="0"selected="selected">--指定なし--</option>
+                    <option value="1">公開</option>
+                    <option value="2">非公開</option>
+                    </select></dd>
+            </dl>
+                <p><input type="button" value="検索" /></p> 
         </div> 
 
     </form> 
@@ -71,15 +72,24 @@
     <form action="page_edit.php" method="post" name="form"> 
 
         <table summary="ページ一覧の表です。タイトルのリンクと編集ボタンから、ページの編集ができます。削除ボタンから削除ができます。" cellpadding="0" cellspacing="0"> 
+            <colgroup>
+                <col width="7%" />
+                <col width="38%" />
+                <col width="13%" />
+                <col width="10%" />
+                <col width="15%" />
+                <col width="10%" />
+                <col width="7%" />
+            </colgroup>
             <thead> 
                 <tr> 
-                    <th scope="col" width="7%" id="tableFirst">表示</th> 
-                    <th scope="col" width="38%">タイトル<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
-                    <th scope="col" width="13%">制作日<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
-                    <th scope="col" width="10%">制作者</th> 
-                    <th scope="col" width="15%">カテゴリー</th> 
-                    <th scope="col" width="10%">状態</th> 
-                    <th scope="col" width="7%">削除</th> 
+                    <th scope="col" id="tableFirst">表示</th> 
+                    <th scope="col">タイトル<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
+                    <th scope="col">制作日<a href="#" title="降順に並び替え">▼</a><a href="#" title="昇順に並び替え">▲</a></th> 
+                    <th scope="col">制作者</th> 
+                    <th scope="col">カテゴリー</th> 
+                    <th scope="col">状態</th> 
+                    <th scope="col">削除</th> 
                 </tr> 
             </thead> 
 
