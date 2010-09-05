@@ -35,6 +35,11 @@ class Admin_IndexController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
+        $ambition = new Admin_Model_Ambition();
+        $this->view->ambition = $ambition->load();
+        
+        $this->view->ambitionForm = $this->_getParam('ambitionForm',
+                $this->_createAmbitionForm());
     }
 
     /** 
@@ -47,7 +52,44 @@ class Admin_IndexController extends Setuco_Controller_Action_Admin
      */ 
     public function updateAmbitionAction()
     {
-        $this->_redirect('/admin/index/index');
+        $form = $this->_createAmbitionForm();
+        if (!$form->isValid($_POST)) {
+            $this->_setParam('ambitionForm', $form);
+            return $this->_forward('index');
+        }
+        $ambition = new Admin_Model_Ambition();
+        $ambition->update($form->getValue('ambition'));
+        
+        $this->_redirect('/admin');
+    }
+    
+    /**
+     * 
+     * @return void
+     * @author charlesvineyard
+     */
+    private function _createAmbitionForm()
+    {
+        $form = new Setuco_Form();
+        $form->setAttrib('id', 'ambitionForm');
+        $form->setMethod('post');
+        $form->setAction($this->_helper->url('update-ambition'));
+
+        $form->addElement('text', 'ambition', array(
+            'required' => true,
+            'filters'  => array('StringTrim')
+        ));
+        $form->addElement('submit', 'submit', array(
+            'label'    => '保存'
+        ));
+        $form->addElement('button', 'cancel', array(
+            'label'    => 'キャンセル',
+            'onclick'  => 'hideAmbitionForm()'
+        ));
+        // デコレータの調整
+        $form->setMinimalDecoratorElements(array('ambition', 'submit', 'cancel'));
+
+        return $form;
     }
 
     /** 

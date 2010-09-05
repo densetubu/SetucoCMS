@@ -1,16 +1,37 @@
+<style>
+#ambitionForm {
+    display: none;
+}
+</style>
+<script>
+function showAmbitionForm() {
+    dojo.style('ambitionView', {display: 'none'});   
+    dojo.style('ambitionForm', {display: 'inline'});
+    dojo.query('#ambitionForm input[name$=ambition]')[0].value =
+            dojo.byId('ambitionValue').innerHTML;
+}
+function hideAmbitionForm() {
+    dojo.style('ambitionForm', {display: 'none'});   
+    dojo.style('ambitionView', {display: 'inline'});
+}
+</script>
+
 <!-- section"野望" START -->
 <div class="section">
 
-    <form action="index.php" method="post">
-
         <dl id="designs">
-
-                <dt>野望</dt><dd><em>「せつこー俺だー結婚してくれー」</em><a href='index.php?edit=true'><img src='images/btn_edit.gif' alt='野望を変更する' width='21' height='21' /></a></dd>
-
+            <dt>野望</dt>
+            <dd>
+                <span id="ambitionView">
+                    <em>「<span id="ambitionValue"><?php echo $this->ambition ?></span>」</em>
+                    <a href="javascript:void(0)" onclick="showAmbitionForm()">
+                        <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
+                    </a>
+                </span>
+                <?php echo $this->ambitionForm ?>
+            </dd>
         </dl>
-
     </form>
-
 </div>
 <!-- section"野望" END -->
 
