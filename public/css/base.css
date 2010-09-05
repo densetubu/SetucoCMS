@@ -720,7 +720,13 @@ div#mainContent dl dd.tags input.tag {
     width: 60px;
     padding: 2px 4px;
 }
-
+p.default {
+    margin-bottom: 20px;
+    margin-left: 5px;
+}
+input.defaultInput {
+    width: 15em;
+}
 /*------------------------------------------------------------*/
 /*    ul#directory style                                            */
 /*------------------------------------------------------------*/
