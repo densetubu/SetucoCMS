@@ -28,9 +28,15 @@
 abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_Abstract
 {
     /**
+     * 一覧ページで、1ページあたり何件のデータを表示するか
+     */
+    const PAGE_LIMIT = 10;
+
+
+    /**
      * モジュール間の共通の設定
      *
-     * @void
+     * @return void
      * @author suzuki-mar
      */
     public function init()
@@ -47,7 +53,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
     /**
      * ページャーの設定をして、ビューで使用できるようにする
      *
-     * @void
+     * @retun void
      * @author suzuki-mar
      */
     public function setPagerForView($max)
@@ -59,7 +65,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
 
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
-        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage('10');
+        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage(self::PAGE_LIMIT);
 
         //viewでpaginationControlを使用しなくても、表示できるようにする
         $paginator->setView($this->view);

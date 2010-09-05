@@ -1,6 +1,28 @@
 <?php
+/**
+ * 閲覧側のエラーコントローラー
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage Controller
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link       
+ * @version    
+ * @since      File available since Release 0.1.0
+ * @author     suzuki-mar
+ */
 
-class ErrorController extends Zend_Controller_Action
+/**
+ * エラーコントローラー
+ * 
+ * @package    Controller
+ * @subpackage Controller
+ * @author     suzuki-mar
+ */
+class ErrorController extends Setuco_Controller_Action_Default
 {
     /**
      * クラスの共通設定 
@@ -8,7 +30,6 @@ class ErrorController extends Zend_Controller_Action
      */
     public function init()
     {
-
         //モジュール毎に違うレイアウトを表示する
         $this->_setLayout();
 
@@ -65,12 +86,7 @@ class ErrorController extends Zend_Controller_Action
      */
     private function _setLayout()
     {
-        //request->getModuleNameではうまくうごかないので、URIからモジュールを判定する
-        if (preg_match('/^\/admin\/+/', $_SERVER['REQUEST_URI'])) {
-            $moduleName = "admin";
-        } else { // 該当するものがなかったらdefault
-            $moduleName = "default";
-        }
+        $moduleName = $this->_getParam('module', 'default');
 
         // レイアウトの適用がうまくできないので、initメソッド内で設定する
         $options = array('layout' => 'layout',
