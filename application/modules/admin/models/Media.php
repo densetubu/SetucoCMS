@@ -72,22 +72,22 @@ class Admin_Model_Media
             // ファイルタイプによってふさわしい一覧表示用のアイコンを準備
             switch ($res[$i]['type']) {
                 case 'txt':
-                    $res[$i]['iconUrl'] = '/images/icn_txt.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_txt.gif';
                     break;
                 case 'pdf':
-                    $res[$i]['iconUrl'] = '/images/icn_pdf.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_pdf.gif';
                     break;
                 case 'jpg':
-                    $res[$i]['iconUrl'] = '/images/icn_pdf.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
                     break;
                 case 'gif':
-                    $res[$i]['iconUrl'] = '/images/icn_pdf.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
                     break;
                 case 'png':
-                    $res[$i]['iconUrl'] = '/images/icn_pdf.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
                     break;
                 default:
-                    $res[$i]['iconUrl'] = '/images/icn_pdf.gif';
+                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
                     break;
             }
         }
