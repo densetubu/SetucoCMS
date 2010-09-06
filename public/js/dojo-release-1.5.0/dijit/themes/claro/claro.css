@@ -1652,6 +1652,7 @@ DIV.dijitTabDisabled, .dj_ie DIV.dijitTabDisabled {
 	
 	cursor: default;
 }
+/*
 .claro {
 	font-family:Verdana,Arial,Helvetica,sans-serif;
 	font-size: .688em;
@@ -1711,6 +1712,7 @@ pre {
 	padding: 1.5em;
 }
 table {  font-size:100%; }
+*/
 table.dojoTabular { 
 	border-collapse: collapse; 
 	border-spacing: 0; 
