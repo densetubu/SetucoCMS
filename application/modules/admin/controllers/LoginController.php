@@ -103,8 +103,9 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
     private function _createLoginForm()
     {
         $form = new Setuco_Form();
-        $form->setMethod('post');
-        $form->setAction($this->_helper->url('auth'));
+        $form->setMethod('post')
+             ->setAction($this->_helper->url('auth'));
+        $form->getDecorator('HtmlTag')->setOption('class', 'straight');
 
         $form->addElement('text', 'loginId', array(
                     'label'    => 'アカウント名',

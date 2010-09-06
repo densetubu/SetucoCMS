@@ -17,13 +17,12 @@ class Setuco_Form extends Zend_Form
         $this->setElementDecorators(array('ViewHelper'), (array)$elements);
     }
     
-    public function loadDefaultDecorators()
-    {
-        parent::loadDefaultDecorators();
-        
-        // dlタグのclass属性をセット
-        if ($htmlTag = parent::getDecorator('HtmlTag')) {
-            $htmlTag->setOption('class', 'straight');
-        }
+    /**
+     * Dojoエレメントを有効にする
+     * 
+     * @return Setuco_Form
+     */
+    public function enableDojo() {
+        Zend_Dojo::enableForm($this);
     }
 }
