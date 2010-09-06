@@ -561,6 +561,9 @@ th {
 th#tableFirst {
     border-left: solid 1px #abcce5;
 }
+th img {
+    padding: 0 0 3px 3px;
+}
 td {
     border-right: solid 1px #f6f6f6;
     padding: 7px 5px 7px 15px;
