@@ -39,8 +39,8 @@
 
             <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル**KB、合計**MBまでです。</span></dt> 
                 <dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd> 
-                <dd>ファイル名:<input type="text" id="file_name" name="file_name" value="" /></dd> 
-                <dd>説明:<input type="text" id="file_name" name="file_name" value="" /></dd> 
+                <dd>ファイル名:<input type="text" id="file_name" name="file_name" value="<?php echo $this->mediaData['name']; ?>" /></dd> 
+                <dd>説明:<input type="text" id="file_name" name="file_name" value="<?php echo $this->mediaData['comment']; ?>" /></dd> 
                 <dd class="upload">ファイル:<input type="file" name="upload_img" id="upload_img" size="55" /></dd> 
             <dt><span class="attentionMessage">**MB</span></dt> 
 
