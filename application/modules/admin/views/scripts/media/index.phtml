@@ -75,40 +75,28 @@
 		<tr>
 			<th scope="col" width="20%" id="tableFirst">表示</th>
 			<th scope="col" width="40%">ファイル
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $type
-                     . '/sort/name'
-                     . '/order/desc'; ?>" title="降順に並び替え">▼</a>
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $this->condition['type']
-                     . '/sort/name'
-                     . '/order/asc'; ?>" title="昇順に並び替え">▲</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/desc'; 
+				?>" title="降順に並び替え">▼</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/asc'; 
+				?>" title="昇順に並び替え">▲</a>
 			</th>
 			<th scope="col" width="13%">更新日
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $this->condition['type']
-                     . '/sort/update_date'
-                     . '/order/desc'; ?>" title="降順に並び替え">▼</a>
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $this->condition['type']
-                     . '/sort/' . $this->condition['sort']
-                     . '/order/asc'; ?>" title="昇順に並び替え">▲</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/desc'; 
+				?>" title="降順に並び替え">▼</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/asc'; 
+				?>" title="昇順に並び替え">▲</a>
 			</th>
 			<th scope="col" width="13%">アップロード日
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $this->condition['type']
-                     . '/sort/create_date'
-                     . '/order/desc'; ?>" title="降順に並び替え">▼</a>
-				<a href="<?php echo $this->baseUrl('/admin/media/index')
-				     . '/page/' . $this->currentPage
-                     . '/type/' . $this->condition['type']
-                     . '/sort/create_date'
-                     . '/order/asc'; ?>" title="昇順に並び替え">▲</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/desc'; 
+				?>" title="降順に並び替え">▼</a>
+				<a href="<?php 
+				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/asc'; 
+				?>" title="昇順に並び替え">▲</a>
 			</th>
 			<th scope="col" width="7%">編集</th>
 

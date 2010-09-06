@@ -220,7 +220,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $fileSelector = new Zend_Form_Element_File('upload_img', array('size' => 55));
         $fileSelector->setLabel(null)
                     ->addDecorator('Label', array('tag' => null))
-                    ->setDestination($_SERVER['DOCUMENT_ROOT'] . '/media/upload') // public/media/uploadディレクトリの権限に注意
+                    ->setDestination(APPLICATION_PATH . '/../public/media/upload') // public/media/uploadディレクトリの権限に注意
                     ->setMaxFileSize(self::MAX_FILE_SIZE)
                     ->addValidator('Size', false, self::MAX_FILE_SIZE)
                     ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
