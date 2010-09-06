@@ -128,7 +128,7 @@
                 </a>
             </td>
             <td>
-                <a href="#" onclick="alert('削除しますか？');"> <!-- ダイアログ表示=>OK押下でデリート --> <?php // @todo 未対応 ?>
+                <a href="#" onclick="if (confirm('ファイル <?php echo $fileinfo['name']; ?> を削除しますか？')) {location.href = '<?php echo $this->baseUrl('/admin/media/delete/id/' . $fileinfo['id']); ?>';} "> <!-- ダイアログ表示=>OK押下でデリート --> 
                 <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                 </a>
             </td>
