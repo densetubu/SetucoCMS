@@ -67,7 +67,7 @@
 <?php echo $this->searchForm->getElement('search'); ?>
 </p>
 </div>
-
+</form>
 <table
 	summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。"
 	cellpadding="0" cellspacing="0">
@@ -110,7 +110,7 @@
 	    <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : ''; ?>>
             <td class="thumb">
                 <a href="#" onclick=""> <!-- そのファイルを開く？  -->
-                <img src="<?php echo $this->baseUrl($fileinfo['iconUrl']); ?>" width="48" height="auto" />
+                <img src="<?php echo $this->baseUrl($fileinfo['thumbUrl']); ?>" width="48" height="auto" />
                 </a>
             </td>
             <td>

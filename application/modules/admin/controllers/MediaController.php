@@ -59,13 +59,13 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $currentPage = $this->_getPage();
 
         // ファイルタイプの絞り込み取得
-        
-        $type = $this->_fileTypes[$this->_getParam('fileType', $this->_getParam('type', 0))];
-
-        if ($type === null) {
-            $type = 'all';
+        $type = 'all';
+        if ($this->getRequest()->isPost()) {
+            $type = $this->_fileTypes[$this->_getParam('fileType', 0)]; // 絞込みフォームでの指定
+            $currentPage = 1;
+        } else {
+            $type = $this->_getParam('type');     // ソートリンクでの指定
         }
-        
        
         // ソートカラムとオーダー取得
         $sort  = $this->_getParam('sort', 'name'); // どの列でソートするか（media表の列名が入る）
@@ -122,10 +122,11 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     public function createAction()
     {
         
-        
+        // ファイルアップロード後でなければmediaのトップページへ
         if (!$this->getRequest()->isPost()) {
             $this->_redirect('/admin/media/index');
         }
+        
         
         $form = $this->_createUploadForm();
         if (!$form->isValid($_POST)) {
@@ -133,16 +134,18 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。');
             $this->_redirect('/admin/media/index');
         }
+        
+        // @todo 指定名での保存
         if (!$form->upload_img->receive()) {
             $this->_helper->flashMessenger('ファイルが正しく送信されませんでした。');
             $this->_redirect('/admin/media/index');
         }
-        
+
         $service = new Admin_Model_Media();
-        if (!$service->saveUploadedMedia($this->upload_img->getFileName())) {
+        if (!$service->saveUploadedMedia($form->upload_img->getFileName())) {
             $this->_helper->flashMessenger('ファイルが正しく保存できませんでした。');
             $this->_redirect('/admin/media/index');
-        }        
+        }
         
         $this->_helper->flashMessenger('ファイルをアップロードしました。');
         $this->_redirect('/admin/media/index');
@@ -245,17 +248,18 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     {
         $searchForm = new Zend_Form();
         $searchForm->setMethod('post');
-        $searchForm->setAction('/admin/media/index');
+        $searchForm->setAction('/admin/media/index');        
         
         // ファイルタイプのセレクトボックス
         $typeSelector = new Zend_Form_Element_Select('fileType');
         $typeSelector->clearDecorators()
                      ->setLabel('ファイルの種類')
+                     ->setValue(array_search($condition['type'], $this->_fileTypes))
                      ->addDecorator('ViewHelper')
                      ->addDecorator('Label', array('tag' => null));
 
         $typeSelector->addMultiOptions($this->_fileTypes);
-        $typeSelector->addMultiOption('0', '--指定なし--');
+        $typeSelector->addMultiOption('0', '--指定なし--', 'selected');
         // @todo 現在適用されている絞り込みのファイル種類をselectedにする
         
         // 絞込みボタン
@@ -265,7 +269,6 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $searchFormSubmit->clearDecorators()
                          ->addDecorator('ViewHelper');
                     
-                        
         $searchForm->addElement($typeSelector);
         $searchForm->addElement($searchFormSubmit);
         

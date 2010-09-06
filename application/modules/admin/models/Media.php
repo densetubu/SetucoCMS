@@ -24,7 +24,7 @@
  */
 class Admin_Model_Media
 {
-    
+   
 
     /**
      * メソッドの説明
@@ -37,63 +37,36 @@ class Admin_Model_Media
      */
     public function findMedias($condition, $currentPage, $limit)
     {
-        
-        $res = array();
-        $start = ($currentPage - 1) * $limit + 1;
-        $end = $start + $limit;
-        $allCount = $this->countMedias($condition);
-        $types = array('jpg', 'gif', 'png', 'pdf', 'txt');
-        
-       
-        for ($i = $start; $i < $end && $i <= $allCount; $i++) {
-    
-            $type = $types[$i % sizeof($types)] ;
 
-            if ($condition['type'] != 'all' && $type != $condition['type']) {
-               
-                continue;
-            }
-            
-            $res[$i] = array(
-                'id'          => $i,
-                'name'        => '表示名' . ($i),
-                'type'        => $type, 
-                'createDate' => "2010-08-23 05:01:11",
-                'updateDate' => "2010-08-24 05:01:11",
-                'comment'     => '表示名' . ($i). 'の説明'
-            );
-                
-            $createDate = strptime($res[$i]['createDate'], "%Y-%m-%d %H:%M:%S");
-            $res[$i]['createDate'] = $createDate['tm_mon'] . '月' . $createDate['tm_mday'] . '日';
-            
-            $updateDate = strptime($res[$i]['updateDate'], "%Y-%m-%d %H:%M:%S");
-            $res[$i]['updateDate'] = $updateDate['tm_mon'] . '月' . $updateDate['tm_mday'] . '日';
-            
-            // ファイルタイプによってふさわしい一覧表示用のアイコンを準備
-            switch ($res[$i]['type']) {
-                case 'txt':
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_txt.gif';
-                    break;
-                case 'pdf':
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_pdf.gif';
-                    break;
-                case 'jpg':
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
-                    break;
-                case 'gif':
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
-                    break;
-                case 'png':
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
-                    break;
-                default:
-                    $res[$i]['iconUrl'] = '/media/thumbnail/thumb_img.png';
-                    break;
-            }
+        $medias = $this->_mediaDao_SelectAll();
+        $workArray = array();
+        
+        // ファイル種別の絞込み
+        if ($condition['type'] != 'all') {
+            foreach ($medias as $i => $media) {
+                if ($media['type'] == $condition['type']) {
+                    array_push($workArray, $media);
+                }
+            }    
+            $medias = $workArray;
         }
-
-        // Zend_Db_Select, fetchAll　した状態の配列を返す
-        return $res;
+        
+        
+        // スタブ限定のチートソート
+        if (
+            ($condition['sort'] == 'name'        && $condition['order'] == 'desc') ||
+            ($condition['sort'] == 'update_date' && $condition['order'] == 'asc') ||
+            ($condition['sort'] == 'create_date' && $condition['order'] == 'desc') 
+        ) {
+            $medias = array_reverse($medias); // 逆転する
+        }
+        
+        // ページャーの反映
+        $startRecord = ($currentPage - 1) * $limit;
+        
+        $result = array_slice($medias, $startRecord, $limit);
+        return $result;
+        
 
     }
 
@@ -107,10 +80,26 @@ class Admin_Model_Media
      * @return ＜型 説明 | void＞
      * @author   akitsukada
      */
-    public function countMedias($condition)
+    public function countMedias($condition = null)
     {
         // SELECT count(*) FROM media;
-        return 23;
+        $fileCount = 23; // 適当
+        if ($condition == null) {
+            return $fileCount;
+        }
+        
+        if ($condition['type'] == 'all') {
+            return $fileCount;
+        }
+        
+        $medias = $this->_mediaDao_SelectAll();
+        $cnt = 0;
+        foreach ($medias as $i => $media) {
+            if ($media['type'] == $condition['type']) {
+                $cnt++;
+            }
+        }
+        return $cnt;        
     }
 
     /**
@@ -133,16 +122,59 @@ class Admin_Model_Media
     
         $type = $types[$id % sizeof($types)] ;
         $res = array(
-            'id'          => $id,
-            'name'        => '表示名' . ($id),
-            'type'        => $type, 
+            'id'         => $id,
+            'name'       => '表示名' . ($id),
+            'type'       => $type, 
             'createDate' => "2010-08-23 05:01:11",
             'updateDate' => "2010-08-24 05:01:11",
-            'comment'     => '表示名' . ($id) . 'の説明'
+            'comment'    => '表示名' . ($id) . 'の説明'
         );
         
         return $res;
 
     }
+ 
+    /**
+     * スタブ専用のメソッド。DAOの代わりにmedia表のデータを全件作って返す
+     */
+    private function _mediaDao_SelectAll() {
+
+        $res = array();
+        $types = array('jpg', 'gif', 'png', 'pdf', 'txt'); 
+        $count = $this->countMedias();
+       
+        for ($i = 0; $i < $count; $i++) {
     
+            $type     = $types[$i % sizeof($types)] ;
+            $thumb    = '';
+            switch ($type) {
+                case 'jpg' :
+                case 'gif' :
+                case 'png' :
+                    $thumb = 'thumb_img.png';
+                    break;
+                case 'pdf' :
+                    $thumb = 'thumb_pdf.gif';
+                    break;
+                case 'txt' :
+                    $thumb = 'thumb_txt.gif';
+                    break;
+            }
+            
+            $res[$i] = array(
+                'id'         => $i,
+                'name'       => '表示名' . ($i + 1),
+                'type'       => $type, 
+                'createDate' => "2010-08-23 05:01:" . sprintf("%02d", 59 - $i),
+                'updateDate' => "2010-08-24 05:01:" . sprintf("%02d", $i),
+                'comment'    => '表示名' . ($i). 'の説明',
+                'thumbUrl'	 => '/media/thumbnail/' . $thumb
+            );
+            
+        }
+
+        // Zend_Db_Select, fetchAll　した状態の配列を返す
+        return $res;
+        
+    }
 }
