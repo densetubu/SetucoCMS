@@ -26,22 +26,6 @@
  */
 class Admin_LoginController extends Setuco_Controller_Action_Admin
 {
-    /** 
-     *
-     * コントローラーの共通設定をしています 
-     *
-     * @return void
-     * @author Yuu Yamanaka suzuki_mar
-     */
-    public function init()
-    {
-        //親クラスの設定を引き継ぐ
-        parent::init();
-
-        // レイアウトを無効にする
-        Zend_Layout::getMvcInstance()->disableLayout();
-    }
-
     /**
      * ログインフォーム
      * 
@@ -123,6 +107,17 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
         $form->setMinimalDecoratorElements('submit');
 
         return $form;
+    }
+    
+    /**
+     * レイアウト名を取得します。
+     * 
+     * @return string レイアウト名
+     * @author charlesvineyard
+     */
+    protected function getLayoutName()
+    {
+        return 'layout-login';
     }
 }
 
