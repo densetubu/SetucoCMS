@@ -1,9 +1,10 @@
-<style>
+<?php $this->headStyle()->captureStart() ?>
 #ambitionForm {
     display: none;
 }
-</style>
-<script>
+<?php $this->headStyle()->captureEnd() ?>
+
+<?php $this->headScript()->captureStart() ?>
 function showAmbitionForm() {
     dojo.style('ambitionView', {display: 'none'});   
     dojo.style('ambitionForm', {display: 'inline'});
@@ -14,24 +15,25 @@ function hideAmbitionForm() {
     dojo.style('ambitionForm', {display: 'none'});   
     dojo.style('ambitionView', {display: 'inline'});
 }
-</script>
+<?php $this->headScript()->captureEnd() ?>
 
 <!-- section"野望" START -->
 <div class="section">
-
-        <dl id="designs">
-            <dt>野望</dt>
-            <dd>
-                <span id="ambitionView">
-                    <em>「<span id="ambitionValue"><?php echo $this->ambition ?></span>」</em>
-                    <a href="javascript:void(0)" onclick="showAmbitionForm()">
-                        <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
-                    </a>
-                </span>
-                <?php echo $this->ambitionForm ?>
-            </dd>
-        </dl>
-    </form>
+    <dl id="designs">
+        <dt>
+            野望
+        </dt>
+        <dd>
+            <span id="ambitionView">
+                <em>「<span id="ambitionValue"><?php echo $this->ambition ?></span>」</em>
+                <a href="javascript:void(0)" onclick="showAmbitionForm()">
+                    <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" 
+                         alt="野望を変更する" width="21" height="21" />
+                </a>
+            </span>
+            <?php echo $this->ambitionForm ?>
+        </dd>
+    </dl>
 </div>
 <!-- section"野望" END -->
 

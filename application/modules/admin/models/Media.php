@@ -70,7 +70,10 @@ class Admin_Model_Media
 
     }
 
-
+    public function deleteMedia($id) 
+    {
+        return true;
+    }
     /**
      * メソッドの説明
      *
@@ -137,7 +140,8 @@ class Admin_Model_Media
     /**
      * スタブ専用のメソッド。DAOの代わりにmedia表のデータを全件作って返す
      */
-    private function _mediaDao_SelectAll() {
+    private function _mediaDao_SelectAll() 
+    {
 
         $res = array();
         $types = array('jpg', 'gif', 'png', 'pdf', 'txt'); 
@@ -163,7 +167,7 @@ class Admin_Model_Media
             
             $res[$i] = array(
                 'id'         => $i,
-                'name'       => '表示名' . ($i + 1),
+                'name'       => '表示名' . ($i),
                 'type'       => $type, 
                 'createDate' => "2010-08-23 05:01:" . sprintf("%02d", 59 - $i),
                 'updateDate' => "2010-08-24 05:01:" . sprintf("%02d", $i),

@@ -27,12 +27,16 @@
         <p class="default"><input type="text" id="tag_name" name="tag_name" class="defaultInput" value="新規タグ" /><input type="submit" id="sub" name="sub" value="追加" /></p> 
 
         <table summary="タグ一覧の表です。タグの追加・編集・削除ができます。" cellpadding="0" cellspacing="0"> 
-
+            <colrougp> 
+                <col width="80%" /> 
+                <col width="10%" /> 
+                <col width="10%" /> 
+            </colgroup> 
            <thead> 
                <tr> 
-                   <th scope="col" width="80%" id="tableFirst">タグ名<a href="#">▼</a><a href="#">▲</a></th> 
-                   <th scope="col" width="10%">編集</th> 
-                   <th scope="col" width="10%">削除</th> 
+                   <th scope="col" id="tableFirst">タグ名<a href="#"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a><a href="#"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a></th> 
+                   <th scope="col">編集</th> 
+                   <th scope="col">削除</th> 
                </tr> 
            </thead> 
 

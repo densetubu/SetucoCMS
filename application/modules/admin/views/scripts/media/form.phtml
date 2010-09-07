@@ -28,23 +28,39 @@
 
     <div class="hArea"> 
 
-        <h3 id="textType">「logo.jpg」の編集</h3> 
+        <h3 id="textType"><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</h3> 
 
     </div> 
 
 
-    <form action="#" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
+<?php if (count($this->flashMessage)) : ?>
+    <div id='messageArea'>
+        <p><?php echo $this->flashMessage ?></p>
+        <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
+    </div>
+<?php endif; ?>
+
+    <form action="<?php echo $this->updateForm->getAction(); ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
 
         <dl id="inputArea"> 
 
             <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル**KB、合計**MBまでです。</span></dt> 
                 <dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd> 
-                <dd>ファイル名:<input type="text" id="file_name" name="file_name" value="<?php echo $this->mediaData['name']; ?>" /></dd> 
-                <dd>説明:<input type="text" id="file_name" name="file_name" value="<?php echo $this->mediaData['comment']; ?>" /></dd> 
-                <dd class="upload">ファイル:<input type="file" name="upload_img" id="upload_img" size="55" /></dd> 
+                <dd>ファイル名:
+    	            <?php echo $this->updateForm->getElement('name'); ?>
+                </dd> 
+                <dd>説明:
+	                <?php echo $this->updateForm->getElement('comment'); ?>
+                </dd> 
+                <dd class="upload">ファイル:
+	                <?php echo $this->updateForm->getElement('upload_img'); ?>
+                </dd> 
             <dt><span class="attentionMessage">**MB</span></dt> 
 
-                <dd ><input type="submit" class="upSub" id="up" name="up" value="編集を保存する" /></dd> 
+                <dd >
+	                <?php echo $this->updateForm->getElement('up'); ?>
+<!--                <input type="submit" class="upSub" id="up" name="up" value="編集を保存する" />-->
+                </dd> 
         </dl> 
 
     </form> 
