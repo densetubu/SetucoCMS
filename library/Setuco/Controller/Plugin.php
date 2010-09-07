@@ -1,9 +1,26 @@
 <?php
 
 /**
- * せつこの標準コントローラプラグイン
- * 
- * @author Yuu Yamanaka
+ * Setucoの標準コントローラプラグイン
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Controller
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.
+ * @license
+ * @version
+ * @link
+ * @since      File available since Release 0.1.0
+ * @author     Yuu Yamanaka, charlelsvineyard
+ */
+
+/**
+ * @category   Setuco
+ * @package    Controller
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.
+ * @license
+ * @author     Yuu Yamanaka, charlelsvineyard
  */
 class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
 {
@@ -16,14 +33,13 @@ class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
     public function dispatchLoopStartup()
     {
         if ($this->getRequest()->getModuleName() == 'admin') {
-            if ($this->_isLoginControllerRequired()) {
+            if ($this->_isLoginControllerRequested()) {
                 return;
             }
-            if ($this->_isLoggedIn()) {
-                $this->_setNavigationEnable();
-                return;
+            if (! $this->_isLoggedIn()) {
+                $this->_redirectLogin();        
             }
-            $this->_redirectLogin();        
+            $this->_setNavigationEnable();
         }
     }
     
@@ -33,7 +49,7 @@ class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
      * @return boolean アクセスされていれば true
      * @author charlesvineyard
      */
-    private function _isLoginControllerRequired()
+    private function _isLoginControllerRequested()
     {
         return $this->getRequest()->getControllerName() == 'login';
     }
