@@ -63,13 +63,21 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
 
+        //現在のページ番号を取得する
+        $page = $this->_getParam('page', 1);
+
+        //現在のページ番号を渡す 
+        $this->view->page = $page;
+
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
-        $paginator->setCurrentPageNumber($this->_getParam('page'))->setItemCountPerPage(self::PAGE_LIMIT);
+        $paginator->setCurrentPageNumber($page)->setItemCountPerPage(self::PAGE_LIMIT);
 
         //viewでpaginationControlを使用しなくても、表示できるようにする
         $paginator->setView($this->view);
 
+        //ページャーをviewで使用できるようにする
         $this->view->paginator = $paginator;
+
     }
 }

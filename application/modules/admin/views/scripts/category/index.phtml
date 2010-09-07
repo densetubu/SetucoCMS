@@ -1,6 +1,27 @@
+<?php
+/**
+ * カテゴリーの新規作成、編集 一覧表示の画面
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Category
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @author     suzuki-mar
+ */
+?>
+
+<?php
+?>
+
 <!-- topicPath START -->
 <div id="topicPath">
-    <p><a href="../index.php">トップ</a><img src="../images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+    <p><a href="<?php echo $this->baseUrl('/'); ?>">トップ</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif')?>" width="6" height="11" alt="の中の" /></p>
     <p>カテゴリーの追加・編集・削除</p>
 </div>
 <!-- topicpath END -->
@@ -14,7 +35,7 @@
 
             <div class="topichArea">
 
-                <h3><img src="../images/h_catAll.jpg" width="208" height="18" alt="カテゴリーの追加・編集・削除" /></h3>
+                <h3><img src="<?php echo $this->baseUrl('/images/h_catAll.jpg')?>" width="208" height="18" alt="カテゴリーの追加・編集・削除" /></h3>
 
             </div>
 
@@ -23,9 +44,14 @@
     </div>
 
     
-    <form action="cat_edit.php" method="post">
 
-        <p class="default"><input type="text" id="cat_name" name="cat_name" class="defaultInput" value="新規カテゴリー" /><input type="submit" id="sub" name="sub" value="追加" /></p>
+        <p class="default">
+        <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
+        <?php echo $this->createForm->getElement('cat_name'); ?>
+        <?php echo $this->createForm->getElement('sub'); ?>
+
+        </form>
+        </p>
 
         <table summary="カテゴリー一覧の表です。カテゴリーの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
 
@@ -40,22 +66,50 @@
 
             <tbody>
 
-                                <tr>
-<td>about</td><td><a href='index.php?edit=32'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='32' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(32);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
-<tr class='checkG'>
-<td>contents</td><td><a href='index.php?edit=12'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='12' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(12);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
-<tr>
-<td>link</td><td><a href='index.php?edit=19'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='19' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(19);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
-<tr class='checkG'>
+<?php foreach($this->categories as $value): ?>
 
-<td>report</td><td><a href='index.php?edit=42'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='42' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(42);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
-<tr>
-<td>test</td><td><a href='index.php?edit=46'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='46' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(46);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
+<?php if($value['is_check']): //checkしているか? ?>
 <tr class='checkG'>
-<td>新規カテゴリー</td><td><a href='index.php?edit=49'><img src='../images/btn_edit.png' alt='編集' width='27' height='27' /></a></td><input type='hidden' id='cat_id' name='cat_id' value='49' /><input type='hidden' id='cat_no' name='cat_no' value='' /><td><a href='#' onclick='flg(49);'><img src='../images/btn_delete.png' alt='削除' width='27' height='27' /></a></td></tr>
+<?php else: ?>
 <tr>
-<td>未分類<span id='autoCatMessage'>（※カテゴリー未選択時に自動選択されるカテゴリーです）</span></td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            </tbody>
+<?php endif; ?>
+
+<?php if ($value['id'] !== false): //登録したカテゴリーか　編集削除できるか ?> 
+
+<?php //タグを編集するか ?>
+<?php if ($value['id'] == $this->editId): ?>
+<td> 
+<form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="post">
+
+<?php
+echo $this->addForm->getElement('name')->setValue($value['name']);
+echo $this->addForm->getElement('id')->setValue($value['id']);
+echo $this->addForm->getElement('sub');
+?>
+
+</form>
+</td>
+
+<?php else: ?>
+<td><?php echo $value['name'] ?></td>
+
+<?php endif; ?>
+
+<td><a href='<?php echo $this->baseUrl("/admin/category/index/page/{$this->page}/id/{$value['id']}")?>'><img src='<?php echo $this->baseUrl('/images/btn_edit.png')?>' alt='編集' width='27' height='27' /></a></td>
+<input type='hidden' id='cat_id' name='cat_id' value='<?php echo $value['id'] ?>' />
+<input type='hidden' id='cat_no' name='cat_no' value='' />
+<td><a href='#' onclick='flg(<?php echo $value['id']?>);'><img src='<?php echo $this->baseUrl('/images/btn_delete.png')?>' alt='削除' width='27' height='27' /></a></td>
+
+<?php else: //デフォルトのカテゴリー 編集削除できない ?>
+<td>未分類<span id='autoCatMessage'>（※カテゴリー未選択時に自動選択されるカテゴリーです）</span></td><td>&nbsp;</td><td>&nbsp;</td>
+
+<?php endif; ?>
+
+
+</tr>
+<?php endforeach; ?>
+
+           </tbody>
 
         </table>
 
@@ -65,4 +119,20 @@
     
 </div>
 <!-- section END -->
+
+<?php //htmlのheadタグで出力するためにキャプチャーする
+$this->headScript()->captureStart() ?>
+<!--
+function flg(id){
+    var flg;　//真偽を入れる変数の宣言
+
+        flg=confirm("本当に削除してよろしいですか？"); //真偽の代入
+
+    if (flg==true){
+        location.href='index.php?delete='+id;
+    }
+}
+// -->
+<?php $this->headScript()->captureEnd() ?>
+
 
