@@ -38,7 +38,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
     const PAGE_LIMIT = 10;
 
     /**
-     * モジュール間の共通の設定
+     * adminモジュールコントローラの初期処理です。
      *
      * @return void
      * @author suzuki-mar
@@ -46,12 +46,6 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
     public function init()
     {   
         parent::init();
-        
-        //モジュール間の共通レイアウトの設定
-        $layout = $this->_helper->layout();
-        $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
-        $layout->setLayout('layout');
-        
         $this->_navigation = $this->_initNavigation();
     }   
     
@@ -82,7 +76,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
     /**
      * リクエスト中のページのタイトルを取得します。
      * 
-     * @return strin|null タイトルが設定されていればタイトル、なければ null を返します。
+     * @return string|null タイトルが設定されていればタイトル、なければ null を返します。
      * @author charlesvineyard
      */
     protected function _chooseHeadTitle()
@@ -103,7 +97,7 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
     /**
      * ページャーの設定をして、ビューで使用できるようにする
      *
-     * @retun void
+     * @return void
      * @author suzuki-mar
      */
     public function setPagerForView($max)
