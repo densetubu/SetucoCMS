@@ -23,16 +23,15 @@
  * @author     akitsukada
  */
 class Admin_Model_Media
-{
-   
-
+{   
+    
     /**
-     * メソッドの説明
+     * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件のデータを取得する
      *
-     * @param    型 $hoge 説
-     * @param    型 $foo 説
-     * @param    型 $bar 説
-     * @return ＜型 説明 | void＞
+     * @param    array $condition 		「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
+     * @param    int   $currentPage 	ページネーター用の、現在表示したいページ番号
+     * @param    int  	$limit	 		ページネーター用の、1ページに表示する最大件数
+     * @return 	  array	取得したデータを格納した二次元配列
      * @author   akitsukada
      */
     public function findMedias($condition, $currentPage, $limit)
@@ -67,26 +66,33 @@ class Admin_Model_Media
         $result = array_slice($medias, $startRecord, $limit);
         return $result;
         
-
     }
 
+
+    /**
+     * Media表から、指定したIDのレコードを削除する
+     * 
+     * @param  int 		$id 削除したいファイルのID
+     * @return boolean	true:削除成功、false:削除失敗
+     * @author akitsukada
+     */
     public function deleteMedia($id) 
     {
         return true;
     }
+    
+    
     /**
-     * メソッドの説明
+     * Media表から、条件に合うファイルの件数をカウントする
      *
-     * @param    型 $hoge 説
-     * @param    型 $foo 説
-     * @param    型 $bar 説
-     * @return ＜型 説明 | void＞
+     * @param    array $condition 条件を指定する配列
+     * @return   int カウント結果の件数
      * @author   akitsukada
      */
     public function countMedias($condition = null)
     {
         // SELECT count(*) FROM media;
-        $fileCount = 23; // 適当
+        $fileCount = 38; // 現在はスタブなので適当な数字
         if ($condition == null) {
             return $fileCount;
         }
@@ -105,18 +111,30 @@ class Admin_Model_Media
         return $cnt;        
     }
 
-    /**
-     * 
-     * @param $filename
-     */
-    public function saveUploadedMedia($filename) 
-    {
-        return true;
-    }
     
     /**
-     * IDを指定してファイル一件のデータを取得
-     * @param $id
+     * 受け取ったファイルの情報でMedia表を更新する（１件）
+     * 
+     * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
+     * @return boolean true:更新成功、false:更新失敗
+     * @author akitsukada
+     */
+    public function updateMediaInfo($mediaInfo) 
+    {
+        // DBにデータを登録
+        
+        //var_dump($mediaInfo); exit();
+        return true;
+
+    }
+    
+
+    /**
+     * Media表からIDを指定してファイル一件のデータを取得する
+     * 
+     * @param  int $id 取得したいファイル（メディア）のID
+     * @return mixed 取得したファイルのデータを格納した配列。取得失敗時はnullを返す。
+     * @author akitsukada
      */
     public function findMediaById($id)
     {
@@ -137,8 +155,27 @@ class Admin_Model_Media
 
     }
  
+
     /**
-     * スタブ専用のメソッド。DAOの代わりにmedia表のデータを全件作って返す
+     * ファイルの新規登録のため、Media表を確認して新しいメディアIDを採番し取得する
+     * 
+     * @return int 新規登録用のメディアID 
+     * @author akitsukada
+     */
+    public function createNewMediaID()
+    {
+        // DBを見て新しいメディアIDを取得して返す
+        return time() % 60; // 適当に60程度まで
+    }
+    
+    
+ ######################## 以下スタブ用擬似DAO ###############################
+ 
+    /**
+     * スタブ専用の暫定メソッド。DAOの代わりにmedia表の擬似データを全件作って返す
+     * 
+     * @todo   モデルの実装が進んだら削除する
+     * @author akitsukada
      */
     private function _mediaDao_SelectAll() 
     {
@@ -155,13 +192,13 @@ class Admin_Model_Media
                 case 'jpg' :
                 case 'gif' :
                 case 'png' :
-                    $thumb = 'thumb_img.png';
+                    $thumb = '/media/thumbnail/thumb_img.png';
                     break;
                 case 'pdf' :
-                    $thumb = 'thumb_pdf.gif';
+                    $thumb = '/images/media/icn_pdf.gif';
                     break;
                 case 'txt' :
-                    $thumb = 'thumb_txt.gif';
+                    $thumb = '/images/media/icn_txt.gif';
                     break;
             }
             
@@ -172,7 +209,7 @@ class Admin_Model_Media
                 'createDate' => "2010-08-23 05:01:" . sprintf("%02d", 59 - $i),
                 'updateDate' => "2010-08-24 05:01:" . sprintf("%02d", $i),
                 'comment'    => '表示名' . ($i). 'の説明',
-                'thumbUrl'	 => '/media/thumbnail/' . $thumb
+                'thumbUrl'	 => $thumb
             );
             
         }
@@ -181,4 +218,7 @@ class Admin_Model_Media
         return $res;
         
     }
+    
+    
+
 }

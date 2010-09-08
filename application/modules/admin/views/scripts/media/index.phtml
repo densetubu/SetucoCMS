@@ -136,7 +136,11 @@
                 </a>
             </td>
             <td>
-                <a href="#" onclick="if (confirm('ファイル <?php echo $fileinfo['name']; ?> を削除しますか？')) {location.href = '<?php echo $this->baseUrl('/admin/media/delete/id/' . $fileinfo['id']); ?>';} "> <!-- ダイアログ表示=>OK押下でデリート --> 
+                <a href="#" onclick="
+                	if (confirm('ファイル <?php echo $fileinfo['name']; ?> を削除しますか？')) {
+                		location.href = '<?php echo $this->baseUrl('/admin/media/delete/id/' . $fileinfo['id']); ?>';
+                	} 
+                "> <!-- ダイアログ表示=>OK押下でデリート --> 
                 <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                 </a>
             </td>

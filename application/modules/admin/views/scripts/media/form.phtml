@@ -44,7 +44,7 @@
 
         <dl id="inputArea"> 
 
-            <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル**KB、合計**MBまでです。</span></dt> 
+            <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル<?php echo $this->maxFileSize; ?>KB、合計 <?php echo $this->maxFileSize; ?> KBまでです。</span></dt> 
                 <dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd> 
                 <dd>ファイル名:
     	            <?php echo $this->updateForm->getElement('name'); ?>
