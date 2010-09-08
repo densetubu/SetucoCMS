@@ -67,40 +67,48 @@
 <?php echo $this->searchForm->getElement('search'); ?>
 </p>
 </div>
-
+</form>
 <table
 	summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。"
 	cellpadding="0" cellspacing="0">
+	<colgroup>
+		<col width="20%" />
+		<col width="30%" />
+		<col width="18%" />
+		<col width="18%" />
+		<col width="7%" />
+		<col width="7%" />
+	</colgroup>
 	<thead>
 		<tr>
-			<th scope="col" width="20%" id="tableFirst">表示</th>
-			<th scope="col" width="40%">ファイル
+			<th scope="col" id="tableFirst">表示</th>
+			<th scope="col">ファイル
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/desc'; 
-				?>" title="降順に並び替え">▼</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/asc'; 
-				?>" title="昇順に並び替え">▲</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
 			</th>
-			<th scope="col" width="13%">更新日
+			<th scope="col">更新日
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/desc'; 
-				?>" title="降順に並び替え">▼</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/asc'; 
-				?>" title="昇順に並び替え">▲</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
 			</th>
-			<th scope="col" width="13%">アップロード日
+			<th scope="col">アップロード日
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/desc'; 
-				?>" title="降順に並び替え">▼</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
 				<a href="<?php 
 				    echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/asc'; 
-				?>" title="昇順に並び替え">▲</a>
+				?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
 			</th>
-			<th scope="col" width="7%">編集</th>
+			<th scope="col">編集</th>
 
-			<th scope="col" width="7%">削除</th>
+			<th scope="col">削除</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -110,7 +118,7 @@
 	    <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : ''; ?>>
             <td class="thumb">
                 <a href="#" onclick=""> <!-- そのファイルを開く？  -->
-                <img src="<?php echo $this->baseUrl($fileinfo['iconUrl']); ?>" width="48" height="auto" />
+                <img src="<?php echo $this->baseUrl($fileinfo['thumbUrl']); ?>" width="48" height="auto" />
                 </a>
             </td>
             <td>
@@ -128,7 +136,11 @@
                 </a>
             </td>
             <td>
-                <a href="#" onclick="alert('削除しますか？');"> <!-- ダイアログ表示=>OK押下でデリート --> <?php // @todo 未対応 ?>
+                <a href="#" onclick="
+                	if (confirm('ファイル <?php echo $fileinfo['name']; ?> を削除しますか？')) {
+                		location.href = '<?php echo $this->baseUrl('/admin/media/delete/id/' . $fileinfo['id']); ?>';
+                	} 
+                "> <!-- ダイアログ表示=>OK押下でデリート --> 
                 <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                 </a>
             </td>

@@ -16,8 +16,6 @@
  * @author     suzuki_mar
  */
 
-
-
 /**
  * @category    Setuco
  * @package     Setuco_Controller
@@ -28,6 +26,41 @@
  */
 abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action  
 {
+    /**
+     * 全てのコントローラ共通の初期処理です。
+     *
+     * @return void
+     * @author suzuki-mar charlesvineyard
+     */
+    public function init()
+    {   
+        parent::init();
+        $this->_initLayout();
+    }   
+
+    /**
+     * レイアウトを設定します。
+     * 
+     * @return void
+     * @author suzuki_mar charlesvineyard
+     */
+    protected function _initLayout()
+    {
+        $layout = $this->_helper->layout();
+        $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
+        $layout->setLayout($this->getLayoutName());
+    }
+    
+    /**
+     * レイアウト名を取得します。
+     * 
+     * @return string レイアウト名
+     * @author charlesvineyard
+     */
+    protected function getLayoutName()
+    {
+        return 'layout';
+    }
 
     /**
      * モジュールのディレクトリーのパスを取得する
@@ -39,7 +72,5 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     {   
         $result = APPLICATION_PATH . "/modules/{$this->_getParam('module')}/";
         return $result;
-
     }  
-
 }

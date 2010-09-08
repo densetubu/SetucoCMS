@@ -5,7 +5,6 @@ $this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
 $this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
 $this->headTitle('SetucoCMS')->setSeparator(' / ');     // TODO SetucoCMS でいい？
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
-$this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 ?>
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
@@ -15,50 +14,40 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
         <meta name="copyright" content="SetucoCMS" />   <?php // TODO SetucoCMS? ?>   
         <meta http-equiv="imagetoolbar" content="no" />
         <?php echo $this->headTitle() ?>
-        <?php echo $this->dojo() ?>
         <?php echo $this->headScript() ?>
         <?php echo $this->headLink() ?>
         <?php echo $this->headStyle() ?>
+        <style>
+        .errors {
+            color: red;
+        }
+        body#loginBoad #container > ul.errors {
+            text-align: center;
+            margin: -10px 0 10px;
+        }
+        body#loginBoad dd {
+            margin-bottom: 15px;
+        }
+        body#loginBoad dd input {
+            margin-bottom: 0px;
+        }
+        body#loginBoad input#submit {
+            float: right;
+            width: 80px;
+            margin-bottom: 30px;            
+        }
+        </style>
     </head>
-    <body class="soria">
-    
+    <body id="loginBoad">
+
         <!-- container START -->
         <div id="container">
-        
-            <!-- header START -->
-            <div id="header">
-                <?php echo $this->render('header.phtml') ?>
-            </div>
-            <!-- header END -->
 
-            <!-- content START -->
-            <div id="content">
-
-                <!-- mainContent START -->
-                <div id="mainContent">
-
-                    <!-- mainContentInner START -->
-                    <div id="mainContentInner">
-                        <?php echo $this->layout()->content ?>
-                    </div>
-                    <!-- mainContentInner END -->
-                    
-                </div>
-                <!-- mainContent END -->
-        
-                <!-- sidebar START -->
-                <div id="sidebar">
-                    <?php echo $this->layout()->navigation ?>
-                </div>
-                <!-- sidebar END -->
-
-            </div>
-            <!-- content END -->
-
+            <?php echo $this->layout()->content ?>
             <?php echo $this->render('footer.phtml') ?>
 
         </div>
         <!-- container END -->
-        
+
     </body>
 </html>

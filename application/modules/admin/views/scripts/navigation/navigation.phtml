@@ -1,0 +1,34 @@
+<!-- gNav START -->
+<ul id="gNav">
+    <?php foreach ($this->navInfos as $navigation) { ?>
+        <li>
+            <?php if ($navigation['id'] == 'index') { ?>
+                <a href="<?php echo $navigation['href'] ?>">
+                    <img src="<?php echo $navigation['src'] ?>" 
+                         alt="<?php echo $navigation['label'] ?>" 
+                         width="150" height="30" />
+                </a>
+            <?php } else { ?>
+                <dl>
+                    <dt>
+                        <a href="<?php echo $navigation['href'] ?>">
+                            <img src="<?php echo $navigation['src'] ?>" 
+                                 alt="<?php echo $navigation['label'] ?>" 
+                                 width="150" height="30" />
+                        </a>
+                    </dt>
+                    <?php if (count($navigation['childrenArr'])) { ?>
+                        <?php foreach ($navigation['childrenArr'] as $child) { ?>
+                            <dd<?php if ($child['isActive']) echo ' id="active"' ?>>
+                                <a href="<?php echo $child['href'] ?>">
+                                    <?php echo $child['label'] ?>
+                                </a>
+                            </dd>            
+                        <?php } ?>
+                    <?php } ?>
+                </dl>
+            <?php } ?>    
+        </li>
+    <?php } ?>
+</ul>
+<!-- gNav END -->

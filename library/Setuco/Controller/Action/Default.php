@@ -15,8 +15,6 @@
  * @author     suzuki_mar
  */
 
-
-
 /**
  * @category    Setuco
  * @package     Setuco_Controller
@@ -28,22 +26,13 @@
 abstract class Setuco_Controller_Action_Default extends Setuco_Controller_Action_Abstract
 {
     /**
-     * モジュール間の共通の設定
+     * defaultモジュールコントローラの初期処理です。
      *
-     * @void
+     * @return void
      * @author suzuki-mar
      */
     public function init()
     {   
-        //親クラスのメソッドを実行する
         parent::init();
-
-        //モジュール間の共通レイアウトの設定
-        $layout = $this->_helper->layout();
-        $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
-        $layout->setLayout('layout');
-
-
-    }   
-
+    } 
 }
