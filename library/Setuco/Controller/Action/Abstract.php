@@ -48,7 +48,18 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     {
         $layout = $this->_helper->layout();
         $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
-        $layout->setLayout('layout');
+        $layout->setLayout($this->getLayoutName());
+    }
+    
+    /**
+     * レイアウト名を取得します。
+     * 
+     * @return string レイアウト名
+     * @author charlesvineyard
+     */
+    protected function getLayoutName()
+    {
+        return 'layout';
     }
 
     /**
