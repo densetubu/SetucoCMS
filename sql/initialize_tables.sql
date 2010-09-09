@@ -1,112 +1,122 @@
-DROP TABLE IF EXISTS page_tag ;
-DROP TABLE IF EXISTS page_media;
-DROP TABLE IF EXISTS page;
-DROP TABLE IF EXISTS media;
-DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS tag;
-DROP TABLE IF EXISTS site;
-DROP TABLE IF EXISTS ambition;
-DROP TABLE IF EXISTS goal;
+/*****************************************************
+* CREATE TABLES
+******************************************************/
 
-/*タグ表*/
+-- タグ表 --
 CREATE TABLE tag (
-	id int auto_increment,
-	name varchar(30) unique,
-	PRIMARY KEY(id)
+    id      INT AUTO_INCREMENT NOT NULL,
+    name    VARCHAR(255) UNIQUE NOT NULL,
+    PRIMARY KEY(id)
 );
 
-/*カテゴリ表*/
-CREATE TABLE category (
-	id int auto_increment,
-	name text,
-	parent_id int,
-	primary key(id),
-	FOREIGN KEY(parent_id) REFERENCES category(id)
-	ON DELETE CASCADE
-) TYPE=INNODB;
-
-/*アカウント表*/
+-- アカウント表 --
 CREATE TABLE account (
-	id int auto_increment,
-	login_id varchar(30) unique,
-	nickname varchar(30) unique,
-	password text,
-	PRIMARY KEY(id)
+    id       INT AUTO_INCREMENT NOT NULL,
+    login_id VARCHAR(255) UNIQUE NOT NULL,
+    nickname VARCHAR(255) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    PRIMARY KEY(id)
 );
 
-/*メディア表*/
+-- メディア表 --
 CREATE TABLE media (
-	id int auto_increment,
-	name text,
-	type text,
-	create_date timestamp,
-	update_date timestamp,
-	comment text,
-	PRIMARY KEY(id)
+    id          INT AUTO_INCREMENT NOT NULL,
+    name        TEXT NOT NULL,
+    type        TEXT NOT NULL,
+    create_date TIMESTAMP NOT NULL,
+    update_date TIMESTAMP NOT NULL,
+    comment     TEXT,
+    PRIMARY KEY(id)
 );
 
-/*ページ表*/
+-- カテゴリ表 --
+CREATE TABLE category (
+    id          INT AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(255) NOT NULL,
+    parent_id   INT NOT NULL,
+    PRIMARY KEY(id),
+    UNIQUE(name, parent_id),
+    FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
+) TYPE=INNODB;
+
+-- ページ表 --
 CREATE TABLE page (
-	id int auto_increment PRIMARY KEY,
-	title text,
-	contents text,
-	outline text,
-	create_date timestamp,
-	account_id int REFERENCES account(id) ON DELETE CASCADE,
-	status int,
-	category_id int REFERENCES category(id) ON DELETE CASCADE,
-	update_date timestamp
+    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    title       TEXT NOT NULL,
+    contents    TEXT NOT NULL,
+    outline     TEXT,
+    create_date TIMESTAMP NOT NULL,
+    account_id  INT NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+    status      INT NOT NULL,
+    category_id INT REFERENCES category(id) ON DELETE CASCADE,
+    update_date TIMESTAMP NOT NULL
 ) TYPE=INNODB;
 
-/*ページメディア表*/
+-- ページメディア表 --
 CREATE TABLE page_media (
-	page_id int REFERENCES page(id) ON DELETE CASCADE,
-	media_id int REFERENCES media(id) ON DELETE CASCADE,
-	PRIMARY KEY(media_id,page_id)
+    page_id     INT NOT NULL REFERENCES page(id) ON DELETE CASCADE,
+    media_id    INT NOT NULL REFERENCES media(id) ON DELETE CASCADE,
+    PRIMARY KEY(media_id,page_id)
 ) TYPE=INNODB;
 
-/*ページタグ表*/
+-- ページタグ表 --
 CREATE TABLE page_tag (
-	page_id int  REFERENCES page(id)
-	ON DELETE CASCADE,
-	tag_id int REFERENCES tag(id)
-	ON DELETE CASCADE,
-	PRIMARY KEY(page_id,tag_id)
+    page_id     INT NOT NULL REFERENCES page(id) ON DELETE CASCADE,
+    tag_id      INT NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
+    PRIMARY KEY(page_id,tag_id)
 ) TYPE=INNODB;
 
-/*サイト表*/
+-- サイト表 --
 CREATE TABLE site (
-	name text,
-	url text,
-	comment text,
-	keyword text,
-	opend_date timestamp
+    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    name        TEXT NOT NULL,
+    url         TEXT NOT NULL,
+    comment     TEXT,
+    keyword     TEXT,
+    open_date   TIMESTAMP NOT NULL
 );
 
-/*野望表*/
+-- 野望表 --
 CREATE TABLE ambition (
-	ambition text
+    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    ambition    TEXT NOT NULL
 );
 
-/*目標表*/
+-- 目標表 --
 CREATE TABLE goal (
-	page_count int,
-	target_month timestamp
+    id           INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    page_count   INT NOT NULL,
+    target_month TIMESTAMP NOT NULL
 );
 
-/*索引の作成*/
-CREATE INDEX page_tag_tag_index
+
+/*****************************************************
+* CREAETE INDEX 
+******************************************************/
+
+-- 索引の作成 --
+CREATE INDEX page_tag_tag_id_index
 ON page_tag(tag_id);
 
-/*サイト表へ初期値の追加*/
-INSERT INTO site (opend_date)
-VALUES(now());
 
-/*野望表へ初期値の追加*/
-INSERT INTO ambition (ambition)
-VALUES('任意の初期値');
+/*****************************************************
+* INSERT DEFAULTS
+******************************************************/
 
-/*目標表へ初期値の追加*/
-INSERT INTO goal (page_count)
-VALUES('任意の初期値');
+-- サイト表へ初期値の追加 --
+INSERT INTO site 
+    (name, url, comment, keyword, open_date)
+VALUES
+    ('日本電子専門学校 電設部', 'http://penguin.jec.ac.jp/', '日本電子専門学校電設部SetucoCMSプロジェクトです。', 'せつこ,俺だ,結婚,してくれ', now());
+
+-- 野望表へ初期値の追加 --
+INSERT INTO ambition 
+    (ambition)
+VALUES
+    ('せつこーおれだーけっこｎ（ｒｙ');
+
+-- 目標表へ初期値の追加 --
+INSERT INTO goal 
+    (page_count, target_month)
+VALUES
+    (13, now());
