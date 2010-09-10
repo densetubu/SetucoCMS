@@ -14,7 +14,7 @@
 
             <div class="topichArea"> 
 
-                <h3><img src="../images/h_goal.jpg" width="109" height="18" alt="更新目標の編集" /></h3> 
+                <h3><img src="<?php echo $this->baseUrl('/images/h_goal.jpg') ?>" width="109" height="18" alt="更新目標の編集" /></h3> 
 
             </div> 
 
@@ -22,27 +22,14 @@
 
     </div> 
 
-    <?php if (count($this->flashMessage)) : ?>
-        <div id='messageArea'>
+    <?php if (count($this->flashMessage)): ?>
+        <div id="messageArea">
             <p><?php echo $this->flashMessage ?></p>
             <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
         </div>
-    <?php endif; ?>    
-    <form action="edit.php" method="post"> 
-
-        <dl class="editArea"> 
-
-            <dt><label for="goal_span">更新間隔</label></dt> 
-                <dd><input type="text" id="goal_span" name="goal_span" value='24' onblur="if(this.value == '') { this.value='24'; }" />日置き</dd> 
-
-            <dt><label for="goal_month">一ヶ月の更新数</label></dt> 
-                <dd><input type="text" id="goal_month" name="goal_month" value='-10' onblur="if(this.value == '') { this.value='-10'; }" />ページ</dd> 
-
-        </dl> 
-
-        <p class="editAreaP"><input type="submit" id="sub" name="sub" value="更新目標を変更" /></p> 
-
-    </form> 
+    <?php endif; ?>
+    
+    <?php echo $this->goalForm ?> 
 
 </div> 
 <!-- section END --> 
