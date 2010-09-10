@@ -3,15 +3,15 @@ $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
 $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8');
 $this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
 $this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
-$this->headTitle('SetucoCMS')->setSeparator(' / ');     // TODO SetucoCMS でいい？
+$this->headTitle('SetucoCMS')->setSeparator(':')->headTitle('ログイン画面');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
 ?>
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <?php echo $this->headMeta() ?>
-        <meta name="author" content="xxxxx" />        <?php // TODO author ?>        
-        <meta name="copyright" content="SetucoCMS" />   <?php // TODO SetucoCMS? ?>   
+        <meta name="author" content="ErinaMikami with SetucoCMS Project" />
+        <meta name="copyright" content="SetucoCMS" />   
         <meta http-equiv="imagetoolbar" content="no" />
         <?php echo $this->headTitle() ?>
         <?php echo $this->headScript() ?>

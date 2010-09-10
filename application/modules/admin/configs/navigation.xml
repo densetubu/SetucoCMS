@@ -8,7 +8,7 @@
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
-            <order>1</order>
+            <order>-10</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/gNav/btn_menu_top.jpg</src>
             <pages>
@@ -30,48 +30,6 @@
                 </index_form-goal>
             </pages>
         </index>
-        <directory>
-            <id>directory</id>
-            <title>サイト構造（カテゴリー・ページの一覧）</title>
-            <label>サイト構造</label>
-            <module>admin</module>
-            <controller>directory</controller>
-            <action>index</action>
-            <order>2</order>
-            <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_directory.jpg</src>
-            <pages>
-                <directory_index>
-                    <id>directory_index</id>
-                    <title>サイト構造（カテゴリー・ページの一覧）</title>
-                    <label>カテゴリー・ページの一覧</label>
-                    <module>admin</module>
-                    <controller>directory</controller>
-                    <action>index</action>
-                </directory_index>
-            </pages>
-        </directory>
-        <category>
-            <id>category</id>
-            <title>カテゴリーの追加・編集・削除</title>
-            <label>カテゴリー</label>
-            <module>admin</module>
-            <controller>category</controller>
-            <action>index</action>
-            <order>3</order>
-            <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_category.jpg</src>
-            <pages>
-                <category_index>
-                    <id>category_index</id>
-                    <title>カテゴリーの追加・編集・削除</title>
-                    <label>追加・編集・削除</label>
-                    <module>admin</module>
-                    <controller>category</controller>
-                    <action>index</action>
-                </category_index>
-            </pages>
-        </category>
         <page>
             <id>page</id>
             <title>ページの編集・削除</title>
@@ -79,7 +37,7 @@
             <module>admin</module>
             <controller>page</controller>
             <action>index</action>
-            <order>4</order>
+            <order>0</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/gNav/h_menu_page.jpg</src>
             <pages>
@@ -101,6 +59,48 @@
                 </page_index>
             </pages>
         </page>
+        <directory>
+            <id>directory</id>
+            <title>サイト構造（カテゴリー・ページの一覧）</title>
+            <label>サイト構造</label>
+            <module>admin</module>
+            <controller>directory</controller>
+            <action>index</action>
+            <order>10</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/gNav/h_menu_directory.jpg</src>
+            <pages>
+                <directory_index>
+                    <id>directory_index</id>
+                    <title>サイト構造（カテゴリー・ページの一覧）</title>
+                    <label>カテゴリー・ページの一覧</label>
+                    <module>admin</module>
+                    <controller>directory</controller>
+                    <action>index</action>
+                </directory_index>
+            </pages>
+        </directory>
+        <category>
+            <id>category</id>
+            <title>カテゴリーの追加・編集・削除</title>
+            <label>カテゴリー</label>
+            <module>admin</module>
+            <controller>category</controller>
+            <action>index</action>
+            <order>20</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/gNav/h_menu_category.jpg</src>
+            <pages>
+                <category_index>
+                    <id>category_index</id>
+                    <title>カテゴリーの追加・編集・削除</title>
+                    <label>追加・編集・削除</label>
+                    <module>admin</module>
+                    <controller>category</controller>
+                    <action>index</action>
+                </category_index>
+            </pages>
+        </category>
         <tag>
             <id>tag</id>
             <title>タグの追加・編集・削除</title>
@@ -108,7 +108,7 @@
             <module>admin</module>
             <controller>tag</controller>
             <action>index</action>
-            <order>5</order>
+            <order>30</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/gNav/h_menu_tag.jpg</src>
             <pages>
@@ -129,7 +129,7 @@
             <module>admin</module>
             <controller>media</controller>
             <action>index</action>
-            <order>6</order>
+            <order>40</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/gNav/h_menu_file.jpg</src>
             <pages>
@@ -150,7 +150,7 @@
             <module>admin</module>
             <controller>site</controller>
             <action>index</action>
-            <order>7</order>
+            <order>50</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/gNav/h_menu_site.jpg</src>
             <pages>

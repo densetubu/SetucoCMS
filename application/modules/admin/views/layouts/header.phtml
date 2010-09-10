@@ -5,20 +5,20 @@
 ?>
 <div>
     <h1>
-        <a href="<?php echo $this->baseUrl('') ?>index.php" title="管理画面のトップに戻ります">
-            <?php // TODO  せつこCMS？ ?>
-            <img src="<?php echo $this->baseUrl('') ?>images/header/logo.jpg" alt="せつこCMS"  width="152" height="39" />
+        <a href="<?php echo $this->baseUrl('/admin') ?>" title="管理画面のトップに戻ります">
+            <img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" 
+                 alt="せつこCMS"  width="152" height="39" />
         </a>
     </h1>
     <h2>
         <a href="<?php echo $siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
             <span><?php echo $siteName ?></span>
-            <img src="<?php echo $this->baseUrl('') ?>images/header/btn_watchSite.jpg" alt="サイトを確認する" width="108" height="29" />
+            <img src="<?php echo $this->baseUrl('/images/header/btn_watchSite.jpg') ?>" 
+                 alt="サイトを確認する" width="108" height="29" />
         </a>
     </h2>
 </div>
 
-<?php // TODO logout.php は後でURL変更 ?>
 <form action="<?php echo $this->baseUrl('/admin/login/logout') ?>" method="post">
     <ul>
         <li id="utilLogout">
@@ -27,7 +27,7 @@
                    type="submit" id="sub" name="sub" value="ログアウト" />
         </li>
         <li id="utilAccount">
-            <a href="#"><?php echo $loginName ?></a>でログイン中
+            <?php echo $loginName ?>でログイン中
         </li>
     </ul>
 </form>
