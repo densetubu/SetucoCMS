@@ -1,22 +1,25 @@
 /*****************************************************
-* CREATE TABLES
-******************************************************/
+ * CREATE TABLES
+ *****************************************************/
 
 -- タグ表 
 CREATE TABLE tag (
     id      INT AUTO_INCREMENT NOT NULL,
-    name    VARCHAR(255) UNIQUE NOT NULL,
-    PRIMARY KEY(id)
-);
+    name    VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id),
+    UNIQUE(name)
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- アカウント表 
 CREATE TABLE account (
     id       INT AUTO_INCREMENT NOT NULL,
-    login_id VARCHAR(255) UNIQUE NOT NULL,
-    nickname VARCHAR(255) UNIQUE NOT NULL,
+    login_id VARCHAR(255) NOT NULL,
+    nickname VARCHAR(255) NOT NULL,
     password TEXT NOT NULL,
-    PRIMARY KEY(id)
-);
+    PRIMARY KEY(id),
+    UNIQUE(login_id),
+    UNIQUE(nickname)
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- メディア表 
 CREATE TABLE media (
@@ -27,7 +30,7 @@ CREATE TABLE media (
     update_date TIMESTAMP NOT NULL,
     comment     TEXT,
     PRIMARY KEY(id)
-);
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- カテゴリ表 
 CREATE TABLE category (
@@ -37,73 +40,88 @@ CREATE TABLE category (
     PRIMARY KEY(id),
     UNIQUE(name, parent_id),
     FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
-) TYPE=INNODB;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- ページ表 
 CREATE TABLE page (
-    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    id          INT AUTO_INCREMENT NOT NULL,
     title       TEXT NOT NULL,
     contents    TEXT NOT NULL,
     outline     TEXT,
     create_date TIMESTAMP NOT NULL,
-    account_id  INT NOT NULL REFERENCES account(id) ON DELETE CASCADE,
+    account_id  INT,
     status      INT NOT NULL,
-    category_id INT REFERENCES category(id) ON DELETE CASCADE,
-    update_date TIMESTAMP NOT NULL
-) TYPE=INNODB;
+    category_id INT,
+    update_date TIMESTAMP NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(account_id) REFERENCES account(id) ON DELETE SET NULL,
+    FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- ページメディア表 
 CREATE TABLE page_media (
-    page_id     INT NOT NULL REFERENCES page(id) ON DELETE CASCADE,
-    media_id    INT NOT NULL REFERENCES media(id) ON DELETE CASCADE,
-    PRIMARY KEY(media_id,page_id)
-) TYPE=INNODB;
+    page_id INT NOT NULL,
+    media_id INT NOT NULL,
+    PRIMARY KEY(media_id,page_id),
+    FOREIGN KEY(page_id) REFERENCES page(id) ON DELETE CASCADE,
+    FOREIGN KEY(media_id) REFERENCES media(id) ON DELETE CASCADE
+) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- ページタグ表 
 CREATE TABLE page_tag (
-    page_id     INT NOT NULL REFERENCES page(id) ON DELETE CASCADE,
-    tag_id      INT NOT NULL REFERENCES tag(id) ON DELETE CASCADE,
-    PRIMARY KEY(page_id,tag_id)
-) TYPE=INNODB;
+    page_id     INT NOT NULL,
+    tag_id      INT NOT NULL,
+    PRIMARY KEY(page_id,tag_id),
+    FOREIGN KEY(page_id) REFERENCES page(id) ON DELETE CASCADE,
+    FOREIGN KEY(tag_id) REFERENCES tag(id) ON DELETE CASCADE
+) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- サイト表 
 CREATE TABLE site (
-    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
     url         TEXT NOT NULL,
     comment     TEXT,
     keyword     TEXT,
-    open_date   TIMESTAMP NOT NULL
-);
+    open_date   TIMESTAMP NOT NULL,
+    PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- 野望表 
 CREATE TABLE ambition (
-    id          INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ambition    TEXT NOT NULL
-);
+    id          INT AUTO_INCREMENT NOT NULL,
+    ambition    TEXT NOT NULL,
+    PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- 更新目標表 
 CREATE TABLE goal (
-    id           INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    id           INT AUTO_INCREMENT NOT NULL,
     page_count   INT NOT NULL,
-    target_month TIMESTAMP NOT NULL
-);
+    target_month TIMESTAMP NOT NULL,
+    PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_bin;
 
 
 /*****************************************************
-* CREAETE INDEX 
-******************************************************/
+ * CREAETE INDEX 
+ *****************************************************/
 
--- 索引の作成 --
+-- 索引の作成 
 CREATE INDEX page_tag_tag_id_index
 ON page_tag(tag_id);
 
 
 /*****************************************************
-* INSERT DEFAULTS
-******************************************************/
+ * INSERT DEFAULTS
+ *****************************************************/
 
 -- 初期値の登録
+INSERT INTO account 
+    (login_id, nickname, password)
+VALUES
+    ('admin', '管理者さん', 'password');
+
 INSERT INTO site 
     (name, url, comment, keyword, open_date)
 VALUES
@@ -125,3 +143,5 @@ VALUES
     (14, '2010-07-01 00:00:00'),
     (14, '2010-08-01 00:00:00'),
     (17, '2010-09-01 00:00:00');
+
+commit;
