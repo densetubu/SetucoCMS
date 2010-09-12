@@ -12,12 +12,15 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
+ * @param      Zend_Paginator   $paginator    ページャークラス 
+ * @param      Setuco_Form      $createForm   カテゴリーを新規作成するフォームクラス
+ * @param      Setuco_Form      $updateForm   カテゴリーを編集するフォームクラス
+ * @param      Array            $categories   一覧ページで表示するカテゴリーデータ
+ * @param      String[option]           $flashMessage 新規作成、編集、削除の実行結果のメッセージ
  * @author     suzuki-mar
  */
 ?>
 
-<?php
-?>
 
 <!-- topicPath START -->
 <div id="topicPath">
@@ -46,15 +49,23 @@
     
 
         <p class="default">
-        <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
-        <?php echo $this->createForm->getElement('cat_name'); ?>
-        <?php echo $this->createForm->getElement('sub'); ?>
 
+    <?php if (count($this->flashMessage)) : ?>
+    <div id='messageArea'>
+        <p><?php echo $this->flashMessage ?></p>
+        <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
+    </div>
+    <?php endif; ?>
+
+
+        <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
+        <?php $this->createForm->displayElement('cat_name', array('class' => 'defaultInput', 'value' => '新規カテゴリー')); ?>
+        <?php $this->createForm->displayElement('sub', array('class' => 'sub', 'value' => '追加') ); ?>
         </form>
         </p>
 
         <table summary="カテゴリー一覧の表です。カテゴリーの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
-            <colrougp> 
+            <colgroup> 
                 <col width="80%" /> 
                 <col width="10%" /> 
                 <col width="10%" /> 
@@ -86,9 +97,9 @@
 <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="post">
 
 <?php
-echo $this->addForm->getElement('name')->setValue($value['name']);
-echo $this->addForm->getElement('id')->setValue($value['id']);
-echo $this->addForm->getElement('sub');
+$this->updateForm->displayElement('name',   array('value' => $value['name']) ); 
+$this->updateForm->displayElement('id',     array('value' => $value['id']) ); 
+$this->updateForm->displayElement('sub',    array('class' => 'sub', 'value' => "保存") ); 
 ?>
 
 </form>
@@ -102,7 +113,7 @@ echo $this->addForm->getElement('sub');
 <td><a href='<?php echo $this->baseUrl("/admin/category/index/page/{$this->page}/id/{$value['id']}")?>'><img src='<?php echo $this->baseUrl('/images/btn_edit.png')?>' alt='編集' width='27' height='27' /></a></td>
 <input type='hidden' id='cat_id' name='cat_id' value='<?php echo $value['id'] ?>' />
 <input type='hidden' id='cat_no' name='cat_no' value='' />
-<td><a href='#' onclick='flg(<?php echo $value['id']?>);'><img src='<?php echo $this->baseUrl('/images/btn_delete.png')?>' alt='削除' width='27' height='27' /></a></td>
+<td><a href='#' onclick='confirmRedirect("<?php echo $this->baseUrl("/admin/category/delete/id/{$value['id']}")?>");'><img src='<?php echo $this->baseUrl('/images/btn_delete.png')?>' alt='削除' width='27' height='27' /></a></td>
 
 <?php else: //デフォルトのカテゴリー 編集削除できない ?>
 <td>未分類<span id='autoCatMessage'>（※カテゴリー未選択時に自動選択されるカテゴリーです）</span></td><td>&nbsp;</td><td>&nbsp;</td>
@@ -127,13 +138,10 @@ echo $this->addForm->getElement('sub');
 <?php //htmlのheadタグで出力するためにキャプチャーする
 $this->headScript()->captureStart() ?>
 <!--
-function flg(id){
-    var flg;　//真偽を入れる変数の宣言
+function confirmRedirect(url){
 
-        flg=confirm("本当に削除してよろしいですか？"); //真偽の代入
-
-    if (flg==true){
-        location.href='index.php?delete='+id;
+    if (confirm("本当に削除してよろしいですか？")) {
+        location.href = url;
     }
 }
 // -->

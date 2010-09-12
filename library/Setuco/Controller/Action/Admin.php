@@ -93,7 +93,25 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
         }
         return $currentNavAction->getTitle();
     }
-    
+
+    /**
+     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
+     * 
+     * @return int 現在ページネーターで表示すべきページ番号
+     * @author akitsukada
+     */
+    protected function _getPage()
+    {
+        // URLからページ番号の指定を得る ( デフォルトは1 )
+        $currentPage = $this->_getParam('page');
+        if (!is_numeric($currentPage)) {
+            $currentPage = 1;
+        }
+        return $currentPage;
+    }
+
+
+
     /**
      * ページャーの設定をして、ビューで使用できるようにする
      *
@@ -102,7 +120,11 @@ abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_A
      */
     public function setPagerForView($max)
     {
-        
+        //数値ではない場合は数値にキャストする 数字ではエラーなので
+        if(is_string($max)) {
+            $max = (int) $max;
+        }
+
         //共通のページャーの設定をする
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');

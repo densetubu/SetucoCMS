@@ -7,8 +7,8 @@
  * @category 	Setuco
  * @package 	Admin
  * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @copyright   Copyright (c) 2010 SetucoCMS Project. (http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
  * @link
  * @since       File available since Release 0.1.0
@@ -17,32 +17,51 @@
 
 
 /**
- * @category    Setuco
  * @package     Admin
  * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
  * @author      charlesvineyard suzuki-mar saniker10
  */
 class Admin_CategoryController extends Setuco_Controller_Action_Admin
 {
+    /**
+     * 全アクションで使用するサービスクラス
+     * @var Admin_Model_Category
+     */
+    private $_service = null;
+
+    /**
+     * コントローラーの共通設定をする
+     * 全アクションで使用するサービスクラスのインスタンスをオブジェクト変数にする 
+     *
+     * @reutn true
+     * @author suzuki-mar
+     */
+    public function init() 
+    {
+        //親クラスの設定を引き継ぐ
+        parent::init();
+
+        //全アクションで使用するサービスクラスのインスタンを生成する
+        $this->_service = new Admin_Model_Category();
+
+        return true;
+    }
+
+
     /** 
      * カテゴリーの新規作成するフォーム
      * カテゴリーの一覧表示のアクションです
      * 現在は、スタブからデータを取得している
      *
-     * @return void
+     * @return true
      * @author charlesvineyard suzuki-mar saniker10
-     * @todo バリデートチェック
+     * @todo Flashメッセージの取得
      */
     public function indexAction()
     {
-        $service = new Admin_Model_Category();
-
-        $this->view->categories = $service->getCategories();
 
         //編集用のフォームクラスを取得する
-        $this->view->addForm = $this->_createAddForm();
+        $this->view->updateForm = $this->_createUpdateForm();
 
         //新規作成用のフォームクラスを取得する
         $this->view->createForm = $this->_createCreateForm();
@@ -52,13 +71,23 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
 
         //編集するカテゴリーが存在したらそのidを渡す
         if ($isEdit) {
-            if ($service->isExistsId($this->_getParam('id'))) {
+            if ($this->_service->isExistsId($this->_getParam('id'))) {
                 $this->view->editId = $this->_getParam('id');
             }
         }
 
-        //ページャーの設定をする
-        $this->setPagerForView(50);
+        //フラッシュメッセージがある場合のみ設定する
+        if ($this->_helper->flashMessenger->hasMessages()){
+            $flashMessages = $this->_helper->flashMessenger->getMessages();
+            $this->view->flashMessage = $flashMessages[0];
+        }
+
+        //入力したキーワード(カテゴリー名)からデータと該当したデータが何件あったか(limitしないで)を取得する
+        $this->view->categories = $this->_service->searchCategories($this->_getParam('keyword'), $this->_getPage(), parent::PAGE_LIMIT);
+        $max = $this->_service->countCategoriesByKeyword($this->_getParam('keyword'));
+        $this->setPagerForView($max);
+
+        return true;
     }
 
 
@@ -68,10 +97,28 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
      *
      * @return void
      * @author charlesvineyard
-     * @todo 内容の実装 現在はスケルトン
      */
     public function createAction()
     {
+        //バリデートするFormオブジェクトを取得する
+        $validateForm = $this->_createCreateForm();
+
+
+        //入力したデータをバリデートチェックをする
+        if ($validateForm->isValid($this->_getAllParams() ) ) {
+            
+            //カテゴリーを新規作成する
+            if ($this->_service->registCategory($this->_getAllParams())) {
+                $this->_helper->flashMessenger('カテゴリーの新規作成に成功しました');
+                $isSetFlashMessage = true;
+            }
+        } 
+
+        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
+        if (!isset($isSetFlashMessage)) {
+            $this->_helper->flashMessenger('カテゴリーの新規作成に失敗しました');
+        } 
+    
         $this->_redirect('/admin/category/index');        
     }
 
@@ -81,10 +128,27 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
      *
      * @return void
      * @author charlesvineyard
-     * @todo 内容の実装 現在はスケルトン
      */
     public function updateAction()
     {
+        //バリデートするFormオブジェクトを取得する
+        $validateForm = $this->_createUpdateForm();
+
+        //入力したデータをバリデートチェックをする
+        if ($validateForm->isValid($this->_getAllParams()) ) {
+            
+            //カテゴリーを編集する
+            if ($this->_service->updateCategory($this->_getAllParams(), $this->_getParam('id')) ) {
+                $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
+                $isSetFlashMessage = true;
+            }
+        } 
+
+        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
+        if (!isset($isSetFlashMessage)) {
+            $this->_helper->flashMessenger('カテゴリーの編集に失敗しました');
+        } 
+    
         $this->_redirect('/admin/category/index');        
     }
 
@@ -97,11 +161,29 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
      */
     public function deleteAction()
     {
+
+        //数値以外はエラー
+        $validator = new Zend_Validate_Digits($this->_getParam('id'));
+        if ($validator->isValid($this->_getParam('id'))) {
+
+             //カテゴリーを削除する
+            if ($this->_service->deleteCategory($this->_getParam('id')) ) {
+                $this->_helper->flashMessenger('カテゴリーの削除に成功しました');
+                $isSetFlashMessage = true;
+            }
+        }
+
+        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
+        if (!isset($isSetFlashMessage)) {
+            $this->_helper->flashMessenger('カテゴリーの削除に失敗しました');
+        } 
+
         $this->_redirect('/admin/category/index');        
     }
 
     /**
      * 新規作成用のフォームを作成する
+     * class属性などは、view側で指定する
      *
      * @return Zend_Form 新規作成用のフォーム
      * @author suzuki-mar
@@ -109,28 +191,20 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
     private function _createCreateForm()
     {
         //カテゴリー名を入力するinputタグを生成
-        $inputItem =  new Zend_Form_Element_Text('cat_name');
-        $inputItem->clearDecorators()
-                     ->addDecorator('ViewHelper')
-                     ->addDecorator('Label', array('tag' => null))
-                     ->setAttrib('class', 'defaultInput')
-                     ->setValue('新規カテゴリー')
-                     ->setRequired()
+        $form = new Setuco_Form();
+
+        //inputタグだけのクラスを生成する
+        $inputItem =  $form->createElementOfViewHelper('text', 'cat_name');
+        $inputItem->setRequired()
                      ->addFilter('StringTrim')
                      ->addValidators(array(
                         array('NotEmpty', true),
                         array('stringLength', false, array(1, 100))
                         ));
+        $form->addElement($inputItem);
 
         //submitボタンを生成する
-        $submitItem = new Zend_Form_Element_Submit(
-                'sub', array('class' => 'sub', 'label' => '追加'));
-
-        $submitItem->clearDecorators()->addDecorator('ViewHelper');
-
-        //フォームクラスに生成したタグを追加する
-        $form = new Zend_Form();
-        $form->addElement($inputItem);
+        $submitItem = $form->createElementOfViewHelper('submit', 'sub');
         $form->addElement($submitItem);
 
         return $form;
@@ -139,54 +213,42 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
 
     /**
      * 編集用のフォームを作成する
+     * class属性などは、view側で指定する
      *
      * @return Zend_Form 編集用のフォーム
      * @author suzuki-mar
      */
-    private function _createAddForm()
+    private function _createUpdateForm()
     {
+        //フォームクラスの生成
+        $form = new Setuco_Form();
+
         //カテゴリー名を入力するinputタグを生成
-        $inputItem =  new Zend_Form_Element_Text('name');
-        $inputItem->clearDecorators()
-            ->addDecorator('ViewHelper')
-            ->addDecorator('Label', array('tag' => null))
-            ->setRequired()
+        $inputItem =  $form->createElementOfViewHelper('text', 'name');
+        $inputItem->setRequired()
             ->addFilter('StringTrim')
             ->addValidators(array(
                         array('NotEmpty', true),
                         array('stringLength', false, array(1, 100))
                         ));
+        $form->addElement($inputItem);
 
         //idをセットするhiddenタグを生成
-        $hiddenItem = new Zend_Form_Element_Hidden('id');
-        $hiddenItem->clearDecorators()
-            ->addDecorator('ViewHelper')
-            ->addDecorator('Label', array('tag' => null))
-            ->setRequired()
+        $hiddenItem = $form->createElementOfViewHelper('hidden', 'id');
+        $hiddenItem->setRequired()
             ->addFilter('StringTrim')
             ->addValidators(array(
                         array('NotEmpty', true),
                         array('stringLength', false, array(1, 100)),
                         array('Int')
                         ));
- 
-            
+        $form->addElement($hiddenItem);
 
         //submitボタンを生成する
-        $submitItem = new Zend_Form_Element_Submit(
-                'sub', array('class' => 'sub', 'label' => '保存'));
-
-        $submitItem->clearDecorators()->addDecorator('ViewHelper');
-
-
-        //フォームクラスの生成
-        $form = new Zend_Form();
-
-        $form->addElement($inputItem);
-        $form->addElement($hiddenItem);
+        $submitItem = $form->createElementOfViewHelper('submit', 'sub');
         $form->addElement($submitItem);
-        return $form;
 
+        return $form;
     }
 
 }

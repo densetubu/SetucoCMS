@@ -152,7 +152,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
         // すべてのファイルを検証
         if (!$adapter->isValid()) { 
-            $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。');
+            $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。'); 
             $this->_redirect('/admin/media/index');
         }
         
@@ -354,23 +354,6 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $this->_helper->flashMessenger('ファイルを削除しました。');
         $this->_redirect('/admin/media/index');
     
-    }
-
-   
-    /**
-     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
-     * 
-     * @return int 現在ページネーターで表示すべきページ番号
-     * @author akitsukada
-     */
-    private function _getPage()
-    {
-        // URLからページ番号の指定を得る ( デフォルトは1 )
-        $currentPage = $this->_getParam('page');
-        if (!is_numeric($currentPage)) {
-            $currentPage = 1;
-        }
-        return $currentPage;
     }
 
     
