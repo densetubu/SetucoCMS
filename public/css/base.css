@@ -163,17 +163,20 @@ div#header ul li#utilAccount ,
 div#header ul li#utilLogout {
     padding-right: 15px;
 }
-div#header ul li#utilManual a {
-    background-image: url(../images/header/bg_manual.gif);
-}
-div#header ul li#utilAccount a {
-    background-image: url(../images/header/bg_nowLogin.gif);
-}
 div#header ul li#utilManual a ,
 div#header ul li#utilAccount a {
     background-repeat: no-repeat;
     background-position: left center;
     padding-left: 12px;
+}
+div#header ul li#utilManual a {
+    background-image: url(../images/header/bg_manual.gif);
+}
+div#header ul li#utilAccount span {
+    background-image: url(../images/header/bg_nowLogin.gif);
+    background-repeat: no-repeat;
+    font-weight: bold;
+    padding-left: 15px;
 }
 div#header li#utilLogout input ,
 div#header li#utilLogout input.logoutNormal {
