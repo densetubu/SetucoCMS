@@ -1,5 +1,4 @@
 <?php
-
 /**
  * ナビゲーションページの拡張クラスです。
  * 
@@ -7,25 +6,22 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category Setuco
- * @package Navigation
+ * @category   Setuco
+ * @package    Navigation
  * @subpackage Page_Directory
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
  * @link
  * @since      File available since Release 0.1.0
  * @author     charlelsvineyard
  */
 
-
 /**
- * @category Setuco
- * @package Navigation
+ * @category   Setuco
+ * @package    Navigation
  * @subpackage Page_Directory
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author  charlelsvineyard
+ * @author     charlelsvineyard
  */
 class Setuco_Navigation_Page_Directory_Page extends Zend_Navigation_Page_Mvc
 {

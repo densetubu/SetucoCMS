@@ -1,28 +1,26 @@
 <?php
 /**
- * 管理側のサイト構造一覧のコントローラーです。
+ * 管理側のサイト構造一覧のコントローラ
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category    Setuco
- * @package     Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @version
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage Controller
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since       File available since Release 0.1.0
- * @author      charlesvineyard
+ * @version
+ * @since      File available since Release 0.1.0
+ * @author     charlesvineyard
  */
 
-
 /**
- * @category    Setuco
- * @package     Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author      charlesvineyard
+ * サイト構造一覧のコントローラ
+ *
+ * @package    Admin
+ * @subpackage Controller
+ * @author     charlesvineyard
  */
 class Admin_DirectoryController extends Setuco_Controller_Action_Admin
 {
