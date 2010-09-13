@@ -1,6 +1,6 @@
 <?php
 /**
- * 更新目標に関するサービスです。
+ * 更新目標に関するサービス
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -9,18 +9,17 @@
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
- * @link       
- * @version    
+ * @link
+ * @version
  * @since      File available since Release 0.1.0
  * @author     charlesvineyard
  */
 
 /**
- * @category   Setuco
+ * 更新目標管理クラス
+ *
  * @package    Admin
  * @subpackage Model
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
- * @license
  * @author     charlesvineyard
  */
 class Admin_Model_Goal
@@ -48,17 +47,6 @@ class Admin_Model_Goal
     {
         // TODO
     }
-    
-    /**
-     * 更新状況を取得します。
-     * 
-     * @return int 更新状況
-     * @author charlesvineyard
-     */
-    public function findGoalStatus()
-    {
-        // TODO
-        return 0;
-    }
+
 }
 

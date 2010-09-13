@@ -1,28 +1,26 @@
 <?php
 /**
- * ログイン処理をするコントローラーです
+ * ログイン処理をするコントローラ
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @version
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage Controller
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since       File available since Release 0.1.0
- * @author     
+ * @version
+ * @since      File available since Release 0.1.0
+ * @author     Yuu Yamanaka
  */
 
-
 /**
- * @category    Setuco
- * @package     Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author      Yuu Yamanaka
+ * ログイン処理をするコントローラ
+ *
+ * @package    Admin
+ * @subpackage Controller
+ * @author     Yuu Yamanaka
  */
 class Admin_LoginController extends Setuco_Controller_Action_Admin
 {
