@@ -174,7 +174,7 @@ class Admin_Model_Media
     /**
      * スタブ専用の暫定メソッド。DAOの代わりにmedia表の擬似データを全件作って返す
      * 
-     * @todo   モデルの実装が進んだら削除する
+     * @todo   DAOの実装が進んだら削除する
      * @author akitsukada
      */
     private function _mediaDao_SelectAll() 
@@ -215,10 +215,6 @@ class Admin_Model_Media
         }
 
         // Zend_Db_Select, fetchAll　した状態の配列を返す
-        return $res;
-        
+        return $res;   
     }
-    
-    
-
 }

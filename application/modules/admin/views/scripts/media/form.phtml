@@ -9,64 +9,50 @@
  * @subpackage View_Script_Media
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
- * @link       
- * @version    
+ * @link
+ * @version
  * @since      File available since Release 0.1.0
  * @author     akitsukada
  */
 ?>
-<!-- topicPath START --> 
-<div id="topicPath"> 
-    <p><a href="/admin/">トップ</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p> 
-    <p><a href="/admin/media">ファイルの追加・編集・削除</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p> 
-    <p>「logo.jpg」の編集</p> 
-</div> 
-<!-- topicpath END --> 
+<!-- topicPath START -->
+<div id="topicPath">
+    <p><a href="/admin/">トップ</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+    <p><a href="/admin/media">ファイルの追加・編集・削除</a><img src="/images/topicPath.gif" width="6" height="11" alt="の中の" /></p>
+    <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</p>
+</div>
+<!-- topicpath END -->
 
-<!-- section START --> 
-<div class="section"> 
-
-    <div class="hArea"> 
-
-        <h3 id="textType"><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</h3> 
-
-    </div> 
-
-
-<?php if (count($this->flashMessage)) : ?>
-    <div id='messageArea'>
-        <p><?php echo $this->flashMessage ?></p>
+<!-- section START -->
+<div class="section">
+    <div class="hArea">
+        <h3 id="textType"><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</h3>
+    </div>
+    
+    <?php if (count($this->flashMessage)) : ?>
+    <div id='messageArea'><?php foreach ($this->flashMessage as $message) : ?>
+        <p><?php echo $message ?></p>
+        <?php endforeach; ?>
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
-<?php endif; ?>
+    <?php endif; ?>
+    
+    <form
+    	action="<?php echo $this->baseUrl($this->updateForm->getAction()); ?>"
+    	method="post" ENCTYPE="MULTIPART/FORM-DATA">
+    
+        <dl id="inputArea">        
+        	<dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル<?php echo $this->maxFileSize; ?>KB、合計
+        	<?php echo $this->maxFileSize; ?> KBまでです。</span></dt>
+        	<dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd>
+        	<dd>ファイル名: <?php echo $this->updateForm->getElement('name'); ?></dd>
+        	<dd>説明: <?php echo $this->updateForm->getElement('comment'); ?></dd>
+        	<dd class="upload">ファイル: <?php echo $this->updateForm->getElement('upload_img'); ?>
+        	</dd>
+        	<dt><span class="attentionMessage">**MB</span></dt><?php // @todo ファイルサイズの取得？ ?>      
+        	<dd><?php echo $this->updateForm->getElement('up'); ?></dd>
+        </dl>
+    </form>
 
-    <form action="<?php echo $this->updateForm->getAction(); ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
-
-        <dl id="inputArea"> 
-
-            <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル<?php echo $this->maxFileSize; ?>KB、合計 <?php echo $this->maxFileSize; ?> KBまでです。</span></dt> 
-                <dd><a href="#"><img src="/images/logo.jpg" width="152" height="39" /></a></dd> 
-                <dd>ファイル名:
-    	            <?php echo $this->updateForm->getElement('name'); ?>
-                </dd> 
-                <dd>説明:
-	                <?php echo $this->updateForm->getElement('comment'); ?>
-                </dd> 
-                <dd class="upload">ファイル:
-	                <?php echo $this->updateForm->getElement('upload_img'); ?>
-                </dd> 
-            <dt><span class="attentionMessage">**MB</span></dt> 
-
-                <dd >
-	                <?php echo $this->updateForm->getElement('up'); ?>
-<!--                <input type="submit" class="upSub" id="up" name="up" value="編集を保存する" />-->
-                </dd> 
-        </dl> 
-
-    </form> 
-
-
-
-
-</div> 
-<!-- section END --> 
+</div>
+<!-- section END -->
