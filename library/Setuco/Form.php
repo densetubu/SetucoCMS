@@ -6,8 +6,8 @@
  *
  * @category    Setuco
  * @package     Form
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
  * @link
  * @since       File available since Release 0.1.0
@@ -17,8 +17,6 @@
 /**
  * @category    Setuco
  * @package     Form
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
  * @author      Yuu Yamanaka
  */
 class Setuco_Form extends Zend_Form

@@ -1,27 +1,26 @@
 <?php
 /**
- * ナビゲーションのコントローラーです。
+ * ナビゲーションのコントローラ
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category Setuco
- * @package Admin
+ * @category   Setuco
+ * @package    Admin
  * @subpackage Controller
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @version
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
+ * @version
  * @since      File available since Release 0.1.0
- * @author     charlelsvineyard
+ * @author     charlesvineyard
  */
 
 /**
- * @category Setuco
- * @package  Admin
+ * ナビゲーションのコントローラ
+ *
+ * @package    Admin
  * @subpackage Controller
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author  charlelsvineyard
+ * @author     charlesvineyard
  */
 class Admin_NavigationController extends Setuco_Controller_Action_Admin
 {

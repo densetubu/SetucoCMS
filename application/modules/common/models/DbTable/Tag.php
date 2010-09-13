@@ -25,14 +25,14 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
     /**
      * テーブル名
      * 
-     * @var String
+     * @var string
      */
     protected $_name = 'tag';
 
     /**
      * プライマリーキーのカラム名
      *
-     * @var String
+     * @var string
      */
     protected $_primary = 'id';
 }

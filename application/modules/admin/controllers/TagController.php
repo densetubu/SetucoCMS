@@ -1,27 +1,26 @@
 <?php
 /**
- * 管理側のタグを管理するコントローラーです。
+ * タグ管理のコントローラ
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @version
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage Controller
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since       File available since Release 0.1.0
- * @author     
+ * @version
+ * @since      File available since Release 0.1.0
+ * @author     charlesvineyard
  */
 
 /**
- * @category    Setuco
- * @package     Admin
- * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author 
+ * タグ管理のコントローラ
+ *
+ * @package    Admin
+ * @subpackage Controller
+ * @author     charlesvineyard
  */
 class Admin_TagController extends Setuco_Controller_Action_Admin
 {

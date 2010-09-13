@@ -1,25 +1,38 @@
 <?php
 /**
- * AccountテーブルのDAOクラスです。
+ * accountテーブルのDbTable(DAO)クラスです。
+ *
+ * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Common_Model
- * @subpackage DbTable
- * @copyright  Copyright (c) 2010 SetucoCMS Project.
+ * @package    Common
+ * @subpackage Model_DbTable
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @version
+ * @link
  * @since      File available since Release 0.1.0
  * @author     mitchang
  */
+
+/**
+ * @package     Common
+ * @subpackage  Model_DbTable
+ * @author      mitchang
+ */
 class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
 {
-	/*
+	/**
 	 * 	テーブル名
-	 *	@var String
+	 * 
+	 *	@var string
 	 */
 	protected $_name = 'media';
 	
-	/*
-	 *	プライマリキーのフィールド名
-	 *	@var String
+	/**
+	 *	プライマリキーのカラム名
+	 *
+	 *	@var string
 	 */
 	protected $_primary = 'id';
 }
