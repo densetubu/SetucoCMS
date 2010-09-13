@@ -154,7 +154,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
         // すべてのファイルを検証
         if (!$adapter->isValid()) { 
-            $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。');
+            $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
             $this->_redirect('/admin/media/index');
         }
         
@@ -177,7 +177,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         // ファイルの受信と保存
         if (!$adapter->receive()) {
-            $this->_helper->flashMessenger('ファイルが正しく送信されませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
             $this->_redirect('/admin/media/index');
         }
         
@@ -189,12 +189,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             'comment'    => ''
    		);
         if (!$service->updateMediaInfo($dat)) {
-            $this->_helper->flashMessenger('ファイルが正しく保存できませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
             $this->_redirect('/admin/media/index');
         }
         
         // 処理正常終了
-        $this->_helper->flashMessenger('ファイルをアップロードしました。');
+        $this->_helper->flashMessenger->addMessage('ファイルをアップロードしました。');
         $this->_redirect('/admin/media/index');
 
     }
@@ -346,18 +346,18 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         $service = new Admin_Model_Media();
         if (!$service->deleteMedia($id)) {
-            $this->_helper->flashMessenger('ファイル情報を削除できませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイル情報を削除できませんでした。');
             $this->_redirect('/admin/media/index');
         }
 
-        $this->_helper->flashMessenger('ファイルを削除しました。');
+        $this->_helper->flashMessenger->addMessage('ファイルを削除しました。');
         $this->_redirect('/admin/media/index');
     
     }
 
    
     /**
-     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
+     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです。
      * 
      * @return int 現在ページネーターで表示すべきページ番号
      * @author akitsukada
@@ -374,7 +374,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
     
     /**
-     * ファイル新規アップロード用フォームを作成するメソッドです
+     * ファイル新規アップロード用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの新規アップロード用フォームオブジェクト
      * @author akitsukada
@@ -413,7 +413,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
 
     /**
-     * ファイルの絞込み・ソート用フォームを作成するメソッドです
+     * ファイルの絞込み・ソート用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの絞込み・ソート用フォームオブジェクト
      * @author akitsukada
@@ -452,7 +452,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
     
     /**
-     * ファイルの更新（=上書きアップロード）用フォームを作成するメソッドです
+     * ファイルの更新（=上書きアップロード）用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの更新（=上書きアップロード）用フォームオブジェクト
      * @author akitsukada
@@ -509,7 +509,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
        
     /**
-     * ファイルのアップロード先ディレクトリを得るメソッドです。ディレクトリが存在しない場合は作成します。
+     * ファイルのアップロード先ディレクトリパスを得るメソッドです。
      * 
      * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
      * @author akitsukada
@@ -519,6 +519,13 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         return APPLICATION_PATH . '/../public/media/upload';
     }
     
+    
+    /**
+     * ファイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
+     * 
+     * @return boolean ファイルのアップロード先ディレクトリが書き込み可能か。
+     * @author akitsukada
+     */
     private function _isWritableUploadDest() 
     {
         $dir = $this->_getUploadDest();
@@ -527,7 +534,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
         
     /**
-     * サムネイルのアップロード先ディレクトリを得るメソッドです。ディレクトリが存在しない場合は作成します。
+     * サムネイルのアップロード先ディレクトリパスを得るメソッドです。
      * 
      * @return string サムネイルのアップロード先ディレクトリ名
      * @author akitsukada
@@ -537,6 +544,13 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         return APPLICATION_PATH . '/../public/media/thumbnail';
     }
 
+    
+    /**
+     * サムネイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
+     * 
+     * @return boolean サムネイルのアップロード先ディレクトリが書き込み可能か。
+     * @author akitsukada
+     */
     private function _isWritableThumbnailDest() 
     {
         $dir = $this->_getUploadDest();
@@ -545,7 +559,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
 
     /**
-     * フラッシュメッセージを設定するメソッド。
+     * フラッシュメッセージをビューに設定するメソッド。
      * 
      * @return void
      * @author akitsukada
