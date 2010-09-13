@@ -24,19 +24,13 @@
  */
 class Admin_MediaController extends Setuco_Controller_Action_Admin
 {
-
+    
     /**
      * アップロードできるファイルサイズの最大値
      * @todo 最大サイズを決める
      */
     const MAX_FILE_SIZE = 500000;
     
-    /**
-     * ページネーターー用の、1ページあたりのデータ表示件数
-     * @todo 外だしする
-     */
-    const PAGE_LIMIT = 10;  
-
     /**
      * SetucoCMSで扱えるファイルの種類（拡張子）
      * 
@@ -96,8 +90,8 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
         // 条件にあったファイルデータの取得をサービスに指示
         $mediaService = new Admin_Model_Media();
-        $mediaData    = $mediaService->findMedias($condition, $currentPage, self::PAGE_LIMIT);
         $count        = $mediaService->countMedias($condition);
+        $mediaData    = $mediaService->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
 
         // viewにファイルデータを渡す
         $this->view->mediaData = $mediaData;
@@ -105,8 +99,19 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // アップロードできる最大サイズをKB換算でviewに教える
         $this->view->maxFileSize = (int)(self::MAX_FILE_SIZE / 1024);
 
-        // viewにファイルアップロード用フォームを設定
-        $this->view->uploadForm = $this->_createUploadForm();
+        // ディレクトリに問題なければviewにファイルアップロード用フォームを設定 
+        $dirErrors = array();
+        if (!$this->_isWritableUploadDest()) {
+            array_push($dirErrors, $this->_getUploadDest() . '　が存在しないか、書き込みできません。');
+        }
+        if (!$this->_isWritableThumbnailDest()) {
+            array_push($dirErrors, $this->_getThumbnailDest() . '　が存在しないか、書き込みできません。');
+        }
+        if (count($dirErrors) == 0) {
+            $this->view->uploadForm = $this->_createUploadForm();
+        } else {
+            $this->view->dirErrors = $dirErrors;
+        }
         
         // viewにファイル絞込み・ソート用フォームの作成
         $this->view->searchForm = $this->_createSearchForm($condition);        
@@ -115,11 +120,8 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $this->view->currentPage = $currentPage;
         $this->setPagerForView($count);
 
-        // フラッシュメッセージ用の設定
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages[0];
-        }
+        // フラッシュメッセージ設定
+        $this->_setFlashMessages();
         
     }
 
@@ -152,7 +154,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
         // すべてのファイルを検証
         if (!$adapter->isValid()) { 
-            $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。'); 
+            $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
             $this->_redirect('/admin/media/index');
         }
         
@@ -175,7 +177,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         // ファイルの受信と保存
         if (!$adapter->receive()) {
-            $this->_helper->flashMessenger('ファイルが正しく送信されませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
             $this->_redirect('/admin/media/index');
         }
         
@@ -187,12 +189,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             'comment'    => ''
    		);
         if (!$service->updateMediaInfo($dat)) {
-            $this->_helper->flashMessenger('ファイルが正しく保存できませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
             $this->_redirect('/admin/media/index');
         }
         
         // 処理正常終了
-        $this->_helper->flashMessenger('ファイルをアップロードしました。');
+        $this->_helper->flashMessenger->addMessage('ファイルをアップロードしました。');
         $this->_redirect('/admin/media/index');
 
     }
@@ -223,15 +225,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         // フォームの作成とviewへのセット
         $this->view->updateForm = $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment']);
-    
+        
         // アップロードできる最大サイズをKB換算でviewに教える
         $this->view->maxFileSize = (int)(self::MAX_FILE_SIZE / 1024);
         
-        // フラッシュメッセージ用の設定
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages[0];
-        }
+        // フラッシュメッセージ設定
+        $this->_setFlashMessages();
         
     }
     
@@ -270,7 +269,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $post = $this->getRequest()->getPost();
         
         if (!$form->isValid($post)) {
-            $this->_helper->flashMessenger('ファイルが更新できませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイルが更新できませんでした。');
             $this->_redirect($redirectUrl);
         }
         
@@ -286,7 +285,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
                     
             // すべてのファイルを検証
             if (!$adapter->isValid()) { 
-                $this->_helper->flashMessenger('ファイルのサイズオーバーか、または対応外のファイル形式です。');
+                $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
                 $this->_redirect($redirectUrl);
             }
             
@@ -304,7 +303,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             
             // ファイルの受信と保存
             if (!$adapter->receive()) {
-                $this->_helper->flashMessenger('ファイルが正しく送信されませんでした。');
+                $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
                 $this->_redirect($redirectUrl);
             }
             
@@ -317,14 +316,14 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
                 'comment'    => $post['comment']
        		);
             if (!$service->updateMediaInfo($dat)) {
-                $this->_helper->flashMessenger('ファイルが正しく更新できませんでした。');
+                $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
                 $this->_redirect($redirectUrl);
             }
         }
         
         
         // 処理正常終了
-        $this->_helper->flashMessenger('ファイル情報を更新しました。');
+        $this->_helper->flashMessenger->addMessage('ファイル情報を更新しました。');
         $this->_redirect($redirectUrl);
         
     }
@@ -347,18 +346,18 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         $service = new Admin_Model_Media();
         if (!$service->deleteMedia($id)) {
-            $this->_helper->flashMessenger('ファイル情報を削除できませんでした。');
+            $this->_helper->flashMessenger->addMessage('ファイル情報を削除できませんでした。');
             $this->_redirect('/admin/media/index');
         }
 
-        $this->_helper->flashMessenger('ファイルを削除しました。');
+        $this->_helper->flashMessenger->addMessage('ファイルを削除しました。');
         $this->_redirect('/admin/media/index');
     
     }
 
-    
+   
     /**
-     * ファイル新規アップロード用フォームを作成するメソッドです
+     * ファイル新規アップロード用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの新規アップロード用フォームオブジェクト
      * @author akitsukada
@@ -376,6 +375,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // ファイル選択パーツ作成と余分な装飾タグの除去
         $fileSelector = new Zend_Form_Element_File('upload_img', array('size' => 55));
         $fileSelector->setLabel(null)
+                     ->setMultiFile(1)
                      ->addDecorator('Label', array('tag' => null));
       
         // submitボタンの作成と余分な装飾タグの除去
@@ -396,10 +396,10 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
 
     /**
-     * ファイルの絞込み・ソート用フォームを作成するメソッドです
+     * ファイルの絞込み・ソート用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの絞込み・ソート用フォームオブジェクト
-     * 
+     * @author akitsukada
      */
     private function _createSearchForm($condition)
     {
@@ -435,10 +435,10 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
     
     /**
-     * ファイルの更新（=上書きアップロード）用フォームを作成するメソッドです
+     * ファイルの更新（=上書きアップロード）用フォームを作成するメソッドです。
      * 
      * @return Zend_Form ファイルの更新（=上書きアップロード）用フォームオブジェクト
-     * @author
+     * @author akitsukada
      * 
      */
     private function _createUpdateForm($id, $name = null, $comment = null) 
@@ -492,35 +492,69 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
        
     /**
-     * ファイルのアップロード先ディレクトリを得るメソッドです。ディレクトリが存在しない場合は作成します。
+     * ファイルのアップロード先ディレクトリパスを得るメソッドです。
      * 
      * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
-     * @todo ディレクトリ作成時のパーミッション検討？
+     * @author akitsukada
      */
     private function _getUploadDest() 
+    {        
+        return APPLICATION_PATH . '/../public/media/upload';
+    }
+    
+    
+    /**
+     * ファイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
+     * 
+     * @return boolean ファイルのアップロード先ディレクトリが書き込み可能か。
+     * @author akitsukada
+     */
+    private function _isWritableUploadDest() 
     {
-        
-        $dir = APPLICATION_PATH . '/../public/media/upload';
-        if (!(file_exists($dir) && is_dir($dir))) {
-            mkdir( $dir, 0777, true );
-        }
-        return $dir;
+        $dir = $this->_getUploadDest();
+        return is_writable($dir) && is_dir($dir);
     }
     
         
     /**
-     * サムネイルのアップロード先ディレクトリを得るメソッドです。ディレクトリが存在しない場合は作成します。
+     * サムネイルのアップロード先ディレクトリパスを得るメソッドです。
      * 
      * @return string サムネイルのアップロード先ディレクトリ名
-     * @todo ディレクトリ作成時のパーミッション検討？
+     * @author akitsukada
      */
     private function _getThumbnailDest() 
     {
-        $dir = APPLICATION_PATH . '/../public/media/thumbnail';
-        if (!(file_exists($dir) && is_dir($dir))) {
-            mkdir( $dir, 0777, true );
+        return APPLICATION_PATH . '/../public/media/thumbnail';
+    }
+
+    
+    /**
+     * サムネイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
+     * 
+     * @return boolean サムネイルのアップロード先ディレクトリが書き込み可能か。
+     * @author akitsukada
+     */
+    private function _isWritableThumbnailDest() 
+    {
+        $dir = $this->_getUploadDest();
+        return is_writable($dir) && is_dir($dir);
+    }
+    
+
+    /**
+     * フラッシュメッセージをビューに設定するメソッド。
+     * 
+     * @return void
+     * @author akitsukada
+     * 
+     */
+    private function _setFlashMessages() 
+    {
+        // フラッシュメッセージ用の設定
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->flashMessage = $flashMessages;
         }
-        return $dir;
     }
     
 }

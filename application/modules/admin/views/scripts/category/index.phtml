@@ -48,21 +48,18 @@
 
     
 
-        <p class="default">
-
-    <?php if (count($this->flashMessage)) : ?>
-    <div id='messageArea'>
-        <p><?php echo $this->flashMessage ?></p>
-        <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
-    </div>
-    <?php endif; ?>
-
-
         <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
-        <?php $this->createForm->displayElement('cat_name', array('class' => 'defaultInput', 'value' => '新規カテゴリー')); ?>
+        <p class="default">
+        <?php if (count($this->flashMessage)) : ?>
+            <div id='messageArea'>
+                <p><?php echo $this->flashMessage ?></p>
+                <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
+            </div>
+        <?php endif; ?>
+
+<?php $this->createForm->displayElement('cat_name', array('class' => 'defaultInput', 'value' => '新規カテゴリー')); ?>
         <?php $this->createForm->displayElement('sub', array('class' => 'sub', 'value' => '追加') ); ?>
         </form>
-        </p>
 
         <table summary="カテゴリー一覧の表です。カテゴリーの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
             <colgroup> 
