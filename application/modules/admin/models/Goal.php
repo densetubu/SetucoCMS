@@ -47,17 +47,6 @@ class Admin_Model_Goal
     {
         // TODO
     }
-    
-    /**
-     * 更新状況を取得します。
-     * 
-     * @return int 更新状況
-     * @author charlesvineyard
-     */
-    public function findGoalStatus()
-    {
-        // TODO
-        return 0;
-    }
+
 }
 
