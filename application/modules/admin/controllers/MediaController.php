@@ -446,7 +446,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // 編集用フォームの作成
         $updateForm = new Zend_Form();
         $updateForm->setMethod('post');
-        $updateForm->setAction('/admin/media/update/id/' . $id);
+        $updateForm->setAction($this->_helper->url('update/id/' . $id));
         $updateForm->setAttrib('enctype', 'multipart/form-data');
         
         // ファイル名編集テキストボックス

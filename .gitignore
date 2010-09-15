@@ -3,3 +3,4 @@ public/.htaccess
 .project
 .settings
 public/media/upload/*.*
+Thumbs.db
