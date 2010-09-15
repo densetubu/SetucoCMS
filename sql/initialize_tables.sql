@@ -2,14 +2,6 @@
  * CREATE TABLES
  *****************************************************/
 
--- タグ表 
-CREATE TABLE tag (
-    id      INT AUTO_INCREMENT NOT NULL,
-    name    VARCHAR(255) NOT NULL,
-    PRIMARY KEY(id),
-    UNIQUE(name)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
-
 -- アカウント表 
 CREATE TABLE account (
     id       INT AUTO_INCREMENT NOT NULL,
@@ -21,26 +13,34 @@ CREATE TABLE account (
     UNIQUE(nickname)
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
+-- タグ表 
+CREATE TABLE tag (
+    id      INT AUTO_INCREMENT NOT NULL,
+    name    VARCHAR(255) NOT NULL,
+    PRIMARY KEY(id),
+    UNIQUE(name)
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- メディア表 
 CREATE TABLE media (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
     type        TEXT NOT NULL,
-    create_date TIMESTAMP NOT NULL,
-    update_date TIMESTAMP NOT NULL,
+    create_date TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+    update_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     comment     TEXT,
     PRIMARY KEY(id)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- カテゴリ表 
 CREATE TABLE category (
     id          INT AUTO_INCREMENT NOT NULL,
     name        VARCHAR(255) NOT NULL,
-    parent_id   INT NOT NULL,
+    parent_id   INT,
     PRIMARY KEY(id),
     UNIQUE(name, parent_id),
     FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- ページ表 
 CREATE TABLE page (
@@ -48,15 +48,15 @@ CREATE TABLE page (
     title       TEXT NOT NULL,
     contents    TEXT NOT NULL,
     outline     TEXT,
-    create_date TIMESTAMP NOT NULL,
-    account_id  INT,
     status      INT NOT NULL,
     category_id INT,
-    update_date TIMESTAMP NOT NULL,
+    account_id  INT,
+    create_date TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+    update_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     FOREIGN KEY(account_id) REFERENCES account(id) ON DELETE SET NULL,
     FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- ページメディア表 
 CREATE TABLE page_media (
@@ -83,22 +83,22 @@ CREATE TABLE site (
     url         TEXT NOT NULL,
     comment     TEXT,
     keyword     TEXT,
-    open_date   TIMESTAMP NOT NULL,
+    open_date   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
-) CHARACTER SET utf8 COLLATE utf8_bin;
+) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- 野望表 
 CREATE TABLE ambition (
     id          INT AUTO_INCREMENT NOT NULL,
     ambition    TEXT NOT NULL,
     PRIMARY KEY(id)
-) CHARACTER SET utf8 COLLATE utf8_bin;
+) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- 更新目標表 
 CREATE TABLE goal (
     id           INT AUTO_INCREMENT NOT NULL,
     page_count   INT NOT NULL,
-    target_month TIMESTAMP NOT NULL,
+    target_month DATE NOT NULL,
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
@@ -120,7 +120,7 @@ ON page_tag(tag_id);
 INSERT INTO account 
     (login_id, nickname, password)
 VALUES
-    ('admin', '管理者さん', 'password');
+    ('admin', '管理者さん', SHA1('password'));
 
 INSERT INTO site 
     (name, url, comment, keyword, open_date)
@@ -135,13 +135,13 @@ VALUES
 INSERT INTO goal 
     (page_count, target_month)
 VALUES
-    (13, '2010-02-01 00:00:00'),
-    (15, '2010-03-01 00:00:00'),
-    (10, '2010-04-01 00:00:00'),
-    (14, '2010-05-01 00:00:00'),
-    (14, '2010-06-01 00:00:00'),
-    (14, '2010-07-01 00:00:00'),
-    (14, '2010-08-01 00:00:00'),
-    (17, '2010-09-01 00:00:00');
+    (13, '2010-02-01'),
+    (15, '2010-03-01'),
+    (10, '2010-04-01'),
+    (14, '2010-05-01'),
+    (14, '2010-06-01'),
+    (14, '2010-07-01'),
+    (14, '2010-08-01'),
+    (17, '2010-09-01');
 
 commit;
