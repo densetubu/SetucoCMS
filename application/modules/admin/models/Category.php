@@ -27,14 +27,14 @@ class Admin_Model_Category
 	/**
 	 * タグ情報タグを取得する	 
 	 * 
-     * @param String $keyword 検索するカテゴリ名
+     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
      * @param int $page 現在のページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
 	 * @return array 	カテゴリー情報の一覧
 	 * @author  saniker10, suzuki-mar
      * @todo スタブのデータを取得している
 	 */
-	 public function searchCategories($keyword, $page, $limit)
+	 public function searchCategories($sort, $page, $limit)
 	 {
        $result[] = array('name' => 'about', 	        'id' => 1, 'is_check' => false);
 	   $result[] = array('name' => 'contents', 	        'id' => 2, 'is_check' => true);
@@ -45,6 +45,22 @@ class Admin_Model_Category
 
        //デフォルトのカテゴリー　削除できない
        $result[] = array('name' => '未分類',            'id' => false, 'is_check' => false); 
+
+       //nullじゃなかったら、ソートをする
+       if (!is_null($sort)) {
+           foreach ($result as $key => $value) {
+                $names[$key] = $value['name'];
+           }
+
+           //ソートする方法をパラメータによって変更する desc意外は昇順(asc)
+          if($sort === 'desc') {
+              $sort = SORT_DESC;
+          } else {
+              $sort = SORT_ASC;
+         }
+
+          array_multisort($names, $sort, $result);
+       }
 
 	   return $result;
     }
@@ -57,7 +73,7 @@ class Admin_Model_Category
      * @author suzuki-mar
      * @todo スタブのデータを取得している
      */
-     public function countCategoriesByKeyword() 
+     public function countCategories() 
      {
          $result = 50;
          return $result;
@@ -69,20 +85,11 @@ class Admin_Model_Category
       * @param  numeric 存在するかを調べるid
       * @return boolean 指定したidが存在するか
       * @author suzuki-mar
-      * @todo   スタブのデータを取得している
+      * @todo 固定値(true)をかえしている
       */
      public function isExistsId($id)
      {
-         //同じデータを使用するため 実際は、DAOにSQLを発行させる
-         $categories = $this->getCategories();
-
-         //id一覧の配列を生成する
-         foreach ($categories as $value) {
-             $ids[] = $value['id'];
-         }
-
-         //指定したidが存在するか
-         $result = in_array($id, $ids);
+         $result = true;
 
          return $result;
      }

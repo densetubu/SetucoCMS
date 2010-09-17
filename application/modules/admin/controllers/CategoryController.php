@@ -82,9 +82,10 @@ class Admin_CategoryController extends Setuco_Controller_Action_Admin
             $this->view->flashMessage = $flashMessages[0];
         }
 
-        //入力したキーワード(カテゴリー名)からデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_service->searchCategories($this->_getParam('keyword'), $this->_getPage(), parent::PAGE_LIMIT);
-        $max = $this->_service->countCategoriesByKeyword($this->_getParam('keyword'));
+
+        //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
+        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), parent::PAGE_LIMIT);
+        $max = $this->_service->countCategories();
         $this->setPagerForView($max);
 
         return true;
