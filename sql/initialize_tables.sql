@@ -19,7 +19,7 @@ CREATE TABLE tag (
     name    VARCHAR(255) NOT NULL,
     PRIMARY KEY(id),
     UNIQUE(name)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- メディア表 
 CREATE TABLE media (
@@ -40,7 +40,7 @@ CREATE TABLE category (
     PRIMARY KEY(id),
     UNIQUE(name, parent_id),
     FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- ページ表 
 CREATE TABLE page (
