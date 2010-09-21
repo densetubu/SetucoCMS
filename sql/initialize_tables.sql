@@ -2,7 +2,7 @@
  * CREATE TABLES
  *****************************************************/
 
--- アカウント表 
+-- account table
 CREATE TABLE account (
     id       INT AUTO_INCREMENT NOT NULL,
     login_id VARCHAR(255) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE account (
     UNIQUE(nickname)
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
--- タグ表 
+-- tag table 
 CREATE TABLE tag (
     id      INT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE tag (
     UNIQUE(name)
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
--- メディア表 
+-- media table 
 CREATE TABLE media (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
@@ -32,17 +32,17 @@ CREATE TABLE media (
     PRIMARY KEY(id)
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- カテゴリ表 
+-- category table
 CREATE TABLE category (
     id          INT AUTO_INCREMENT NOT NULL,
     name        VARCHAR(255) NOT NULL,
-    parent_id   INT,
+    parent_id   INT DEFAULT -1,
     PRIMARY KEY(id),
     UNIQUE(name, parent_id),
     FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
--- ページ表 
+-- page table
 CREATE TABLE page (
     id          INT AUTO_INCREMENT NOT NULL,
     title       TEXT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE page (
     FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
 ) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- ページメディア表 
+-- page_media table 
 CREATE TABLE page_media (
     page_id INT NOT NULL,
     media_id INT NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE page_media (
     FOREIGN KEY(media_id) REFERENCES media(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
--- ページタグ表 
+-- page_tag table 
 CREATE TABLE page_tag (
     page_id     INT NOT NULL,
     tag_id      INT NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE page_tag (
     FOREIGN KEY(tag_id) REFERENCES tag(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
--- サイト表 
+-- site table 
 CREATE TABLE site (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
@@ -87,14 +87,14 @@ CREATE TABLE site (
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- 野望表 
+-- ambition table
 CREATE TABLE ambition (
     id          INT AUTO_INCREMENT NOT NULL,
     ambition    TEXT NOT NULL,
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- 更新目標表 
+-- goal table
 CREATE TABLE goal (
     id           INT AUTO_INCREMENT NOT NULL,
     page_count   INT NOT NULL,
@@ -104,23 +104,28 @@ CREATE TABLE goal (
 
 
 /*****************************************************
- * CREAETE INDEX 
+ * CREATE INDEX 
  *****************************************************/
 
--- 索引の作成 
+-- page_tag_tag_id_index index
 CREATE INDEX page_tag_tag_id_index
 ON page_tag(tag_id);
 
 
 /*****************************************************
- * INSERT DEFAULTS
+ * INSERT DEFAULTS RECORDS
  *****************************************************/
 
--- 初期値の登録
+-- insert statements
 INSERT INTO account 
     (login_id, nickname, password)
 VALUES
     ('admin', '管理者さん', SHA1('password'));
+
+INSERT INTO category 
+    (id, name, parent_id)
+VALUES
+    (-1, 'no_parent', null);
 
 INSERT INTO site 
     (name, url, comment, keyword, open_date)
@@ -135,13 +140,6 @@ VALUES
 INSERT INTO goal 
     (page_count, target_month)
 VALUES
-    (13, '2010-02-01'),
-    (15, '2010-03-01'),
-    (10, '2010-04-01'),
-    (14, '2010-05-01'),
-    (14, '2010-06-01'),
-    (14, '2010-07-01'),
-    (14, '2010-08-01'),
-    (17, '2010-09-01');
+    (10, cast(date_format(now(), '%Y-%m-1') as date));
 
 commit;
