@@ -26,7 +26,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
 {
     /**
      * ログインフォーム
-     * 
+     *
      * @return void
      * @author Yuu Yamanaka
      */
@@ -39,7 +39,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
     /**
      * ログイン処理
      * indexコントローラーのindexアクションに遷移します
-     * 
+     *
      * @return void
      * @author Yuu Yamanaka
      */
@@ -59,26 +59,25 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
                     array('ログインIDまたはパスワードが間違っています'));
             return $this->_forward('index');
         };
-
-        $this->_redirect('/admin/index/index');        
+        $this->_helper->redirector('index', 'index');
     }
 
     /**
      * ログアウト処理
      * indexアクションに遷移します
-     * 
+     *
      * @return void
      * @author Yuu Yamanaka
      */
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
-        $this->_redirect('/admin/login');        
+        $this->_helper->redirector('index');
     }
 
     /**
      * ログインフォームオブジェクトを作成して返す
-     * 
+     *
      * @return Setuco_Form
      * @author Yuu Yamanaka
      */
@@ -107,10 +106,10 @@ class Admin_LoginController extends Setuco_Controller_Action_Admin
 
         return $form;
     }
-    
+
     /**
      * レイアウト名を取得します。
-     * 
+     *
      * @return string レイアウト名
      * @author charlesvineyard
      */
