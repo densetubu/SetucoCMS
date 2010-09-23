@@ -36,7 +36,17 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
      * アップロードできるファイルサイズの最大値
      * @todo 最大サイズを決める
      */
-    const MAX_FILE_SIZE = 500000;
+    const FILE_SIZE_MAX = 500000;
+    
+    /**
+     * 
+     */
+    const FILENAME_LENGTH_MIN = 1;
+    
+    /**
+     * 
+     */
+    const FILENAME_LENGTH_MAX = 50;
     
     /**
      * SetucoCMSで扱えるファイルの種類（拡張子）
@@ -71,7 +81,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
      */
     public function indexAction()
     {
-
+        
         // ページネーターーのカレントページの取得
         $currentPage = $this->_getPage();
 
@@ -106,7 +116,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $this->view->mediaData = $mediaData;
 
         // アップロードできる最大サイズをKB換算でviewに教える
-        $this->view->maxFileSize = (int)(self::MAX_FILE_SIZE / 1024);
+        $this->view->maxFileSize = (int)(self::FILE_SIZE_MAX / 1024);
 
         // ディレクトリに問題なければviewにファイルアップロード用フォームを設定
         $dirErrors = array();
@@ -145,7 +155,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
      * @todo サムネイルの生成と保存
      */
     public function createAction()
-    {
+    { 
         
         // ファイルアップロードのポスト後でなければmediaのトップページへ
         if (!$this->getRequest()->isPost()) {
@@ -155,10 +165,9 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         // ファイル受信に使うadapterの作成とバリデータの設定
         $adapter  = new Zend_File_Transfer_Adapter_Http();
-        $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false))
-                ->addValidator('Count', false, array('min' => 1, 'max' => 5))
-                ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
-
+        $this->_setFileValidators($adapter);
+        
+       
         // すべてのファイルを検証
         if (!$adapter->isValid()) {
             $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
@@ -232,7 +241,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $this->view->updateForm = $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment']);
         
         // アップロードできる最大サイズをKB換算でviewに教える
-        $this->view->maxFileSize = (int)(self::MAX_FILE_SIZE / 1024);
+        $this->view->maxFileSize = (int)(self::FILE_SIZE_MAX / 1024);
         
         // フラッシュメッセージ設定
         $this->_setFlashMessages();
@@ -278,13 +287,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
         // ファイル受信に使うadapterの作成
         $adapter  = new Zend_File_Transfer_Adapter_Http();
+        
         // ファイル関連はファイルが選択された場合のみ処理
         if ($adapter->getFileName()) {
 
             // ファイル受信バリデータの設定
-            $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false))
-                    ->addValidator('Count', false, array('min' => 0, 'max' => 1)) // updateでは１件のファイルのみを扱うとする
-                    ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
+            $this->_setFileValidators($adapter, true);
                     
             // すべてのファイルを検証
             if (!$adapter->isValid()) {
@@ -330,7 +338,26 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
     }
 
-
+    
+    /**
+     * 
+     */
+    private function _setFileValidators(Zend_File_Transfer_Adapter_Abstract $adapter, $isUpdate = false)
+    {
+        if ($isUpdate) {
+            $minCount = 0;
+            $maxCount = 1;
+        } else {
+            $minCount = 1;
+            $maxCount = 5;
+        }
+        
+        $adapter->addValidator('FilesSize', false, array(1, self::FILE_SIZE_MAX, false))
+                    ->addValidator('Count', false, array('min' => $minCount, 'max' => $maxCount)) 
+                    ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
+        return $adapter;    
+    }
+    
     /**
      * ファイル削除処理のアクションです
      * indexアクションに遷移します
@@ -453,8 +480,9 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // ファイル名編集テキストボックス
         $txtFileName = new Zend_Form_Element_Text('name');
         $txtFileName->clearDecorators()
-                    ->setRequired(true)
+                    ->setRequired(true) // @todo ファイル名文字数制限
                     ->setValue($name)
+                    ->addFilter('StringTrim')
                     ->addDecorator('ViewHelper')
                     ->addDecorator('Label', array('tag' => null));
 
