@@ -20,14 +20,14 @@
  * @subpackage  Model_DbTable
  * @author      mitchang
  */
-class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
 {
 	/**
 	 * 	テーブル名
 	 * 
 	 *	@var string
 	 */
-	protected $_name = 'media';
+	protected $_name = 'account';
 	
 	/**
 	 *	プライマリキーのカラム名
