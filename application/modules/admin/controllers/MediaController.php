@@ -26,6 +26,13 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 {
     
     /**
+     * 
+     * Mediaサービスクラスのオブジェクト
+     * @var Admin_Model_Media
+     */
+    private $_service = null;
+    
+    /**
      * アップロードできるファイルサイズの最大値
      * @todo 最大サイズを決める
      */
@@ -33,23 +40,26 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
     /**
      * SetucoCMSで扱えるファイルの種類（拡張子）
-     * 
+     *
      * @var array
+     * @todo 'all'をなくしたい
      */
     private $_fileTypes = array('all', 'jpg', 'gif', 'png', 'pdf', 'txt');
  
     /**
-     * MimeTypeと拡張子の変換用配列
-     * 
-     * @var array
+     *
      */
-    private $_mimeTypes = array(
-        'application/pdf'    => 'pdf',
-        'image/jpeg'         => 'jpg',
-        'image/gif'          => 'gif',
-        'image/png'          => 'png',
-        'text/plain'         => 'txt'
-    );
+    public function init()
+    {
+        
+        //親クラスの設定を引き継ぐ
+        parent::init();
+
+        //全アクションで使用するサービスクラスのインスタンを生成する
+        $this->_service = new Admin_Model_Media();
+
+        return true;
+    }
     
     /**
      *
@@ -75,8 +85,8 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         }
        
         // ソート指定のカラムとオーダー取得 (デフォルトではファイル名'name'の昇順'asc')
-        $sort  = $this->_getParam('sort', 'name'); 
-        $order = $this->_getParam('order',  'asc'); 
+        $sort  = $this->_getParam('sort', 'name');
+        $order = $this->_getParam('order',  'asc');
 
         // データ取得の条件を作る
         $condition = array(
@@ -89,9 +99,8 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         $this->view->condition = $condition;
 
         // 条件にあったファイルデータの取得をサービスに指示
-        $mediaService = new Admin_Model_Media();
-        $count        = $mediaService->countMedias($condition);
-        $mediaData    = $mediaService->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
+        $count        = $this->_service->countMedias($condition);
+        $mediaData    = $this->_service->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
 
         // viewにファイルデータを渡す
         $this->view->mediaData = $mediaData;
@@ -99,7 +108,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // アップロードできる最大サイズをKB換算でviewに教える
         $this->view->maxFileSize = (int)(self::MAX_FILE_SIZE / 1024);
 
-        // ディレクトリに問題なければviewにファイルアップロード用フォームを設定 
+        // ディレクトリに問題なければviewにファイルアップロード用フォームを設定
         $dirErrors = array();
         if (!$this->_isWritableUploadDest()) {
             array_push($dirErrors, $this->_getUploadDest() . '　が存在しないか、書き込みできません。');
@@ -114,7 +123,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         }
         
         // viewにファイル絞込み・ソート用フォームの作成
-        $this->view->searchForm = $this->_createSearchForm($condition);        
+        $this->view->searchForm = $this->_createSearchForm($condition);
         
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
@@ -143,35 +152,32 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             $this->_redirect('/admin/media/index');
         }
         
-        // Mediaサービスを用意
-        $service = new Admin_Model_Media();
         
         // ファイル受信に使うadapterの作成とバリデータの設定
         $adapter  = new Zend_File_Transfer_Adapter_Http();
-        $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false)) 
+        $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false))
                 ->addValidator('Count', false, array('min' => 1, 'max' => 5))
                 ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
 
         // すべてのファイルを検証
-        if (!$adapter->isValid()) { 
+        if (!$adapter->isValid()) {
             $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
             $this->_redirect('/admin/media/index');
         }
         
-        // 保存名に使う新しいファイルIDを取得
-        $mediaId = $service->createNewMediaID();
+        // 保存時の物理名に使う新しいファイルIDを取得
+        $mediaId = $this->_service->createNewMediaID();
         
-        // 拡張子を取得
-        $extType = $this->_mimeTypes[$adapter->getMimeType()];
+        // オリジナルファイルの情報を取得
+        $fileInfo = pathinfo($adapter->getFileName());
+
+        // 拡張子取得
+        $extType =  $fileInfo['extension'];
         
-        // DBに保存するオリジナルファイル名を取得
-        $fileInfo = $adapter->getFileInfo();
-        $origName = $fileInfo['upload_img']['name'];
-        
-        // ファイルの保存先と保存名を指定
+        // ファイルの保存先と物理名（id)を指定
         $adapter->setDestination($this->_getUploadDest());
         $adapter->addFilter('Rename', array( // 別名を指定
-        	'target' => $this->_getUploadDest() . '/' . $mediaId . '.' . $extType, 
+        	'target' => $this->_getUploadDest() . '/' . $mediaId . '.' . $extType,
         	'overwrite' => true
         ));
         
@@ -184,11 +190,11 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // サービスにファイルの情報を渡してDB登録させる
         $dat = array(
             'id'         => $mediaId,
-            'name'       => $origName,
-            'type'       => $extType, 
+            'name'       => $fileInfo['filename'],
+            'type'       => $extType,
             'comment'    => ''
    		);
-        if (!$service->updateMediaInfo($dat)) {
+        if (!$this->_service->updateMediaInfo($dat)) {
             $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
             $this->_redirect('/admin/media/index');
         }
@@ -205,7 +211,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
      *
      * @return void
      * @author akitsukada
-     * 
+     *
      */
     public function formAction()
     {
@@ -217,11 +223,10 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         }
         
         // IDに該当するファイル情報をサービスから取得
-        $service = new Admin_Model_Media();
-        $mediaData = $service->findMediaById($id);
+        $mediaData = $this->_service->findMediaById($id);
 
         // ビューにファイル情報を渡す
-        $this->view->mediaData = $mediaData; 
+        $this->view->mediaData = $mediaData;
         
         // フォームの作成とviewへのセット
         $this->view->updateForm = $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment']);
@@ -259,8 +264,6 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         // formアクションへのリダイレクトURL
         $redirectUrl = '/admin/media/form/id/' . $id;
         
-        // Mediaサービスを用意
-        $service = new Admin_Model_Media();
         
         // 更新フォームオブジェクト取得
         $form = $this->_createUpdateForm($id);
@@ -279,25 +282,25 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         if ($adapter->getFileName()) {
 
             // ファイル受信バリデータの設定
-            $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false)) 
+            $adapter->addValidator('FilesSize', false, array(1, self::MAX_FILE_SIZE, false))
                     ->addValidator('Count', false, array('min' => 0, 'max' => 1)) // updateでは１件のファイルのみを扱うとする
                     ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
                     
             // すべてのファイルを検証
-            if (!$adapter->isValid()) { 
+            if (!$adapter->isValid()) {
                 $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
                 $this->_redirect($redirectUrl);
             }
             
-            // 保存名に使う新しいファイルIDを取得
-            $mediaId = $service->createNewMediaID();
+            // オリジナルファイルの情報を取得
+            $fileInfo = pathinfo($adapter->getFileName());
             
-            // 拡張子を取得
-            $extType = $this->_mimeTypes[$adapter->getMimeType()];
+            // アップロードされたファイルの拡張子取得
+            $extType =  $fileInfo['extension'];
             
             // ファイルの保存先と保存名を指定
             $adapter->addFilter('Rename', array( // 別名を指定
-            	'target' => $this->_getUploadDest() . '/' . $id . '.' . $extType, 
+            	'target' => $this->_getUploadDest() . '/' . $id . '.' . $extType,
             	'overwrite' => true
             ));
             
@@ -312,15 +315,14 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             $dat = array(
                 'id'         => $id,
                 'name'       => $post['name'],
-                'type'       => $extType, 
+                'type'       => $extType,
                 'comment'    => $post['comment']
        		);
-            if (!$service->updateMediaInfo($dat)) {
+            if (!$this->_service->updateMediaInfo($dat)) {
                 $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
                 $this->_redirect($redirectUrl);
             }
         }
-        
         
         // 処理正常終了
         $this->_helper->flashMessenger->addMessage('ファイル情報を更新しました。');
@@ -344,8 +346,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
             $this->_redirect('/admin/media/index');
         }
         
-        $service = new Admin_Model_Media();
-        if (!$service->deleteMedia($id)) {
+        if (!$this->_service->deleteMedia($id)) {
             $this->_helper->flashMessenger->addMessage('ファイル情報を削除できませんでした。');
             $this->_redirect('/admin/media/index');
         }
@@ -358,7 +359,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
    
     /**
      * ファイル新規アップロード用フォームを作成するメソッドです。
-     * 
+     *
      * @return Zend_Form ファイルの新規アップロード用フォームオブジェクト
      * @author akitsukada
      * @todo 複数ファイルのアップロード
@@ -397,7 +398,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
     /**
      * ファイルの絞込み・ソート用フォームを作成するメソッドです。
-     * 
+     *
      * @return Zend_Form ファイルの絞込み・ソート用フォームオブジェクト
      * @author akitsukada
      */
@@ -405,7 +406,7 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     {
         $searchForm = new Zend_Form();
         $searchForm->setMethod('post');
-        $searchForm->setAction('/admin/media/index');        
+        $searchForm->setAction('/admin/media/index');
         
         // ファイルタイプのセレクトボックス
         $typeSelector = new Zend_Form_Element_Select('fileType');
@@ -436,12 +437,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
     /**
      * ファイルの更新（=上書きアップロード）用フォームを作成するメソッドです。
-     * 
+     *
      * @return Zend_Form ファイルの更新（=上書きアップロード）用フォームオブジェクト
      * @author akitsukada
-     * 
+     *
      */
-    private function _createUpdateForm($id, $name = null, $comment = null) 
+    private function _createUpdateForm($id, $name = null, $comment = null)
     {
         // 編集用フォームの作成
         $updateForm = new Zend_Form();
@@ -493,23 +494,23 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
        
     /**
      * ファイルのアップロード先ディレクトリパスを得るメソッドです。
-     * 
+     *
      * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
      * @author akitsukada
      */
-    private function _getUploadDest() 
-    {        
+    private function _getUploadDest()
+    {
         return APPLICATION_PATH . '/../public/media/upload';
     }
     
     
     /**
      * ファイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
-     * 
+     *
      * @return boolean ファイルのアップロード先ディレクトリが書き込み可能か。
      * @author akitsukada
      */
-    private function _isWritableUploadDest() 
+    private function _isWritableUploadDest()
     {
         $dir = $this->_getUploadDest();
         return is_writable($dir) && is_dir($dir);
@@ -518,11 +519,11 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
         
     /**
      * サムネイルのアップロード先ディレクトリパスを得るメソッドです。
-     * 
+     *
      * @return string サムネイルのアップロード先ディレクトリ名
      * @author akitsukada
      */
-    private function _getThumbnailDest() 
+    private function _getThumbnailDest()
     {
         return APPLICATION_PATH . '/../public/media/thumbnail';
     }
@@ -530,11 +531,11 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
     
     /**
      * サムネイルのアップロード先ディレクトリが書き込み可能であるかを判定するメソッドです。
-     * 
+     *
      * @return boolean サムネイルのアップロード先ディレクトリが書き込み可能か。
      * @author akitsukada
      */
-    private function _isWritableThumbnailDest() 
+    private function _isWritableThumbnailDest()
     {
         $dir = $this->_getUploadDest();
         return is_writable($dir) && is_dir($dir);
@@ -543,12 +544,12 @@ class Admin_MediaController extends Setuco_Controller_Action_Admin
 
     /**
      * フラッシュメッセージをビューに設定するメソッド。
-     * 
+     *
      * @return void
      * @author akitsukada
-     * 
+     *
      */
-    private function _setFlashMessages() 
+    private function _setFlashMessages()
     {
         // フラッシュメッセージ用の設定
         $flashMessages = $this->_helper->flashMessenger->getMessages();
