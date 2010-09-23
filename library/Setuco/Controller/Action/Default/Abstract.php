@@ -19,11 +19,9 @@
  * @category    Setuco
  * @package     Setuco_Controller
  * @subpackage  Action
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_Default extends Setuco_Controller_Action_Abstract
+abstract class Setuco_Controller_Action_Default_Abstract extends Setuco_Controller_Action_Abstract
 {
     /**
      * defaultモジュールコントローラの初期処理です。

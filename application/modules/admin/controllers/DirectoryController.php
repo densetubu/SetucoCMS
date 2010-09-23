@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     charlesvineyard
  */
-class Admin_DirectoryController extends Setuco_Controller_Action_Admin
+class Admin_DirectoryController extends Setuco_Controller_Action_Admin_Abstract
 {
     /** 
      * サイト構造(ディレクトリー)の一覧を表示するのアクションです。

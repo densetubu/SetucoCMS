@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     charlesvineyard
  */
-class Admin_TagController extends Setuco_Controller_Action_Admin
+class Admin_TagController extends Setuco_Controller_Action_Admin_Abstract
 {
     /** 
      * タグの新規作成するフォーム

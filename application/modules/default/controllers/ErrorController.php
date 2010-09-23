@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     suzuki-mar
  */
-class ErrorController extends Setuco_Controller_Action_Default
+class ErrorController extends Setuco_Controller_Action_Default_Abstract
 {
     /**
      * クラスの共通設定 
@@ -39,6 +39,8 @@ class ErrorController extends Setuco_Controller_Action_Default
     {
         $errors = $this->_getParam('error_handler');
 
+        
+        
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:

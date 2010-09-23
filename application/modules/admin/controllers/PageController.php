@@ -24,7 +24,7 @@
  * @license
  * @author	    akitsukaa 
  */
-class Admin_PageController extends Setuco_Controller_Action_Admin
+class Admin_PageController extends Setuco_Controller_Action_Admin_Abstract
 {
     /** 
      * ページの一覧表示のアクション

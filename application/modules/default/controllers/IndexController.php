@@ -13,7 +13,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author     
+ * @author      suzuki_mar    
  */
 
 
@@ -22,11 +22,9 @@
  * @category    Setuco
  * @package     Default
  * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
- * @author 
+ * @author      suzuki_mar
  */
-class IndexController extends Setuco_Controller_Action_Default
+class IndexController extends Setuco_Controller_Action_Default_Abstract
 {
 
     /** 

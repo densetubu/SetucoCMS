@@ -6,7 +6,7 @@
  *
  * @category   Setuco
  * @package    Setuco_Controller
- * @subpackage Action
+ * @subpackage Action_Admin
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @version
@@ -18,12 +18,10 @@
 /**
  * @category    Setuco
  * @package     Setuco_Controller
- * @subpackage  Action
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @subpackage  Action_Admin
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_Admin extends Setuco_Controller_Action_Abstract
+abstract class Setuco_Controller_Action_Admin_Abstract extends Setuco_Controller_Action_Abstract
 {
     /**
      * ナビゲーション
