@@ -278,12 +278,16 @@ class Zend_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstrac
             // get a count of the number of exceptions encountered
             $this->_exceptionCountAtFirstEncounter = count($exceptions);
 
+
+            
+            
             // Forward to the error handler
             $request->setParam('error_handler', $error)
                     ->setModuleName($this->getErrorHandlerModule())
                     ->setControllerName($this->getErrorHandlerController())
                     ->setActionName($this->getErrorHandlerAction())
                     ->setDispatched(false);
+                    
         }
     }
 }

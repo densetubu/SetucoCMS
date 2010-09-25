@@ -32,10 +32,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Validate_Abstract::setDefaultTranslator($translator);
     }
     
+    /**
+     * 使用するプラグインを登録する
+     * 
+     * @return void
+     * @author suzuki_mar
+     */
     protected function _initPlugin()
     {
-        $fc = Setuco_Application_BootstrapUtil::extractResource($this, 'FrontController');
-        $fc->registerPlugin(new Setuco_Controller_Plugin());
+    	//プラグインを登録するために、フロントコントローラーのインスタンを取得する
+        $frontController = Setuco_Application_BootstrapUtil::extractResource($this, 'FrontController');
+        
+        //基本的なコントローラーに関するプラグインを登録する
+        $frontController->registerPlugin(new Setuco_Controller_Plugin());
+        //エラーコントローラーを制御するプラグインを登録する
+        $frontController->registerPlugin(new Setuco_Controller_Plugin_ErrorHandler());
+        
     }
     
     /**

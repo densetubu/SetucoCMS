@@ -5,8 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Controller
- * @subpackage Action_Admin
+ * @package    Setuco
+ * @subpackage Controller_Action
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @version
@@ -17,8 +17,8 @@
 
 /**
  * @category    Setuco
- * @package     Setuco_Controller
- * @subpackage  Action_Admin
+ * @package     Setuco
+ * @subpackage  Controller_Action
  * @author      suzuki-mar
  */
 abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_Action_Abstract

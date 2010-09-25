@@ -1,11 +1,11 @@
 <?php
 /**
- * 閲覧側のエラーコントローラー
+ * 管理側のエラーコントローラー
  *
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Default
+ * @package    Admin
  * @subpackage Controller
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -18,11 +18,11 @@
 /**
  * エラーコントローラー
  * 
- * @package    Default
+ * @package    Admin
  * @subpackage Controller
  * @author     suzuki-mar
  */
-class ErrorController extends Setuco_Controller_Action_DefaultAbstract
+class Admin_ErrorController extends Setuco_Controller_Action_AdminAbstract
 {
     /**
      * クラスの共通設定 
@@ -30,6 +30,9 @@ class ErrorController extends Setuco_Controller_Action_DefaultAbstract
      */
     public function init()
     {
+    	//親コントローラーの設定を引き継ぐ
+    	parent::init();
+    	
         //モジュール毎に違うレイアウトを表示する
         $this->_setLayout();
 
@@ -38,8 +41,6 @@ class ErrorController extends Setuco_Controller_Action_DefaultAbstract
     public function errorAction()
     {
         $errors = $this->_getParam('error_handler');
-
-        
         
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
