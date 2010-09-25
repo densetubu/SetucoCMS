@@ -24,7 +24,7 @@
  * @subpackage  Controller
  * @author      suzuki_mar
  */
-class IndexController extends Setuco_Controller_Action_Default_Abstract
+class IndexController extends Setuco_Controller_Action_DefaultAbstract
 {
 
     /** 

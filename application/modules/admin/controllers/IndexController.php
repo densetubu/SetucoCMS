@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     charlesvineyard
  */
-class Admin_IndexController extends Setuco_Controller_Action_Admin_Abstract
+class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
 {
     /**
      * 野望サービス

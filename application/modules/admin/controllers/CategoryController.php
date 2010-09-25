@@ -21,7 +21,7 @@
  * @subpackage  Controller
  * @author      charlesvineyard suzuki-mar saniker10
  */
-class Admin_CategoryController extends Setuco_Controller_Action_Admin_Abstract
+class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 {
     /**
      * 全アクションで使用するサービスクラス

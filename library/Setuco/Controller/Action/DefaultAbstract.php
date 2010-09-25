@@ -21,7 +21,7 @@
  * @subpackage  Action
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_Default_Abstract extends Setuco_Controller_Action_Abstract
+abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract
 {
     /**
      * defaultモジュールコントローラの初期処理です。

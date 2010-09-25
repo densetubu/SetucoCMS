@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     Yuu Yamanaka
  */
-class Admin_LoginController extends Setuco_Controller_Action_Admin_Abstract
+class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
 {
     /**
      * ログインフォーム

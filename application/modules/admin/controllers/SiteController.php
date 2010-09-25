@@ -24,7 +24,7 @@
  * @license
  * @author 
  */
-class Admin_SiteController extends Setuco_Controller_Action_Admin_Abstract
+class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 {
 
 

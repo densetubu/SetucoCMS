@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     suzuki-mar
  */
-class ErrorController extends Setuco_Controller_Action_Default_Abstract
+class ErrorController extends Setuco_Controller_Action_DefaultAbstract
 {
     /**
      * クラスの共通設定 

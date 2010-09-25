@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     akitsukada
  */
-class Admin_MediaController extends Setuco_Controller_Action_Admin_Abstract
+class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 {
     
     /**
