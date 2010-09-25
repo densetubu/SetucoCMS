@@ -4,3 +4,4 @@ public/.htaccess
 .settings
 public/media/upload/*.*
 Thumbs.db
+application/configs/application.ini
