@@ -94,6 +94,8 @@ abstract class Zend_Validate_Db_Abstract extends Zend_Validate_Abstract
      */
     public function __construct($options)
     {
+    
+    	
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
         } else if (func_num_args() > 1) {

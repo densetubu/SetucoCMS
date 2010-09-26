@@ -57,8 +57,8 @@
             </div>
         <?php endif; ?>
 
-<?php $this->createForm->displayElement('cat_name', array('class' => 'defaultInput', 'value' => '新規カテゴリー')); ?>
-        <?php $this->createForm->displayElement('sub', array('class' => 'sub', 'value' => '追加') ); ?>
+       <input type="text" name="cat_name" id="cat_name" class="defaultInput" value="新規カテゴリー"> 
+       <input type="submit" class="sub" value="追加"> 
         </form>
 
         <table summary="カテゴリー一覧の表です。カテゴリーの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
@@ -94,16 +94,14 @@
 <?php //タグを編集するか ?>
 <?php if ($value['id'] == $this->editId): ?>
 <td> 
+
 <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="post">
-
-<?php
-$this->updateForm->displayElement('name',   array('value' => $value['name']) ); 
-$this->updateForm->displayElement('id',     array('value' => $value['id']) ); 
-$this->updateForm->displayElement('parent_id',     array('value' => $value['parent_id']) );
-$this->updateForm->displayElement('sub',    array('class' => 'sub', 'value' => "保存") ); 
-?>
-
+    <input type="text" name="name" id="name" value="<?php echo $value['name']?>">
+    <input type="hidden" name="id" id="id" value="<?php echo $value['id']?>">
+    <input type="hidden" name="parent_id" id="parent_id" value="<?php echo $value['parent_id']?>">
+    <input type="submit" class="sub" value="保存">
 </form>
+
 </td>
 
 <?php else: ?>

@@ -2097,6 +2097,7 @@ class Zend_Form_Element implements Zend_Validate_Interface
      */
     protected function _loadValidator(array $validator)
     {
+    
         $origName = $validator['validator'];
         $name     = $this->getPluginLoader(self::VALIDATE)->load($validator['validator']);
 

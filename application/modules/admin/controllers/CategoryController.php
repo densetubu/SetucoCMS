@@ -60,12 +60,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     public function indexAction()
     {
 
-        //編集用のフォームクラスを取得する
-        $this->view->updateForm = $this->_createUpdateForm();
-
-        //新規作成用のフォームクラスを取得する
-        $this->view->createForm = $this->_createCreateForm();
-
         //idがあったら、編集モードとする
         $isEdit = $this->_hasParam('id');
 
@@ -96,14 +90,18 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * カテゴリーを新規作成するアクションです
      * indexアクションに遷移します
      *
-     * @return void
-     * @author charlesvineyard
+     * @return true
+     * @author charlesvineyard suzuki-mar
      */
     public function createAction()
     {
-        //バリデートするFormオブジェクトを取得する
-        $validateForm = $this->_createCreateForm();
-
+    	//フォームから値を送信されなかったら、indexに遷移する
+    	if (!$this->_request->isPost()) {
+    		$this->_redirect('/admin/category/index');
+    	}
+    	
+        //新規登録のバリデートオブジェクトを取得する
+        $validateForm = $this->_validateCreate();
 
         //入力したデータをバリデートチェックをする
         if ($validateForm->isValid($this->_getAllParams() ) ) {
@@ -121,19 +119,26 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         } 
     
         $this->_redirect('/admin/category/index');        
+        
+        return true;
     }
 
     /** 
      * カテゴリーを更新処理するアクションです
      * indexアクションに遷移します
      *
-     * @return void
-     * @author charlesvineyard
+     * @return true
+     * @author charlesvineyard suzuki_mar
      */
     public function updateAction()
     {
+        //フォームから値を送信されなかったら、indexに遷移する
+        if (!$this->_request->isPost()) {
+            $this->_redirect('/admin/category/index');
+        }
+    	
         //バリデートするFormオブジェクトを取得する
-        $validateForm = $this->_createUpdateForm();
+        $validateForm = $this->_validateUpdate();
 
         //入力したデータをバリデートチェックをする
         if ($validateForm->isValid($this->_getAllParams()) ) {
@@ -150,18 +155,23 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->flashMessenger('カテゴリーの編集に失敗しました');
         } 
     
-        $this->_redirect('/admin/category/index');        
+        $this->_redirect('/admin/category/index');       
+
+        return true;
     }
 
     /** 
      * カテゴリーを削除するアクションです
      *
-     * @return void
-     * @author charlesvineyard
-     * @todo 内容の実装 現在はスケルトン
+     * @return true
+     * @author charlesvineyard suzuki-mar
      */
     public function deleteAction()
     {
+        //フォームから値を送信されなかったら、indexに遷移する
+        if (!$this->_request->isPost()) {
+            $this->_redirect('/admin/category/index');
+        }
 
         //数値以外はエラー
         $validator = new Zend_Validate_Digits($this->_getParam('id'));
@@ -180,88 +190,133 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         } 
 
         $this->_redirect('/admin/category/index');        
+        
+        return true;
     }
 
     /**
-     * 新規作成用のフォームを作成する
-     * class属性などは、view側で指定する
+     * 新規作成用のバリデートルールを作成する
+     * 
      *
      * @return Zend_Form 新規作成用のフォーム
      * @author suzuki-mar
      */
-    private function _createCreateForm()
+    private function _validateCreate()
     {
         //カテゴリー名を入力するinputタグを生成
         $form = new Setuco_Form();
 
         //inputタグだけのクラスを生成する
         $inputItem =  $form->createElementOfViewHelper('text', 'cat_name');
-        $inputItem->setRequired()
-                     ->addFilter('StringTrim')
-                     ->addValidators(array(
-                        array('NotEmpty', true),
-                        array('stringLength', false, array(1, 100))
-                        ));
+        //バリデートルールを設定する
+        $inputItem = $this->_setValidateRuleOfName($inputItem);
         $form->addElement($inputItem);
-
-        //submitボタンを生成する
-        $submitItem = $form->createElementOfViewHelper('submit', 'sub');
-        $form->addElement($submitItem);
 
         return $form;
     }
-
-
+    
+                        
     /**
-     * 編集用のフォームを作成する
-     * class属性などは、view側で指定する
+     * 編集用のバリデートオブジェクトを作成する
+     * 
      *
      * @return Zend_Form 編集用のフォーム
      * @author suzuki-mar
      */
-    private function _createUpdateForm()
+    private function _validateUpdate()
     {
         //フォームクラスの生成
         $form = new Setuco_Form();
 
+        
         //カテゴリー名を入力するinputタグを生成
         $inputItem =  $form->createElementOfViewHelper('text', 'name');
-        $inputItem->setRequired()
-            ->addFilter('StringTrim')
-            ->addValidators(array(
-                        array('NotEmpty', true),
-                        array('stringLength', false, array(1, 100))
-                        ));
+        //バリデートルールを設定する
+        $inputItem = $this->_setValidateRuleOfName($inputItem, true);
+        
         $form->addElement($inputItem);
 
         //idをセットするhiddenタグを生成
         $idItem = $form->createElementOfViewHelper('hidden', 'id');
-        $idItem->setRequired()
+        //バリデートルールを設定する
+        $idItem = $this->_setValidateRuleOfId($idItem);
+        $form->addElement($idItem);
+
+        //idをセットするhiddenタグを生成
+        $parentIdItem = $form->createElementOfViewHelper('hidden', 'parent_id');
+        $parentIdItem = $this->_setValidateRuleOfParentId($parentIdItem);
+        $form->addElement($parentIdItem);
+
+        return $form;
+    }
+
+        /**
+     * カテゴリー名のバリデートルールを設定する
+     * 
+     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
+     * @param boolean[option] $isUpdate 編集用のバリデートルールか デフォルトは新規登録
+     * @author suzuki-mar
+     */
+    private function _setValidateRuleOfName(Zend_Form_Element $element, $isUpdate = false) 
+    {
+        //編集と新規登録では、ルールを変更する
+        if ($isUpdate) {
+            $noRecordExistsOption = array('table' => 'category', 'field' => 'name', 'exclude' => array('field' => 'id', 'value' => $this->_getParam('id')) ); 
+        } else {
+            $noRecordExistsOption = array('table' => 'category', 'field' => 'name');
+        }
+        
+        $element->setRequired()
+                  ->addFilter('StringTrim')
+                  ->addValidators(array(
+                    array('NotEmpty', true),
+                    //文字列の長さを指定する
+                    array('stringLength', true, array(1, 100)),
+                    //同じカテゴリーは登録できないようにする
+                    array('Db_NoRecordExists', true, $noRecordExistsOption
+                    )));
+                    
+       return $element;
+    }
+
+    /**
+     * IDのバリデートルールを設定する
+     * 
+     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
+     * @author suzuki-mar
+     */
+    private function _setValidateRuleOfId(Zend_Form_Element $element)
+    {
+        $element->setRequired()
             ->addFilter('StringTrim')
             ->addValidators(array(
                 array('NotEmpty', true),
                 array('stringLength', false, array(1, 100)),
                 array('Int')
                         ));
-        $form->addElement($idItem);
+    
+         return $element;
+    }
 
-        //idをセットするhiddenタグを生成
-        $parentIdItem = $form->createElementOfViewHelper('hidden', 'parent_id');
-        $parentIdItem->setRequired()
+    /**
+     * parent_idのバリデートルールを設定する
+     * 
+     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
+     * @author suzuki-mar
+     */
+    private function _setValidateRuleOfParentId(Zend_Form_Element $element)
+    {
+        $element->setRequired()
             ->addFilter('StringTrim')
             ->addValidators(array(
                 array('NotEmpty', true),
                 array('stringLength', false, array(1, 100)),
                 array('Int')
-                            ));
-        $form->addElement($parentIdItem);
-        
-        //submitボタンを生成する
-        $submitItem = $form->createElementOfViewHelper('submit', 'sub');
-        $form->addElement($submitItem);
-
-        return $form;
+                        ));
+    
+         return $element;
     }
-
+    
+    
 }
 
