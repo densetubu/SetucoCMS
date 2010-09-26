@@ -113,10 +113,12 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     /**
      * ページャーの設定をして、ビューで使用できるようにする
      *
+     * @param int 最大何件のデータが該当したのか
+     * @param int[option] 一ページあたりに何件のデータを表示するのか
      * @return void
      * @author suzuki-mar
      */
-    public function setPagerForView($max)
+    public function setPagerForView($max, $limit = null)
     {
         //数値ではない場合は数値にキャストする 数字ではエラーなので
         if(is_string($max)) {
@@ -133,9 +135,14 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         //現在のページ番号を渡す 
         $this->view->page = $page;
 
+       //指定がなければ、デフォルトを使用する
+       if (is_null($limit)) {
+       	 $limit = self::PAGE_LIMIT;
+       }
+        
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
-        $paginator->setCurrentPageNumber($page)->setItemCountPerPage(self::PAGE_LIMIT);
+        $paginator->setCurrentPageNumber($page)->setItemCountPerPage($limit);
 
         //viewでpaginationControlを使用しなくても、表示できるようにする
         $paginator->setView($this->view);

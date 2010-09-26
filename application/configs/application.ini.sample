@@ -15,8 +15,8 @@ resources.layout.layout="layout"
 ;DB設定
 resources.db.adapter = "pdo_mysql"
 resources.db.params.host = "localhost"
-resources.db.params.username = "oooooo"
-resources.db.params.password = "xxxxxx"
+resources.db.params.username = "oooooooo"
+resources.db.params.password = "xxxxxxxx"
 resources.db.params.dbname = "setucocms"
 resources.db.isDefaultTableAdapter = true
 

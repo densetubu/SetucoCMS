@@ -84,9 +84,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), parent::PAGE_LIMIT);
+        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), 2);
         $max = $this->_service->countCategories();
-        $this->setPagerForView($max);
+        $this->setPagerForView($max, 2);
 
         return true;
     }
@@ -235,16 +235,27 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $form->addElement($inputItem);
 
         //idをセットするhiddenタグを生成
-        $hiddenItem = $form->createElementOfViewHelper('hidden', 'id');
-        $hiddenItem->setRequired()
+        $idItem = $form->createElementOfViewHelper('hidden', 'id');
+        $idItem->setRequired()
             ->addFilter('StringTrim')
             ->addValidators(array(
-                        array('NotEmpty', true),
-                        array('stringLength', false, array(1, 100)),
-                        array('Int')
+                array('NotEmpty', true),
+                array('stringLength', false, array(1, 100)),
+                array('Int')
                         ));
-        $form->addElement($hiddenItem);
+        $form->addElement($idItem);
 
+        //idをセットするhiddenタグを生成
+        $parentIdItem = $form->createElementOfViewHelper('hidden', 'parent_id');
+        $parentIdItem->setRequired()
+            ->addFilter('StringTrim')
+            ->addValidators(array(
+                array('NotEmpty', true),
+                array('stringLength', false, array(1, 100)),
+                array('Int')
+                            ));
+        $form->addElement($parentIdItem);
+        
         //submitボタンを生成する
         $submitItem = $form->createElementOfViewHelper('submit', 'sub');
         $form->addElement($submitItem);
