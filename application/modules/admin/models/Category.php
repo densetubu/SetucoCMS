@@ -139,7 +139,7 @@ class Admin_Model_Category
         $updateData['name'] = $inputData['name'];
         
         //アップデートする
-        $result = $this->_updateById($updateData, $updateId);
+        $result = $this->_updateByPrimary($updateData, $updateId);
 	    return $result;
 	}
 
@@ -161,24 +161,29 @@ class Admin_Model_Category
 		return $result;
 	}
 	
-	/******
-	 * 使いまわせるかもしれないメソッド
-	 *********/
+	/*****************************
+	 * 使いまわせるかもしれないメソッド *
+	 *****************************/
 	
 	/**
 	 * １件のみデータを新規作成する
 	 * 
 	 * @param array $saveData 新規登録するデータ
+	 * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
 	 * @return 新規作成できたか
 	 * @author suzuki-mar
 	 */
-	protected function _regiser($saveData)
+	protected function _regiser($saveData, $dao = null)
 	{
-	
+	   //指定がなかったら、オブジェクト変数のdaoを使用する
+	   if (is_null($dao)) {
+	   	$dao = $this->_dao;
+	   }
+		
        //作成に失敗したときに例外が発生する
         try {
             //データをinsertする
-            $this->_dao->insert($saveData);
+            $dao->insert($saveData);
             $result = true;
 
         } catch (Zend_Exception $e) {
@@ -193,23 +198,29 @@ class Admin_Model_Category
      * 指定したプライマリキーのデータをアップデートする
      *
      * @param array $inputData 入力したデータ: バリデートチェックした入力データ
+     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
      * @param int   $updateId  アップデートするデータのID
      * @return boolean 編集できたか
      * @author suzuki-mar
      */
-    protected function _updateById($updateData, $updateId)
-    {       
+    protected function _updateByPrimary($updateData, $updateId, $dao = null)
+    { 
+     //指定がなかったら、オブジェクト変数のdaoを使用する
+       if (is_null($dao)) {
+        $dao = $this->_dao;
+       }
+    	
         //アップデートに失敗したときに例外が発生する
         try {
             //データをupdateする
-            $primary    = $this->_dao->getPrimary();
+            $primary    = $dao->getPrimary();
             
             //数値にキャストする
             $updateId = (int)$updateId;
             //アップデートする条件のwhere句を生成する
-            $where      = $this->_dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
+            $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
                         
-            $this->_dao->update($updateData, $where);
+            $dao->update($updateData, $where);
             $result     = true;
 
         } catch (Zend_Exception $e) {
@@ -222,26 +233,29 @@ class Admin_Model_Category
     /**
      * 指定したプライマリキーのデータを削除する
      *
-     * コントローラーから、削除するidを取得する
-     *
      * @param  int   $deleteId  削除するデータのID
+     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス     
      * @return boolean 削除できたか
      * @author suzuki-mar
      */
-    protected  function _deleteByPrimary($deleteId)
+    protected  function _deleteByPrimary($deleteId, $dao = null)
     {
-
+     //指定がなかったら、オブジェクト変数のdaoを使用する
+       if (is_null($dao)) {
+        $dao = $this->_dao;
+       }
+    	
         //アップデートに失敗したときに例外が発生する
         try {
             //データをupdateする
-            $primary    = $this->_dao->getPrimary();
+            $primary    = $dao->getPrimary();
             
             //数値にキャストする
             $deleteId = (int)$deleteId;
             //アップデートする条件のwhere句を生成する
-            $where      = $this->_dao->getAdapter()->quoteInto("{$primary} = ?", $deleteId);
+            $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $deleteId);
                         
-            $this->_dao->delete($where);
+            $dao->delete($where);
             $result     = true;
 
         } catch (Zend_Exception $e) {

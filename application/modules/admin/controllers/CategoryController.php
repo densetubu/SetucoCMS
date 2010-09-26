@@ -84,9 +84,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), 2);
+        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), self::PAGE_LIMIT);
         $max = $this->_service->countCategories();
-        $this->setPagerForView($max, 2);
+        $this->setPagerForView($max);
 
         return true;
     }
