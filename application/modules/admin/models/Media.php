@@ -23,8 +23,33 @@
  * @author     akitsukada
  */
 class Admin_Model_Media
-{   
-    
+{
+
+    /**
+     * メディア表のDAO
+     *
+     * @var unknown_type
+     */
+    private $_dao = null;
+
+    const ICON_PATH_IMG = '/media/thumbnail/';
+    const ICON_PATH_PDF = '/images/media/icn_pdf.gif';
+    const ICON_PATH_TXT = '/images/media/icn_txt.gif';
+    private $_thumbnailDirectory = null;
+    private $_thumbnailWidth = null;
+
+    /**
+     * コンストラクター。DAOのインスタンスを初期化する
+     *
+     *
+     */
+    public function __construct($thumbnailDirectory, $thumbnailWidth)
+    {
+        $this->_dao = new Common_Model_DbTable_Media();
+        $this->_thumbnailDirectory = $thumbnailDirectory;
+        $this->_thumbnailWidth = $thumbnailWidth;
+    }
+
     /**
      * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件のデータを取得する
      *
@@ -37,51 +62,127 @@ class Admin_Model_Media
     public function findMedias($condition, $currentPage, $limit)
     {
 
-        $medias = $this->_mediaDao_SelectAll();
-        $workArray = array();
+        $select = $this->_dao->select()
+                             ->order("{$condition['sort']} {$condition['order']}")
+                             ->limitPage($currentPage, $limit);
+
+        if ($condition['type'] !== 'all') {
+            // 拡張子絞り込み指定されていた場合のみWhere句を設定
+            $select->where('type = ?', $condition['type']);
+        } else {
+            $select->where('type != ?', 'new');
+        }
+
+        $medias = $this->_dao->executeSelect($select)->toArray();
+        return $this->_addThumbnailInfo($medias); // サムネイルのパス情報を追加した配列をreturn
+
+    }
+
+    private function _addThumbnailInfo(array $medias)
+    {
+        $thumbUrl = '';
+        foreach ($medias as $cnt => $media) {
+            switch ($media['type']) {
+                case 'pdf' :
+                    $thumbUrl = self::ICON_PATH_PDF;
+                    break;
+                case 'txt' :
+                    $thumbUrl = self::ICON_PATH_TXT;
+                    break;
+                case 'jpg' : // 以下の３種類の場合はまとめて処理
+                case 'gif' :
+                case 'png' :
+                    $thumbUrl = self::ICON_PATH_IMG . $media['id'] . '.gif';
+                    $thumbImage = imagecreatefromgif(APPLICATION_PATH . '/../public' . self::ICON_PATH_IMG . $media['id'] . '.gif');
+                    $thumbWidth = imagesx($thumbImage);
+                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth > $thumbWidth ? $thumbWidth : $this->_thumbnailWidth;
+                    break;
+            }
+            $medias[$cnt]['thumbUrl'] = $thumbUrl;
+        }
+        return $medias;
+    }
+
+    public function saveThumnailFromImage($imagePath, $thumbWidth)
+    {
         
-        // ファイル種別の絞込み
-        if ($condition['type'] != 'all') {
-            foreach ($medias as $i => $media) {
-                if ($media['type'] == $condition['type']) {
-                    array_push($workArray, $media);
-                }
-            }    
-            $medias = $workArray;
+        // アップロードされた画像のオブジェクトを保持
+        $originalImage = null;
+        
+        // 透過色情報
+        $transIndex = 0;
+        $transColor = null;
+        
+        // 画像のパスからイメージオブジェクト取得
+        $imageInfo = pathinfo($imagePath);
+        $ext = $imageInfo['extension'];
+        switch ($ext) {
+            case 'jpg' :
+                $originalImage = imagecreatefromjpeg($imagePath);
+                break;
+            case 'gif' :
+                $originalImage = imagecreatefromgif($imagePath);
+                break;
+            case 'png' :
+                $originalImage = imagecreatefrompng($imagePath);
+                break;
+            default :
+                return false;  // 拡張子が対応画像(jpg, gif, png)でなければfalse
         }
         
         
-        // スタブ限定のチートソート
-        if (
-            ($condition['sort'] == 'name'        && $condition['order'] == 'desc') ||
-            ($condition['sort'] == 'update_date' && $condition['order'] == 'asc') ||
-            ($condition['sort'] == 'create_date' && $condition['order'] == 'desc') 
-        ) {
-            $medias = array_reverse($medias); // 逆転する
+        // 画像のオリジナルサイズ取得
+        $originalWidth = imagesx($originalImage);
+        $originalHeight = imagesy($originalImage);
+        
+        // 比率計算＆サムネイルサイズ設定
+        $rate = $thumbWidth / $originalWidth;
+        $thumbHeight = $originalHeight * $rate;
+
+        if ($originalWidth < $thumbWidth && $originalHeight < $thumbHeight) {
+            // もし元画像が十分に小さければそのサイズのままサムネイルにする
+            $thumbWidth = $originalWidth;
+            $thumbHeight = $originalHeight;
         }
         
-        // ページャーの反映
-        $startRecord = ($currentPage - 1) * $limit;
+        // サムネイル用イメージオブジェクト生成
+        $thumbImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
         
-        $result = array_slice($medias, $startRecord, $limit);
-        return $result;
+        // gifかpngの場合は背景の透過処理
+        if ($ext == 'gif' || $ext == 'png') { 
+            $transIndex = imagecolortransparent($originalImage);
+            $transColor = imagecolorsforindex($originalImage, $transIndex);
+            $transIndex = imagecolorallocate($thumbImage, $transColor['red'], $transColor['green'], $transColor['blue']);
+            imagefill($thumbImage, 0, 0, $transIndex);
+            imagecolortransparent($thumbImage, $transIndex);
+        }
+        
+        // 算出したサイズに李サンプリングコピー
+        imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight); 
+        // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
+
+        // サムネイルを保存 
+        $thumbPath = $this->_thumbnailDirectory . '/' . $imageInfo['filename'] . '.gif';
+        imagegif($thumbImage, $thumbPath . '');
+        
+        // 画像オブジェクト破棄
+        imagedestroy($originalImage);
+        imagedestroy($thumbImage);
         
     }
 
-
     /**
      * Media表から、指定したIDのレコードを削除する
-     * 
+     *
      * @param  int 		$id 削除したいファイルのID
      * @return boolean	true:削除成功、false:削除失敗
      * @author akitsukada
      */
-    public function deleteMedia($id) 
+    public function deleteMediaById($id)
     {
-        return true;
+        return $this->_dao->deleteById($id);
     }
-    
-    
+
     /**
      * Media表から、条件に合うファイルの件数をカウントする
      *
@@ -89,130 +190,79 @@ class Admin_Model_Media
      * @return   int カウント結果の件数
      * @author   akitsukada
      */
-    public function countMedias($condition = null)
+    public function countMedias($ext = null)
     {
-        // SELECT count(*) FROM media;
-        $fileCount = 38; // 現在はスタブなので適当な数字
-        if ($condition == null) {
-            return $fileCount;
-        }
-        
-        if ($condition['type'] == 'all') {
-            return $fileCount;
-        }
-        
-        $medias = $this->_mediaDao_SelectAll();
-        $cnt = 0;
-        foreach ($medias as $i => $media) {
-            if ($media['type'] == $condition['type']) {
-                $cnt++;
-            }
-        }
-        return $cnt;        
+        return $this->_dao->count($ext);
+
     }
 
-    
     /**
      * 受け取ったファイルの情報でMedia表を更新する（１件）
-     * 
+     *
      * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
      * @return boolean true:更新成功、false:更新失敗
      * @author akitsukada
      */
-    public function updateMediaInfo($mediaInfo) 
+    public function updateMediaInfo($id, $mediaInfo)
     {
         // DBにデータを登録
-        
-        //var_dump($mediaInfo); exit();
-        return true;
+        try {
+
+            //アップデートする条件のwhere句を生成する
+            $where = $this->_dao->getAdapter()->quoteInto("id = ?", $id);
+
+            $this->_dao->update($mediaInfo, $where);
+            $result = true;
+
+        } catch (Zend_Exception $e) {
+            $result = false;
+        }
+
+        return $result;
 
     }
-    
 
     /**
      * Media表からIDを指定してファイル一件のデータを取得する
-     * 
+     *
      * @param  int $id 取得したいファイル（メディア）のID
      * @return mixed 取得したファイルのデータを格納した配列。取得失敗時はnullを返す。
      * @author akitsukada
      */
     public function findMediaById($id)
     {
-        
-        $types = array('jpg', 'gif', 'png', 'pdf', 'txt');
-    
-        $type = $types[$id % sizeof($types)] ;
-        $res = array(
-            'id'         => $id,
-            'name'       => '表示名' . ($id),
-            'type'       => $type, 
-            'createDate' => "2010-08-23 05:01:11",
-            'updateDate' => "2010-08-24 05:01:11",
-            'comment'    => '表示名' . ($id) . 'の説明'
-        );
-        
-        return $res;
 
+        $media = $this->_dao->findById($id);
+        return $media[0];
     }
+
 
     /**
      * ファイルの新規登録のため、Media表を確認して新しいメディアIDを採番し取得する
-     * 
-     * @return int 新規登録用のメディアID 
+     *
+     * @return int 新規登録用のメディアID
      * @author akitsukada
      */
     public function createNewMediaID()
     {
-        // DBを見て新しいメディアIDを取得して返す
-        return time() % 60; // 適当に60程度まで
-    }
-        
- ######################## 以下スタブ用擬似DAO ###############################
- 
-    /**
-     * スタブ専用の暫定メソッド。DAOの代わりにmedia表の擬似データを全件作って返す
-     * 
-     * @todo   DAOの実装が進んだら削除する
-     * @author akitsukada
-     */
-    private function _mediaDao_SelectAll() 
-    {
 
-        $res = array();
-        $types = array('jpg', 'gif', 'png', 'pdf', 'txt'); 
-        $count = $this->countMedias();
-       
-        for ($i = 0; $i < $count; $i++) {
-    
-            $type     = $types[$i % sizeof($types)] ;
-            $thumb    = '';
-            switch ($type) {
-                case 'jpg' :
-                case 'gif' :
-                case 'png' :
-                    $thumb = '/media/thumbnail/thumb_img.png';
-                    break;
-                case 'pdf' :
-                    $thumb = '/images/media/icn_pdf.gif';
-                    break;
-                case 'txt' :
-                    $thumb = '/images/media/icn_txt.gif';
-                    break;
-            }
-            
-            $res[$i] = array(
-                'id'         => $i,
-                'name'       => '表示名' . ($i),
-                'type'       => $type, 
-                'createDate' => "2010-08-23 05:01:" . sprintf("%02d", 59 - $i),
-                'updateDate' => "2010-08-24 05:01:" . sprintf("%02d", $i),
-                'comment'    => '表示名' . ($i). 'の説明',
-                'thumbUrl'	 => $thumb
+        // 新しいレコードをDBに挿入してIDを得る
+        try {
+
+            // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
+            $newRec = array (
+                'name' => 'tmpName',
+                'type' => 'new',
+                'create_date' => date("Y-m-d H:i:s", time()),
+                'update_date' => date("Y-m-d H:i:s", time()),
             );
-            
+
+            $result = $this->_dao->insert($newRec);
+
+        } catch (Zend_Exception $e) {
+            $result = false;
         }
 
-        // Zend_Db_Select, fetchAll　した状態の配列を返す
-        return $res;   
+        return $result; // 適当に60程度まで
     }
 }

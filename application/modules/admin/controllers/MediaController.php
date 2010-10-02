@@ -39,14 +39,19 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     const FILE_SIZE_MAX = 500000;
     
     /**
-     * 
+     * ファイルの表示名の長さ 最短文字数
      */
     const FILENAME_LENGTH_MIN = 1;
     
     /**
-     * 
+     * ファイルの表示名の長さ 最長文字数
      */
     const FILENAME_LENGTH_MAX = 50;
+    
+    const THUMBNAIL_WIDTH = 48;
+    
+    const FILEEXT_ALL_INDEX = -1;
+    const FILEEXT_ALL = 'all';
     
     /**
      * SetucoCMSで扱えるファイルの種類（拡張子）
@@ -54,21 +59,24 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * @var array
      * @todo 'all'をなくしたい
      */
-    private $_fileTypes = array('all', 'jpg', 'gif', 'png', 'pdf', 'txt');
+    private $_fileExt = array('jpg', 'gif', 'png', 'pdf', 'txt');
+    
  
     /**
-     *
+     * 初期化処理
+     * 
+     * @return void
+     * @author akitsukada
      */
     public function init()
     {
-        
+
         //親クラスの設定を引き継ぐ
         parent::init();
-
+        
         //全アクションで使用するサービスクラスのインスタンを生成する
-        $this->_service = new Admin_Model_Media();
+        $this->_service = new Admin_Model_Media($this->_getThumbnailDest(), self::THUMBNAIL_WIDTH);
 
-        return true;
     }
     
     /**
@@ -81,22 +89,22 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        
+
         // ページネーターーのカレントページの取得
         $currentPage = $this->_getPage();
 
         // ファイルタイプの絞り込み条件取得(デフォルトでは'all')
-        $type = 'all';
-        if ($this->getRequest()->isPost()) {
-            $type = $this->_fileTypes[$this->_getParam('fileType', 0)]; // 絞込みフォームでの指定
-            $currentPage = 1;
+        $type = self::FILEEXT_ALL;
+        if ($this->getRequest()->isPost()) { // isPost == trueならばファイル種別絞り込みフォームでsubmitされている
+            $type = array_key_exists($this->_getParam('fileType', 0), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL; 
+            $currentPage = 1; // 新たに絞り込みされた場合は常に1ページ目表示
         } else {
             $type = $this->_getParam('type', 'all');     // ソートリンクでの指定
         }
-       
+
         // ソート指定のカラムとオーダー取得 (デフォルトではファイル名'name'の昇順'asc')
         $sort  = $this->_getParam('sort', 'name');
-        $order = $this->_getParam('order',  'asc');
+        $order = $this->_getParam('order', 'asc');
 
         // データ取得の条件を作る
         $condition = array(
@@ -108,13 +116,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // viewに現在指定されている条件の情報を渡す(カレントページや適用されているソートの矢印などの判断のため)
         $this->view->condition = $condition;
 
-        // 条件にあったファイルデータの取得をサービスに指示
-        $count        = $this->_service->countMedias($condition);
-        $mediaData    = $this->_service->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
-
         // viewにファイルデータを渡す
-        $this->view->mediaData = $mediaData;
-
+        $this->view->mediaData = $this->_service->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
+        
         // アップロードできる最大サイズをKB換算でviewに教える
         $this->view->maxFileSize = (int)(self::FILE_SIZE_MAX / 1024);
 
@@ -137,8 +141,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($count);
-
+        $this->setPagerForView($this->_service->countMedias($condition['type']));
+        
+        // サムネイルの表示サイズ指定
+        $this->view->thumbWidth = self::THUMBNAIL_WIDTH;
+        
         // フラッシュメッセージ設定
         $this->_setFlashMessages();
         
@@ -152,6 +159,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * @return void
      * @author akitsukada
      * @todo エラー判定とその処理をちゃんと書く
+     * @todo ファイルとDB、２フェーズコミットにしてエラー時のロールバックをちゃんと制御する
      * @todo サムネイルの生成と保存
      */
     public function createAction()
@@ -162,31 +170,30 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_redirect('/admin/media/index');
         }
         
-        
         // ファイル受信に使うadapterの作成とバリデータの設定
         $adapter  = new Zend_File_Transfer_Adapter_Http();
         $this->_setFileValidators($adapter);
         
-       
         // すべてのファイルを検証
         if (!$adapter->isValid()) {
             $this->_helper->flashMessenger->addMessage('ファイルのサイズオーバーか、または対応外のファイル形式です。');
             $this->_redirect('/admin/media/index');
         }
         
-        // 保存時の物理名に使う新しいファイルIDを取得
-        $mediaId = $this->_service->createNewMediaID();
-        
         // オリジナルファイルの情報を取得
         $fileInfo = pathinfo($adapter->getFileName());
 
+        
         // 拡張子取得
         $extType =  $fileInfo['extension'];
         
+        // 保存時の物理名に使う新しいファイルIDを取得
+        $newId = $this->_service->createNewMediaID();
+
         // ファイルの保存先と物理名（id)を指定
         $adapter->setDestination($this->_getUploadDest());
         $adapter->addFilter('Rename', array( // 別名を指定
-        	'target' => $this->_getUploadDest() . '/' . $mediaId . '.' . $extType,
+        	'target' => $this->_getUploadDest() . '/' . $newId . '.' . $extType,
         	'overwrite' => true
         ));
         
@@ -195,18 +202,22 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
             $this->_redirect('/admin/media/index');
         }
+        $this->_service->saveThumnailFromImage($adapter->getFileName(), self::THUMBNAIL_WIDTH);
         
         // サービスにファイルの情報を渡してDB登録させる
         $dat = array(
-            'id'         => $mediaId,
+            'id'         => $newId,
             'name'       => $fileInfo['filename'],
             'type'       => $extType,
             'comment'    => ''
    		);
-        if (!$this->_service->updateMediaInfo($dat)) {
+        if (!$this->_service->updateMediaInfo($newId, $dat)) {
             $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
+            // dbの削除
             $this->_redirect('/admin/media/index');
         }
+        
+        // dbの更新
         
         // 処理正常終了
         $this->_helper->flashMessenger->addMessage('ファイルをアップロードしました。');
@@ -259,20 +270,19 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function updateAction()
     {
         
+        // 既存ファイルを消すかどうかのフラグ
+        $isDeleteOldFile = false;
+        
         // ファイルアップロードのポスト後でなければmediaのトップページへ
         if (!$this->getRequest()->isPost()) {
             $this->_redirect('/admin/media/index');
         }
-    
+        
         // 編集対象のファイルIDを取得（指定されていなかったらmediaトップへ）
         $id = $this->_getParam('id');
         if ($id === null) {
             $this->_redirect('/admin/media/index');
         }
-        
-        // formアクションへのリダイレクトURL
-        $redirectUrl = '/admin/media/form/id/' . $id;
-        
         
         // 更新フォームオブジェクト取得
         $form = $this->_createUpdateForm($id);
@@ -280,10 +290,20 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // Postデータ取得
         $post = $this->getRequest()->getPost();
         
+        // formアクションへのリダイレクトURL
+        $redirectUrl = '/admin/media/form/id/' . $id;
+        
+        // Postのバリデーション
         if (!$form->isValid($post)) {
             $this->_helper->flashMessenger->addMessage('ファイルが更新できませんでした。');
             $this->_redirect($redirectUrl);
         }
+
+        // サービスにファイルの情報を渡してUpdateさせるためのデータ
+        $dat = array(
+            'name'       => $post['name'],
+            'comment'    => $post['comment']
+        );
         
         // ファイル受信に使うadapterの作成
         $adapter  = new Zend_File_Transfer_Adapter_Http();
@@ -302,9 +322,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             
             // オリジナルファイルの情報を取得
             $fileInfo = pathinfo($adapter->getFileName());
+            $extType =  $fileInfo['extension'];             // 拡張子取得
             
-            // アップロードされたファイルの拡張子取得
-            $extType =  $fileInfo['extension'];
+            // 既存のファイルと新ファイルで拡張子が違う場合は既存のファイル情報を取得（新ファイルアップロード後に古いファイルをremoveできるようにするため）
+            $oldFileInfo = $this->_service->findMediaById($id);
+            if ($extType !== $oldFileInfo['type']) {
+                $isDeleteOldFile = true;
+            }
             
             // ファイルの保存先と保存名を指定
             $adapter->addFilter('Rename', array( // 別名を指定
@@ -318,19 +342,18 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $this->_redirect($redirectUrl);
             }
             
-            
-            // サービスにファイルの情報を渡してUpdateさせる
-            $dat = array(
-                'id'         => $id,
-                'name'       => $post['name'],
-                'type'       => $extType,
-                'comment'    => $post['comment']
-       		);
-            if (!$this->_service->updateMediaInfo($dat)) {
-                $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
-                $this->_redirect($redirectUrl);
-            }
+            // 保存するファイル情報、拡張子を取得しておく
+            $dat['type'] = $extType;
+
         }
+        
+        if (!$this->_service->updateMediaInfo($id, $dat)) {
+            $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
+            $this->_redirect($redirectUrl);
+        }
+        
+        // @todo 拡張子が違うファイルで更新した場合の仕様は？
+        
         
         // 処理正常終了
         $this->_helper->flashMessenger->addMessage('ファイル情報を更新しました。');
@@ -354,7 +377,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         
         $adapter->addValidator('FilesSize', false, array(1, self::FILE_SIZE_MAX, false))
                     ->addValidator('Count', false, array('min' => $minCount, 'max' => $maxCount)) 
-                    ->addValidator('Extension', false, 'jpg,png,gif,pdf,txt');
+                    ->addValidator('Extension', false, implode(',', $this->_fileExt));
+                    
         return $adapter;    
     }
     
@@ -363,6 +387,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * indexアクションに遷移します
      *
      * @return void
+     * @todo ファイルとDBでちゃんと２フェーズコミットする。どちらかNGなら両方ともロールバックするなど
      * @author akitsukada
      */
     public function deleteAction()
@@ -373,8 +398,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_redirect('/admin/media/index');
         }
         
-        if (!$this->_service->deleteMedia($id)) {
+        if (!$this->_service->deleteMediaById($id)) {
             $this->_helper->flashMessenger->addMessage('ファイル情報を削除できませんでした。');
+            $this->_redirect('/admin/media/index');
+        }
+        
+        if (!$this->_removeFileById($id)) {
+            $this->_helper->flashMessenger->addMessage('アップロードされたファイルを削除できませんでした。');
             $this->_redirect('/admin/media/index');
         }
 
@@ -439,13 +469,12 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $typeSelector = new Zend_Form_Element_Select('fileType');
         $typeSelector->clearDecorators()
                      ->setLabel('ファイルの種類')
-                     ->setValue(array_search($condition['type'], $this->_fileTypes))
+                     ->setValue(array_search($condition['type'], $this->_fileExt))
                      ->addDecorator('ViewHelper')
                      ->addDecorator('Label', array('tag' => null));
-                     
-        $typeSelector->addMultiOptions($this->_fileTypes);
-        $typeSelector->addMultiOption(0, ' --指定なし-- ' );
         
+        $typeSelector->addMultiOption(self::FILEEXT_ALL_INDEX, '--指定なし--');
+        $typeSelector->addMultiOptions($this->_fileExt);
         
         // 絞込みボタン
         $searchFormSubmit = new Zend_Form_Element_Submit(
@@ -568,7 +597,33 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $dir = $this->_getUploadDest();
         return is_writable($dir) && is_dir($dir);
     }
+
     
+    private function _removeFileById($id)
+    {
+        $uploadDir = $this->_getUploadDest();
+        $thumbDir = $this->_getThumbnailDest();
+        if (($uploadDirHandle = opendir($uploadDir)) !== false && 
+            ($thumbDirHandle = opendir($thumbDir))   !== false ) {
+            while (($file = readdir($uploadDirHandle)) !== false && ($thumb = readdir($thumbDirHandle)) !== false) {
+                if (($file != "." && $file != "..") && ($thumb != "." && $thumb != "..")) {
+                    // アップロードされた*.*の削除
+                    if (preg_match("/^{$id}\.(" . implode("|", $this->_fileExt) . ")$/", $file)) {  
+                        if (!unlink("{$uploadDir}/{$file}")) {
+                            return false;
+                        }
+                    }
+                    // 生成されたサムネイル*.gifの削除
+                    if (preg_match("/^{$id}\.gif$/", $thumb)) {  
+                        if (!unlink("{$thumbDir}/{$thumb}")) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * フラッシュメッセージをビューに設定するメソッド。
