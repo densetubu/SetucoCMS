@@ -68,6 +68,16 @@ class Admin_Model_Category
 		  $result[] = array('name' => '未分類',  'id' => false, 'is_check' => false);
 		}
 		
+		//配列の順番が偶数かどうかを設定する
+		foreach ($result as $key => &$value) {
+			if ($key % 2 === 0) {
+				$value['is_even'] = true;
+			} else {
+				$value['is_even'] = false;
+			}
+		}
+		unset($value, $key);
+		
 		return $result;
 	}
 

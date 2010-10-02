@@ -82,7 +82,8 @@
 
 <?php foreach ($this->categories as $value): ?>
 
-<?php if (isset($value['is_check']) && $value['is_check']): //checkしているか? ?>
+
+<?php if ($value['is_even'] === true): //配列のループが偶数か ?>
 <tr class='checkG'>
 <?php else: ?>
 <tr>
