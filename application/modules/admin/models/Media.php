@@ -24,39 +24,63 @@
  */
 class Admin_Model_Media
 {
-
+    
+    /**
+     * サムネイル保存ディレクトリのbaseUrl用パス。
+     */
+    const THUMB_DIR_PATH_FROM_PUBLIC = '/media/thumbnail/';
+    
+    /**
+     * PDFファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_PDF = '/images/media/icn_pdf.gif';
+    
+    /**
+     * TXTファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_TXT = '/images/media/icn_txt.gif';
+    
     /**
      * メディア表のDAO
-     *
-     * @var unknown_type
+     * 
+     * @var Common_Model_DbTable_Media
      */
     private $_dao = null;
 
-    const ICON_PATH_IMG = '/media/thumbnail/';
-    const ICON_PATH_PDF = '/images/media/icn_pdf.gif';
-    const ICON_PATH_TXT = '/images/media/icn_txt.gif';
-    private $_thumbnailDirectory = null;
+    /**
+     * サムネイル保存ディレクトリの物理絶対パス
+     * @var string
+     */
+    private $_thumbnailDirectoryFQPath = '';
+    
+    /**
+     * サムネイルの表示幅、標準値
+     * @var int
+     */
     private $_thumbnailWidth = null;
 
     /**
      * コンストラクター。DAOのインスタンスを初期化する
      *
-     *
+     * @param string $thumbnailDirectoryFQPath サムネイル保存ディレクトリの物理絶対パス
+     * @param int $thumbnailWidth サムネイルの標準表示幅
+     * @return void
+     * @author akitsukada
      */
-    public function __construct($thumbnailDirectory, $thumbnailWidth)
+    public function __construct($thumbnailDirectoryFQPath, $thumbnailWidth)
     {
         $this->_dao = new Common_Model_DbTable_Media();
-        $this->_thumbnailDirectory = $thumbnailDirectory;
+        $this->_thumbnailDirectoryFQPath = $thumbnailDirectoryFQPath;
         $this->_thumbnailWidth = $thumbnailWidth;
     }
 
     /**
-     * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件のデータを取得する
+     * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件（オフセット$currentPage-1）のデータを取得する
      *
      * @param    array $condition 		「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
      * @param    int   $currentPage 	ページネーター用の、現在表示したいページ番号
      * @param    int  	$limit	 		ページネーター用の、1ページに表示する最大件数
-     * @return 	  array	取得したデータを格納した二次元配列
+     * @return 	 array	取得したデータを格納した二次元配列
      * @author   akitsukada
      */
     public function findMedias($condition, $currentPage, $limit)
@@ -78,6 +102,13 @@ class Admin_Model_Media
 
     }
 
+    /**
+     * データベースから取得したMediaデータの、ファイル種別に応じてサムネイルのパス情報を付加する
+     * 
+     * @param array $medias DBからfetchAllしてきたデータ
+     * @return array サムネイル情報付加済みの配列
+     * @author akitsukada
+     */
     private function _addThumbnailInfo(array $medias)
     {
         $thumbUrl = '';
@@ -92,8 +123,8 @@ class Admin_Model_Media
                 case 'jpg' : // 以下の３種類の場合はまとめて処理
                 case 'gif' :
                 case 'png' :
-                    $thumbUrl = self::ICON_PATH_IMG . $media['id'] . '.gif';
-                    $thumbImage = imagecreatefromgif(APPLICATION_PATH . '/../public' . self::ICON_PATH_IMG . $media['id'] . '.gif');
+                    $thumbUrl = self::THUMB_DIR_PATH_FROM_PUBLIC . $media['id'] . '.gif';
+                    $thumbImage = imagecreatefromgif($this->_thumbnailDirectoryFQPath . '/' . $media['id'] . '.gif');
                     $thumbWidth = imagesx($thumbImage);
                     $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth > $thumbWidth ? $thumbWidth : $this->_thumbnailWidth;
                     break;
@@ -103,7 +134,13 @@ class Admin_Model_Media
         return $medias;
     }
 
-    public function saveThumnailFromImage($imagePath, $thumbWidth)
+    /**
+     * ファイルシステム上の画像ファイル絶対パスからサムネイルを生成し保存する
+     * 
+     * @param string $imagePath ファイルシステム上に保存された（アップロードされた）画像ファイルの絶対パス
+     * @return boolean サムネイル生成、保存に成功したらtrue,失敗ならfalse
+     */
+    public function saveThumnailFromImage($imagePath)
     {
         
         // アップロードされた画像のオブジェクトを保持
@@ -136,6 +173,7 @@ class Admin_Model_Media
         $originalHeight = imagesy($originalImage);
         
         // 比率計算＆サムネイルサイズ設定
+        $thumbWidth = $this->_thumbnailWidth;
         $rate = $thumbWidth / $originalWidth;
         $thumbHeight = $originalHeight * $rate;
 
@@ -162,7 +200,7 @@ class Admin_Model_Media
         // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
 
         // サムネイルを保存 
-        $thumbPath = $this->_thumbnailDirectory . '/' . $imageInfo['filename'] . '.gif';
+        $thumbPath = $this->_thumbnailDirectoryFQPath . '/' . $imageInfo['filename'] . '.gif';
         imagegif($thumbImage, $thumbPath . '');
         
         // 画像オブジェクト破棄
@@ -172,7 +210,7 @@ class Admin_Model_Media
     }
 
     /**
-     * Media表から、指定したIDのレコードを削除する
+     * DBのMedia表から、指定したIDのレコードを削除する
      *
      * @param  int 		$id 削除したいファイルのID
      * @return boolean	true:削除成功、false:削除失敗
@@ -184,7 +222,7 @@ class Admin_Model_Media
     }
 
     /**
-     * Media表から、条件に合うファイルの件数をカウントする
+     * DBのMedia表から、条件に合うファイルの件数をカウントする
      *
      * @param    array $condition 条件を指定する配列
      * @return   int カウント結果の件数
@@ -197,7 +235,7 @@ class Admin_Model_Media
     }
 
     /**
-     * 受け取ったファイルの情報でMedia表を更新する（１件）
+     * 受け取ったファイルの情報で、Media表の指定されたIDのレコードを更新する
      *
      * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
      * @return boolean true:更新成功、false:更新失敗
@@ -207,17 +245,14 @@ class Admin_Model_Media
     {
         // DBにデータを登録
         try {
-
             //アップデートする条件のwhere句を生成する
             $where = $this->_dao->getAdapter()->quoteInto("id = ?", $id);
-
             $this->_dao->update($mediaInfo, $where);
             $result = true;
-
         } catch (Zend_Exception $e) {
             $result = false;
         }
-
+        echo $result;
         return $result;
 
     }
@@ -234,13 +269,13 @@ class Admin_Model_Media
 
         $media = $this->_dao->findById($id);
         return $media[0];
+        
     }
-
 
     /**
      * ファイルの新規登録のため、Media表を確認して新しいメディアIDを採番し取得する
      *
-     * @return int 新規登録用のメディアID
+     * @return mixed ID取得成功時は新規登録用のID、失敗時はfalse
      * @author akitsukada
      */
     public function createNewMediaID()
@@ -263,6 +298,6 @@ class Admin_Model_Media
             $result = false;
         }
 
-        return $result; // 適当に60程度まで
+        return $result; 
     }
 }

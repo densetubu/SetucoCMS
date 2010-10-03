@@ -36,28 +36,26 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
      */
     protected $_primary = 'id';
 
-    
     /**
-     * メディア表のレコードを全県取得する 
+     * media表から指定されたIDのレコードを取得する
+     * 
+     * @param int $id 取得したいファイルのID
+     * @return array 取得したレコードを格納した配列
+     * @author akitsukada
      */
-    public function findAll()
-    {
-        //データを取得するSelectオブジェクトを生成する
-        $select = $this->select($this->_name);
-        
-        //データを取得する
-        $result = $this->fetchAll($select);
-
-        return $result;
-
-    }
-    
     public function findById($id) 
     {
         $select = $this->select($this->_name)->where('id = ?', $id);
         return $this->fetchAll($select)->toArray();
     }
     
+    /**
+     * media表から指定されたIDのレコードを削除する
+     * 
+     * @param int $id 削除したいレコードのID
+     * @return boolean 削除
+     * @author akitsukada
+     */
     public function deleteById($id) 
     {
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
@@ -67,6 +65,13 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
         return false;
     }
     
+    /**
+     * media表の、指定された拡張子のファイル件数をカウントする
+     * 
+     * @param string $ext カウントしたいファイルの拡張子。指定しなければ全ての拡張子になる
+     * @return int カウントした件数
+     * @author akitsukada
+     */
     public function count($ext = null)
     {
         $select = $this->select($this->_name);
@@ -78,7 +83,13 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
         return count($result);
     }
     
-    
+    /**
+     * 渡されたSelectオブジェクトを実行し結果を返す
+     * 
+     * @param Zend_Db_Table_Select $select 実行したいSelectオブジェクト
+     * @return Selectオブジェクトの実行(fetchAll)結果
+     * @author akitsukada
+     */
     public function executeSelect(Zend_Db_Table_Select $select) 
     {
         return $this->fetchAll($select);
