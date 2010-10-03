@@ -102,7 +102,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイルタイプの絞り込み条件取得(デフォルトでは'all')
         $type = self::FILEEXT_ALL;
         if ($this->getRequest()->isPost()) { // isPost == trueならばファイル種別絞り込みフォームでsubmitされている
-            $type = array_key_exists($this->_getParam('fileType', 0), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL; 
+            $type = array_key_exists($this->_getParam('fileType'), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL; 
             $currentPage = 1; // 新たに絞り込みされた場合は常に1ページ目表示
         } else {
             $type = $this->_getParam('type', 'all');     // ソートリンクでの指定
@@ -169,7 +169,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         if (!$this->getRequest()->isPost()) {
             $this->_redirect('/admin/media/index');
         }
-
+        
         // バリデートはzend_formで行う
         $form = $this->_createUploadForm(); 
         if (!$form->isValid($this->_getAllParams())) {
