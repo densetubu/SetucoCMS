@@ -214,6 +214,7 @@ class Admin_Model_Media
      *
      * @param  int 		$id 削除したいファイルのID
      * @return boolean	true:削除成功、false:削除失敗
+     * @todo page_media表からの子レコード削除
      * @author akitsukada
      */
     public function deleteMediaById($id)
