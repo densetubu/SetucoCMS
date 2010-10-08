@@ -18,41 +18,44 @@
  */
 ?>
 <?php $this->headStyle()->captureStart() ?>
-#ambitionForm {
+#ambitionEdit {
     display: none;
 }
 <?php $this->headStyle()->captureEnd() ?>
 
 <?php $this->headScript()->captureStart() ?>
-function showAmbitionForm() {
+function showAmbitionEdit() {
     dojo.style('ambitionView', {display: 'none'});
-    dojo.style('ambitionForm', {display: 'inline'});
-    dojo.query('#ambitionForm input[name$=ambition]')[0].value =
-            dojo.byId('ambitionValue').innerHTML;
+    dojo.style('ambitionEdit', {display: 'inline'});
 }
-function hideAmbitionForm() {
-    dojo.style('ambitionForm', {display: 'none'});
+function hideAmbitionEdit() {
+    dojo.style('ambitionEdit', {display: 'none'});
     dojo.style('ambitionView', {display: 'inline'});
 }
 <?php $this->headScript()->captureEnd() ?>
 
 <!-- section"野望" START -->
 <div class="section">
-    <dl id="designs">
-        <dt>
-            野望
-        </dt>
-        <dd>
-            <span id="ambitionView">
-                <em>「<span id="ambitionValue"><?php echo $this->ambition ?></span>」</em>
-                <a href="javascript:void(0)" onclick="showAmbitionForm()">
-                    <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>"
-                         alt="野望を変更する" width="21" height="21" />
-                </a>
-            </span>
-            <?php echo $this->ambitionForm ?>
-        </dd>
-    </dl>
+    <form id="ambitionForm" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">
+        <dl id="designs">
+            <dt>
+                <label for="ambition">野望</label>
+            </dt>
+            <dd>
+                <span  id="ambitionView">
+                    <em>「<?php echo $this->ambitionForm->getElement('ambition')->getValue() ?>」</em>
+                    <a href="javascript:void(0)" onclick="showAmbitionEdit()">
+                        <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
+                    </a>
+                </span>
+                <span id="ambitionEdit">
+                    <em><?php echo $this->ambitionForm->getElement('ambition') ?></em>
+                    <?php echo $this->ambitionForm->getElement('submit') ?>
+                    <?php echo $this->ambitionForm->getElement('cancel') ?>
+                </span>
+            </dd>
+        </dl>
+    </form>
 </div>
 <!-- section"野望" END -->
 
@@ -65,55 +68,31 @@ function hideAmbitionForm() {
                     <img src="images/h_nowData.gif" alt="現在の状況" width="110" height="22" />
                 </h3>
                 <p>
-                    <a href="<?php echo $this->baseUrl('/admin/index/form-goal') ?>">
-                        更新目標の編集
-                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/index/form-goal') ?>">更新目標の編集</a>
                 </p>
             </div>
         </div>
     </div>
-
     <dl class="check">
-        <dt>
-            更新状況
-        </dt>
-        <dd>
-            <?php echo $this->updateStatus ?>
-        </dd>
+        <dt>更新状況</dt>
+        <dd><?php echo $this->updateStatus ?></dd>
     </dl>
     <dl class="straight">
-        <dt>
-            最終更新日
-        </dt>
-        <dd>
-            <?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）
-        </dd>
+        <dt>最終更新日</dt>
+        <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
     </dl>
     <dl class="check">
-        <dt>
-            今月の作成数
-        </dt>
-        <dd>
-            <?php echo $this->createdPageCount ?>ページ（目標から<?php echo $this->diffGoal ?>ページ！）
-        </dd>
+        <dt>今月の作成数</dt>
+        <dd><?php echo $this->createdPageCount ?>ページ（目標から<?php echo $this->diffGoal ?>ページ！）</dd>
     </dl>
     <dl class="straight">
-        <dt>
-            総ページ数
-        </dt>
-        <dd>
-            <?php echo $this->totalPageCount ?>ページ
-        </dd>
+        <dt>総ページ数</dt>
+        <dd><?php echo $this->totalPageCount ?>ページ</dd>
     </dl>
     <dl class="check">
-        <dt>
-            経過日数
-        </dt>
-        <dd>
-            <?php echo $this->pastDaysFromOpen ?>日目（<?php echo $this->openDate ?>開設）
-        </dd>
+        <dt>経過日数</dt>
+        <dd><?php echo $this->pastDaysFromOpen ?>日目（<?php echo $this->openDate ?>開設）</dd>
     </dl>
-
 </div>
 <!-- section"現在の状況" END -->
 
@@ -123,51 +102,29 @@ function hideAmbitionForm() {
         <div class="topichAreaR">
             <div class="topichArea">
                 <h3 id="recentry">
-                    <img src="<?php echo $this->baseUrl('/images/h_recentlyPage.jpg') ?>"
-                         alt="最近作ったページ" width="194" height="23" />
+                    <img src="<?php echo $this->baseUrl('/images/h_recentlyPage.jpg') ?>" alt="最近作ったページ" width="194" height="23" />
                 </h3>
                 <p>
-                    <a href="<?php echo $this->baseUrl('/page') ?>">
-                        ページの一覧（編集・削除）へ
-                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/page') ?>"> ページの一覧（編集・削除）へ</a>
                 </p>
             </div>
         </div>
     </div>
-
     <?php foreach ($this->lastCreatedPages as $page): ?>
         <dl class="contentsList<?php echo $this->cycle(array('K', 'G'))->next() ?>">
-            <dt class="pageDate">
-                <?php echo ($page['createDate'])?>
-            </dt>
+            <dt class="pageDate"><?php echo $page['createDate'] ?></dt>
             <dd class="pageTitle">
-                <a href="<?php echo $this->baseUrl('/page/form/id/' . $page['id']) ?>">
-                    <?php echo ($page['title'])?>
-                </a>
+                <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
             </dd>
-
-            <dt>
-                カテゴリー
-            </dt>
-            <dd>
-                <?php echo ($page['categoryId'])?>   <!-- TODO categoryIdじゃなくてカテゴリー名にする -->
-            </dd>
-
-            <dt>
-                制作者
-            </dt>
-            <dd>
-                <?php echo ($page['accountId'])?>   <!-- TODO accountIdじゃなくてニックネームにする -->
-            </dd>
-
-            <dt>
-                公開状態
-            </dt>
-            <dd>
-                <?php echo ($page['status'])?>
-            </dd>
+            <dt>カテゴリー</dt>
+                <!-- TODO categoryIdじゃなくてカテゴリー名にする -->
+            <dd><?php echo ($page['categoryId'])?></dd>
+            <dt>制作者</dt>
+                <!-- TODO accountIdじゃなくてニックネームにする -->
+            <dd><?php echo ($page['accountId'])?></dd>
+            <dt>公開状態</dt>
+            <dd><?php echo ($page['status'])?></dd>
         </dl>
-    <?php endforeach; ?>
-
+    <?php endforeach ?>
 </div>
 <!-- section"最近作ったページ" END -->
