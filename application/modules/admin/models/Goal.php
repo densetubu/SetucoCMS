@@ -46,11 +46,11 @@ class Admin_Model_Goal
     /**
      * 当月の更新目標ページ数を更新します。
      *
-     * @param  int 更新目標ページ数
+     * @param  int 当月の更新目標ページ数
      * @return void
      * @author charlesvineyard
      */
-    public function updateGoalPageCount()
+    public function updateMonthlyGoalPageCount($goalPageCount)
     {
         // TODO
     }

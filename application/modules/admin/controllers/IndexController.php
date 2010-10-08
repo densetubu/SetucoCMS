@@ -272,7 +272,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form-goal');
         }
-        $this->_goal->updateGoalPageCount();
+        $this->_goal->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
         $this->_redirect('/admin/index/form-goal');
     }
