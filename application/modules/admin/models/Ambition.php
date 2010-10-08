@@ -9,8 +9,8 @@
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
- * @link       
- * @version    
+ * @link
+ * @version
  * @since      File available since Release 0.1.0
  * @author     charlesvineyard
  */
@@ -27,19 +27,21 @@ class Admin_Model_Ambition
 {
     /**
      * 野望の情報をロードします。
-     * 
+     *
      * @return Zend_Navigation
      * @author charlesvineyard
      */
     public function load()
     {
-        // TODO
-        return 'せつこー俺だー結婚してけれー';
+        $table = new Common_Model_DbTable_Ambition();
+        $result = $table->find('1')->current()->toArray();
+        return $result['ambition'];
+
     }
-    
+
     /**
      * 野望を更新します。
-     * 
+     *
      * @param  string 野望
      * @return void
      * @author charlesvineyard

@@ -76,7 +76,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function indexAction()
     {
         // 野望
-        $this->view->ambition = $this->_ambition->load();
         $this->view->ambitionForm = $this->_getParam('ambitionForm',
                 $this->_createAmbitionForm());
 
@@ -93,7 +92,8 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_findCreatedPageCount();
         $this->view->createdPageCount = $createdPageCount;
-        $this->view->diffGoal = Setuco_Util_String::convertSign2String($this->_goal->loadGoalPageCount() - $createdPageCount);
+        $this->view->diffGoal = Setuco_Util_String::convertSign2String(
+                $createdPageCount - $this->_goal->loadMonthlyGoalPageCount());
 
         // 総ページ数
         $this->view->totalPageCount = $this->_page->countPage();
@@ -157,26 +157,29 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     private function _createAmbitionForm()
     {
         $form = new Setuco_Form();
-        $form->setAttrib('id', 'ambitionForm');
-        $form->setMethod('post');
-        $form->setAction($this->_helper->url('update-ambition'));
-        $form->getDecorator('HtmlTag')->clearOptions();
-
+        $form->clearDecorators()
+             ->setDisableLoadDefaultDecorators(true)
+             ->setAttrib('id', 'ambitionForm')
+             ->setMethod('post')
+             ->setAction($this->_helper->url('update-ambition'));
         $form->addElement('text', 'ambition', array(
-            'required' => true,
-            'filters'  => array('StringTrim')
+            'id'      => 'ambition',
+            'name'    => 'ambition',
+            'value'   => $this->_ambition->load(),
+            'filters' => array('StringTrim')
         ));
         $form->addElement('submit', 'submit', array(
-            'label'    => '保存'
+            'id'    => 'sub',
+            'name'  => 'sub',
+            'label' => '保存'
         ));
         $form->addElement('button', 'cancel', array(
-            'label'    => 'キャンセル',
-            'onclick'  => 'hideAmbitionForm()'
+            'id'      => 'cancel',
+            'name'    => 'cancel',
+            'label'   => 'キャンセル',
+            'onclick' => 'hideAmbitionEdit()'
         ));
-
-        // 付属タグの除去
-        $form->setMinimalDecoratorElements(array('ambition', 'submit', 'cancel', 'ambitionForm'));
-
+        $form->setMinimalDecoratorElements(array('ambition', 'submit', 'cancel'));
         return $form;
     }
 
@@ -203,13 +206,11 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      */
     private function findGoalForm()
     {
+        // validation でエラーになったとき
         if ($this->_hasParam('form')) {
             return $this->_getParam('form');
         }
-        $form =  $this->_createGoalForm();
-        $form->getElement('goal')
-             ->setValue($this->_goal->loadGoalPageCount());
-        return $form;
+        return $this->_createGoalForm();
     }
 
     /**
@@ -221,23 +222,39 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     private function _createGoalForm()
     {
         $form = new Setuco_Form();
-        $form->setAttrib('id', 'goalForm');
-        $form->setMethod('post');
-        $form->setAction($this->_helper->url('update-goal'));
-        $form->getDecorator('HtmlTag')->setOption('class', 'editArea');
-
-        $form->addElement('text', 'goal', array(
-            'label'      => '一ヶ月の新規作成数',
-            'validators' => array('int'),
-            'required' => true,
-            'filters'  => array('StringTrim')
+        $form->clearDecorators()
+             ->setDisableLoadDefaultDecorators(true)
+             ->addPrefixPath('Setuco_Form_Decorator_', 'Setuco/Form/Decorator/', 'decorator')
+             ->setAttrib('id', 'goalForm')
+             ->setMethod('post')
+             ->setAction($this->_helper->url('update-goal'))
+             ->addDecorator('FormElements')
+             ->addDecorator('Form');
+             // TODO setDisableLoadDefaultDecorators, clearDecoratorsはSetucoFormのコンストラクタに移したい
+        $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
+        $goalValue = $this->_goal->loadMonthlyGoalPageCount();
+        $goal->setValue($goalValue)
+             ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
+             ->setRequired(true)
+             ->setValidators(array('int'))
+             ->setFilters(array('StringTrim'))
+             ->clearDecorators()
+             ->setDisableLoadDefaultDecorators(true)
+             ->addDecorator('ViewHelper')
+             ->addDecorator('SuffixString', array('value' => 'ページ'))    // テキストボックスの後ろの文字列
+             ->addDecorator('Errors')
+             ->addDecorator('HtmlTag', array('tag' => 'dd'))
+             ->addDecorator('Label', array('tag' => 'dt'));
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('更新目標を変更')
+               ->clearDecorators()
+               ->setDisableLoadDefaultDecorators(true)
+               ->addDecorator('ViewHelper')
+               ->addDecorator('HtmlTag', array('tag' => 'p', 'class' => 'editAreaP'));
+        $form->addElements(array(
+            $goal,
+            $submit
         ));
-        $form->addElement('submit', 'submit', array(
-                    'label'    => '更新目標を変更'
-        ));
-        // 付属タグの除去
-        $form->setMinimalDecoratorElements(array('goalForm', 'submit'));
-
         return $form;
     }
 
@@ -255,7 +272,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form-goal');
         }
-        $this->_goal->updateGoalPageCount();
+        $this->_goal->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
         $this->_redirect('/admin/index/form-goal');
     }

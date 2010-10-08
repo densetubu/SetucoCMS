@@ -12,50 +12,48 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
+ * @param      array        $mediaData   編集対象のファイル情報を収めた配列
+ * @param      Zend_Form    $updateForm  ファイル編集用のフォームオブジェクト
+ * @param      string       $fileSizeMax アップロードできる最大ファイルサイズ（'*KB'などの形式）
+ * @param      array        $flashMessage フラッシュメッセージが入った配列
  * @author     akitsukada
  */
 ?>
+
 <!-- topicPath START -->
 <div id="topicPath">
-
-<p>ファイルの追加・編集・削除</p>
+    <p>ファイルの追加・編集・削除</p>
 </div>
+
 <div id="topicPath">
- <p><a href="../index.php">トップ</a><img src="<?php echo $this->baseUrl('images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
+    <p><a href="../index.php">トップ</a><img src="<?php echo $this->baseUrl('images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
     <p><a href="/admin/media">ファイルの追加・編集・削除</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
-    <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</p>
+    <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ?>の編集</p>
 </div>
 <!-- topicpath END -->
 
 <!-- section START -->
 <div class="section">
     <div class="hArea">
-        <h3 id="textType"><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ; ?>の編集</h3>
+        <h3 id="textType"><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')' ?>の編集</h3>
     </div>
-    
-    <?php if (count($this->flashMessage)) : ?>
-    <div id='messageArea'><?php foreach ($this->flashMessage as $message) : ?>
+    <?php if (count($this->flashMessage)): ?>
+    <div id='messageArea'><?php foreach ($this->flashMessage as $message): ?>
         <p><?php echo $message ?></p>
-        <?php endforeach; ?>
+        <?php endforeach ?>
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
-    <?php endif; ?>
-    
-    <form
-        action="<?php echo $this->updateForm->getAction(); ?>"
-        method="post" ENCTYPE="MULTIPART/FORM-DATA">
-    
-        <dl id="inputArea">        
-            <dt><span class="attentionMessage">※一度にアップできるファイルは、1ファイル<?php echo $this->maxFileSize; ?>KB、
-                                                                           合計<?php echo $this->maxFileSize; ?> KBまでです。</span></dt>
-            <dd><a href="#"><img src="<?php echo $this->baseUrl('/images/header/logo.jpg'); ?>" width="152" height="39" /></a></dd>
-            <dd>ファイル名: <?php echo $this->updateForm->getElement('name'); ?></dd>
-            <dd>説明: <?php echo $this->updateForm->getElement('comment'); ?></dd>
-            <dd class="upload">ファイル: <?php echo $this->updateForm->getElement('upload_img'); ?></dd>
-            <dt><span class="attentionMessage">**MB</span></dt><?php // @todo ファイルサイズの取得？ ?>      
-            <dd><?php echo $this->updateForm->getElement('up'); ?></dd>
+    <?php endif ?>
+    <form action="<?php echo $this->updateForm->getAction() ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
+        <dl id="inputArea">
+            <dt><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></dt>
+            <dd><a href="#"><img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" width="152" height="39" /></a></dd>
+            <dd>ファイル名: <?php echo $this->updateForm->getElement('name') ?></dd>
+            <dd>説明: <?php echo $this->updateForm->getElement('comment') ?></dd>
+            <dd class="upload">ファイル: <?php echo $this->updateForm->getElement('upload_img') ?></dd>
+            <dt><span class="attentionMessage">**MB</span></dt><?php // @todo ファイルサイズの取得？ ?>
+            <dd><?php echo $this->updateForm->getElement('up') ?></dd>
         </dl>
     </form>
-
 </div>
 <!-- section END -->

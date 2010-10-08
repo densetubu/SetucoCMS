@@ -24,26 +24,33 @@
  */
 class Admin_Model_Goal
 {
+    private $_goal;
+
+    public function init()
+    {
+        $this->_goal = new Common_Model_DbTable_Goal();
+
+    }
     /**
      * 当月の更新目標ページ数を取得します。
-     * 
+     *
      * @return int 更新目標ページ数
      * @author charlesvineyard
      */
-    public function loadGoalPageCount()
+    public function loadMonthlyGoalPageCount()
     {
         // TODO
         return 10;
     }
-    
+
     /**
      * 当月の更新目標ページ数を更新します。
-     * 
-     * @param  int 更新目標ページ数
+     *
+     * @param  int 当月の更新目標ページ数
      * @return void
      * @author charlesvineyard
      */
-    public function updateGoalPageCount()
+    public function updateMonthlyGoalPageCount($goalPageCount)
     {
         // TODO
     }

@@ -4,15 +4,23 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category   Setuco
- * @package    Admin
- * @subpackage View_Script_Media
- * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
- * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @category    Setuco
+ * @package     Admin
+ * @subpackage  View_Script_Media
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
  * @version
- * @since      File available since Release 0.1.0
- * @author     akitsukada
+ * @since       File available since Release 0.1.0
+ * @param       array       $condition    絞り込み、ソートの条件を保持した配列。type => 絞り込み用ファイル種別（拡張子）、sort => ソートする列、order => 昇順か降順か
+ * @param       array       $medias       一覧表示するファイルのデータ
+ * @param       string      $fileSizeMax  アップロードできる最大サイズ（'*KB'など）  
+ * @param       Zend_Form   $uploadForm   新規ファイルアップロード用のフォーム
+ * @param       Zend_Form   $searchForm   ファイル種類絞り込み用のフォーム
+ * @param       array       $dirErrors    ファイルの保存先／サムネイル保存先ディレクトリに異常があった場合のエラーメッセージが入った配列
+ * @param       int         $currentPage  ページネータで現在表示しているページ番号
+ * @param       array       $flashMessage フラッシュメッセージが入った配列
+ * @author      akitsukada
  */
 ?>
 <?php $this->headScript()->captureStart() ?>
@@ -32,6 +40,10 @@ function addElement() {
 </div>
 <!-- topicpath END -->
 
+<?php $type = $this->condition['type']  ?>
+<?php $sort = $this->condition['sort']  ?>
+<?php $order = $this->condition['order']  ?>
+
 <!-- section START -->
 <div class="section">
     <div class="topichAreaL">
@@ -42,38 +54,35 @@ function addElement() {
             </div>
         </div>
     </div>
-    <?php if (count($this->flashMessage)) : ?>
+    <?php if (count($this->flashMessage)): ?>
     <div id='messageArea'>
-        <?php foreach ($this->flashMessage as $message) : ?>
+        <?php foreach ($this->flashMessage as $message): ?>
             <p><?php echo $message ?></p>
-        <?php endforeach; ?>
+        <?php endforeach ?>
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
-    <?php endif; ?>
-    
-    <form action="<?php echo $this->uploadForm->getAction(); ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
+    <?php endif ?>
+    <form action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA" name="upload_img">
         <div class="default">
-          <?php if (isset($this->uploadForm)) : ?>
-              <p><?php echo $this->uploadForm->getElement('upload_img'); ?></p>
+          <?php if (isset($this->uploadForm)): ?>
+              <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
               <p><a href="#" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
-              <p><span class="attentionMessage">※アップロードできるファイルは、1ファイル <?php echo $this->maxFileSize; ?> KBまでです。</span></p>
-              <p><?php echo $this->uploadForm->getElement('up'); ?></p>
+              <p><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></p>
+              <p><?php echo $this->uploadForm->getElement('up') ?></p>
           <?php else: ?>
-              <?php foreach($this->dirErrors as $direrr) : ?>
-              <p><span class="attentionMessage"><?php echo $direrr; ?></span></p>
-              <?php endforeach; ?>
+              <?php foreach($this->dirErrors as $direrr): ?>
+              <p><span class="attentionMessage"><?php echo $direrr ?></span></p>
+              <?php endforeach ?>
               <p><span class="attentionMessage">アップロード先フォルダの設定を確認してください。</span></p>
-          <?php endif; ?>
-        </div>
-    </form>   
-    
-    <form action="#" method="post">
-        <div class="default">
-            <p><?php echo $this->searchForm->getElement('fileType'); ?></p>
-            <p><?php echo $this->searchForm->getElement('search'); ?></p>
+          <?php endif ?>
         </div>
     </form>
-    
+    <form action="<?php echo $this->searchForm->getAction() ?>" method="post" name="searchForm">
+        <div class="default">
+            <p><?php echo $this->searchForm->getElement('fileType') ?></p>
+            <p><?php echo $this->searchForm->getElement('search') ?></p>
+        </div>
+    </form>
     <table summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
             <col width="20%" />
@@ -87,58 +96,48 @@ function addElement() {
             <tr>
                 <th scope="col" id="tableFirst">表示</th>
                 <th scope="col">ファイル
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/desc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/name/order/asc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">更新日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/desc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/update_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/asc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">アップロード日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/desc'; ?>">
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/desc' ?>">
                         <img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                     </a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->condition['type'] . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">編集</th>
                 <th scope="col">削除</th>
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->mediaData as $cnt => $fileinfo) : ?>
-            <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : ''; ?>>
+            <?php foreach ($this->medias as $cnt => $media): ?>
+            <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : '' ?>>
                 <td class="thumb">
-                    <a href="#" onclick=""> <!-- そのファイルを開く？  -->
-                    <img src="<?php echo $this->baseUrl($fileinfo['thumbUrl']); ?>" width="48" height="auto" />
+                    <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
+                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['comment'] == null ? $media['name'] . '(' . $media['type'] . ' ファイル)' : $media['comment'] ?>" />
+                    </a>
+                </td>
+                <td><?php echo "{$media['name']} [{$media['type']}]" ?></td>
+                <td><?php echo $media['update_date'] ?></td>
+                <td><?php echo $media['create_date'] ?></td>
+                <td>
+                    <a href="<?php echo $this->baseUrl('/admin/media/form/id/' . $media['id']) ?>">
+                        <img src="<?php echo $this->baseUrl('/images/btn_edit.png') ?>" alt='編集' width='27' height='27' />
                     </a>
                 </td>
                 <td>
-                    <?php echo $fileinfo['name']; ?>[<?php echo $fileinfo['type']; ?>]
-                </td>
-                <td>
-                    <?php echo $fileinfo['createDate']; ?>
-                </td>
-                <td>
-                    <?php echo $fileinfo['updateDate']; ?>
-                </td>
-                <td>
-                    <a href="<?php echo $this->baseUrl('/admin/media/form/id/' . $fileinfo['id']); ?>">
-                    <img src="<?php echo $this->baseUrl('/images/btn_edit.png') ?>" alt='編集' width='27' height='27' />
+                    <a href="#" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
+                        <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
-                <td>
-                    <a href="#" onclick="if (confirm('ファイル <?php echo $fileinfo['name']; ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl('/admin/media/delete/id/' . $fileinfo['id']); ?>'; }"> 
-                    <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
-                    </a>
-                </td>
-            </tr>
-            
+            </tr>            
             <?php endforeach ?>
         </tbody>
     </table>
-
-    <div id="pageNav">
-    <?php echo $this->paginator; //ページャーの表示 ?>
-    </div>
+    <div id="pageNav"><?php echo $this->paginator //ページャーの表示 ?></div>
 </div>
 <!-- section END -->
