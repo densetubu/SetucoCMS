@@ -37,6 +37,119 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
     
     /**
+     * テーブルのalias名
+     * 
+     * @var String
+     */
+    protected $_alias = 'c';
+    
+    /**
+     * 外部テーブルと結合したものを取得する
+     * groupなどの必要な設定もしている
+     * 
+     * @return Zend_Db_Select 外部テーブルと結合したSELECTオブジェクト
+     * @author suzuki-mar
+     */
+    protected function _joinSelect() 
+    {
+    	//タグカテゴリーを取得する
+        $select = $this->select()->from(array('c' => $this->_name), array('*'));
+        
+        //テーブルを結合する 使用されていないものも取得する
+        $select->joinLeft(array('p' => 'page'), 'c.id = p.category_id', array('title'));
+        //結合するときはfalseにしないといけない
+        $select->setIntegrityCheck(false);
+        //categoryでグループ化
+        $select->group('c.id');
+        
+        return $select;
+    	
+    }
+    
+    /**
+     * 未分類のカテゴリーを取得するwhere句をセットする　オプションで取得しないにもできる
+     * 未分類のカテゴリーの処理が変わる可能性があるので
+     * 
+     * @param Zend_Select $select where句をセットするSelectオブジェクト
+     * @param boolean isDeselect 未分類のカテゴリーを取得しないのか デフォルトはtrue
+     * @return Zend_Db_Select 未分類のカテゴリーに関するwhereを設定してSelectオブジェクト
+     * @author suzuki-mar
+     */
+    protected function _defaultWhere(Zend_Db_Select $select, $isDeselect = true)
+    {
+    	//デフォルトを取得する
+    	if ($isDeselect) {
+    		$operator = '=';
+    	} else {
+    		$operator = '!=';
+    	}
+    	
+    	$select->where("c.id {$operator} -1"); 
+    	return $select;
+    }
+    
+    /**
+     *　デフォルトのカテゴリーを取得する
+     * 
+     * @return array 未分類のカテゴリーのレコード
+     * @author suzuki-mar
+     */
+    public function findDefault()
+    {
+    	//結合したものを取得する
+    	$select = $this->_joinSelect();
+    	//デフォルト(未分類)だけ取得する
+    	$select = $this->_defaultWhere($select);
+    	
+    	$searchResult = $this->fetchRow($select);
+    	
+    	
+    	//空だったらfalseを返す
+    	if (is_null($searchResult)) {
+    		return false;
+    	} 
+    	
+        
+    	$result = $searchResult->toArray();
+    	
+    	
+    	return $result;
+    }
+    
+    /**
+     * カテゴリー一覧を取得する
+     * 
+     * @param boolean[option] $isDeselectDefault 未使用カテゴリーは取得しないか デフォルトはfalse
+     * @return array カテゴリー一覧　パラメーターがあるときは、未分類を取得しない
+     * @author suzuki-mar
+     */
+    public function findCategoryList($isDeselectDefault = false)
+    {
+    	//結合したものを取得する
+    	$select = $this->_joinSelect();
+    	
+    	//五十音順でソートする
+    	$select->order('name ASC');    
+    	
+    	//未使用カテゴリーを取得しない
+    	if ($isDeselectDefault) {
+    	  $select = $this->_defaultWhere($select, false);
+    	}
+    	
+    	$searchResult = $this->fetchAll($select);
+    	
+    	$result = $searchResult->toArray();
+    	
+        //空だったらfalseを返す
+        if (empty($result)) {
+            return false;
+        } 
+    	
+    	return $result;
+    } 
+    
+    
+    /**
      * 指定したソートでカテゴリー一覧を取得します。
      * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
      * @param int $page 現在のページ番号

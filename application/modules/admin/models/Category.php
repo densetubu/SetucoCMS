@@ -36,7 +36,7 @@ class Admin_Model_Category
 	}
 
 	/**
-	 * タグ情報タグを取得する
+	 * カテゴリーを取得する
 	 *
 	 * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
 	 * @param int $page 現在のページ番号

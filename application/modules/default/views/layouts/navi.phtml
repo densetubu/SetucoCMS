@@ -5,17 +5,21 @@
     <div class="navList">
 
         <h3>カテゴリー</h3>
-
+        <?php if ($this->categoryList !== false): //未分類も含めてひとつもカテゴリーが登録されていないか?>
         <ul>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>about</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>contents</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>link</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>report</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>test</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>新規カテゴリー</a></li>
-            <li><a href='<?php echo "{$this->baseUrl('')}index/category"?>'>未分類</a></li>
+            <?php foreach ($this->categoryList as $category): ?>
+            <li>
+                <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
+                <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
+                <?php else: //使用していない場合はリンクしない?>
+                <?php echo $category['name'] ?> 
+                <?php endif; ?>
+            </li>
+            <?php endforeach; ?>
         </ul>
-
+        <?php else: ?>
+        <p>カテゴリーは登録されていません。</p>
+        <?php endif; ?>
     </div>
     <!-- navList END -->
 

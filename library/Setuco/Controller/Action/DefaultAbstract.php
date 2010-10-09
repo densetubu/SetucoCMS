@@ -48,5 +48,11 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     	//タグクラウドをviewにセットする
     	$this->view->tagCloud = $modelTag->getTagCloud();
     	
+    	
+    	//categoryテーブルのモデルクラスのインスタンス生成
+    	$modelCategory = new Default_Model_Category();
+    	//カテゴリー一覧をviewにセットする
+    	$this->view->categoryList = $modelCategory->getCategoryList();
+    	
     }
 }
