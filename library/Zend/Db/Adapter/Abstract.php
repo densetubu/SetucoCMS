@@ -444,18 +444,26 @@ abstract class Zend_Db_Adapter_Abstract
      */
     public function query($sql, $bind = array())
     {
+    	
+    	
+    	
         // connect to the database if needed
         $this->_connect();
 
+        
+        
         // is the $sql a Zend_Db_Select object?
         if ($sql instanceof Zend_Db_Select) {
-            if (empty($bind)) {
+            
+        	
+        	if (empty($bind)) {
                 $bind = $sql->getBind();
             }
-
             $sql = $sql->assemble();
         }
 
+        
+        
         // make sure $bind to an array;
         // don't use (array) typecasting because
         // because $bind may be a Zend_Db_Expr object
@@ -463,10 +471,14 @@ abstract class Zend_Db_Adapter_Abstract
             $bind = array($bind);
         }
 
+     
+        
         // prepare and execute the statement with profiling
         $stmt = $this->prepare($sql);
         $stmt->execute($bind);
 
+        
+        
         // return the results embedded in the prepared statement object
         $stmt->setFetchMode($this->_fetchMode);
         return $stmt;

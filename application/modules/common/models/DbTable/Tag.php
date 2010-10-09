@@ -35,5 +35,39 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_primary = 'id';
+    
+    
+    /**
+     * タグの名前とどれぐらい使用されているかを取得する
+     *
+     * @return array タグの名前とどれぐらい使用されているかの配列
+     * @author suzuki-mar
+     */
+    public function findTagCount() 
+    {
+    	//タグ名とどれぐらい使用されているかをカウントする
+        $select = $this->select()->from(array('t' => $this->_name), array('id', 'name'));
+        
+        //テーブルを結合する
+        $select->join(array('pt' => 'page_tag'), 't.id = pt.tag_id', array('count' => 'COUNT(pt.tag_id)'));
+        
+        $select->join(array('p' => 'page'), 'p.id = pt.page_id', array('update_date', 'create_date'));
+        
+        //公開しているものしか取得しない
+        $select->where('p.status = ?', Common_Model_DbTable_Page::STATUS_OPEN);
+        //tagごとにカウントする
+        $select->group('pt.tag_id');
+
+        //編集順にソートする
+        $select->order('p.update_date DESC');
+        
+        //結合するときはfalseにしないといけない
+        $select->setIntegrityCheck(false);
+        
+        $result = $this->fetchAll($select)->toArray();
+        
+        return $result;
+    }
+    
 }
 

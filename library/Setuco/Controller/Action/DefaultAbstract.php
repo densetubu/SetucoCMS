@@ -33,4 +33,20 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     {   
         parent::init();
     } 
+    
+    /**
+     * defaultモジュール共通でviewに変数を渡す処理をします。
+     * 
+     * @return void
+     * @author suzuki-mar
+     */
+    public function postDispatch()
+    {
+    	
+    	//tagテーブルのモデルクラスのインスタンス生成
+    	$modelTag = new Default_Model_Tag();
+    	//タグクラウドをviewにセットする
+    	$this->view->tagCloud = $modelTag->getTagCloud();
+    	
+    }
 }

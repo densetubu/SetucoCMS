@@ -127,6 +127,8 @@ class Admin_Model_Category
 	{
 		//DBに登録するデータを生成する
 		$saveData['name'] = $inputData['cat_name'];
+		//バージョン1では、nullにする
+		$saveData['parent_id'] = null;
 
 		//データを新規登録する
 		$result = $this->_regiser($saveData);

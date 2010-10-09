@@ -22,18 +22,29 @@
  */
 class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 {
-    /**
-     * テーブル名
-     * 
-     * @var string
-     */
+	/**
+	 * テーブル名
+	 *
+	 * @var string
+	 */
 	protected $_name = 'page';
-	
-    /**
-     * プライマリーキーのカラム名
-     *
-     * @var string
-     */
+
+	/**
+	 * プライマリーキーのカラム名
+	 *
+	 * @var string
+	 */
 	protected $_primary = 'id';
+
+	/**
+	 * 記事の状態　公開
+	 */
+	const STATUS_OPEN = 1;
+
+	/**
+	 * 記事の状態　下書き
+	 */
+	const STATUS_DRAFT = 0;
+
 }
 

@@ -22,22 +22,19 @@
     <!-- navList START -->
     <div class="navList">
         <h3>タグクラウド</h3> 
-                    
-            <ul id="tagCloud"> 
-                    
-                <li class="level10"><a href="#">タグ10</a></li> 
-                <li class="level1"><a href="#">タグ1</a></li> 
-                <li class="level5"><a href="#">タグ5</a></li> 
-                <li class="level2"><a href="#">タグ2</a></li> 
-                <li class="level7"><a href="#">タグ7</a></li> 
-                <li class="level6"><a href="#">タグ6</a></li> 
-                <li class="level3"><a href="#">タグ3</a></li> 
-                <li class="level8"><a href="#">タグ8</a></li> 
-                <li class="level9"><a href="#">タグ9</a></li> 
-                <li class="level4"><a href="#">タグ4</a></li> 
-                        
-           </ul> 
-                    
+                         
+        <?php if ($this->tagCloud !== false): //タグがなかったら表示しない?>
+        <ul id="tagCloud">
+            <?php foreach ($this->tagCloud as $tag): ?>    
+            <li class="level<?php echo $tag['value'] ?>">
+                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $tag['title'] ?></a>
+            </li> 
+           <?php endforeach;?>
+       </ul> 
+       
+       <?php else: ?>
+       <p>タグは登録されていません</p>
+       <?php endif;?>                     
     </div>
      <!-- navList END -->    
      

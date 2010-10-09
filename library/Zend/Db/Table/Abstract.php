@@ -1299,6 +1299,7 @@ abstract class Zend_Db_Table_Abstract
      */
     public function fetchAll($where = null, $order = null, $count = null, $offset = null)
     {
+    	
         if (!($where instanceof Zend_Db_Table_Select)) {
             $select = $this->select();
 
@@ -1317,9 +1318,11 @@ abstract class Zend_Db_Table_Abstract
         } else {
             $select = $where;
         }
-
+        
+        
         $rows = $this->_fetch($select);
 
+        
         $data  = array(
             'table'    => $this,
             'data'     => $rows,
@@ -1502,7 +1505,9 @@ abstract class Zend_Db_Table_Abstract
      */
     protected function _fetch(Zend_Db_Table_Select $select)
     {
+    	
         $stmt = $this->_db->query($select);
+        
         $data = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         return $data;
     }

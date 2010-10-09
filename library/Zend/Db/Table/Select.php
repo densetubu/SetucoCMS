@@ -203,11 +203,13 @@ class Zend_Db_Table_Select extends Zend_Db_Select
             }
 
             $from = $this->getPart(Zend_Db_Table_Select::FROM);
-
+            
             if ($this->_integrityCheck !== false) {
                 foreach ($fields as $columnEntry) {
                     list($table, $column) = $columnEntry;
 
+                    
+                    
                     // Check each column to ensure it only references the primary table
                     if ($column) {
                         if (!isset($from[$table]) || $from[$table]['tableName'] != $primary) {
@@ -215,6 +217,8 @@ class Zend_Db_Table_Select extends Zend_Db_Select
                             throw new Zend_Db_Table_Select_Exception('Select query cannot join with another table');
                         }
                     }
+                    
+                    
                 }
             }
         }

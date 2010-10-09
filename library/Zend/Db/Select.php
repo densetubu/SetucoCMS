@@ -841,7 +841,7 @@ class Zend_Db_Select
             $lastFromCorrelationName = true;
         }
         $this->_tableCols($correlationName, $cols, $lastFromCorrelationName);
-
+        
         return $this;
     }
 
