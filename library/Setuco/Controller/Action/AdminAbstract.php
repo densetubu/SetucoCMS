@@ -25,11 +25,11 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 {
     /**
      * ナビゲーション
-     * 
+     *
      * @var Zend_Navigation
      */
     protected $_navigation;
-    
+
     /**
      * 一覧ページで、1ページあたり何件のデータを表示するか
      */
@@ -42,27 +42,27 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      * @author suzuki-mar
      */
     public function init()
-    {   
+    {
         parent::init();
         $this->_navigation = $this->_initNavigation();
-    }   
-    
+    }
+
     /**
      * ナビゲーションの設定情報を初期化します。
-     * 
+     *
      * @return Zend_Navigation
      * @author charlesvineyard
      */
     protected function _initNavigation()
     {
-        $navigationConfig = new Zend_Config_Xml($this->_getModulePath() 
+        $navigationConfig = new Zend_Config_Xml($this->_getModulePath()
                 . 'configs/navigation.xml', 'nav', true);
         return new Zend_Navigation($navigationConfig);
     }
-    
+
     /**
      * アクションメソッドが呼ばれるの直前の処理です。
-     * 
+     *
      * @return void
      * @author charlesvineyard
      */
@@ -70,10 +70,10 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     {
         $this->view->headTitle($this->_chooseHeadTitle());
     }
-    
+
     /**
      * リクエスト中のページのタイトルを取得します。
-     * 
+     *
      * @return string|null タイトルが設定されていればタイトル、なければ null を返します。
      * @author charlesvineyard
      */
@@ -94,7 +94,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 
     /**
      * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
-     * 
+     *
      * @return int 現在ページネーターで表示すべきページ番号
      * @author akitsukada
      */
@@ -132,14 +132,14 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         //現在のページ番号を取得する
         $page = $this->_getParam('page', 1);
 
-        //現在のページ番号を渡す 
+        //現在のページ番号を渡す
         $this->view->page = $page;
 
        //指定がなければ、デフォルトを使用する
        if (is_null($limit)) {
        	 $limit = self::PAGE_LIMIT;
        }
-        
+
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
         $paginator->setCurrentPageNumber($page)->setItemCountPerPage($limit);
@@ -150,5 +150,20 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         //ページャーをviewで使用できるようにする
         $this->view->paginator = $paginator;
 
+    }
+
+    /**
+     * フラッシュメッセージがアクションヘルパーに設定されていればビューにセットして可視化します。
+     *
+     * @param  string $paramName ビューにセットする変数名。デフォルトは "flashMessage"。
+     * @return void
+     * @author charlesvineyard
+     */
+    protected function _visibleFlashMessage($paramName = 'flashMessage')
+    {
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->$paramName = $flashMessages[0];
+        }
     }
 }
