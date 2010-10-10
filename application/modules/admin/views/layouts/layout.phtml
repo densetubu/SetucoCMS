@@ -10,16 +10,19 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @version    
+ * @version
  * @since      File available since Release 0.1.0
  * @author     charlesvineyard
  */
 ?>
 <?php
 $this->doctype(Zend_View_Helper_Doctype::XHTML1_STRICT);
-$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8');
-$this->headMeta()->appendHttpEquiv('content-script-type', 'text/jascript');
-$this->headMeta()->appendHttpEquiv('content-style-type', 'text/css');
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8')
+                 ->appendHttpEquiv('content-script-type', 'text/jascript')
+                 ->appendHttpEquiv('content-style-type', 'text/css')
+                 ->appendName('author', 'ErinaMikami with SetucoCMS Project')
+                 ->appendName('copyright', 'SetucoCMS')
+                 ->appendHttpEquiv('imagetoolbar', 'no');
 $this->headTitle('SetucoCMS')->setSeparator(':');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
@@ -28,9 +31,6 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <?php echo $this->headMeta() ?>
-        <meta name="author" content="ErinaMikami with SetucoCMS Project" />
-        <meta name="copyright" content="SetucoCMS" />   
-        <meta http-equiv="imagetoolbar" content="no" />
         <?php echo $this->headTitle() ?>
         <?php echo $this->dojo() ?>
         <?php echo $this->headScript() ?>
@@ -38,10 +38,10 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
         <?php echo $this->headStyle() ?>
     </head>
     <body class="soria">
-    
+
         <!-- container START -->
         <div id="container">
-        
+
             <!-- header START -->
             <div id="header">
                 <?php echo $this->render('header.phtml') ?>
@@ -59,10 +59,10 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
                         <?php echo $this->layout()->content ?>
                     </div>
                     <!-- mainContentInner END -->
-                    
+
                 </div>
                 <!-- mainContent END -->
-        
+
                 <!-- sidebar START -->
                 <div id="sidebar">
                     <?php echo $this->layout()->navigation ?>
@@ -76,6 +76,6 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 
         </div>
         <!-- container END -->
-        
+
     </body>
 </html>
