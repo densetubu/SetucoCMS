@@ -1,5 +1,11 @@
 <?php
-$this->headTitle('日本電子専門学校電設部')->setSeparator(' / ');;     // TODO DBからサイトタイトルを取得する
+//ページタイトルがある場合とない場合でページタイトルの形式を変更する
+if (empty($this->pageTitle)) {
+	$this->headTitle($this->siteInfos['name']);
+} else {
+    $this->headTitle($this->pageTitle)->setSeparator(' | ')->headTitle($this->siteInfos['name']);  	
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -9,15 +15,15 @@ $this->headTitle('日本電子専門学校電設部')->setSeparator(' / ');;    
         <meta http-equiv="content-style-type" content="text/css" />
         <meta http-equiv="content-script-type" content="text/javascript" />
 
-        <meta name="author" content="" />        <?php // TODO DBから取得する? ?>        
-        <meta name="copyright" content="日本電子専門学校 電設部?" />   <?php // TODO DBから取得する ?>   
+        <meta name="author" content="" />                
+        <meta name="copyright" content="<?php echo $this->siteInfos['name'] ?>" />      
         <meta name="generator" content="SetucoCMS" />
         <meta http-equiv="imagetoolbar" content="no" />
 
-        <meta name="description" content="日本電子専門学校電設部SetucoCMSプロジェクトです。" />
-        <meta name="keywords" content="せつこ,俺だ,結婚,してくれ" />
+        <meta name="description" content="<?php echo $this->siteInfos['comment'] ?>" />
+        <meta name="keywords" content="<?php echo $this->siteInfos['keyword'] ?>" />
 
-        <link rel="start" href="<?php echo $this->baseUrl('') ?>" title="このブログのトップページ" />
+        <link rel="start" href="<?php echo $this->siteInfos['url'] ?>" title="このサイトのトップページ" />
 
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('/css/style.css') ?>" media="screen" />
 

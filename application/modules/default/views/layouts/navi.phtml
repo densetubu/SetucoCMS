@@ -8,6 +8,13 @@
         <?php if ($this->categoryList !== false): //未分類も含めてひとつもカテゴリーが登録されていないか?>
         <ul>
             <?php foreach ($this->categoryList as $category): ?>
+            <?php 
+                //デフォルト(未分類のカテゴリー名を選択する)
+                if (isset($category['is_default'])) {
+                	$category['name'] = '未分類';
+                }           
+            ?>
+            
             <li>
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
                 <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>

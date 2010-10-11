@@ -125,7 +125,7 @@ VALUES
 INSERT INTO category 
     (id, name, parent_id)
 VALUES
-    (-1, '未分類', null);
+    (-1, 'no_parent', null);
 
 INSERT INTO site 
     (name, url, comment, keyword, open_date)

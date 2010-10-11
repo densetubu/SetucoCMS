@@ -36,6 +36,20 @@ class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
      */
     protected $_primary = 'id';
     
+    /**
+     * サイト情報を取得する
+     * 
+     * @return array　サイト情報
+     */
+    public function findSiteInfo()
+    {
+    	//レコードはひとつしかない
+    	$select = $this->select();
+    	$searchResult = $this->fetchAll($select)->toArray();
+    	$result = $searchResult['0'];
+    	return $result;
+    	
+    }
 
 }
 

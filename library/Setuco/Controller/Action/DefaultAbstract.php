@@ -23,6 +23,13 @@
  */
 abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract
 {
+	/**
+	 * ページのタイトル
+	 * 
+	 * @var String
+	 */
+	protected $_pageTitle = '';
+	
     /**
      * defaultモジュールコントローラの初期処理です。
      *
@@ -42,17 +49,23 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     public function postDispatch()
     {
-    	
     	//tagテーブルのモデルクラスのインスタンス生成
     	$modelTag = new Default_Model_Tag();
     	//タグクラウドをviewにセットする
     	$this->view->tagCloud = $modelTag->getTagCloud();
     	
-    	
     	//categoryテーブルのモデルクラスのインスタンス生成
     	$modelCategory = new Default_Model_Category();
     	//カテゴリー一覧をviewにセットする
     	$this->view->categoryList = $modelCategory->getCategoryList();
+    	
+    	//siteテーブルのモデルクラスのインスタンス生成
+    	$modelSite = new Default_Model_Site();
+    	//サイト情報をviewにセットする
+    	$this->view->siteInfos     = $modelSite->getSiteInfos();
+    	
+    	//ページタイトルをセットする
+    	$this->view->pageTitle = $this->_pageTitle;
     	
     }
 }

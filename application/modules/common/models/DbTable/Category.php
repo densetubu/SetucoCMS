@@ -44,6 +44,35 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     protected $_alias = 'c';
     
     /**
+     * 表示しないレコードのID
+     */
+    const NO_DISPLAY_ID = -1;
+    
+    /**
+     * 共通の初期設定をしたSELECTオブジェクト
+     * 
+     * @param boolean[option] 外部結合するか　デフォルトはfalse
+     * @return Zend_Db_Select 共通の初期設定をしたSELECTオブジェクト
+     * @author suzuki-mar
+     */
+    protected function _initializeSelect($isJoinTable = false) 
+    {
+    	//初期設定をしているカテゴリーのSELECT文を取得する
+        $select = $this->select();
+        
+        //外部結合するか
+        if ($isJoinTable) {
+            //取得しないカテゴリーを設定する
+            $select->where('c.id != ?', self::NO_DISPLAY_ID);	
+        } else {
+        	$select->where('id != ?', self::NO_DISPLAY_ID);
+        }
+        
+        
+        return $select;
+    }
+    
+    /**
      * 外部テーブルと結合したものを取得する
      * groupなどの必要な設定もしている
      * 
@@ -52,8 +81,10 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      */
     protected function _joinSelect() 
     {
-    	//タグカテゴリーを取得する
-        $select = $this->select()->from(array('c' => $this->_name), array('*'));
+    	//初期設定をしているカテゴリーのSELECT文を取得する
+        $select = $this->_initializeSelect(true);
+        
+        $select->from(array('c' => $this->_name), array('*'));
         
         //テーブルを結合する 使用されていないものも取得する
         $select->joinLeft(array('p' => 'page'), 'c.id = p.category_id', array('title'));
@@ -61,6 +92,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         $select->setIntegrityCheck(false);
         //categoryでグループ化
         $select->group('c.id');
+        
         
         return $select;
     	
@@ -88,34 +120,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     	return $select;
     }
     
-    /**
-     *　デフォルトのカテゴリーを取得する
-     * 
-     * @return array 未分類のカテゴリーのレコード
-     * @author suzuki-mar
-     */
-    public function findDefault()
-    {
-    	//結合したものを取得する
-    	$select = $this->_joinSelect();
-    	//デフォルト(未分類)だけ取得する
-    	$select = $this->_defaultWhere($select);
-    	
-    	$searchResult = $this->fetchRow($select);
-    	
-    	
-    	//空だったらfalseを返す
-    	if (is_null($searchResult)) {
-    		return false;
-    	} 
-    	
-        
-    	$result = $searchResult->toArray();
-    	
-    	
-    	return $result;
-    }
-    
+
     /**
      * カテゴリー一覧を取得する
      * 
@@ -131,10 +136,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     	//五十音順でソートする
     	$select->order('name ASC');    
     	
-    	//未使用カテゴリーを取得しない
-    	if ($isDeselectDefault) {
-    	  $select = $this->_defaultWhere($select, false);
-    	}
+    	
     	
     	$searchResult = $this->fetchAll($select);
     	
@@ -160,8 +162,10 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     public function findSortCategories($sort, $page, $limit)
     {
     	
-    	//データを取得するSelectオブジェクトを生成する
-    	$select = $this->select($this->_name)->limitPage($page, $limit)->order("name {$sort}");
+    	//初期設定をしたSELECTオブジェクト
+    	$select = $this->_initializeSelect();
+    	
+    	$select->limitPage($page, $limit)->order("name {$sort}");
     	
     	//データを取得する
     	$result = $this->fetchAll($select);

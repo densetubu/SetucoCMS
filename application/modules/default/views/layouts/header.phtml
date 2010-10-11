@@ -2,16 +2,16 @@
     <div id="header_inner"> 
             
         <div id="discript"> 
-            <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1">日本電子専門学校 電設部?</a></h1> 
-            <p>日本電子専門学校電設部SetucoCMSプロジェクトです。</p> 
+            <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1"><?php echo $this->siteInfos['name'] ?></a></h1> 
+            <p><?php echo $this->siteInfos['comment'] ?></p> 
         </div> 
 
-        <form action="" method="post">
+        <form action="<?php echo $this->baseUrl('/page/search/') ?>" method="get">
                     
             <dl>
                         
                 <dt><label for="keyword"><img src="<?php echo $this->baseUrl('/images/front/serch.gif') ?>" alt="フリーワード検索" width="23" height="22" /></label></dt>
-                <dd><input type="text" name="keyword" id="keyword" value="キーワードを入力して下さい" onFocus="if (this.value == 'キーワードを入力して下さい') { this.value=''; }" onBlur="if(this.value == '') { this.value='キーワードを入力して下さい'; }" tabindex="2" /></dd>
+                <dd><input type="text" name="query" id="keyword" value="キーワードを入力して下さい" onFocus="if (this.value == 'キーワードを入力して下さい') { this.value=''; }" onBlur="if(this.value == '') { this.value='キーワードを入力して下さい'; }" tabindex="2" /></dd>
             </dl>
                     
             <p><input type="image" src="<?php echo $this->baseUrl('/images/front/btn_serch.jpg') ?>" alt="検索" tabindex="3" /></p>
