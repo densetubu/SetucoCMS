@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 閲覧側のトップページのコントローラーです。
+ * 閲覧側のページを表示するコントローラーです。
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -13,7 +13,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author      suzuki_mar    
+ * @author      suzuki-mar    
  */
 
 
@@ -22,9 +22,9 @@
  * @category    Setuco
  * @package     Default
  * @subpackage  Controller
- * @author      suzuki_mar
+ * @author      suzuki-mar
  */
-class IndexController extends Setuco_Controller_Action_DefaultAbstract
+class PageController extends Setuco_Controller_Action_DefaultAbstract
 {
 
     /** 
@@ -49,28 +49,21 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
      */
     public function indexAction()
     {
-        //新着記事を取得する
-        $modelPage = new Default_Model_Page();
-        $this->view->newPages = $modelPage->getNewPages(); 
-        
-        //フリースペースの内容を取得する
-        $modelSite = new Default_Model_Site();
-        $this->view->freeSpace = $modelSite->getFreeSpace(); 
+
     }
 
     /**
-     * カテゴリーの記事を表示するアクションです
-     *
+     * 検索結果を表示するアクションです
+     * リダイレクトを確認するために実装したので、デバッグ表示してexitしている
+     * 
      * @return void
-     * @author 
-     * @todo 内容を実装する　現在はスケルトン
+     * @todo 
      */
-    public function categoryAction()
+    public function searchAction()
     {
-
+        
+        
+        
     }
 
-
 }
-
-

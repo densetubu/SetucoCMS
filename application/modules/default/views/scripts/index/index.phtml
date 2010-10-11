@@ -9,7 +9,7 @@
 
     <div class="entryBody">
 
-        <p>テスト運用中。フリーエリアです。</p>
+        <p><?php echo $this->freeSpace ?></p>
 
     </div>
 
@@ -27,18 +27,10 @@
     </div>
 
     <div class="entryBody">
-
         <ul>
-            <li><a href='page.php?page_id=109'>くるくるくるくる</a></li>
-            <li><a href='page.php?page_id=107'>ええ</a></li>
-            <li><a href='page.php?page_id=105'>キーワード</a></li>
-            <li><a href='page.php?page_id=104'>aaa</a></li>
-            <li><a href='page.php?page_id=103'>てすと</a></li>
-            <li><a href='page.php?page_id=100'>なんとなく更新してみる</a></li>
-            <li><a href='page.php?page_id=99'>校長賞とりました。</a></li>
-            <li><a href='page.php?page_id=98'>制作展が(´ω｀)</a></li>
-            <li><a href='page.php?page_id=97'>テスト勉強の気分転換にきました</a></li>
-            <li><a href='page.php?page_id=96'>何がおきた</a></li>                            
+            <?php foreach ($this->newPages as $value): ?>
+            <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
+            <?php endforeach; ?>
         </ul>
 
     </div>

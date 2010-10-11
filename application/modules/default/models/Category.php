@@ -77,7 +77,7 @@ class Default_Model_Category
 
 		if (isset($result)) {
 			//未分類のカテゴリーを追加する
-			$result = $this->addDefaultCategory($result);
+			$result = $this->_dao->addDefaultCategory($result);
 		} else { //カテゴリーがなかったら未分類カテゴリーのみ追加する
 			$result = $this->addDefaultCategory();
 		}
@@ -85,35 +85,6 @@ class Default_Model_Category
 		return $result;
 	}
 	
-	/**
-	 * 未分類のカテゴリーを追加したカテゴリーを取得する
-	 * 
-	 * @param array[option] $subjects 元となる配列
-	 * @return array 未分類のカテゴリーを追加したもの 未分類のカテゴリーはis_defaultの要素がある
-	 */
-	public function addDefaultCategory($subjectes = array()) 
-	{
-		$default[0] = array('id' => -2, 'name' => '未分類', 'is_default' => true);
-		
-		//カテゴリーが新規作成されていない場合もリンクする
-		$isLink = empty($subjectes);
-		foreach ($subjectes as $value) {
-            //一つでも使用していない場合は、リンクする 	
-			if ($value['is_used'] !== true) {
-				$isLink = true;
-				break;
-			}
-		}
-		
-		
-		$default[0]['is_used'] = $isLink;
-		
-        
-		//未分類のカテゴリーを追加する
-		$result = array_merge($subjectes, $default);
-		
-		return $result;
-	}
 	
 }
 

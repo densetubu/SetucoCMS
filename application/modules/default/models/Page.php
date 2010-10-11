@@ -1,6 +1,6 @@
 <?php
 /**
- * 閲覧側のサイト情報管理用サービス
+ * 閲覧側のページ情報管理用サービス
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -16,13 +16,13 @@
  */
 
 /**
- * サイト情報管理クラス
+ * ページ情報管理クラス
  *
  * @package    Default
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Default_Model_Site
+class Default_Model_Page
 {
 	/**
      * モデルが使用するDAO(DbTable)クラスを設定する
@@ -31,6 +31,11 @@ class Default_Model_Site
      */
     protected $_dao = null;
 	
+    /**
+     * 新着記事で標準何件取得するか
+     */
+    const GET_PAGE_COUNT = 10;
+    
 	/**
 	 * 初期設定をする
 	 *
@@ -38,38 +43,21 @@ class Default_Model_Site
 	 */
 	public function __construct()
 	{
-		$this->_dao = new Common_Model_DbTable_Site();
+		$this->_dao = new Common_Model_DbTable_Page();
 	}
-	
+
 	/**
-	 * サイト情報を取得する
+	 * 最新の記事を取得する
 	 * 
-	 * @return array サイト情報
-	 * @author suzuki_mar
+	 * @param int[option] 何件のデータを取得するのか　標準は10件
+	 * @author suzuki-mar
 	 */
-	public function getSiteInfos()
+	public function getNewPages($getPageCount = self::GET_PAGE_COUNT) 
 	{
-		$result = $this->_dao->findSiteInfo();
-		//開設年を取得する
-		$result['start_year'] = substr($result['open_date'], 0, 4);
-		return $result;
+	   $result = $this->_dao->findNewPages($getPageCount);
+
+	   return $result;
 	}
-	
-	/**
-	 * フリースペースの内容を取得する
-	 * 
-	 * @return String フリースペースの内容
-	 * @author suzuki_mar
-	 */
-	public function getFreeSpace()
-	{
-		$siteInfo = $this->_dao->findSiteInfo();
-		$result = $siteInfo['comment'];
-		return $result;
-		
-		
-	}
-	
 }
 
 

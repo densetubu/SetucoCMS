@@ -49,6 +49,11 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     const NO_DISPLAY_ID = -1;
     
     /**
+     * 未分類のカテゴリー
+     */
+    const DEFAULT_ID = 0;
+    
+    /**
      * 共通の初期設定をしたSELECTオブジェクト
      * 
      * @param boolean[option] 外部結合するか　デフォルトはfalse
@@ -118,6 +123,36 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     	
     	$select->where("c.id {$operator} -1"); 
     	return $select;
+    }
+    
+        /**
+     * 未分類のカテゴリーを追加したカテゴリーを取得する
+     * 
+     * @param array[option] $subjects 元となる配列
+     * @return array 未分類のカテゴリーを追加したもの 未分類のカテゴリーはis_defaultの要素がある
+     * @author suzuki-mar
+     */
+    public function addDefaultCategory($subjectes = array()) 
+    {
+        $default[0] = array('id' => self::DEFAULT_ID, 'name' => '未分類', 'is_default' => true);
+        
+        //カテゴリーが新規作成されていない場合もリンクする
+        $isLink = empty($subjectes);
+        foreach ($subjectes as $value) {
+            //一つでも使用していない場合は、リンクする  
+            if ($value['is_used'] !== true) {
+                $isLink = true;
+                break;
+            }
+        }
+        
+        $default[0]['is_used'] = $isLink;
+        
+        
+        //未分類のカテゴリーを追加する
+        $result = array_merge($subjectes, $default);
+        
+        return $result;
     }
     
 
