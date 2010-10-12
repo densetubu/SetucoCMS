@@ -13,7 +13,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author      suzuki-mar    
+ * @author      suzuki-mar akitsukada
  */
 
 
@@ -22,7 +22,7 @@
  * @category    Setuco
  * @package     Default
  * @subpackage  Controller
- * @author      suzuki-mar
+ * @author      suzuki-mar akitsukada
  */
 class PageController extends Setuco_Controller_Action_DefaultAbstract
 {
@@ -44,7 +44,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      * トップページのアクションです
      *
      * @return void
-     * @author 
+     * @author suzuki-mar
      * @todo 内容を実装する　現在はスケルトン
      */
     public function indexAction()
@@ -54,16 +54,52 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
     /**
      * 検索結果を表示するアクションです
-     * リダイレクトを確認するために実装したので、デバッグ表示してexitしている
      * 
      * @return void
-     * @todo 
+     * @author akitsukada
+     * @todo 実装（現在スケルトン）
      */
     public function searchAction()
     {
         
         
-        
+    }
+
+    /**
+     * あるカテゴリーに属するページの一覧を表示する
+     *
+     * @return void
+     * @author akitsukada
+     * @todo 実装（現在スケルトン）
+     */
+    public function categoryAction()
+    {
+
+    }
+
+
+    /**
+     * あるタグがつけられたページの一覧を表示する
+     *
+     * @return void
+     * @author akitsukada
+     * @todo 実装（現在スケルトン）
+     */
+    public function tagAction()
+    {
+
+    }
+
+    /**
+     * ページを閲覧する
+     *
+     * @return void
+     * @author akitsukada
+     * @todo 実装（現在スケルトン）
+     */
+    public function showAction()
+    {
+
     }
 
 }
