@@ -55,7 +55,13 @@ class Default_Model_Page
 	public function getNewPages($getPageCount = self::GET_PAGE_COUNT) 
 	{
 	   $result = $this->_dao->findNewPages($getPageCount);
-
+        
+	   //からならfalseを返す
+	   if (empty($result)) {
+	   	return false;
+	   }
+	   
+	   
 	   return $result;
 	}
 }

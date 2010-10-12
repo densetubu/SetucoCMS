@@ -56,6 +56,8 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
         //フリースペースの内容を取得する
         $modelSite = new Default_Model_Site();
         $this->view->freeSpace = $modelSite->getFreeSpace(); 
+        
+        
     }
 
     /**

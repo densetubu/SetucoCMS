@@ -79,7 +79,7 @@ class Default_Model_Category
 			//未分類のカテゴリーを追加する
 			$result = $this->_dao->addDefaultCategory($result);
 		} else { //カテゴリーがなかったら未分類カテゴリーのみ追加する
-			$result = $this->addDefaultCategory();
+			$result = $this->_dao->addDefaultCategory();
 		}
 
 		return $result;

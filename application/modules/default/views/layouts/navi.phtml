@@ -40,7 +40,7 @@
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
                 <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
                 <?php else: //使用していない場合はリンクしない?>
-                <?php echo $category['name'] ?> 
+                <span> <?php echo $category['name'] ?> </span> 
                 <?php endif; ?>
             </li>
             <?php endforeach; ?>
@@ -55,7 +55,7 @@
     <div class="navList">
         <h3>タグクラウド</h3> 
                          
-        <?php if ($this->tagCloud !== false): //タグがなかったら表示しない?>
+        <?php if ($this->tagClouds !== false): //タグがなかったら表示しない?>
         <ul id="tagCloud">
             <?php foreach ($this->tagClouds as $tag): ?>    
             <li class="level<?php echo $tag['level'] ?>">
@@ -65,7 +65,7 @@
        </ul> 
        
        <?php else: ?>
-       <p>タグは登録されていません</p>
+       <p>タグが登録されていません</p>
        <?php endif;?>                     
     </div>
      <!-- navList END -->    

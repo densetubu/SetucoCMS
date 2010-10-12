@@ -63,10 +63,12 @@ class Default_Model_Tag
         //nameとタグの使用数のカウントを取得する
 		$tags  = $this->_dao->findTagCountAndName();
 		
+		
 		//からならfalseを返す
 		if (empty($tags)) {
 			return false;
 		}
+		
 		
 		//タグのカウントの配列を作成する タグが多い順
 		//タグは、1番からカウントする
