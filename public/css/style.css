@@ -352,7 +352,8 @@ div#navArea div.navList h3 {
     padding-left: 8px;
     margin-bottom: 10px;
 }
-div#navArea div.navList ul li a, div#navArea div.navList ul li span {
+div#navArea div.navList ul li a,
+div#navArea div.navList ul li span {
     background: url(../images/front/bg_linkList.gif) no-repeat left 0.4em;
     padding-left: 16px;
     margin-bottom: 6px;
