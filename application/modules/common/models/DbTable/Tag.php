@@ -43,7 +43,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @return array タグの名前とどれぐらい使用されているかの配列
      * @author suzuki-mar
      */
-    public function findTagCount() 
+    public function findTagCountAndName() 
     {
     	//タグ名とどれぐらい使用されているかをカウントする
         $select = $this->select()->from(array('t' => $this->_name), array('id', 'name'));
@@ -60,9 +60,8 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
         //tagごとにカウントする
         $select->group('pt.tag_id');
 
-        //編集順にソートする
-        $select->order('p.update_date DESC');
-        
+        //カウントが多い順
+        $select->order('count DESC');
         
         
         $result = $this->fetchAll($select)->toArray();

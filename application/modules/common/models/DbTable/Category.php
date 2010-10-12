@@ -163,7 +163,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array カテゴリー一覧　パラメーターがあるときは、未分類を取得しない
      * @author suzuki-mar
      */
-    public function findCategoryList($isDeselectDefault = false)
+    public function findCategoryLists($isDeselectDefault = false)
     {
     	//結合したものを取得する
     	$select = $this->_joinSelect();
