@@ -1,4 +1,23 @@
 <?php
+/**
+ * 閲覧側のレイアウトファイル
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Layout
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       String  $pageTitle  ページのタイトル $pageTitleはアクションごとに定義する
+ * @param       array   $siteInfos  サイト情報       
+ * @author      suzuki-mar
+ */
+
+
 //ページタイトルがある場合とない場合でページタイトルの形式を変更する
 if (empty($this->pageTitle)) {
 	$this->headTitle($this->siteInfos['name']);

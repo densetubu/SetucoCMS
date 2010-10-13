@@ -67,7 +67,6 @@ class Default_Model_Site
 		$result = $siteInfo['comment'];
 		return $result;
 		
-		
 	}
 	
 }

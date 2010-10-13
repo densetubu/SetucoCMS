@@ -48,10 +48,10 @@ class Default_Model_Category
      * @return array カテゴリー情報 取得できなかったらfalse
      * @author suzuki-mar
      */
-    public function getCategoryList()
+    public function getCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        $categories = $this->_dao->findCategoryList(true);
+        $categories = $this->_dao->findCategoryLists(true);
 
 
         //取得できた場合のみ整形する
@@ -88,6 +88,7 @@ class Default_Model_Category
      *
      * @param int $id 取得したいページのカテゴリーID
      * @return array|boolean 該当のデータが存在すれば配列データ、存在しなければfalseを返す
+     * @author akitsukada
      */
     public function getCategoryById($id)
     {

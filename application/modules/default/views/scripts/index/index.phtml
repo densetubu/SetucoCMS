@@ -1,3 +1,24 @@
+<?php
+/**
+ * 閲覧側のTOPページ
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Script_Index
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       String  $freeSpace    フリースペースの内容
+ * @param       array   $newPages     記事一覧ページに表示させるページデータ       
+ * @author      suzuki-mar
+ */
+?>
+
+
 <!-- entry START -->
 <div class="entry">
 
@@ -27,11 +48,20 @@
     </div>
 
     <div class="entryBody">
+        <?php if($this->newPages !== false): //記事が公開されている場合のみ表示する ?>
         <ul>
-            <?php foreach ($this->newPages as $value): ?>
-            <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
-            <?php endforeach; ?>
-        </ul>
+            <li>
+                <?php foreach ($this->newPages as $value): ?>
+                <a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a>
+                <?php endforeach; ?>
+            </li>
+        </ul>        
+        
+        <?php else: //記事が公開されていない場合 ?>
+        <p>記事が公開されていません</p>
+        <?php endif; ?>
+             
+        
 
     </div>
 

@@ -57,51 +57,60 @@ class Default_Model_Tag
 	 * @return array タグクラウドのデータ　title id value 値を取得できなかった場合はfalse
 	 * @author suzuki-mar
 	 */
-	public function getTagCloud()
+	public function getTagClouds()
 	{
 		
         //nameとタグの使用数のカウントを取得する
-		$searchedTags  = $this->_dao->findTagCount();
+		$tags  = $this->_dao->findTagCountAndName();
+		
 		
 		//からならfalseを返す
-		if (empty($searchedTags)) {
+		if (empty($tags)) {
 			return false;
 		}
 		
 		
-		//検索したタグをZend_Tagで使用できる方に整形する
-		foreach ($searchedTags as $value) {
-			$tag['title']    = $value['name'];
-			$tag['weight']   = $value['count'];
-			$tag['id']       = $value['id'];
-		
-			//idを添字にする
-			$index = $value['id'];
-			$tags[$index] = $tag;
-			unset($tag);
-		} 
-		
-		
-		//タグクラウドの変数を作成する
-		$list     = new Zend_Tag_ItemList();
-		foreach ($tags as $tag) {
-			$tagItem   = new Zend_Tag_Item($tag);
-			$tagItem->setParam('id', $tag['id']);
-			$list[]   = $tagItem;
+		//タグのカウントの配列を作成する タグが多い順
+		//タグは、1番からカウントする
+		$i = 1; 
+		$counts = array();
+		foreach ($tags as $value) {
+			//同じものは配列に入れない
+			if (!in_array($value['count'], $counts)) {
+			     $counts[$i] = $value['count'];
+                 $i++;	
+			}
+			
+			//タグが、最大のレベルまでいったらループを終了する
+			if ($i > 10) {
+				break;
+			}
 		}
-
-		//絶対値の設定
-		$list->spreadWeightValues($this->_tagSpread);
-
-		//操作しやすいように配列にする
-		foreach ($list as $item) {
-			$tag['title'] = $item->getTitle();
-			$tag['value'] = $item->getParam('weightValue');
-			$tag['id']    = $item->getParam('id');
-			$result[]     = $tag;
-			unset($tag);
+		
+		//最小のカウントを取得する
+		$minCount = min($counts);
+		
+		//タグのレベルを設定する
+		foreach ($tags as &$value) {
+			//$countsの最小よりも小さい場合は、最小と同じレベルにする
+			if ($value['count'] < $minCount) {
+				$value['level'] = 10;
+			} else {
+		      $searchKeys = array_search($value['count'], $counts);
+		      $value['level'] = $searchKeys;
+			}
 		}
-
+		unset($value);
+		
+		
+		//更新順でソートする
+		foreach ($tags as $value) {
+			$dates[] = $value['update_date'];
+		}
+		array_multisort($dates, SORT_DESC, $tags);
+		
+		$result = $tags;
+		
 		return $result;
 
 	}
