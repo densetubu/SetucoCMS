@@ -261,7 +261,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     	
         //取得に成功した場合のみ取得したデータを戻り値にする
         if ($searchResult) {
-        	$result = $searchResult;
+        	$result = $searchResult->toArray();
         } else {
         	$result = false;
         }
