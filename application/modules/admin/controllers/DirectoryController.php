@@ -24,7 +24,25 @@
  */
 class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
 {
-    /** 
+    /**
+     * サイト構造サービス
+     *
+     * @var Admin_Model_Directory
+     */
+    private $_directory;
+
+    /**
+     * 初期処理
+     *
+     * @author charlesvineyard
+     */
+    public function init()
+    {
+        parent::init();
+        $this->_directory = new Admin_Model_Directory();
+    }
+
+    /**
      * サイト構造(ディレクトリー)の一覧を表示するのアクションです。
      *
      * @return void
@@ -32,7 +50,6 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $directory = new Admin_Model_Directory();
-        $this->view->directory = $directory->load();
+        $this->view->directory = $this->_directory->createDirectoryInfo();
     }
 }

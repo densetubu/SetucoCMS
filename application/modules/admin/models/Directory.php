@@ -25,95 +25,83 @@
 class Admin_Model_Directory
 {
     /**
-     * サイト構造の情報をロードします。
-     * 
+     * カテゴリーDAO
+     *
+     * @var Common_Model_DbTable_Category
+     */
+    private $_category;
+
+    /**
+     * ページDAO
+     *
+     * @var Common_Model_DbTable_Page
+     */
+    private $_page;
+
+    /**
+     * コンストラクタ
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_category = new Common_Model_DbTable_Category();
+        $this->_page = new Common_Model_DbTable_Page();
+    }
+
+    /**
+     * サイト構造の情報を作成します。
+     *
      * @return Zend_Navigation
      * @author charlesvineyard
      */
-    public function load()
+    public function createDirectoryInfo()
     {
         $directory = new Zend_Navigation();
-        $categories = $this->_loadCategoriesByParentId(null);
+        $categories = $this->_category->findCategoriesByParentId(Setuco_Data_Constant_Category::NO_PARENT_ID);
         foreach ($categories as $category) {
-            $navCategory = Zend_Navigation_Page::factory(array(
-                'label'      => $category['categoryName'],
-                'module'     => 'admin',
-                'controller' => 'page',
-                'params'     => array('category-id' => $category['categoryId'])
-            ));
-            $directory->addPage($navCategory);
-            $pages = $this->_loadPages($category['categoryId']);
-            foreach ($pages as $page) {
-                $navCategory->addPage(array(
-                    'label'      => $page['pageTitle'],
-                    'module'     => 'admin',
-                    'controller' => 'page',
-                    'params'     => array('id' => $page['pageId']),
-                    'type'       => 'Setuco_Navigation_Page_Directory_Page'
-                ));
-            }
+            $directory->addPage($this->_createNavCategory($category['id'], $category['name']));
         }
         return $directory;
     }
-    
-    /**
-     * 指定の親カテゴリーIDを持つカテゴリーをロードします。
-     * 
-     * @param int $parentId
-     * @return array カテゴリーの配列
-     * @author charlesvineyard
-     * @todo Category クラスに移すべきメソッド
-     */
-    private function _loadCategoriesByParentId($parentId)
-    {
-        if ($parentId == null) {
-            return array(
-                array('categoryId'   => 1,
-                      'categoryName' => 'カテゴリー1',
-                      'parentId'     => null),
-                array('categoryId'   => 3,
-                      'categoryName' => 'カテゴリー3',
-                      'parentId'     => null),
-                array('categoryId'   => 4,
-                      'categoryName' => 'カテゴリー4',
-                      'parentId'     => null),
-            );
 
-        }
-        
-        if ($parentId == 1) {
-            return array(
-                array('categoryId'   => 2,
-                      'categoryName' => 'カテゴリー2',
-                      'parentId'     => 1),
-            );
-        }
-        
-        return array();
-    }
-    
     /**
-     * 指定のカテゴリーIDを持つページをロードします。
-     * 
-     * @param int $categoryId
-     * @return array ページの配列
+     * カテゴリー情報を作成します。
+     *
+     * @return Zend_Navigation_Page カテゴリー情報
      * @author charlesvineyard
-     * @todo Page クラスに移すべきメソッド
      */
-    private function _loadPages($categoryId)
+    private function _createNavCategory($categoryId, $categoryName)
     {
-        return array(
-            array('pageId'    => 1,
-                  'pageTitle' => 'ページタイトル',
-                  'status'    => 1),
-            array('pageId'    => 1,
-                  'pageTitle' => 'ページタイトル',
-                  'status'    => 1),
-            array('pageId'    => 1,
-                  'pageTitle' => 'ページタイトル',
-                  'status'    => 0)
-        );        
+        $navCategory = Zend_Navigation_Page::factory(array(
+            'label'      => $categoryName,
+            'module'     => 'admin',
+            'controller' => 'page',
+            'params'     => array('category-id' => $categoryId)
+        ));
+        $navCategory->addPages($this->_createNavPages($category['id']));
+        return $navCategory;
+    }
+    /**
+     * カテゴリーに属するページ情報を作成します。
+     *
+     * @return array Zend_Navigation_Pageの配列
+     * @author charlesvineyard
+     */
+    private function _createNavPages($categoryId)
+    {
+        $pages = $this->_page->findPagesByCategory($categoryId);
+        $navPages = array();
+        foreach ($pages as $page) {
+            $navPages[] = Zend_Navigation_Page::factory(array(
+                'label'      => $page['title'],
+                'module'     => 'admin',
+                'controller' => 'page',
+                'params'     => array('id' => $page['id']),
+                'type'       => 'Setuco_Navigation_Page_Directory_Page'
+                ));
+        }
+        return $navPages;
     }
 
 }
-
