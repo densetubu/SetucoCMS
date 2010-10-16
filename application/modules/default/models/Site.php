@@ -55,20 +55,7 @@ class Default_Model_Site
 		return $result;
 	}
 	
-	/**
-	 * フリースペースの内容を取得する
-	 * 
-	 * @return String フリースペースの内容
-	 * @author suzuki_mar
-	 */
-	public function getFreeSpace()
-	{
-		$siteInfo = $this->_dao->findSiteInfo();
-		$result = $siteInfo['comment'];
-		return $result;
-		
-	}
-	
+
 }
 
 

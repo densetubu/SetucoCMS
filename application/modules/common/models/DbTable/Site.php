@@ -40,6 +40,7 @@ class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
      * サイト情報を取得する
      * 
      * @return array　サイト情報
+     * @author suzuki-mar
      */
     public function findSiteInfo()
     {

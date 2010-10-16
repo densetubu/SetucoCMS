@@ -55,13 +55,18 @@ class Default_Model_Page
     /**
      * 最新の記事を取得する
      *
-     * @param int[option] 何件のデータを取得するのか　標準は10件
+     * @param int[option] 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
      */
     public function getNewPages($limitGetNewPage = self::LIMIT_GET_NEW_PAGE)
     {
         $result = $this->_dao->findNewPages($limitGetNewPage);
-
+        
+        //からならfalseを返す
+        if (empty($result)) {
+        	$result = false;
+        }
+        
         return $result;
     }
 
