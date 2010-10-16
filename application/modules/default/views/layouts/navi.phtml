@@ -1,3 +1,24 @@
+<?php
+/**
+ * 閲覧側のナビゲーションメニュー
+ * カテゴリー一覧と、タグクラウド
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Layout
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       array   $categoryLists  カテゴリー一覧の配列       
+ * @param       array   $tagClouds タグクラウドが入っている配列
+ * @author      suzuki-mar
+ */
+?>
+
 <!-- navArea START --> 
 <div id="navArea">
 
@@ -7,7 +28,7 @@
         <h3>カテゴリー</h3>
         <?php if ($this->categoryList !== false): //未分類も含めてひとつもカテゴリーが登録されていないか?>
         <ul>
-            <?php foreach ($this->categoryList as $category): ?>
+            <?php foreach ($this->categoryLists as $category): ?>
             <?php 
                 //デフォルト(未分類のカテゴリー名を選択する)
                 if (isset($category['is_default'])) {
@@ -19,7 +40,7 @@
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
                 <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
                 <?php else: //使用していない場合はリンクしない?>
-                <?php echo $category['name'] ?> 
+                <span> <?php echo $category['name'] ?> </span> 
                 <?php endif; ?>
             </li>
             <?php endforeach; ?>
@@ -34,17 +55,17 @@
     <div class="navList">
         <h3>タグクラウド</h3> 
                          
-        <?php if ($this->tagCloud !== false): //タグがなかったら表示しない?>
+        <?php if ($this->tagClouds !== false): //タグがなかったら表示しない?>
         <ul id="tagCloud">
-            <?php foreach ($this->tagCloud as $tag): ?>    
-            <li class="level<?php echo $tag['value'] ?>">
-                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $tag['title'] ?></a>
+            <?php foreach ($this->tagClouds as $tag): ?>    
+            <li class="level<?php echo $tag['level'] ?>">
+                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $tag['name'] ?></a>
             </li> 
            <?php endforeach;?>
        </ul> 
        
        <?php else: ?>
-       <p>タグは登録されていません</p>
+       <p>タグが登録されていません</p>
        <?php endif;?>                     
     </div>
      <!-- navList END -->    

@@ -82,6 +82,7 @@ class Admin_Model_Directory
         $navCategory->addPages($this->_createNavPages($category['id']));
         return $navCategory;
     }
+
     /**
      * カテゴリーに属するページ情報を作成します。
      *
@@ -90,7 +91,7 @@ class Admin_Model_Directory
      */
     private function _createNavPages($categoryId)
     {
-        $pages = $this->_page->findPagesByCategory($categoryId);
+        $pages = $this->_page->findPagesByCategoryId($categoryId);
         $navPages = array();
         foreach ($pages as $page) {
             $navPages[] = Zend_Navigation_Page::factory(array(

@@ -28,7 +28,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_name = 'page';
-
     /**
      * プライマリーキーのカラム名
      *
@@ -70,20 +69,42 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * カテゴリーに属する記事を取得します。
+     * カテゴリを指定して記事を取得する
      *
-     * @param int $categoryId カテゴリーID
-     * @author charlesvineyard
+     * @param int $catId 取得したいカテゴリのID
+     * @param int $currentPage ページネータの何ページ目を表示するか
+     * @param int $limig １ページに表示する記事数
+     * @author akitsukada
+     * @return
      */
-    public function findPagesByCategory($categoryId)
+    public function findPagesByCategoryId($catId, $currentPage = null, $limit = null)
     {
         $select = $this->select();
 
-        //公開しているものしか取得しない
-        $select->where('category_id = ?', $categoryId);
+        $select->from(array('p' => $this->_name));
+
+        //公開している記事のみ取得する
+        $select->where('status = ?', self::STATUS_OPEN);
+
+        //指定されたカテゴリの記事のみ取得する
+        $select->where('category_id = ?', $catId);
+
+        //編集日時の降順にソートする
+        $select->order('update_date DESC');
+
+        //投稿者名取得のためJOIN
+        $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
+        $select->setIntegrityCheck(false);
+
+        if (!is_null($currentPage) && !is_null($limit)) {
+            //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
+            $select->limitPage($currentPage, $limit);
+        }
 
         $result = $this->fetchAll($select)->toArray();
+
         return $result;
+
     }
 
 }

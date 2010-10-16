@@ -63,11 +63,6 @@ class Admin_Model_Category
 		//配列の方が操作しやすいので配列を戻り値にする
 		$result = $searchResult->toArray();
 		
-		//１ページのみ未分類のカテゴリーを追加する
-		if ($page === 1) {
-		  $result[] = array('name' => '未分類',  'id' => false, 'is_check' => false);
-		}
-		
 		//配列の順番が偶数かどうかを設定する
 		foreach ($result as $key => &$value) {
 			if ($key % 2 === 0) {
