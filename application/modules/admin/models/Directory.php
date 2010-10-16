@@ -79,7 +79,7 @@ class Admin_Model_Directory
             'controller' => 'page',
             'params'     => array('category-id' => $categoryId)
         ));
-        $navCategory->addPages($this->_createNavPages($category['id']));
+        $navCategory->addPages($this->_createNavPages($categoryId));
         return $navCategory;
     }
 
