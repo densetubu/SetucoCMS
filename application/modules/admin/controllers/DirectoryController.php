@@ -51,5 +51,6 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
     public function indexAction()
     {
         $this->view->directory = $this->_directory->createDirectoryInfo();
+        Zend_Dojo::enableView($this->view);
     }
 }
