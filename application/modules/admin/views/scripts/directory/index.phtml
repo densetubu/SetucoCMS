@@ -16,6 +16,28 @@
  * @author     charlesvineyard
  */
 ?>
+
+<?php $this->headStyle()->captureStart() ?>
+.category ul {
+    display: none;
+}
+<?php $this->headStyle()->captureEnd() ?>
+
+<?php $this->headScript()->captureStart() ?>
+dojo.require('dojo.NodeList-traverse');
+
+function openCategory(switcher) {
+    dojo.query(switcher.parentNode.parentNode).next().style('display', 'block');
+    switcher.src = '<?php echo $this->baseUrl('/images/directory/icn_category_open.gif') ?>';
+    dojo.query(switcher).attr('onclick', 'closeCategory(this)');
+}
+function closeCategory(switcher) {
+    dojo.query(switcher.parentNode.parentNode).next().style('display', 'none');
+    switcher.src = '<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>';
+    dojo.query(switcher).attr('onclick', 'openCategory(this)');
+}
+<?php $this->headScript()->captureEnd() ?>
+
 <!-- topicPath START -->
 <div id="topicPath">
     <p><a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
@@ -42,8 +64,8 @@
         <li class="category<?php echo $this->cycle(array(' check', ''))->next() ?>">
             <div>
                 <p class="folder">
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" onclick="openCategory(this)" />
                     <a href="<?php echo $category->getHref() ?>">
-                        <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" />
                         <?php echo $category->getLabel() ?>
                     </a>
                 </p>
