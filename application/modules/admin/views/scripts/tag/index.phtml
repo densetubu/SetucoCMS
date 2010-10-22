@@ -16,30 +16,6 @@
  * @author     charlesvineyard
  */
 ?>
-<?php $this->headStyle()->captureStart() ?>
-#tagEdit {
-    display: none;
-}
-<?php $this->headStyle()->captureEnd() ?>
-
-<?php $this->headScript()->captureStart() ?>
-function showTagEdit() {
-    dojo.style('tagView', {display: 'none'});
-    dojo.style('tagEdit', {display: 'inline'});
-    dojo.query('#tagEdit input[name$=tag]')[0].value = dojo.byId('tagView').innerHTML;
-    dojo.query('#tagEdit input[name$=preTag]')[0].value = dojo.byId('tagView').innerHTML;
-    dojo.query('#tagEdit input[name$=id]')[0].value = dojo.byId('hiddenId').value;
-}
-function hideTagEdit() {
-    dojo.style('tagEdit', {display: 'none'});
-    dojo.style('tagView', {display: 'inline'});
-}
-function confirmRedirect(url){
-    if (confirm("本当に削除してよろしいですか？")) {
-        location.href = url;
-    }
-}
-<?php $this->headScript()->captureEnd() ?>
 
 <!-- topicPath START -->
 <div id="topicPath">
@@ -94,21 +70,7 @@ function confirmRedirect(url){
         <tbody>
             <?php foreach($this->tags as $tag): ?>
             <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
-                <td>
-                    <span id="tagView"><?php echo $tag['name'] ?></span>
-                    <span id="tagEdit"><?php echo $this->editTagForm ?></span>
-                    <input type="hidden" name="hiddenId" id="hiddenId" value="<?php echo $tag['id'] ?>" />
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="showTagEdit()">
-                        <img src="<?php echo $this->baseUrl('/images/btn_edit.png') ?>" alt="編集" width="27" height="27" />
-                    </a>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$tag['id']}") ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                    </a>
-                </td>
+                <?php echo $this->partial('tag-row.phtml', array('tag' => $tag, 'editTagForm' => $this->editTagForm))?>
             </tr>
             <?php endforeach ?>
         </tbody>

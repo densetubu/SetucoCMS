@@ -25,6 +25,23 @@
 class Admin_Model_Tag
 {
     /**
+     * タグDAO
+     *
+     * @var Common_Model_DbTable_Tag
+     */
+    private $_tagDao;
+
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_tagDao = new Common_Model_DbTable_Tag();
+    }
+
+    /**
      * 指定したIDのタグ情報を取得する
      *
      * @param  int $id タグID
@@ -33,34 +50,44 @@ class Admin_Model_Tag
      */
     public function load($id)
     {
-        return array('name' => 'タグ1', 'id' => 1);
+        return $this->_tagDao->find($id)->current()->toArray();
     }
 
     /**
-     * すべてのタグ情報タグを取得する
+     * すべてのタグ情報を取得する
      *
-     * @param  string $order
+     * @param  string $order       asc か　desc
+     * @param  int    $pageNumber  ページ番号(オフセットカウント)
+     * @param  int    $limit       一つのページに出力する数(オフセット)
      * @return array タグ情報の一覧
-     * @author saniker10, suzuki-mar
+     * @author saniker10, suzuki-mar, charlesvineyard
      */
-    public function loadAll($order)
+    public function loadAllTags($order, $pageNumber, $limit)
     {
-        $result[] = array('name' => 'タグ1', 'id' => 1);
-        $result[] = array('name' => 'タグ2', 'id' => 2);
-        $result[] = array('name' => '新規タグ', 'id' => 3);
-        return $result;
+        return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
+    }
+
+    /**
+     * すべてのタグを数えます
+     * 
+     * @return int すべてのタグの個数
+     * @author charlesvineyard
+     */
+    public function countAllTags()
+    {
+        return $this->_tagDao->fetchAll()->count();
     }
 
     /**
      * タグを登録する
      *
-     * @param string $tagName タグ名
+     * @param  string $name タグ名
      * @return void
-     * @author  saniker10, suzuki-mar
+     * @author saniker10, suzuki-mar
      */
-    public function regist($tagName)
+    public function regist($name)
     {
-        // TODO
+        $this->_tagDao->insert(array('name' => $name));
     }
 
     /**
@@ -73,7 +100,8 @@ class Admin_Model_Tag
      */
     public function update($id, $name)
     {
-        // TODO
+        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_tagDao->update(array('name' => $name), $where);
     }
 
     /**
@@ -85,6 +113,7 @@ class Admin_Model_Tag
      */
     public function delete($id)
     {
-        // TODO
+        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_tagDao->delete($where);
     }
 }
