@@ -12,8 +12,8 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      string $flashMessage メッセージ
- * @param		Setuco_Form $goalForm 更新目標を編集するフォーム
+ * @param      string      $flashMessage フラッシュメッセージ
+ * @param      Setuco_Form $goalForm     更新目標を編集するフォーム
  * @author     charlesvineyard
  */
 ?>
@@ -45,7 +45,7 @@
         </div>
     <?php endif ?>
 
-    <form id="goalForm" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
+    <form id="<?php echo $this->goalForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
         <dl class="editArea">
             <?php echo $this->goalForm->getElement('goal') ?>
         </dl>

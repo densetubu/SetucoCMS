@@ -12,8 +12,17 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      string $ambition 野望
- * @param      Setuco_Form $ambitionForm 野望を編集するフォーム
+ * @param      string      $ambition               野望
+ * @param      Setuco_Form $ambitionForm           野望を編集するフォーム
+ * @param      string      $updateStatus           更新状況
+ * @param      string      $lastUpdateDate         最終更新日
+ * @param      int         $pastDaysFromLastUpdate 最終更新日からの経過日数
+ * @param      int         $createdPageCount       今月の作成数
+ * @param      string      $diffGoal               今月の作成数と目標作成ページ数との差分
+ * @param      int         $totalPageCount         総ページ数
+ * @param      int         $pastDaysFromOpen       経過日数
+ * @param      string      $openDate               サイト開設日
+ * @param      array       $lastCreatedPages       最近作成したページの一覧
  * @author     charlesvineyard
  */
 ?>
@@ -36,7 +45,7 @@ function hideAmbitionEdit() {
 
 <!-- section"野望" START -->
 <div class="section">
-    <form id="ambitionForm" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">
+    <form id="<?php echo $this->ambitionForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">
         <dl id="designs">
             <dt>
                 <label for="ambition">野望</label>
