@@ -22,13 +22,15 @@
 
 <!-- topicPath START -->
 <div id="topicPath">
-    <p>ファイルの追加・編集・削除</p>
-</div>
-
-<div id="topicPath">
-    <p><a href="../index.php">トップ</a><img src="<?php echo $this->baseUrl('images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
-    <p><a href="/admin/media">ファイルの追加・編集・削除</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
-    <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')'  ?>の編集</p>
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin/media') ?>">ファイルの追加・編集・削除</a>
+        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')' ?>の編集</p>
 </div>
 <!-- topicpath END -->
 
