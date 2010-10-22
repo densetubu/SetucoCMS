@@ -22,17 +22,31 @@
  */
 class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
 {
-	/**
-	 * 	テーブル名
-	 * 
-	 *	@var string
-	 */
-	protected $_name = 'account';
-	
-	/**
-	 *	プライマリキーのカラム名
-	 *
-	 *	@var string
-	 */
-	protected $_primary = 'id';
+    /**
+     * 	テーブル名
+     *
+     *	@var string
+     */
+    protected $_name = 'account';
+
+    /**
+     *	プライマリキーのカラム名
+     *
+     *	@var string
+     */
+    protected $_primary = 'id';
+
+    /**
+     * ログインIDからアカウント1件を取得します。
+     *
+     * @param  string $loginId ログインID
+     * @return array アカウント情報
+     * @author charlesvineyard
+     */
+    public function findByLoginId($loginId)
+    {
+        $select = $this->select()->where('login_id = ?', $loginId);
+        return $this->fetchAll($select)->current()->toArray();
+    }    
+    
 }

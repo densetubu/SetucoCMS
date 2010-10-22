@@ -14,27 +14,20 @@
  * @since      File available since Release 0.1.0
  * @param      string $siteName  サイト名
  * @param      string $siteUrl   サイトURL
- * @param      string $loginName ログイン中のアカウント名
+ * @param      string $nickName  ログイン中のアカウントのニックネーム
  * @author     charlesvineyard
  */
-?>
-<?php
-    $siteName = 'サイトタイトル';  // TODO あとで直す
-    $siteUrl = 'siteurl';       // TODO あとで直す
-    $loginName = 'だれかさん';   // TODO あとで直す
 ?>
 <div>
     <h1>
         <a href="<?php echo $this->baseUrl('/admin') ?>" title="管理画面のトップに戻ります">
-            <img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" 
-                 alt="せつこCMS"  width="152" height="39" />
+            <img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" alt="せつこCMS"  width="152" height="39" />
         </a>
     </h1>
     <h2>
-        <a href="<?php echo $siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
-            <span><?php echo $siteName ?></span>
-            <img src="<?php echo $this->baseUrl('/images/header/btn_watchSite.jpg') ?>" 
-                 alt="サイトを確認する" width="108" height="29" />
+        <a href="<?php echo $this->siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
+            <span><?php echo $this->siteName ?></span>
+            <img src="<?php echo $this->baseUrl('/images/header/btn_watchSite.jpg') ?>" alt="サイトを確認する" width="108" height="29" />
         </a>
     </h2>
 </div>
@@ -42,12 +35,10 @@
 <form action="<?php echo $this->baseUrl('/admin/login/logout') ?>" method="post">
     <ul>
         <li id="utilLogout">
-            <input onMouseOver="this.className='logoutOver'"
-                   onMouseOut="this.className='logoutNormal'"
-                   type="submit" id="sub" name="sub" value="ログアウト" />
+            <input onMouseOver="this.className='logoutOver'" onMouseOut="this.className='logoutNormal'" type="submit" id="sub" name="sub" value="ログアウト" />
         </li>
         <li id="utilAccount">
-            <span><?php echo $loginName ?></span>でログイン中
+            <span><?php echo $this->nickName ?></span>でログイン中
         </li>
     </ul>
 </form>

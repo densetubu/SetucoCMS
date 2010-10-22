@@ -45,6 +45,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     {
         parent::init();
         $this->_navigation = $this->_initNavigation();
+        $this->_initHeader();
     }
 
     /**
@@ -58,6 +59,30 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         $navigationConfig = new Zend_Config_Xml($this->_getModulePath()
                 . 'configs/navigation.xml', 'nav', true);
         return new Zend_Navigation($navigationConfig);
+    }
+
+    /**
+     * ヘッダーに関する初期処理です。
+     *
+     * @return Zend_Navigation
+     * @author charlesvineyard
+     */
+    protected function _initHeader()
+    {
+        $auth = Zend_Auth::getInstance();
+        if (! $auth->hasIdentity()) {
+            return;
+        }
+        
+        $loginId = $auth->getIdentity();
+        $accountService = new Admin_Model_Account();
+        $account = $accountService->load($loginId);
+        $this->view->nickName = $account['nickname'];
+        
+        $siteService = new Admin_Model_Site();
+        $site = $siteService->getSiteInfo();
+        $this->view->siteName = $site['name'];
+        $this->view->siteUrl  = $site['url'];
     }
 
     /**
