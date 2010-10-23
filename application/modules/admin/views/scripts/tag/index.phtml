@@ -97,6 +97,8 @@ function confirmRedirect(url){
                 <td>
                     <span id="tagView"><?php echo $tag['name'] ?></span>
                     <span id="tagEdit"><?php echo $this->editTagForm ?></span>
+                    <!-- TODO 　span の中をパーシャルの呼出にかえる↓のhiddenは無視 -->
+                    
                     <input type="hidden" name="hiddenId" id="hiddenId" value="<?php echo $tag['id'] ?>" />
                 </td>
                 <td>

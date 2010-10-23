@@ -230,7 +230,8 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * 
      * @param Zend_Db_Select カウントするSelectオブジェクト
      * @return int 何件のデータがあるのか
-     * @author suzuki-mar 
+     * @author suzuki-mar
+     * @todo countRows に名前変更で親クラスに定義
      */
     public function fetchCount(Zend_Db_Select $select)
     {

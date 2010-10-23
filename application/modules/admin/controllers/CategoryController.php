@@ -27,7 +27,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * 全アクションで使用するサービスクラス
      * @var Admin_Model_Category
      */
-    private $_service = null;
+    private $_categoryService = null;
 
     /**
      * コントローラーの共通設定をする
