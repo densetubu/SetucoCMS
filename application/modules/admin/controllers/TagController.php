@@ -29,7 +29,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var Admin_Model_Tag
      */
-    private $_tag;
+    private $_tagService;
 
     /**
      * 初期処理
@@ -39,7 +39,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
-        $this->_tag = new Admin_Model_Tag();
+        $this->_tagService = new Admin_Model_Tag();
     }
 
     /**
@@ -53,12 +53,10 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         $this->view->newTagForm = $this->_getParam('newTagForm', $this->_createNewTagForm());
         $this->view->editTagForm = $this->_getParam('editTagForm', $this->_createEditTagForm());
-
-        $allTags = $this->_tag->loadAll($this->_getParam('order'));
-        $this->setPagerForView(count($allTags));
-        $this->view->tags = $allTags;
+        $this->view->tags = $this->_tagService->loadAllTags($this->_getParam('order', 'asc'), $this->_getPage(), self::PAGE_LIMIT);
+        $this->setPagerForView($this->_tagService->countAllTags());
         $this->_visibleFlashMessage();
-
+        $this->view->addScriptPath(APPLICATION_PATH . '/modules/admin/views/partials');
     }
 
     /**
@@ -130,7 +128,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         $cancel = new Zend_Form_Element_Button('cancel', array(
             'id'      => 'cancel',
             'label'   => 'キャンセル',
-            'onclick' => 'hideTagEdit()'
+            'onclick' => 'hideTagEdit(this)'
         ));
         $id = new Zend_Form_Element_Hidden('id', array(
             'id'    => 'id',
@@ -159,7 +157,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('newTagform', $form);
             return $this->_forward('index');
         }
-        $this->_tag->regist($form->getValue('tag'));
+        $this->_tagService->regist($form->getValue('tag'));
         $this->_helper->flashMessenger('新規タグを作成しました。');
         $this->_helper->redirector('index');
     }
@@ -178,7 +176,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('editTagform', $form);
             return $this->_forward('index');
         }
-        $this->_tag->update($form->getValue('id'), $form->getValue('tag'));
+        $this->_tagService->update($form->getValue('id'), $form->getValue('tag'));
         $this->_helper->flashMessenger('「' . $form->getValue('preTag') . '」を「' . $form->getValue('tag') . '」に変更しました。');
         $this->_helper->redirector('index');
     }
@@ -197,8 +195,8 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         if (!$validator->isValid($id)) {
             $this->_helper->redirector('index');
         }
-        $tag = $this->_tag->load($id);
-        $this->_tag->delete($id);
+        $tag = $this->_tagService->load($id);
+        $this->_tagService->delete($id);
         $this->_helper->flashMessenger('「' . $tag['name'] . '」を削除しました。');
         $this->_helper->redirector('index');
     }

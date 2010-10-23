@@ -22,7 +22,6 @@
  */
 class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 {
-
     /**
      * テーブル名
      *
@@ -48,11 +47,11 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 
     /**
      * 新着記事を取得する
-     * 
-     * @param int $limitGetNewPage 何件の記事を取得するのか
+     *
+     * @param int $getPageCount 何件の記事を取得するのか
      * @author suzuki-mar
      */
-    public function findNewPages($limitGetNewPage)
+    public function findNewPages($getPageCount)
     {
         $select = $this->select();
 
@@ -63,7 +62,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->order('update_date DESC');
 
         //指定した件数しか取得しない
-        $select->limit($limitGetNewPage);
+        $select->limit($getPageCount);
 
         $result = $this->fetchAll($select)->toArray();
         return $result;
@@ -101,11 +100,11 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
             $select->limitPage($currentPage, $limit);
         }
-        
+
         $result = $this->fetchAll($select)->toArray();
 
         return $result;
-        
+
     }
 
 }

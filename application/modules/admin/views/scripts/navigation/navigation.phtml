@@ -10,7 +10,7 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @version    
+ * @version
  * @since      File available since Release 0.1.0
  * @param      array $navInfos ナビゲーション情報の配列
  * @author     charlesvineyard
@@ -18,35 +18,29 @@
 ?>
 <!-- gNav START -->
 <ul id="gNav">
-    <?php foreach ($this->navInfos as $navigation) { ?>
-        <li>
-            <?php if ($navigation['id'] == 'index') { ?>
+<?php foreach ($this->navInfos as $navigation): ?>
+    <li>
+    <?php if ($navigation['id'] == 'index'): ?>
+        <a href="<?php echo $navigation['href'] ?>">
+            <img src="<?php echo $navigation['src'] ?>" alt="<?php echo $navigation['label'] ?>" width="150" height="30" />
+        </a>
+    <?php else: ?>
+        <dl>
+            <dt>
                 <a href="<?php echo $navigation['href'] ?>">
-                    <img src="<?php echo $navigation['src'] ?>" 
-                         alt="<?php echo $navigation['label'] ?>" 
-                         width="150" height="30" />
+                    <img src="<?php echo $navigation['src'] ?>" alt="<?php echo $navigation['label'] ?>" width="150" height="30" />
                 </a>
-            <?php } else { ?>
-                <dl>
-                    <dt>
-                        <a href="<?php echo $navigation['href'] ?>">
-                            <img src="<?php echo $navigation['src'] ?>" 
-                                 alt="<?php echo $navigation['label'] ?>" 
-                                 width="150" height="30" />
-                        </a>
-                    </dt>
-                    <?php if (count($navigation['childrenArr'])) { ?>
-                        <?php foreach ($navigation['childrenArr'] as $child) { ?>
-                            <dd<?php if ($child['isActive']) echo ' id="active"' ?>>
-                                <a href="<?php echo $child['href'] ?>">
-                                    <?php echo $child['label'] ?>
-                                </a>
-                            </dd>            
-                        <?php } ?>
-                    <?php } ?>
-                </dl>
-            <?php } ?>    
-        </li>
-    <?php } ?>
+            </dt>
+        <?php if (count($navigation['childrenArr'])): ?>
+            <?php foreach ($navigation['childrenArr'] as $child): ?>
+                <dd <?php echo ($child['isActive']) ? ' id="active"' : '' ?>>
+                    <a href="<?php echo $child['href'] ?>"><?php echo $child['label'] ?></a>
+                </dd>
+            <?php endforeach ?>
+        <?php endif ?>
+        </dl>
+    <?php endif ?>
+    </li>
+<?php endforeach ?>
 </ul>
 <!-- gNav END -->

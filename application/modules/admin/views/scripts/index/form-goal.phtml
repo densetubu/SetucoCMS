@@ -12,14 +12,17 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      string $flashMessage メッセージ
- * @param		Setuco_Form $goalForm 更新目標を編集するフォーム
+ * @param      string      $flashMessage フラッシュメッセージ
+ * @param      Setuco_Form $goalForm     更新目標を編集するフォーム
  * @author     charlesvineyard
  */
 ?>
 <!-- topicPath START -->
 <div id="topicPath">
-    <p><a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a><img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" /></p>
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
     <p>更新目標の編集</p>
 </div>
 <!-- topicpath END -->
@@ -42,7 +45,7 @@
         </div>
     <?php endif ?>
 
-    <form id="goalForm" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
+    <form id="<?php echo $this->goalForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
         <dl class="editArea">
             <?php echo $this->goalForm->getElement('goal') ?>
         </dl>

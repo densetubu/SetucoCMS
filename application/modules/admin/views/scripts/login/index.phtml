@@ -12,23 +12,21 @@
  * @link
  * @version    
  * @since      File available since Release 0.1.0
- * @param      string $errors エラー情報
- * @param		Setuco_Form $form ログインフォーム
+ * @param      string      $errors エラー情報
+ * @param      Setuco_Form $form   ログインフォーム
  * @author     Yuu Yamanaka
  */
 ?>
 <h1>
-    <img src="<?php echo $this->baseUrl('images/loginLogo.gif') ?>" 
-         width="268" height="67" alt="せつこCMS" />        <?php // TODO せつこCMS？ ?>
+    <img src="<?php echo $this->baseUrl('images/loginLogo.gif') ?>" width="268" height="67" alt="せつこCMS" />
 </h1>
 
 <p id="catch">
-    <img src="<?php echo $this->baseUrl('images/catch.gif') ?>" 
-         width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" />
+    <img src="<?php echo $this->baseUrl('images/catch.gif') ?>" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" />
 </p>
 
 <?php if ($this->errors) : ?>
-<?php echo $this->htmlList($this->errors, false, array('class' => 'errors')) ?>
-<?php endif; ?>
+    <?php echo $this->htmlList($this->errors, false, array('class' => 'errors')) ?>
+<?php endif ?>
 <?php echo $this->form ?>
 

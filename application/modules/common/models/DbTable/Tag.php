@@ -24,7 +24,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
 {
     /**
      * テーブル名
-     * 
+     *
      * @var string
      */
     protected $_name = 'tag';
@@ -35,26 +35,25 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_primary = 'id';
-    
-    
+
     /**
      * タグの名前とどれぐらい使用されているかを取得する
      *
      * @return array タグの名前とどれぐらい使用されているかの配列
      * @author suzuki-mar
      */
-    public function findTagCountAndName() 
+    public function findTagCountAndName()
     {
-    	//タグ名とどれぐらい使用されているかをカウントする
+        //タグ名とどれぐらい使用されているかをカウントする
         $select = $this->select()->from(array('t' => $this->_name), array('id', 'name'));
-        
+
         //テーブルを結合する
         $select->join(array('pt' => 'page_tag'), 't.id = pt.tag_id', array('count' => 'COUNT(pt.tag_id)'));
         $select->join(array('p' => 'page'), 'p.id = pt.page_id', array('update_date', 'create_date'));
-        
+
         //結合するときはfalseにしないといけない
         $select->setIntegrityCheck(false);
-        
+
         //公開しているものしか取得しない
         $select->where('p.status = ?', Common_Model_DbTable_Page::STATUS_OPEN);
         //tagごとにカウントする
@@ -62,12 +61,27 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
 
         //カウントが多い順
         $select->order('count DESC');
-        
-        
+
+
         $result = $this->fetchAll($select)->toArray();
-        
+
         return $result;
     }
-    
+
+    /**
+     * 指定した並び順でタグ一覧を取得します。
+     * 
+     * @param string|array $order 並び順
+     * @param int $page 現在のページ番号
+     * @param int $limit 1ページあたり何件のデータを取得するのか
+     * @return array タグ情報の配列
+     * @author charlesvineyard
+     */
+    public function findSortedTags($order, $page, $limit)
+    {
+        $select = $this->select()->limitPage($page, $limit)->order("name {$order}");
+        return $this->fetchAll($select);
+    }
+
 }
 

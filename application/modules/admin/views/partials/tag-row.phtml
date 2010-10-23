@@ -1,0 +1,60 @@
+<?php
+/**
+ * タグの追加・編集・削除画面内のタグ表示部分
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Partial
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      Setuco_Form $editTagForm タグ編集フォーム
+ * @param      array       $tag         タグ情報の配列
+ * @author     charlesvineyard
+ */
+?>
+<?php $this->headStyle()->captureStart() ?>
+#tagEdit {
+    display: none;
+}
+<?php $this->headStyle()->captureEnd() ?>
+
+<?php $this->headScript()->captureStart() ?>
+dojo.require('dojo.NodeList-traverse');
+function showTagEdit(switcher) {
+    dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
+    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'inline');
+}
+function hideTagEdit(switcher) {
+    dojo.query(switcher.parentNode.parentNode).style('display', 'none');
+    dojo.query(switcher.parentNode.parentNode).prev().style('display', 'inline');
+}
+function confirmRedirect(url){
+    if (confirm("本当に削除してよろしいですか？")) {
+        location.href = url;
+    }
+}
+<?php $this->headScript()->captureEnd() ?>
+<?php 
+    $this->editTagForm->getElement('tag')->setValue($this->tag['name']);
+    $this->editTagForm->getElement('id')->setValue($this->tag['id']);
+    $this->editTagForm->getElement('preTag')->setValue($this->tag['name']);
+?>
+<td>
+    <span id="tagView"><?php echo $this->tag['name'] ?></span>
+    <span id="tagEdit"><?php echo $this->editTagForm ?></span>
+</td>
+<td>
+    <a href="javascript:void(0)" onclick="showTagEdit(this)">
+        <img src="<?php echo $this->baseUrl('/images/btn_edit.png') ?>" alt="編集" width="27" height="27" />
+    </a>
+</td>
+<td>
+    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>');">
+        <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+    </a>
+</td>

@@ -25,6 +25,23 @@
 class Admin_Model_Tag
 {
     /**
+     * タグDAO
+     *
+     * @var Common_Model_DbTable_Tag
+     */
+    private $_tagDao;
+
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_tagDao = new Common_Model_DbTable_Tag();
+    }
+
+    /**
      * 指定したIDのタグ情報を取得する
      *
      * @param  int $id タグID
@@ -33,34 +50,66 @@ class Admin_Model_Tag
      */
     public function load($id)
     {
-        return array('name' => 'タグ1', 'id' => 1);
+        return $this->_tagDao->find($id)->current()->toArray();
     }
 
     /**
-     * すべてのタグ情報タグを取得する
+     * 存在するタグ名か調べます
      *
-     * @param  string $order
-     * @return array タグ情報の一覧
-     * @author saniker10, suzuki-mar
+     * @param  string $name タグ名
+     * @return boolean 存在すれば true
+     * @author charlesvineyard
      */
-    public function loadAll($order)
+    public function isExistsTagName($name)
     {
-        $result[] = array('name' => 'タグ1', 'id' => 1);
-        $result[] = array('name' => 'タグ2', 'id' => 2);
-        $result[] = array('name' => '新規タグ', 'id' => 3);
-        return $result;
+        $row = $this->_tagDao->fetchRow(
+            $this->_tagDao->select()
+                 ->where('name = ?', $name)
+            );
+        if (is_null($row)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * すべてのタグ情報を取得する
+     *
+     * @param  string $order       asc か　desc
+     * @param  int    $pageNumber  ページ番号(オフセットカウント)
+     * @param  int    $limit       一つのページに出力する数(オフセット)
+     * @return array タグ情報の一覧
+     * @author saniker10, suzuki-mar, charlesvineyard
+     */
+    public function loadAllTags($order, $pageNumber, $limit)
+    {
+        return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
+    }
+
+    /**
+     * すべてのタグを数えます
+     * 
+     * @return int すべてのタグの個数
+     * @author charlesvineyard
+     */
+    public function countAllTags()
+    {
+        return $this->_tagDao->fetchAll()->count();
     }
 
     /**
      * タグを登録する
      *
-     * @param string $tagName タグ名
+     * @param  string $name タグ名
      * @return void
-     * @author  saniker10, suzuki-mar
+     * @author saniker10, suzuki-mar
      */
-    public function regist($tagName)
+    public function regist($name)
     {
-        // TODO
+        if ($this->isExistsTagName($name)) {
+            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
+        }
+        $this->_tagDao->insert(array('name' => $name));
     }
 
     /**
@@ -73,7 +122,11 @@ class Admin_Model_Tag
      */
     public function update($id, $name)
     {
-        // TODO
+        if ($this->isExistsTagName($name)) {
+            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
+        }
+        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_tagDao->update(array('name' => $name), $where);
     }
 
     /**
@@ -85,6 +138,7 @@ class Admin_Model_Tag
      */
     public function delete($id)
     {
-        // TODO
+        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_tagDao->delete($where);
     }
 }
