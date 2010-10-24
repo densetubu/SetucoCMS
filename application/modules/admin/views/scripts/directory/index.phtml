@@ -68,7 +68,7 @@ function closeCategory(switcher) {
             <div>
             <?php if ($pageCount == 0): ?>
                 <p class="folder">
-                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリーを開く" />
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" />
             <?php else: ?>
                 <p class="folder" onclick="openCategory(this)">
                     <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" />
@@ -77,8 +77,7 @@ function closeCategory(switcher) {
                 </p>
                 <p>
                     <a href="<?php echo $category->getHref() ?>">
-                        <img src="<?php echo $this->baseUrl('/images/directory/icn_page.gif') ?>" 
-                        width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
+                        <img src="<?php echo $this->baseUrl('/images/directory/icn_page.gif') ?>" width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
                     </a>
                 </p>
             </div>
