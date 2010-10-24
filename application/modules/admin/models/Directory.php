@@ -29,14 +29,14 @@ class Admin_Model_Directory
      *
      * @var Common_Model_DbTable_Category
      */
-    private $_category;
+    private $_categoryDao;
 
     /**
      * ページDAO
      *
      * @var Common_Model_DbTable_Page
      */
-    private $_page;
+    private $_pageDao;
 
     /**
      * コンストラクタ
@@ -45,8 +45,8 @@ class Admin_Model_Directory
      */
     public function __construct()
     {
-        $this->_category = new Common_Model_DbTable_Category();
-        $this->_page = new Common_Model_DbTable_Page();
+        $this->_categoryDao = new Common_Model_DbTable_Category();
+        $this->_pageDao = new Common_Model_DbTable_Page();
     }
 
     /**
@@ -58,10 +58,12 @@ class Admin_Model_Directory
     public function createDirectoryInfo()
     {
         $directory = new Zend_Navigation();
-        $categories = $this->_category->findCategoriesByParentId(Setuco_Data_Constant_Category::NO_PARENT_ID);
+        $categories = $this->_categoryDao->findCategoriesByParentId(Setuco_Data_Constant_Category::NO_PARENT_ID);
         foreach ($categories as $category) {
             $directory->addPage($this->_createNavCategory($category['id'], $category['name']));
         }
+        // 未分類を追加
+        $directory->addPage($this->_createNavCategory(null, Setuco_Data_Constant_Category::UNCATEGORIZED_STRING));
         return $directory;
     }
 
@@ -91,7 +93,7 @@ class Admin_Model_Directory
      */
     private function _createNavPages($categoryId)
     {
-        $pages = $this->_page->findPagesByCategoryId($categoryId);
+        $pages = $this->_pageDao->findPagesByCategoryId($categoryId);
         $navPages = array();
         foreach ($pages as $page) {
             $navPages[] = Zend_Navigation_Page::factory(array(

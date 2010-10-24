@@ -87,7 +87,11 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->where('status = ?', self::STATUS_OPEN);
 
         //指定されたカテゴリの記事のみ取得する
-        $select->where('category_id = ?', $catId);
+        if (is_null($catId)) {
+            $select->where('category_id is null');
+        } else {
+            $select->where('category_id = ?', $catId);
+        }
 
         //編集日時の降順にソートする
         $select->order('update_date DESC');
