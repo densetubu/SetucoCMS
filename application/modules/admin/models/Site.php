@@ -25,18 +25,31 @@
 class Admin_Model_Site
 {
     /**
+     * サイトDAO
+     *
+     * @var Common_Model_DbTable_Site
+     */
+    private $_siteDao;
+    
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_siteDao = new Common_Model_DbTable_Site();
+    }
+    
+    /**
      * サイト情報を取得する
      *
      * @return array サイト情報
      */
     public function getSiteInfo()
-	{
-		$result = array('name' => '日本電子専門学校 電設部?',
-						'url' => 'http://design1.chu.jp/testsetuco/penguin/',
-						'comment' => '日本電子専門学校電設部SetucoCMSプロジェクトです。',
-						'keyword' => 'せつこ,俺だ,結婚,してくれ');
-		return $result;
-	}
+    {
+        return $this->_siteDao->fetchRow()->toArray();
+    }
 
     /**
      * サイトの更新状況を取得します。
@@ -81,4 +94,3 @@ class Admin_Model_Site
     }
 
 }
-
