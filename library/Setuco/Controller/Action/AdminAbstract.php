@@ -118,69 +118,6 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 	}
 
 	/**
-	 * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
-	 *
-	 * @return int 現在ページネーターで表示すべきページ番号
-	 * @author akitsukada
-	 */
-	protected function _getPage()
-	{
-		// URLからページ番号の指定を得る ( デフォルトは1 )
-		$currentPage = $this->_getParam('page');
-		if (!is_numeric($currentPage)) {
-			$currentPage = 1;
-		}
-
-		$currentPage = (int) $currentPage;
-		return $currentPage;
-	}
-
-
-
-	/**
-	 * ページャーの設定をして、ビューで使用できるようにする
-	 *
-	 * @param int 最大何件のデータが該当したのか
-	 * @param int[option] 一ページあたりに何件のデータを表示するのか
-	 * @return void
-	 * @author suzuki-mar
-	 */
-	public function setPagerForView($max, $limit = null)
-	{
-
-		//数値ではない場合はfalseを返す (ありなえいので)
-		if(!is_int($max)) {
-			return false;
-		}
-
-		//共通のページャーの設定をする
-		Zend_Paginator::setDefaultScrollingStyle('Sliding');
-		Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
-
-		//現在のページ番号を取得する
-		$page = $this->_getPage();
-
-		//現在のページ番号を渡す
-		$this->view->page = $page;
-
-		//指定がなければ、デフォルトを使用する
-		if (is_null($limit)) {
-			$limit = self::PAGE_LIMIT;
-		}
-
-		//ページャークラスを生成する
-		$paginator = Zend_Paginator::factory($max);
-		$paginator->setCurrentPageNumber($page)->setItemCountPerPage($limit);
-
-		//viewでpaginationControlを使用しなくても、表示できるようにする
-		$paginator->setView($this->view);
-
-		//ページャーをviewで使用できるようにする
-		$this->view->paginator = $paginator;
-
-	}
-
-	/**
 	 * フラッシュメッセージがアクションヘルパーに設定されていればビューにセットして可視化します。
 	 *
 	 * @param  string $paramName ビューにセットする変数名。デフォルトは "flashMessage"。
@@ -194,4 +131,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 			$this->view->$paramName = $flashMessages[0];
 		}
 	}
+	
+
+	
 }

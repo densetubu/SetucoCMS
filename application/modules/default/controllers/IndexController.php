@@ -51,8 +51,9 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
     {
         //新着記事を取得する
         $modelPage = new Default_Model_Page();
-        $this->view->newPages = $modelPage->getNewPages(); 
-        
+        $this->view->newPages = $modelPage->getLastUpdatePages(); 
+        $max = 120;
+        $this->setPagerForView($max);
         
     }
 
