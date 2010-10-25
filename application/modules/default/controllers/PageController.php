@@ -107,7 +107,10 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_service->countPagesByCategory($id), 5);
+        
+        // @todo setPagerForView がadminからcommonに移されるの待ち
+        //$this->setPagerForView($this->_service->countPagesByCategory($id), 5);
+
     }
 
     /**
