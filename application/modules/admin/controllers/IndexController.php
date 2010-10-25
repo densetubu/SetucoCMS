@@ -29,28 +29,28 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var Admin_Model_Ambition
      */
-    private $_ambition;
+    private $_ambitionService;
 
     /**
      * サイトサービス
      *
      * @var Admin_Model_Site
      */
-    private $_site;
+    private $_siteService;
 
     /**
      * 更新目標サービス
      *
      * @var Admin_Model_Goal
      */
-    private $_goal;
+    private $_goalService;
 
     /**
      * ページサービス
      *
      * @var Admin_Model_Page
      */
-    private $_page;
+    private $_pageService;
 
     /**
      * 初期処理
@@ -60,10 +60,10 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
-        $this->_ambition = new Admin_Model_Ambition();
-        $this->_site = new Admin_Model_Site();
-        $this->_goal = new Admin_Model_Goal();
-        $this->_page = new Admin_Model_Page();
+        $this->_ambitionService = new Admin_Model_Ambition();
+        $this->_siteService = new Admin_Model_Site();
+        $this->_goalService = new Admin_Model_Goal();
+        $this->_pageService = new Admin_Model_Page();
     }
 
 
@@ -80,12 +80,12 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
                 $this->_createAmbitionForm());
 
         // 更新状況
-        $updateStatus = $this->_site->getUpdateStatus();
+        $updateStatus = $this->_siteService->getUpdateStatus();
         $updateStatusStr = Setuco_Data_Converter_UpdateStatus::convertUpdateStatus2String($updateStatus);
         $this->view->updateStatus = $updateStatusStr;
 
         // 最終更新日
-        $lastUpdateInfo = $this->_site->getLastUpdateDateWithPastDays();
+        $lastUpdateInfo = $this->_siteService->getLastUpdateDateWithPastDays();
         $this->view->lastUpdateDate = $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd', 'ja_JP');
         $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
 
@@ -93,18 +93,18 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $createdPageCount = $this->_findCreatedPageCount();
         $this->view->createdPageCount = $createdPageCount;
         $this->view->diffGoal = Setuco_Util_String::convertSign2String(
-                $createdPageCount - $this->_goal->loadMonthlyGoalPageCount());
+                $createdPageCount - $this->_goalService->loadMonthlyGoalPageCount());
 
         // 総ページ数
-        $this->view->totalPageCount = $this->_page->countPage();
+        $this->view->totalPageCount = $this->_pageService->countPage();
 
         // サイト開設日
-        $siteDateInfo = $this->_site->getOpenDateWithPastDays();
+        $siteDateInfo = $this->_siteService->getOpenDateWithPastDays();
         $this->view->openDate = $siteDateInfo['openDate']->toString('YYYY/MM/dd', 'ja_JP');
         $this->view->pastDaysFromOpen = $siteDateInfo['pastDays'];
 
         // 最近作ったページ
-        $lastCreatedPages = $this->_page->loadLastCreatedPages(5);
+        $lastCreatedPages = $this->_pageService->loadLastCreatedPages(5);
         $modifiedLastCreatedPages = array();
         foreach ($lastCreatedPages as $page) {
             $page['status'] = Setuco_Data_Converter_PageInfo::convertStatus2String($page['status']);
@@ -122,7 +122,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     private function _findCreatedPageCount()
     {
         $date = new Zend_Date();
-        return $this->_page->countPage(
+        return $this->_pageService->countPage(
                 Setuco_Data_Constant_Page::STATUS_RELEASE,
                 $date->get('YYYY', 'ja_JP'),
                 $date->get('MM', 'ja_JP')
@@ -143,7 +143,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('ambitionForm', $form);
             return $this->_forward('index');
         }
-        $this->_ambition->update($form->getValue('ambition'));
+        $this->_ambitionService->update($form->getValue('ambition'));
 
         $this->_redirect('/admin');
     }
@@ -165,7 +165,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $form->addElement('text', 'ambition', array(
             'id'      => 'ambition',
             'name'    => 'ambition',
-            'value'   => $this->_ambition->load(),
+            'value'   => $this->_ambitionService->load(),
             'filters' => array('StringTrim')
         ));
         $form->addElement('submit', 'submit', array(
@@ -230,9 +230,8 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->setAction($this->_helper->url('update-goal'))
              ->addDecorator('FormElements')
              ->addDecorator('Form');
-             // TODO setDisableLoadDefaultDecorators, clearDecoratorsはSetucoFormのコンストラクタに移したい
         $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
-        $goalValue = $this->_goal->loadMonthlyGoalPageCount();
+        $goalValue = $this->_goalService->loadMonthlyGoalPageCount();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
              ->setRequired(true)
@@ -272,7 +271,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form-goal');
         }
-        $this->_goal->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
+        $this->_goalService->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
         $this->_redirect('/admin/index/form-goal');
     }

@@ -26,29 +26,44 @@
 class Admin_Model_Ambition
 {
     /**
-     * 野望の情報をロードします。
+     * 野望DAO
      *
-     * @return Zend_Navigation
+     * @var Common_Model_DbTable_Ambition
+     */
+    private $_ambitionDao;
+    
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_ambitionDao = new Common_Model_DbTable_Ambition();
+    }
+        
+    /**
+     * 野望をロードします。
+     *
+     * @return string 野望文字列
      * @author charlesvineyard
      */
     public function load()
     {
-        $table = new Common_Model_DbTable_Ambition();
-        $result = $table->find('1')->current()->toArray();
+        $result = $this->_ambitionDao->fetchRow()->toArray();
         return $result['ambition'];
-
     }
 
     /**
      * 野望を更新します。
      *
-     * @param  string 野望
+     * @param  string $ambition 野望
      * @return void
      * @author charlesvineyard
      */
     public function update($ambition)
     {
-        // TODO
+        $this->_ambitionDao->update(array('ambition' => $ambition));
     }
 }
 

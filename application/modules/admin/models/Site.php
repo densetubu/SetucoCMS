@@ -25,18 +25,31 @@
 class Admin_Model_Site
 {
     /**
+     * サイトDAO
+     *
+     * @var Common_Model_DbTable_Site
+     */
+    private $_siteDao;
+    
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_siteDao = new Common_Model_DbTable_Site();
+    }
+    
+    /**
      * サイト情報を取得する
      *
      * @return array サイト情報
      */
     public function getSiteInfo()
-	{
-		$result = array('name' => '日本電子専門学校 電設部?',
-						'url' => 'http://design1.chu.jp/testsetuco/penguin/',
-						'comment' => '日本電子専門学校電設部SetucoCMSプロジェクトです。',
-						'keyword' => 'せつこ,俺だ,結婚,してくれ');
-		return $result;
-	}
+    {
+        return $this->_siteDao->fetchRow()->toArray();
+    }
 
     /**
      * サイトの更新状況を取得します。
@@ -55,7 +68,7 @@ class Admin_Model_Site
      *
      * 最終更新日はページの公開日時が最新のものです。
      *
-     * @return array 最終更新日と経過日数の配列
+     * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列
      * @author charlesvineyard
      */
     public function getLastUpdateDateWithPastDays()
@@ -69,16 +82,35 @@ class Admin_Model_Site
     /**
      * サイト開設日とその日からの経過日数を取得します。
      *
-     * @return array サイト開設日と経過日数の配列
+     * @return array サイト開設日(openDate Zend_Date)と経過日数(pastDays int)の配列
      * @author charlesvineyard
      */
     public function getOpenDateWithPastDays()
     {
+        $site = $this->getSiteInfo();
         $openDate = new Zend_Date();
-        $openDate->setDate('2009-09-01', 'YYYY-MM-dd', 'ja_JP');
+        $openDate->setDate($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('openDate' => $openDate,
-                     'pastDays' => 300);
+                     'pastDays' => $this->_findPastDays($openDate, new Zend_Date()));
+    }
+    
+    /**
+     * ある日付から他の日付までの経過日数を求めます。
+     * 
+     * 引数の日付のHOUR以下の設定は切り捨てて計算します。
+     * $toDateが$fromDateより小さい場合はマイナス値が返ります。
+     * 
+     * @param  Zend_Date $fromDate 経過日数の起算日
+     * @param  Zend_Date $toDate   経過日数の終算日
+     * @return int 経過日数
+     * @author charlesvineyard
+     */
+    private function _findPastDays($fromDate, $toDate)
+    {
+        $fromDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
+        $toDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
+        $pastDaysValue = $toDate->toValue() - $fromDate->toValue();
+        return (int)($pastDaysValue / 60 / 60 / 24);
     }
 
 }
-

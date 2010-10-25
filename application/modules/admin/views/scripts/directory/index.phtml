@@ -27,13 +27,13 @@
 dojo.require('dojo.NodeList-traverse');
 
 function openCategory(switcher) {
-    dojo.query(switcher.parentNode.parentNode).next().style('display', 'block');
-    switcher.src = '<?php echo $this->baseUrl('/images/directory/icn_category_open.gif') ?>';
+    dojo.query(switcher.parentNode).next().style('display', 'block');
+    dojo.query(switcher).children().at(0).attr('src', '<?php echo $this->baseUrl('/images/directory/icn_category_open.gif') ?>');
     dojo.query(switcher).attr('onclick', 'closeCategory(this)');
 }
 function closeCategory(switcher) {
-    dojo.query(switcher.parentNode.parentNode).next().style('display', 'none');
-    switcher.src = '<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>';
+    dojo.query(switcher.parentNode).next().style('display', 'none');
+    dojo.query(switcher).children().at(0).attr('src', '<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>');
     dojo.query(switcher).attr('onclick', 'openCategory(this)');
 }
 <?php $this->headScript()->captureEnd() ?>
@@ -60,15 +60,20 @@ function closeCategory(switcher) {
         </div>
     </div>
     <ul id="directory">
-        <?php
-        foreach ($this->directory as $category):
-            $pageCount = $category->count();
-        ?>
+    <?php
+    foreach ($this->directory as $category):
+        $pageCount = $category->count();
+    ?>
         <li class="category<?php echo $this->cycle(array(' check', ''))->next() ?>">
             <div>
+            <?php if ($pageCount == 0): ?>
                 <p class="folder">
-                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" onclick="openCategory(this)" />
-                    <a href="<?php echo $category->getHref() ?>"><?php echo $category->getLabel() ?></a>
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" />
+            <?php else: ?>
+                <p class="folder" onclick="openCategory(this)">
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" />
+            <?php endif ?>
+                    <?php echo $category->getLabel() ?>
                 </p>
                 <p>
                     <a href="<?php echo $category->getHref() ?>">
@@ -77,11 +82,11 @@ function closeCategory(switcher) {
                 </p>
             </div>
             <ul>
-                <?php
-                $i = 0;
-                foreach ($category as $page):
-                    $i++;
-                ?>
+            <?php
+            $i = 0;
+            foreach ($category as $page):
+                $i++;
+            ?>
                 <li class="page<?php echo ($i == $pageCount) ? ' lastChild' : '' ?>">
                     <div>
                         <p>
@@ -96,10 +101,10 @@ function closeCategory(switcher) {
                         </p>
                     </div>
                 </li>
-                <?php endforeach ?>
+            <?php endforeach ?>
             </ul>
         </li>
-        <?php endforeach ?>
+    <?php endforeach ?>
     </ul>
 </div>
 <!-- section END -->
