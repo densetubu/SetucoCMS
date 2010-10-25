@@ -42,7 +42,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         parent::init();
 
         //全アクションで使用するサービスクラスのインスタンを生成する
-        $this->_service = new Admin_Model_Category();
+        $this->_categoryService = new Admin_Model_Category();
 
         return true;
     }
@@ -65,7 +65,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         //編集するカテゴリーが存在したらそのidを渡す
         if ($isEdit) {
-            if ($this->_service->isExistsId($this->_getParam('id'))) {
+            if ($this->_categoryService->isExistsId($this->_getParam('id'))) {
                 $this->view->editId = $this->_getParam('id');
             }
         }
@@ -78,8 +78,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_service->searchCategories($this->_getParam('sort'), $this->_getPage(), self::PAGE_LIMIT);
-        $max = $this->_service->countCategories();
+        $this->view->categories = $this->_categoryService->searchCategories($this->_getParam('sort'), $this->_getPage(), self::PAGE_LIMIT);
+        $max = $this->_categoryService->countCategories();
         $this->setPagerForView($max);
 
         return true;
@@ -107,7 +107,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if ($validateForm->isValid($this->_getAllParams() ) ) {
             
             //カテゴリーを新規作成する
-            if ($this->_service->registCategory($this->_getAllParams())) {
+            if ($this->_categoryService->registCategory($this->_getAllParams())) {
                 $this->_helper->flashMessenger('カテゴリーの新規作成に成功しました');
                 $isSetFlashMessage = true;
             }
@@ -144,7 +144,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if ($validateForm->isValid($this->_getAllParams()) ) {
             
             //カテゴリーを編集する
-            if ($this->_service->updateCategory($this->_getAllParams(), $this->_getParam('id')) ) {
+            if ($this->_categoryService->updateCategory($this->_getAllParams(), $this->_getParam('id')) ) {
                 $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
                 $isSetFlashMessage = true;
             }
@@ -168,9 +168,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      */
     public function deleteAction()
     {
-        //フォームから値を送信されなかったら、indexに遷移する
-        if (!$this->_request->isPost()) {
-            $this->_redirect('/admin/category/index');
+    	   //フォームからidが送信されなかったら、indexに遷移する
+        if (!$this->_hasParam('id')) {
+        	   $this->_redirect('/admin/category/index');
         }
 
         //数値以外はエラー
@@ -178,7 +178,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if ($validator->isValid($this->_getParam('id'))) {
 
              //カテゴリーを削除する
-            if ($this->_service->deleteCategory($this->_getParam('id')) ) {
+            if ($this->_categoryService->deleteCategory($this->_getParam('id')) ) {
                 $this->_helper->flashMessenger('カテゴリーの削除に成功しました');
                 $isSetFlashMessage = true;
             }
