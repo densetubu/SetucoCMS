@@ -24,6 +24,7 @@
  */
 class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
 {
+
     /**
      * サイト構造サービス
      *
@@ -53,4 +54,5 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         $this->view->directory = $this->_directory->createDirectoryInfo();
         Zend_Dojo::enableView($this->view);
     }
+
 }
