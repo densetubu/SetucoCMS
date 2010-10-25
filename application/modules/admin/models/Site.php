@@ -32,6 +32,13 @@ class Admin_Model_Site
     private $_siteDao;
     
     /**
+     * ページDAO
+     * 
+     * @var Common_Model_DbTable_Page
+     */
+    private $_pageDao;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -39,6 +46,7 @@ class Admin_Model_Site
     public function __construct()
     {
         $this->_siteDao = new Common_Model_DbTable_Site();
+        $this->_pageDao = new Common_Model_DbTable_Page();
     }
     
     /**
@@ -73,10 +81,11 @@ class Admin_Model_Site
      */
     public function getLastUpdateDateWithPastDays()
     {
+        $newPages = $this->_pageDao->findNewPages(1);    // 二次元配列で返ってくる
         $lastUpdateDate = new Zend_Date();
-        $lastUpdateDate->setDate('2010-09-10', 'YYYY-MM-dd', 'ja_JP');
+        $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('lastUpdateDate' => $lastUpdateDate,
-                     'pastDays' => 10);
+                     'pastDays' => $this->_findPastDays($lastUpdateDate, new Zend_Date()));
     }
 
     /**
