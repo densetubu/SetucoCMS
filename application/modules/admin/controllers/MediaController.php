@@ -29,7 +29,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * Mediaサービスクラスのオブジェクト
      * @var Admin_Model_Media
      */
-    private $_service = null;
+    private $_media = null;
 
     /**
      * アップロードできるファイルサイズの最大値（Byte単位）
@@ -82,7 +82,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
-        $this->_service = new Admin_Model_Media($this->_getThumbnailDest(), self::THUMBNAIL_WIDTH);
+        $this->_media = new Admin_Model_Media($this->_getThumbnailDest(), self::THUMBNAIL_WIDTH);
     }
 
     /**
@@ -122,7 +122,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->condition = $condition;
 
         // viewにファイルデータを渡す
-        $this->view->medias = $this->_service->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
+        $this->view->medias = $this->_media->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
 
         // アップロードできる最大サイズをviewに教える
         $this->view->fileSizeMax = self::FILE_SIZE_MAX . 'Byte';
@@ -147,7 +147,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_service->countMedias($condition['type']));
+        $this->setPagerForView($this->_media->countMedias($condition['type']));
 
         // フラッシュメッセージ設定
         $this->_setFlashMessages();
@@ -187,7 +187,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $extType = $fileInfo['extension'];
 
         // 保存時の物理名に使う新しいファイルIDを取得
-        $newId = $this->_service->createNewMediaID();
+        $newId = $this->_media->createNewMediaID();
 
         // ファイルの保存先と物理名（id)を指定
         $adapter->setDestination($this->_getUploadDest());
@@ -201,7 +201,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
             $this->_helper->redirector('index');
         }
-        $this->_service->saveThumnailFromImage($adapter->getFileName());
+        $this->_media->saveThumnailFromImage($adapter->getFileName());
 
         // サービスにファイルの情報を渡してDB登録させる
         $dat = array(
@@ -212,7 +212,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         );
 
         // dbの更新
-        if (!$this->_service->updateMediaInfo($newId, $dat)) {
+        if (!$this->_media->updateMediaInfo($newId, $dat)) {
             $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
             $this->_helper->redirector('index');
         }
@@ -239,7 +239,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         }
 
         // IDに該当するファイル情報をサービスから取得
-        $mediaData = $this->_service->findMediaById($id);
+        $mediaData = $this->_media->findMediaById($id);
 
         // ビューにファイル情報を渡す
         $this->view->mediaData = $mediaData;
@@ -312,7 +312,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $fileInfo = pathinfo($adapter->getFileName());
             $extType = $fileInfo['extension'];             // 拡張子取得
             // 既存のファイルと新ファイルで拡張子が違う場合は既存のファイル情報を取得（新ファイルアップロード後に古いファイルをremoveできるようにするため）
-            $oldFileInfo = $this->_service->findMediaById($id);
+            $oldFileInfo = $this->_media->findMediaById($id);
             if ($extType !== $oldFileInfo['type']) {
                 $isDeleteOldFile = true;
             }
@@ -336,14 +336,14 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             }
 
             // サムネイルを保存
-            $this->_service->saveThumnailFromImage($adapter->getFileName());
+            $this->_media->saveThumnailFromImage($adapter->getFileName());
 
             // 保存するファイル情報、拡張子を取得しておく
             $dat['type'] = $extType;
         }
 
         // DBの更新
-        if (!$this->_service->updateMediaInfo($id, $dat)) {
+        if (!$this->_media->updateMediaInfo($id, $dat)) {
             $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
             $this->_redirect($redirectUrl);
         }
@@ -369,7 +369,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         }
 
         // DBのファイル情報を削除
-        if (!$this->_service->deleteMediaById($id)) {
+        if (!$this->_media->deleteMediaById($id)) {
             $this->_helper->flashMessenger->addMessage('ファイル情報を削除できませんでした。');
             $this->_helper->redirector('index');
         }
