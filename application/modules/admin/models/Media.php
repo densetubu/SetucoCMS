@@ -24,35 +24,34 @@
  */
 class Admin_Model_Media
 {
-    
     /**
      * サムネイル保存ディレクトリのbaseUrl用パス。
      */
     const THUMB_DIR_PATH_FROM_PUBLIC = '/media/thumbnail/';
-    
+
     /**
      * PDFファイル用アイコンファイルのパス
      */
     const ICON_PATH_PDF = '/images/media/icn_pdf.gif';
-    
+
     /**
      * TXTファイル用アイコンファイルのパス
      */
     const ICON_PATH_TXT = '/images/media/icn_txt.gif';
-    
+
     /**
      * メディア表のDAO
      * 
      * @var Common_Model_DbTable_Media
      */
-    private $_dao = null;
+    private $_mediadao = null;
 
     /**
      * サムネイル保存ディレクトリの物理絶対パス
      * @var string
      */
     private $_thumbnailDirectoryFQPath = '';
-    
+
     /**
      * サムネイルの表示幅、標準値
      * @var int
@@ -69,7 +68,7 @@ class Admin_Model_Media
      */
     public function __construct($thumbnailDirectoryFQPath, $thumbnailWidth)
     {
-        $this->_dao = new Common_Model_DbTable_Media();
+        $this->_mediadao = new Common_Model_DbTable_Media();
         $this->_thumbnailDirectoryFQPath = $thumbnailDirectoryFQPath;
         $this->_thumbnailWidth = $thumbnailWidth;
     }
@@ -86,9 +85,9 @@ class Admin_Model_Media
     public function findMedias($condition, $currentPage, $limit)
     {
 
-        $select = $this->_dao->select()
-                             ->order("{$condition['sort']} {$condition['order']}")
-                             ->limitPage($currentPage, $limit);
+        $select = $this->_mediadao->select()
+                        ->order("{$condition['sort']} {$condition['order']}")
+                        ->limitPage($currentPage, $limit);
 
         if ($condition['type'] !== 'all') {
             // 拡張子絞り込み指定されていた場合のみWhere句を設定
@@ -97,9 +96,8 @@ class Admin_Model_Media
             $select->where('type != ?', 'new');
         }
 
-        $medias = $this->_dao->executeSelect($select)->toArray();
-        return $this->_addThumbnailInfo($medias); // サムネイルのパス情報を追加した配列をreturn
-
+        $medias = $this->_mediadao->executeSelect($select)->toArray();
+        return $this->_addThumbnailPathInfo($medias); // サムネイルのパス情報を追加した配列をreturn
     }
 
     /**
@@ -109,16 +107,18 @@ class Admin_Model_Media
      * @return array サムネイル情報付加済みの配列
      * @author akitsukada
      */
-    private function _addThumbnailInfo(array $medias)
+    private function _addThumbnailPathInfo(array $medias)
     {
         $thumbUrl = '';
         foreach ($medias as $cnt => $media) {
             switch ($media['type']) {
                 case 'pdf' :
                     $thumbUrl = self::ICON_PATH_PDF;
+                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth;
                     break;
                 case 'txt' :
                     $thumbUrl = self::ICON_PATH_TXT;
+                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth;
                     break;
                 case 'jpg' : // 以下の３種類の場合はまとめて処理
                 case 'gif' :
@@ -142,14 +142,14 @@ class Admin_Model_Media
      */
     public function saveThumnailFromImage($imagePath)
     {
-        
+
         // アップロードされた画像のオブジェクトを保持
         $originalImage = null;
-        
+
         // 透過色情報
         $transIndex = 0;
         $transColor = null;
-        
+
         // 画像のパスからイメージオブジェクト取得
         $imageInfo = pathinfo($imagePath);
         $ext = $imageInfo['extension'];
@@ -166,47 +166,44 @@ class Admin_Model_Media
             default :
                 return false;  // 拡張子が対応画像(jpg, gif, png)でなければfalse
         }
-        
-        
+
         // 画像のオリジナルサイズ取得
         $originalWidth = imagesx($originalImage);
         $originalHeight = imagesy($originalImage);
-        
+
         // 比率計算＆サムネイルサイズ設定
         $thumbWidth = $this->_thumbnailWidth;
         $rate = $thumbWidth / $originalWidth;
         $thumbHeight = $originalHeight * $rate;
 
+        // もし元画像が十分に小さければそのサイズのままサムネイルにする
         if ($originalWidth < $thumbWidth && $originalHeight < $thumbHeight) {
-            // もし元画像が十分に小さければそのサイズのままサムネイルにする
             $thumbWidth = $originalWidth;
             $thumbHeight = $originalHeight;
         }
-        
+
         // サムネイル用イメージオブジェクト生成
         $thumbImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
-        
+
         // gifかpngの場合は背景の透過処理
-        if ($ext == 'gif' || $ext == 'png') { 
+        if ($ext == 'gif' || $ext == 'png') {
             $transIndex = imagecolortransparent($originalImage);
             $transColor = imagecolorsforindex($originalImage, $transIndex);
             $transIndex = imagecolorallocate($thumbImage, $transColor['red'], $transColor['green'], $transColor['blue']);
             imagefill($thumbImage, 0, 0, $transIndex);
             imagecolortransparent($thumbImage, $transIndex);
         }
-        
-        // 算出したサイズに李サンプリングコピー
-        imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight); 
-        // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
 
-        // サムネイルを保存 
+        // 算出したサイズに李サンプリングコピー
+        imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
+        // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
+        // サムネイルを保存
         $thumbPath = $this->_thumbnailDirectoryFQPath . '/' . $imageInfo['filename'] . '.gif';
         imagegif($thumbImage, $thumbPath . '');
-        
+
         // 画像オブジェクト破棄
         imagedestroy($originalImage);
         imagedestroy($thumbImage);
-        
     }
 
     /**
@@ -219,7 +216,7 @@ class Admin_Model_Media
      */
     public function deleteMediaById($id)
     {
-        return $this->_dao->deleteById($id);
+        return $this->_mediadao->deleteById($id);
     }
 
     /**
@@ -231,8 +228,7 @@ class Admin_Model_Media
      */
     public function countMedias($ext = null)
     {
-        return $this->_dao->count($ext);
-
+        return $this->_mediadao->count($ext);
     }
 
     /**
@@ -247,15 +243,14 @@ class Admin_Model_Media
         // DBにデータを登録
         try {
             //アップデートする条件のwhere句を生成する
-            $where = $this->_dao->getAdapter()->quoteInto("id = ?", $id);
-            $this->_dao->update($mediaInfo, $where);
+            $where = $this->_mediadao->getAdapter()->quoteInto("id = ?", $id);
+            $this->_mediadao->update($mediaInfo, $where);
             $result = true;
         } catch (Zend_Exception $e) {
             $result = false;
         }
         echo $result;
         return $result;
-
     }
 
     /**
@@ -268,9 +263,8 @@ class Admin_Model_Media
     public function findMediaById($id)
     {
 
-        $media = $this->_dao->findById($id);
+        $media = $this->_mediadao->find($id)->toArray();
         return $media[0];
-        
     }
 
     /**
@@ -282,23 +276,17 @@ class Admin_Model_Media
     public function createNewMediaID()
     {
 
-        // 新しいレコードをDBに挿入してIDを得る
-        try {
+        // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
+        $newRec = array(
+            'name' => 'tmpName',
+            'type' => 'new',
+            'create_date' => date("Y-m-d H:i:s", time()),
+            'update_date' => date("Y-m-d H:i:s", time()),
+        );
 
-            // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
-            $newRec = array (
-                'name' => 'tmpName',
-                'type' => 'new',
-                'create_date' => date("Y-m-d H:i:s", time()),
-                'update_date' => date("Y-m-d H:i:s", time()),
-            );
+        $result = $this->_mediadao->insert($newRec);
 
-            $result = $this->_dao->insert($newRec);
-
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
-
-        return $result; 
+        return $result;
     }
+
 }

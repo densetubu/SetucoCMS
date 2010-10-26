@@ -74,6 +74,7 @@
             <?php foreach($this->tags as $tag): ?>
             <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
                 <?php echo $this->partial('tag-row.phtml', array('tag' => $tag, 'editTagForm' => $this->editTagForm))?>
+
             </tr>
             <?php endforeach ?>
         </tbody>

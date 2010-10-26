@@ -51,10 +51,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param int $getPageCount 何件の記事を取得するのか
      * @author suzuki-mar
      */
-    public function findNewPages($getPageCount)
+    public function findLastUpdatePages($getPageCount)
     {
         $select = $this->select();
-
+        
         //公開しているものしか取得しない
         $select->where('status = ?', self::STATUS_OPEN);
 

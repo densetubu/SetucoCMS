@@ -53,14 +53,15 @@ class Default_Model_Page
     }
 
     /**
-     * 最新の記事を取得する
+     * 最新の編集した記事を取得する
      *
      * @param int[option] 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
      */
-    public function getNewPages($limitGetNewPage = self::LIMIT_GET_NEW_PAGE)
+    public function getLastUpdatePages($limitGetNewPage = self::LIMIT_GET_NEW_PAGE)
     {
-        $result = $this->_dao->findNewPages($limitGetNewPage);
+    	//更新順の記事を取得する
+        $result = $this->_dao->findLastUpdatePages($limitGetNewPage);
         
         //からならfalseを返す
         if (empty($result)) {

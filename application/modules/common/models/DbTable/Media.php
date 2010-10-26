@@ -35,19 +35,6 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_primary = 'id';
-
-    /**
-     * media表から指定されたIDのレコードを取得する
-     * 
-     * @param int $id 取得したいファイルのID
-     * @return array 取得したレコードを格納した配列
-     * @author akitsukada
-     */
-    public function findById($id) 
-    {
-        $select = $this->select($this->_name)->where('id = ?', $id);
-        return $this->fetchAll($select)->toArray();
-    }
     
     /**
      * media表から指定されたIDのレコードを削除する

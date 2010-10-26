@@ -31,6 +31,11 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 	protected $_pageTitle = '';
 
 	/**
+     * 一覧ページで、1ページあたり何件のデータを表示するか
+     */
+    const PAGE_LIMIT = 10;
+	
+	/**
 	 * defaultモジュールコントローラの初期処理です。
 	 *
 	 * @return void

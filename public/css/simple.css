@@ -379,6 +379,40 @@ div#navArea div.navList p {
     margin: 15px 0 6px;
 }
 
+
+/*------------------------------------------------------------*/
+/*    pageNav style                                           */
+/*------------------------------------------------------------*/
+div#pageNav {
+    text-align: center;
+}
+div#pageNav ul {
+    margin: 0 auto;
+    zoom: 100%;
+}
+div#pageNav ul li {
+    display:inline;
+    margin-right: 4px;
+    margin-left: 4px;
+}
+div#pageNav ul li.navNumber a ,
+div#pageNav ul li.current span {
+    background-color: #eaeaea;
+    padding: 4px 7px;
+    text-decoration: none;
+    border:solid 1px #dedede;
+}
+div#pageNav ul li.navNumber a:hover {
+    background-color: #f4f4f4;
+    border:solid 1px #dedede;
+}
+div#pageNav ul li.current span {
+    background-color: #dedede;
+    border:solid 1px #d0d0d0;
+    font-weight: bold;
+}
+
+
 /*---------------------------------------------------------------*/
 /*-- tagCloud style ---------------------------------------------*/
 /*---------------------------------------------------------------*/
