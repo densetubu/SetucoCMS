@@ -81,7 +81,7 @@ class Admin_Model_Site
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $newPages = $this->_pageDao->findNewPages(1);    // 二次元配列で返ってくる
+        $newPages = $this->_pageDao->findLastUpdatePages(1);    // 二次元配列で返ってくる
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('lastUpdateDate' => $lastUpdateDate,
