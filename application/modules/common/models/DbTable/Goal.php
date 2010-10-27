@@ -35,5 +35,16 @@ class Common_Model_DbTable_Goal extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_primary = 'id';
+    
+    /**
+     * 設定済みの中で最新の目標を取得します。
+     * 
+     * @return array 目標情報
+     * @author charlesvineyard
+     */
+    public function findLastGoal()
+    {
+        return  $this->fetchRow(null, "target_month desc")->toArray();
+    }
 }
 
