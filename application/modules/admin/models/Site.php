@@ -50,6 +50,35 @@ class Admin_Model_Site
     }
     
     /**
+     * サイトの情報を更新する
+     * 
+     * @param array 更新するデータ
+     * @return boolean 更新に成功したか
+     * @author suzuki-mar
+     */
+    public function updateSite($inputData)
+    {
+    	$updateData = $inputData;
+    	unset($updateData['module'], $updateData['controller'], $updateData['action'], 
+            $updateData['sub']);
+    	
+        //アップデートに失敗したときに例外が発生する
+        try {
+
+        	//データは1件しかないないので、whereはいらない
+            $this->_siteDao->update($updateData, true);
+            $result     = true;
+
+        } catch (Zend_Exception $e) {
+            $result = false;            
+        }
+
+        return $result;
+    }
+    	
+    
+    
+    /**
      * サイト情報を取得する
      *
      * @return array サイト情報
