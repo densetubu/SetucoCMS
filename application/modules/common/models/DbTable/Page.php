@@ -69,6 +69,32 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
+     * 今月作成(公開)したページ数を取得する
+     *
+     * @return int 今月作成(公開)したページ数
+     * @author charlesvineyard
+     */
+    public function countCreatedPagesThisMonth()
+    {
+        $startDate = new Zend_Date();
+        $startDate->set(1, Zend_Date::DAY)
+                  ->set(0, Zend_Date::HOUR)
+                  ->set(0, Zend_Date::MINUTE)
+                  ->set(0, Zend_Date::SECOND);
+        $endDate = new Zend_Date();
+        $endDate->addMonth(1)
+                ->set(1, Zend_Date::DAY)
+                ->set(0, Zend_Date::HOUR)
+                ->set(0, Zend_Date::MINUTE)
+                ->set(0, Zend_Date::SECOND);
+        $select = $this->select()
+                ->where('status = ?', self::STATUS_OPEN)
+                ->where('create_date >= ?', $startDate)
+                ->where('create_date < ?', $endDate);
+        return $this->fetchAll($select)->count();
+    }    
+    
+    /**
      * カテゴリを指定して記事を取得する
      *
      * @param int $catId 取得したいカテゴリのID

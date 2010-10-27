@@ -39,6 +39,13 @@ class Admin_Model_Site
     private $_pageDao;
     
     /**
+     * 目標DAO
+     * 
+     * @var Common_Model_DbTable_Ambition
+     */
+    private $_goalDao;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -47,6 +54,7 @@ class Admin_Model_Site
     {
         $this->_siteDao = new Common_Model_DbTable_Site();
         $this->_pageDao = new Common_Model_DbTable_Page();
+        $this->_goalDao = new Common_Model_DbTable_Goal();
     }
     
     /**
@@ -82,6 +90,7 @@ class Admin_Model_Site
      * サイト情報を取得する
      *
      * @return array サイト情報
+     * @author charlesvineyard
      */
     public function getSiteInfo()
     {
@@ -96,8 +105,71 @@ class Admin_Model_Site
      */
     public function getUpdateStatus()
     {
-        // TODO
-        return Setuco_Data_Constant_UpdateStatus::FIRST;
+        $lastGoal = $this->_goalDao->findLastGoal();
+        if(! $this->_isGoalOfThisMonth($lastGoal)) {
+            $this->_fillGoalUntilNow($lastGoal);
+            $lastGoal = $this->_goalDao->findLastGoal();
+        }
+        $todayGoal = $this->_findTodayGoal($lastGoal['page_count']);
+        $createdPageCount = $this->_pageDao->countCreatedPagesThisMonth();
+        if ($todayGoal == $createdPageCount) {
+            return Setuco_Data_Constant_UpdateStatus::NORMAL;
+        }
+        if ($todayGoal < $createdPageCount) {
+            return Setuco_Data_Constant_UpdateStatus::GOOD;
+        }
+        return Setuco_Data_Constant_UpdateStatus::BAD;
+    }
+    
+    /**
+     * 今日の時点での目標作成ページ数を求めます。
+     * 
+     * @param  int $lastGoalPageCount 今月の目標作成ページ数
+     * @return int 今日の目標作成ページ数
+     * @author charlesvineyard
+     */
+    private function _findTodayGoal($lastGoalPageCount)
+    {
+        $now = new Zend_Date();
+        $daysForOnePage = $now->get(Zend_Date::MONTH_DAYS) / $lastGoalPageCount;       // 1ページ更新するための目標日数 float値
+        $today = $now->get(Zend_Date::DAY_SHORT);
+        return  (int) ($today / $daysForOnePage);
+    }
+    
+    /**
+     * 今月の目標かどうか判断します。
+     * 
+     * @param  array $goal 目標情報
+     * @return boolean 今月の目標なら true
+     * @author charlesvineyard
+     */
+    private function _isGoalOfThisMonth($goal)
+    {
+        $goalDate = new Zend_Date($goal['target_month'], 'YYYY-MM-dd', 'ja_JP');
+        $now = new Zend_Date();
+        if($now->get(Zend_Date::MONTH) != $goalDate->get(Zend_Date::MONTH)) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * 目標が設定されていない月から今月までの目標をすべて設定します。
+     * 
+     * @param  array $lastGoal 設定済みの中で最新の目標情報
+     * @author charlesvineyard
+     */
+    private function _fillGoalUntilNow($lastGoal)
+    {
+        $thisMonth = new Zend_Date();
+        $thisMonth->set(1, Zend_Date::DAY);
+        $thisMonth = $thisMonth->toString('YYYY-MM-dd');
+        for ($fillingGoal = $lastGoal; $fillingGoal['target_month'] !== $thisMonth; $lastGoal = $fillingGoal) {
+            $lastGoalDate = new Zend_Date($lastGoal['target_month'], 'YYYY-MM-dd', 'ja_JP');
+            $fillingGoal['target_month'] = $lastGoalDate->addMonth(1)->toString('YYYY-MM-dd');
+            unset($fillingGoal['id']);
+            $this->_goalDao->insert($fillingGoal);
+        }
     }
 
     /**
