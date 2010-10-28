@@ -149,7 +149,7 @@ class Admin_Model_Site
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('lastUpdateDate' => $lastUpdateDate,
-                     'pastDays' => $this->_findPastDays($lastUpdateDate, new Zend_Date()));
+                     'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
     }
 
     /**
@@ -161,29 +161,9 @@ class Admin_Model_Site
     public function getOpenDateWithPastDays()
     {
         $site = $this->getSiteInfo();
-        $openDate = new Zend_Date();
-        $openDate->setDate($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
+        $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('openDate' => $openDate,
-                     'pastDays' => $this->_findPastDays($openDate, new Zend_Date()));
+                     'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
     }
     
-    /**
-     * ある日付から他の日付までの経過日数を求めます。
-     * 
-     * 引数の日付のHOUR以下の設定は切り捨てて計算します。
-     * $toDateが$fromDateより小さい場合はマイナス値が返ります。
-     * 
-     * @param  Zend_Date $fromDate 経過日数の起算日
-     * @param  Zend_Date $toDate   経過日数の終算日
-     * @return int 経過日数
-     * @author charlesvineyard
-     */
-    private function _findPastDays($fromDate, $toDate)
-    {
-        $fromDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
-        $toDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
-        $pastDaysValue = $toDate->toValue() - $fromDate->toValue();
-        return (int)($pastDaysValue / 60 / 60 / 24);
-    }
-
 }
