@@ -128,8 +128,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_ambitionService->update($form->getValue('ambition'));
-
-        $this->_redirect('/admin');
+        $this->_helper->redirector('index');
     }
 
     /**
@@ -257,7 +256,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         }
         $this->_goalService->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
-        $this->_redirect('/admin/index/form-goal');
+        $this->_helper->redirector('form-goal', 'index');
     }
 
 }
