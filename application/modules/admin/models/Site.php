@@ -39,13 +39,6 @@ class Admin_Model_Site
     private $_pageDao;
     
     /**
-     * 目標DAO
-     * 
-     * @var Common_Model_DbTable_Ambition
-     */
-    private $_goalDao;
-    
-    /**
      * ページサービス
      * 
      * @var Admin_Model_Page
@@ -68,7 +61,6 @@ class Admin_Model_Site
     {
         $this->_siteDao = new Common_Model_DbTable_Site();
         $this->_pageDao = new Common_Model_DbTable_Page();
-        $this->_goalDao = new Common_Model_DbTable_Goal();
         $this->_pageService = new Admin_Model_Page();
         $this->_goalService = new Admin_Model_Goal();
     }
@@ -119,12 +111,8 @@ class Admin_Model_Site
      */
     public function getUpdateStatus()
     {
-        $lastGoal = $this->_goalDao->findLastGoal();
-        if(! $this->_goalService->isGoalOfThisMonth($lastGoal)) {
-            $this->_goalService->fillGoalUntilNow($lastGoal);
-            $lastGoal = $this->_goalDao->findLastGoal();
-        }
-        $todayGoal = $this->_goalService->findTodayGoal($lastGoal['page_count']);
+        $lastGoalPageCount = $this->_goalService->loadGoalPageCountThisMonth();
+        $todayGoal = $this->_goalService->findTodayGoal($lastGoalPageCount);
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;

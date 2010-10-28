@@ -93,7 +93,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
         $this->view->diffGoal = Setuco_Util_String::convertSign2String(
-                $createdPageCount - $this->_goalService->loadMonthlyGoalPageCount());
+                $createdPageCount - $this->_goalService->loadGoalPageCountThisMonth());
 
         // 総ページ数
         $this->view->totalPageCount = $this->_pageService->countPages();
@@ -214,7 +214,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->addDecorator('FormElements')
              ->addDecorator('Form');
         $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
-        $goalValue = $this->_goalService->loadMonthlyGoalPageCount();
+        $goalValue = $this->_goalService->loadGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
              ->setRequired(true)
@@ -254,7 +254,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form-goal');
         }
-        $this->_goalService->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
+        $this->_goalService->updateGoalPageCountThisMonth($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
         $this->_helper->redirector('form-goal', 'index');
     }
