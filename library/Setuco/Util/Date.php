@@ -20,5 +20,22 @@
  */
 class Setuco_Util_Date
 {
-
+    /**
+     * ある日付から他の日付までの経過日数を求めます。
+     * 
+     * 引数の日付のHOUR以下の設定は切り捨てて計算します。
+     * $toDateが$fromDateより小さい場合はマイナス値が返ります。
+     * 
+     * @param  Zend_Date $fromDate 経過日数の起算日
+     * @param  Zend_Date $toDate   経過日数の終算日
+     * @return int 経過日数
+     * @author charlesvineyard
+     */
+    public static function findPastDays($fromDate, $toDate)
+    {
+        $fromDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
+        $toDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
+        $pastDaysValue = $toDate->toValue() - $fromDate->toValue();
+        return (int)($pastDaysValue / 60 / 60 / 24);
+    }
 }

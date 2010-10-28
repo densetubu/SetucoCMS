@@ -90,13 +90,13 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
 
         // 今月の作成（公開）ページ数
-        $createdPageCount = $this->_findCreatedPageCount();
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
         $this->view->diffGoal = Setuco_Util_String::convertSign2String(
-                $createdPageCount - $this->_goalService->loadMonthlyGoalPageCount());
+                $createdPageCount - $this->_goalService->loadGoalPageCountThisMonth());
 
         // 総ページ数
-        $this->view->totalPageCount = $this->_pageService->countPage();
+        $this->view->totalPageCount = $this->_pageService->countPages();
 
         // サイト開設日
         $siteDateInfo = $this->_siteService->getOpenDateWithPastDays();
@@ -114,22 +114,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * 今月作成（公開）したページ数を取得します。
-     *
-     * @return int ページ数
-     * @author charlesvineyard
-     */
-    private function _findCreatedPageCount()
-    {
-        $date = new Zend_Date();
-        return $this->_pageService->countPage(
-                Setuco_Data_Constant_Page::STATUS_RELEASE,
-                $date->get('YYYY', 'ja_JP'),
-                $date->get('MM', 'ja_JP')
-        );
-    }
-
-    /**
      * 野望の更新アクションです
      * indexアクションに遷移します
      *
@@ -144,8 +128,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_ambitionService->update($form->getValue('ambition'));
-
-        $this->_redirect('/admin');
+        $this->_helper->redirector('index');
     }
 
     /**
@@ -191,7 +174,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formGoalAction()
     {
-        $this->view->goalForm = $this->findGoalForm();
+        $this->view->goalForm = $this->_findGoalForm();
         $flashMessages = $this->_helper->flashMessenger->getMessages();
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
@@ -204,7 +187,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form
      * @author charlesvineyard
      */
-    private function findGoalForm()
+    private function _findGoalForm()
     {
         // validation でエラーになったとき
         if ($this->_hasParam('form')) {
@@ -231,7 +214,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->addDecorator('FormElements')
              ->addDecorator('Form');
         $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
-        $goalValue = $this->_goalService->loadMonthlyGoalPageCount();
+        $goalValue = $this->_goalService->loadGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
              ->setRequired(true)
@@ -271,9 +254,9 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form-goal');
         }
-        $this->_goalService->updateMonthlyGoalPageCount($form->getElement('goal')->getValue());
+        $this->_goalService->updateGoalPageCountThisMonth($form->getElement('goal')->getValue());
         $this->_helper->flashMessenger('更新目標を変更しました。');
-        $this->_redirect('/admin/index/form-goal');
+        $this->_helper->redirector('form-goal', 'index');
     }
 
 }

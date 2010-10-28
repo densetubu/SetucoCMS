@@ -24,6 +24,24 @@
  */
 class Admin_Model_Page
 {
+    
+    /**
+     * ページDAO
+     * 
+     * @var Common_Model_DbTable_Page
+     */
+    private $_pageDao;
+    
+    /**
+     * コンストラクター
+     *
+     * @author charlesvineyard
+     */
+    public function __construct()
+    {
+        $this->_pageDao = new Common_Model_DbTable_Page();
+    }
+    
     /**
      * ページをロードします。
      *
@@ -51,6 +69,8 @@ class Admin_Model_Page
 
     /**
      * 最近作成されたページを取得します。
+     *
+     * 取得順序は作成日時の降順です。
      *
      * @param  int $count 取得ページ数
      * @return array ページ情報の配列
@@ -120,17 +140,41 @@ class Admin_Model_Page
      *
      * @param int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
      *                     指定しなければ全ての状態のものを数えます。
-     * @param mixed $year  YYYY形式の年
-     * @param mixed $month MM形式の月
+     * @param int $createYear  YYYY形式の年 指定すればその年に作成したものを数えます
+     * @param int $createMonth MM形式の月 $createYearと一緒に指定すればその月に作成したものを数えます
      * @return int ページ数
      * @author charlesvineyard
      */
-    public function countPage($status = null, $year = null, $month = null)
+    public function countPages($status = null, $createYear = null, $createMonth = null)
     {
-        if ($status == null) {
-            return 50;
+        $startDate = null;
+        $endDate = null;
+        if ($createYear != null) {
+            if ($createMonth != null) {
+                $startDate = new Zend_Date("{$createYear}-{$createMonth}", 'YYYY-M');
+                $endDate = new Zend_Date($createYear . '-' . ($createMonth + 1), 'YYYY-M');
+            } else {
+                $startDate = new Zend_Date($createYear, 'YYYY');
+                $endDate = new Zend_Date($createYear + 1, 'YYYY');
+            }
         }
-        return 5;
+        return $this->_pageDao->countPages($status, $startDate, $endDate);
+    }
+
+    /**
+     * 今月作成(公開)したページ数を取得する
+     *
+     * @return int 今月作成(公開)したページ数
+     * @author charlesvineyard
+     */
+    public function countPagesCreatedThisMonth()
+    {
+        $date = new Zend_Date();
+        return $this->countPages(
+                Setuco_Data_Constant_Page::STATUS_RELEASE,
+                $date->get(Zend_Date::YEAR),
+                $date->get(Zend_Date::MONTH_SHORT)
+        );
     }
 
 }

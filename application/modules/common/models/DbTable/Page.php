@@ -69,6 +69,46 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
+     * 最近作成(公開)したページを取得する
+     *
+     * @param  int $getPageCount 何件の記事を取得するのか
+     * @author charlesvineyard
+     */
+    public function findLastCreatedPages($getPageCount)
+    {
+        $select = $this->select()
+            ->where('status = ?', self::STATUS_OPEN)
+            ->order('create_date DESC')
+            ->limit($getPageCount);
+        return $this->fetchAll($select)->toArray();
+    }    
+    
+    /**
+     * 今月作成(公開)したページ数を取得する
+     *
+     * @param  int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
+     *                     指定しなければ全ての状態のものを数えます。
+     * @param  int $createDateStart  作成日時の最小値(この値自体を含む)
+     * @param  int $createDateEnd    作成日時の最大値(この値自体を含まない)
+     * @return int ページ数
+     * @author charlesvineyard
+     */
+    public function countPages($status = null, $createDateStart = null, $createDateEnd = null)
+    {
+        $select = $this->select();
+        if (! is_null($status)) {
+            $select->where('status = ?', $status);
+        }
+        if (! is_null($createDateStart)) {
+            $select->where('create_date >= ?', $createDateStart);
+        }                
+        if (! is_null($createDateEnd)) {
+            $select->where('create_date < ?', $createDateEnd);
+        }
+        return $this->fetchAll($select)->count();
+    }
+    
+    /**
      * カテゴリを指定して記事を取得する
      *
      * @param int $catId 取得したいカテゴリのID

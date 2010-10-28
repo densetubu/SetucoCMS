@@ -39,6 +39,20 @@ class Admin_Model_Site
     private $_pageDao;
     
     /**
+     * ページサービス
+     * 
+     * @var Admin_Model_Page
+     */
+    private $_pageService;
+    
+    /**
+     * 目標サービス
+     * 
+     * @var Admin_Model_Goal
+     */
+    private $_goalService;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -47,12 +61,42 @@ class Admin_Model_Site
     {
         $this->_siteDao = new Common_Model_DbTable_Site();
         $this->_pageDao = new Common_Model_DbTable_Page();
+        $this->_pageService = new Admin_Model_Page();
+        $this->_goalService = new Admin_Model_Goal();
+    }
+    
+    /**
+     * サイトの情報を更新する
+     * 
+     * @param array 更新するデータ
+     * @return boolean 更新に成功したか
+     * @author suzuki-mar
+     */
+    public function updateSite($inputData)
+    {
+    	$updateData = $inputData;
+    	unset($updateData['module'], $updateData['controller'], $updateData['action'], 
+            $updateData['sub']);
+    	
+        //アップデートに失敗したときに例外が発生する
+        try {
+
+        	//データは1件しかないないので、whereはいらない
+            $this->_siteDao->update($updateData, true);
+            $result     = true;
+
+        } catch (Zend_Exception $e) {
+            $result = false;            
+        }
+
+        return $result;
     }
     
     /**
      * サイト情報を取得する
      *
      * @return array サイト情報
+     * @author charlesvineyard
      */
     public function getSiteInfo()
     {
@@ -67,8 +111,16 @@ class Admin_Model_Site
      */
     public function getUpdateStatus()
     {
-        // TODO
-        return Setuco_Data_Constant_UpdateStatus::FIRST;
+        $lastGoalPageCount = $this->_goalService->loadGoalPageCountThisMonth();
+        $todayGoal = $this->_goalService->findTodayGoal($lastGoalPageCount);
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
+        if ($todayGoal == $createdPageCount) {
+            return Setuco_Data_Constant_UpdateStatus::NORMAL;
+        }
+        if ($todayGoal < $createdPageCount) {
+            return Setuco_Data_Constant_UpdateStatus::GOOD;
+        }
+        return Setuco_Data_Constant_UpdateStatus::BAD;
     }
 
     /**
@@ -81,11 +133,11 @@ class Admin_Model_Site
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $newPages = $this->_pageDao->findLastUpdatePages(1);    // 二次元配列で返ってくる
+        $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('lastUpdateDate' => $lastUpdateDate,
-                     'pastDays' => $this->_findPastDays($lastUpdateDate, new Zend_Date()));
+                     'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
     }
 
     /**
@@ -97,29 +149,9 @@ class Admin_Model_Site
     public function getOpenDateWithPastDays()
     {
         $site = $this->getSiteInfo();
-        $openDate = new Zend_Date();
-        $openDate->setDate($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
+        $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('openDate' => $openDate,
-                     'pastDays' => $this->_findPastDays($openDate, new Zend_Date()));
+                     'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
     }
     
-    /**
-     * ある日付から他の日付までの経過日数を求めます。
-     * 
-     * 引数の日付のHOUR以下の設定は切り捨てて計算します。
-     * $toDateが$fromDateより小さい場合はマイナス値が返ります。
-     * 
-     * @param  Zend_Date $fromDate 経過日数の起算日
-     * @param  Zend_Date $toDate   経過日数の終算日
-     * @return int 経過日数
-     * @author charlesvineyard
-     */
-    private function _findPastDays($fromDate, $toDate)
-    {
-        $fromDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
-        $toDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
-        $pastDaysValue = $toDate->toValue() - $fromDate->toValue();
-        return (int)($pastDaysValue / 60 / 60 / 24);
-    }
-
 }
