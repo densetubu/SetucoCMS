@@ -175,7 +175,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formGoalAction()
     {
-        $this->view->goalForm = $this->findGoalForm();
+        $this->view->goalForm = $this->_findGoalForm();
         $flashMessages = $this->_helper->flashMessenger->getMessages();
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
@@ -188,7 +188,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form
      * @author charlesvineyard
      */
-    private function findGoalForm()
+    private function _findGoalForm()
     {
         // validation でエラーになったとき
         if ($this->_hasParam('form')) {
