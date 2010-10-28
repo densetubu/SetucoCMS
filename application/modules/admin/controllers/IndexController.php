@@ -90,13 +90,13 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
 
         // 今月の作成（公開）ページ数
-        $createdPageCount = $this->_findCreatedPageCount();
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
         $this->view->diffGoal = Setuco_Util_String::convertSign2String(
                 $createdPageCount - $this->_goalService->loadMonthlyGoalPageCount());
 
         // 総ページ数
-        $this->view->totalPageCount = $this->_pageService->countPage();
+        $this->view->totalPageCount = $this->_pageService->countPages();
 
         // サイト開設日
         $siteDateInfo = $this->_siteService->getOpenDateWithPastDays();
@@ -111,22 +111,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $modifiedLastCreatedPages[] = $page;
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
-    }
-
-    /**
-     * 今月作成（公開）したページ数を取得します。
-     *
-     * @return int ページ数
-     * @author charlesvineyard
-     */
-    private function _findCreatedPageCount()
-    {
-        $date = new Zend_Date();
-        return $this->_pageService->countPage(
-                Setuco_Data_Constant_Page::STATUS_RELEASE,
-                $date->get('YYYY', 'ja_JP'),
-                $date->get('MM', 'ja_JP')
-        );
     }
 
     /**

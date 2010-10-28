@@ -69,30 +69,44 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 今月作成(公開)したページ数を取得する
+     * 最近作成(公開)したページを取得する
      *
-     * @return int 今月作成(公開)したページ数
+     * @param  int $getPageCount 何件の記事を取得するのか
      * @author charlesvineyard
      */
-    public function countCreatedPagesThisMonth()
+    public function findLastCreatedPages($getPageCount)
     {
-        $startDate = new Zend_Date();
-        $startDate->set(1, Zend_Date::DAY)
-                  ->set(0, Zend_Date::HOUR)
-                  ->set(0, Zend_Date::MINUTE)
-                  ->set(0, Zend_Date::SECOND);
-        $endDate = new Zend_Date();
-        $endDate->addMonth(1)
-                ->set(1, Zend_Date::DAY)
-                ->set(0, Zend_Date::HOUR)
-                ->set(0, Zend_Date::MINUTE)
-                ->set(0, Zend_Date::SECOND);
         $select = $this->select()
-                ->where('status = ?', self::STATUS_OPEN)
-                ->where('create_date >= ?', $startDate)
-                ->where('create_date < ?', $endDate);
-        return $this->fetchAll($select)->count();
+            ->where('status = ?', self::STATUS_OPEN)
+            ->order('create_date DESC')
+            ->limit($getPageCount);
+        return $this->fetchAll($select)->toArray();
     }    
+    
+    /**
+     * 今月作成(公開)したページ数を取得する
+     *
+     * @param  int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
+     *                     指定しなければ全ての状態のものを数えます。
+     * @param  int $createDateStart  作成日時の最小値(この値自体を含む)
+     * @param  int $createDateEnd    作成日時の最大値(この値自体を含まない)
+     * @return int ページ数
+     * @author charlesvineyard
+     */
+    public function countPages($status = null, $createDateStart = null, $createDateEnd = null)
+    {
+        $select = $this->select();
+        if (! is_null($status)) {
+            $select->where('status = ?', $status);
+        }
+        if (! is_null($createDateStart)) {
+            $select->where('create_date >= ?', $createDateStart);
+        }                
+        if (! is_null($createDateEnd)) {
+            $select->where('create_date < ?', $createDateEnd);
+        }
+        return $this->fetchAll($select)->count();
+    }
     
     /**
      * カテゴリを指定して記事を取得する

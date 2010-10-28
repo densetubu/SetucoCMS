@@ -46,6 +46,13 @@ class Admin_Model_Site
     private $_goalDao;
     
     /**
+     * ページサービス
+     * 
+     * @var Admin_Model_Page
+     */
+    private $_pageService;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -55,6 +62,7 @@ class Admin_Model_Site
         $this->_siteDao = new Common_Model_DbTable_Site();
         $this->_pageDao = new Common_Model_DbTable_Page();
         $this->_goalDao = new Common_Model_DbTable_Goal();
+        $this->_pageService = new Admin_Model_Page();
     }
     
     /**
@@ -82,7 +90,7 @@ class Admin_Model_Site
             $lastGoal = $this->_goalDao->findLastGoal();
         }
         $todayGoal = $this->_findTodayGoal($lastGoal['page_count']);
-        $createdPageCount = $this->_pageDao->countCreatedPagesThisMonth();
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;
         }
@@ -153,7 +161,7 @@ class Admin_Model_Site
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $newPages = $this->_pageDao->findLastUpdatePages(1);    // 二次元配列で返ってくる
+        $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
         return array('lastUpdateDate' => $lastUpdateDate,
