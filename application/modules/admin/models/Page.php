@@ -78,61 +78,8 @@ class Admin_Model_Page
      */
     public function loadLastCreatedPages($count)
     {
-        // TODO loadPages()が確定したらそれを呼ぶ
-        return array(
-            array('id'          => 1,
-                  'title'       => 'ページ1',
-                  'contents'    => 'ぺーじの内容だよ1',
-                  'outline'     => 'ページの概要1',
-                  'createDate' => '2011/09/05 12:00:00',
-                  'accountId'  => '1',
-                  'status'      => '1',
-                  'categoryId' => '1',
-                  'updateDate' => '2011/09/01 00:00:00'
-            ),
-            array('id'          => 2,
-                  'title'       => 'ページ2',
-                  'contents'    => 'ぺーじの内容だよ2',
-                  'outline'     => 'ページの概要2',
-                  'createDate' => '2011/09/05 10:00:00',
-                  'accountId'  => '1',
-                  'status'      => '1',
-                  'categoryId' => '2',
-                  'updateDate' => '2011/09/02 00:00:00'
-            ),
-            array('id'          => 3,
-                  'title'       => 'ページ3',
-                  'contents'    => 'ぺーじの内容だよ3',
-                  'outline'     => 'ページの概要3',
-                  'createDate' => '2011/09/05 09:00:00',
-                  'accountId'  => '1',
-                  'status'      => '0',
-                  'categoryId' => '3',
-                  'updateDate' => '2011/09/03 00:00:00'
-            ),
-
-            array('id'          => 4,
-                  'title'       => 'ページ4',
-                  'contents'    => 'ぺーじの内容だよ4',
-                  'outline'     => 'ページの概要4',
-                  'createDate' => '2011/09/05 08:00:00',
-                  'accountId'  => '1',
-                  'status'      => '1',
-                  'categoryId' => '4',
-                  'updateDate' => '2011/09/04 00:00:00'
-            ),
-
-            array('id'          => 5,
-                  'title'       => 'ページ5',
-                  'contents'    => 'ぺーじの内容だよ5',
-                  'outline'     => 'ページの概要5',
-                  'createDate' => '2011/09/05 07:00:00',
-                  'accountId'  => '1',
-                  'status'      => '0',
-                  'categoryId' => '5',
-                  'updateDate' => '2011/09/05 00:00:00'
-            )
-        );
+        return $this->_pageDao->findLastCreatedPages($count, true, true);
+        
     }
 
     /**

@@ -121,16 +121,14 @@ function hideAmbitionEdit() {
     </div>
     <?php foreach ($this->lastCreatedPages as $page): ?>
         <dl class="contentsList<?php echo $this->cycle(array('K', 'G'))->next() ?>">
-            <dt class="pageDate"><?php echo $page['createDate'] ?></dt>
+            <dt class="pageDate"><?php echo $page['create_date'] ?></dt>
             <dd class="pageTitle">
                 <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
             </dd>
             <dt>カテゴリー</dt>
-                <!-- TODO categoryIdじゃなくてカテゴリー名にする -->
-            <dd><?php echo ($page['categoryId'])?></dd>
+            <dd><?php echo ($page['name'])?></dd>
             <dt>制作者</dt>
-                <!-- TODO accountIdじゃなくてニックネームにする -->
-            <dd><?php echo ($page['accountId'])?></dd>
+            <dd><?php echo ($page['nickname'])?></dd>
             <dt>公開状態</dt>
             <dd><?php echo ($page['status'])?></dd>
         </dl>
