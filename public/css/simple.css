@@ -384,6 +384,7 @@ div#navArea div.navList p {
 /*    pageNav style                                           */
 /*------------------------------------------------------------*/
 div#pageNav {
+    margin-top: 20px;
     text-align: center;
 }
 div#pageNav ul {
