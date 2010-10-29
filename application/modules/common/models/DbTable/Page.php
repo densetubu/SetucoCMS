@@ -94,7 +94,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }    
     
     /**
-     * 今月作成(公開)したページ数を取得する
+     * ページを数えます。
      *
      * @param  int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
      *                     指定しなければ全ての状態のものを数えます。
