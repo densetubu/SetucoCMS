@@ -44,16 +44,14 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
      * トップページのアクションです
      *
      * @return void
-     * @author 
-     * @todo 内容を実装する　現在はスケルトン
+     * @author suzuki-mar
      */
     public function indexAction()
     {
         //新着記事を取得する
         $modelPage = new Default_Model_Page();
         $this->view->newPages = $modelPage->getLastUpdatePages(); 
-        $max = 120;
-        $this->setPagerForView($max);
+        
         
     }
 
