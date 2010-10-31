@@ -171,6 +171,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // バリデートはzend_formで行う
         $form = $this->_createUploadForm();
         if (!$form->isValid($this->_getAllParams())) {
+            $msgs = $form->getMessages();
             foreach ($msgs[$form->getName()] as $msgCode => $msg) {
                 $this->_helper->flashMessenger->addMessage($msg);
             }

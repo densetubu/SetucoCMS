@@ -69,7 +69,7 @@ function addElement() {
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
-              <p><a href="#" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
+              <p><a href="javascript:void(0)" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
               <p><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></p>
               <p><?php echo $this->uploadForm->getElement('up') ?></p>
           <?php else: ?>
@@ -133,7 +133,7 @@ function addElement() {
                     </a>
                 </td>
                 <td>
-                    <a href="#" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
+                    <a href="javascript:void(0)" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
                         <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>

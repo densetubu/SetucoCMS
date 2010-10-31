@@ -1,1 +1,21 @@
-tag.phtml
+<!-- entry START -->
+<div class="entry">
+    <div class="entryHead">
+        <h2><a>「<?php echo $this->tag['name'] ?>」の検索結果（<?php echo $this->pageCount ?>件）</a></h2>
+    </div>
+    <table>
+        <colgroup width="28%"></colgroup>
+        <colgroup width="62%"></colgroup>
+        <?php foreach ($this->entries as $cnt => $entry) : ?>
+        <tr>
+            <td>
+                <a href="<?php echo $this->baseUrl('page/show/id/' . $entry['id']) ?>"><?php echo $entry['title'] ?></a>
+            </td>
+            <td><?php echo mb_substr($entry['contents'],0,15,'UTF-8') ?>...　（<?php echo date('Y年m月d日', strtotime($entry['update_date'])) ?>）</td>
+        </tr>
+        <?php endforeach ?>
+    </table>
+    <?php echo $this->paginator ?>
+    <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
+</div>
+<!-- entry END -->

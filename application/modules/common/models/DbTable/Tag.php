@@ -83,5 +83,18 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
+    public function findTagByPageId($pageId)
+    {
+        $select = $this->select()->from(array('t' => $this->_name));
+
+        $select->join(array('pt' => 'page_tag'), 't.id = pt.tag_id');
+        $select->setIntegrityCheck(false);
+
+        $select->where('pt.page_id = ?', $pageId);
+
+        return $this->fetchAll($select);
+
+    }
+
 }
 

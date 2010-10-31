@@ -3,38 +3,34 @@
 
     <div class="entryHead">
 
-        <h2><span>「キーワード」の検索結果（24件）</span></h2>
+        <h2><span>「<?php echo $this->keyword ?>」の検索結果（<?php echo $this->resultCount ?>件）</span></h2>
 
     </div>
-
 
     <table>
         <colgroup width="28%"></colgroup>
         <colgroup width="62%"></colgroup>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
-        <tr><td><a href=<?php echo $this->baseUrl('page/show/id/1') ?>>「技能五輪全国大会レポート」</a></td><td>勉強会プロジェクトでは、Webデザ…　（2009年10月24日）</td></tr>
+        <?php $id = null ?>
+        <?php foreach ($this->searchResult as $cnt => $entry): ?>
+        <?php 
+        if (is_null($id)) {
+            $id = $entry['id'];
+        }  else {
+            if ($id == $entry['id']) {
+                continue; // 一つ前と同エントリだったら表示しないで次のループを続ける
+            } else {
+                $id = $entry['id'];
+            }
+        }
+        ?>
+        <tr>
+            <td><a href="<?php echo $this->baseUrl('page/show/id/1') ?>"><?php echo $entry['title'] ?></a></td>
+            <td><?php echo mb_substr($entry['contents'],0,15,'UTF-8') ?>... （<?php echo date('Y年m月d日', strtotime($entry['update_date'])) ?>）</td>
+        </tr>
+        <?php endforeach ?>
     </table>
 
-
-    <div id="pageNav">
-        <ul>
-            <li><a href="#">前へ</a></li>
-            <li class="navNumber"><a href="#">1</a></li>
-            <li class="navNumber current"><span>2</span></li>
-            <li class="navNumber"><a href="#">3</a></li>
-            <li class="navNumber"><a href="#">4</a></li>
-            <li class="navNumber"><a href="#">5</a></li>
-            <li><a href="#">次へ</a></li>
-        </ul>
-    </div>
+    <?php echo $this->paginator ?>
 
     <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
 

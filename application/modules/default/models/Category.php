@@ -85,14 +85,15 @@ class Default_Model_Category
 
     /**
      * カテゴリーIDを指定してカテゴリー情報を取得する
+     * （DbTableクラスのfindメソッドへの委譲）
      *
      * @param int $id 取得したいページのカテゴリーID
      * @return array|boolean 該当のデータが存在すれば配列データ、存在しなければfalseを返す
      * @author akitsukada
      */
-    public function getCategoryById($id)
+    public function find($id)
     {
-        return $this->_dao->findById($id);
+        return $this->_dao->find($id)->toArray();
     }
 }
 

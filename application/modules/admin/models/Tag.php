@@ -83,7 +83,7 @@ class Admin_Model_Tag
      */
     public function loadAllTags($order, $pageNumber, $limit)
     {
-        return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
+            return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
     }
 
     /**

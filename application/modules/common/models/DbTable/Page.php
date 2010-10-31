@@ -123,6 +123,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 
         $select->from(array('p' => $this->_name));
 
+        //投稿者名取得のためJOIN
+        $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
+        $select->setIntegrityCheck(false);
+
         //公開している記事のみ取得する
         $select->where('status = ?', self::STATUS_OPEN);
 
@@ -136,19 +140,100 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         //編集日時の降順にソートする
         $select->order('update_date DESC');
 
-        //投稿者名取得のためJOIN
-        $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
+        if (!is_null($currentPage) && !is_null($limit)) {
+            //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
+            $select->limitPage($currentPage, $limit);
+        }
+
+        return $this->fetchAll($select);
+
+    }
+
+    /**
+     * タグIDを指定して記事を取得する（ページネータ対応）
+     *
+     * @param int $tagId 取得したいタグのID
+     * @param int $currentPage ページネータで何ページ目を表示するか。省略すると
+     */
+    public function findPagesByTagId($tagId, $currentPage = null, $limit = null)
+    {
+        $select = $this->select();
+
+        $select->from(array(
+            'p'  => $this->_name
+        ));
+
+
+        //編集日時の降順にソートする
+        $select->order('p.update_date DESC');
+
+        $select->join(array('pt' => 'page_tag'), 'pt.page_id = p.id');
+
         $select->setIntegrityCheck(false);
+
+        $select->where('p.status = ?', self::STATUS_OPEN);
+        $select->where('pt.tag_id = ?', $tagId);
 
         if (!is_null($currentPage) && !is_null($limit)) {
             //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
             $select->limitPage($currentPage, $limit);
         }
 
-        $result = $this->fetchAll($select)->toArray();
+        return $this->fetchAll($select);
+        
+    }
 
-        return $result;
+    public function searchPage($keyword, $currentPage, $limit)
+    {
+        $select = $this->select();
+        $select->from(
+            array('p' => $this->_name),
+            array(
+                'id' => 'id',
+                'title' => 'title',
+                'contents',
+                'update_date'
+            )
+        );
 
+        $select->order('p.update_date DESC');
+        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
+        $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
+        $select->join(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
+        $select->setIntegrityCheck(false);
+
+        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+
+        $select->limitPage($currentPage, $limit);
+
+        return $this->fetchAll($select);
+
+    }
+
+    public function countPagesByKeyword($keyword)
+    {
+        $select = $this->select();
+        $select->from(
+            array('p' => $this->_name),
+            array('page_count' => 'COUNT(DISTINCT p.id)')
+        );
+        
+        $select->order('p.update_date DESC');
+        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', null);
+        $select->join(array('c' => 'category'), 'c.id = p.category_id', null);
+        $select->join(array('t' => 'tag'), 't.id = pt.tag_id', null);
+        $select->setIntegrityCheck(false);
+
+        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
+        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+
+        return $this->fetchAll($select);
+        
     }
 
 }

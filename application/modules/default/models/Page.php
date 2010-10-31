@@ -30,7 +30,7 @@ class Default_Model_Page
      * 
      * @var Zend_Db_Table
      */
-    protected $_dao = null;
+    protected $_pageDao = null;
 
     /**
      * 新着記事表示用に標準で何件取得するか
@@ -49,7 +49,7 @@ class Default_Model_Page
      */
     public function __construct()
     {
-        $this->_dao = new Common_Model_DbTable_Page();
+        $this->_pageDao = new Common_Model_DbTable_Page();
     }
 
     /**
@@ -61,7 +61,7 @@ class Default_Model_Page
     public function getLastUpdatePages($limitGetNewPage = self::LIMIT_GET_NEW_PAGE)
     {
     	//更新順の記事を取得する
-        $result = $this->_dao->findLastUpdatePages($limitGetNewPage);
+        $result = $this->_pageDao->findLastUpdatePages($limitGetNewPage);
         
         //からならfalseを返す
         if (empty($result)) {
@@ -78,19 +78,54 @@ class Default_Model_Page
      * @author akitsukada
      * @return
      */
-    public function getPagesByCategory($catId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
+    public function getPagesByCategoryId($catId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
     {
-        return $this->_dao->findPagesByCategoryId($catId, $currentPage, $limit);
+        return $this->_pageDao->findPagesByCategoryId($catId, $currentPage, $limit);
     }
 
     /**
      * 指定したカテゴリに属するページの数を取得する
      */
-    public function countPagesByCategory($catId)
+    public function countPagesByCategoryId($catId)
     {
-        return count($this->_dao->findPagesByCategoryId($catId));
+        return count($this->_pageDao->findPagesByCategoryId($catId));
     }
 
+    /**
+     * タグを指定して記事を取得する
+     *
+     * @param int $tagId 取得したいタグID
+     * @author akitsukada
+     * @return 
+     */
+    public function getPagesByTagId($tagId, $currentPage, $limit = self::LIMIT_GET_NEW_PAGE)
+    {
+        return $this->_pageDao->findPagesByTagId($tagId, $currentPage, $limit)->toArray();
+    }
 
+    /**
+     * 指定したカテゴリに属するページの数を取得する
+     */
+    public function countPagesByTagId($tagId)
+    {
+        return count($this->_pageDao->findPagesByTagId($tagId));
+    }
+
+    public function find($id)
+    {
+        return $this->_pageDao->find($id)->toArray();
+    }
+
+    public function search($keyword, $currentPage = 1, $limit = self::LIMIT_GET_NEW_PAGE)
+    {
+        return $this->_pageDao->searchPage($keyword, $currentPage, $limit)->toArray();
+        
+    }
+    public function countPagesByKeyword($keyword)
+    {
+        $queryResult = $this->_pageDao->countPagesByKeyword($keyword)->toArray();
+        $count = $queryResult[0]['page_count'];
+        return (int)$count;
+    }
 }
 

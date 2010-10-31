@@ -37,7 +37,7 @@ class Default_Model_Tag
 	 * 
 	 * @var Zend_Db_Table
 	 */
-	protected $_dao = null;
+	protected $_tagDao = null;
 	
 	/**
 	 * クラス設定の初期設定をする
@@ -47,8 +47,7 @@ class Default_Model_Tag
 	 */
 	public function __construct()
 	{
-		$this->_dao = new Common_Model_DbTable_Tag();
-
+		$this->_tagDao = new Common_Model_DbTable_Tag();
 	}
 
 	/**
@@ -61,7 +60,7 @@ class Default_Model_Tag
 	{
 		
         //nameとタグの使用数のカウントを取得する
-		$tags  = $this->_dao->findTagCountAndName();
+		$tags  = $this->_tagDao->findTagCountAndName();
 		
 		
 		//からならfalseを返す
@@ -114,5 +113,21 @@ class Default_Model_Tag
 		return $result;
 
 	}
+
+        /**
+         *
+         */
+        public function find($tagId)
+        {
+            return $this->_tagDao->find($tagId)->toArray();
+        }
+
+        /**
+         *
+         */
+        public function getTagsByPageId($pageId)
+        {
+            return $this->_tagDao->findTagByPageId($pageId)->toArray();
+        }
 
 }

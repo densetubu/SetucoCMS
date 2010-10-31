@@ -37,7 +37,11 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     /**
      * サービスクラス
      */
-    private $_service = null;
+    private $_pageService = null;
+
+    private $_categoryService = null;
+    private $_tagService = null;
+
 
     /**
      * アクションの共通設定
@@ -50,7 +54,9 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         //モジュール間の共通の設定を実行
         parent::init();
 
-        $this->_service = new Default_Model_Page;
+        $this->_pageService = new Default_Model_Page();
+        $this->_categoryService = new Default_Model_Category();
+        $this->_tagService = new Default_Model_Tag();
     }
 
     /**
@@ -75,6 +81,19 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     public function searchAction()
     {
 
+        $keyword = $this->_getParam('query');
+        $currentPage = $this->_getPage();
+        $searchResult = $this->_pageService->search($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
+        $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
+
+        $this->view->searchResult = $searchResult;
+        $this->view->resultCount = $searchResultCount;
+        $this->view->keyword = $keyword;
+
+        // ページネーター用の設定
+        $this->view->currentPage = $currentPage;
+        $this->setPagerForView($searchResultCount, self::LIMIT_GET_PAGE_BY_CATEGORY);
+
     }
 
     /**
@@ -89,27 +108,31 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $id = $this->_getParam('id');
         if (!is_numeric($id) && !is_null($id) || is_numeric($id) && $id < 0) {
-            // 不正なIDが指定されたら閲覧側トップにリダイレクト
+            // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
             $this->_helper->redirector('index', 'index');
         } elseif ($id == 0) {
+            // カテゴリ未分類が指定されたとき（todo 仕様確定待ち）
             $id = null;
         }
 
-        $currentPage = $this->_getParam('page', 1);
-        if (!is_numeric($currentPage)) {
-            $currentPage = 1;
+        $currentPage = $this->_getPage();
+
+        $this->_categoryService = new Default_Model_Category();
+
+        $this->view->entries = $this->_pageService->getPagesByCategoryId($id, $currentPage);
+
+        $category = array_pop($this->_categoryService->find($id));
+        if (is_null($category['name'])) {
+            $category['name'] = '未分類';
         }
 
-        $categoryService = new Default_Model_Category();
+        $this->view->category = $category;
 
-        $this->view->entries = $this->_service->getPagesByCategory($id, $currentPage);
-        $this->view->category = $categoryService->getCategoryById($id);
+        $this->_pageTitle = "「{$category['name']}」カテゴリーの記事";
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        
-        // @todo setPagerForView がadminからcommonに移されるの待ち
-        //$this->setPagerForView($this->_service->countPagesByCategory($id), 5);
+        $this->setPagerForView($this->_pageService->countPagesByCategoryId($id), self::LIMIT_GET_PAGE_BY_CATEGORY);
 
     }
 
@@ -118,11 +141,26 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 実装（現在スケルトン）
      */
     public function tagAction()
     {
+        $id = $this->_getParam('id');
 
+        if (!is_numeric($id)) {
+            // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
+            $this->_helper->redirector('index', 'index');
+        }
+
+        $currentPage = $this->_getPage();
+        $tag = array_pop($this->_tagService->find($id));
+        $this->view->entries = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
+        $this->view->tag = $tag;
+        $this->view->pageCount = $this->_pageService->countPagesByTagId($id);
+        $this->_pageTitle = "「{$tag['name']}」タグの記事";
+
+        // ページネーター用の設定
+        $this->view->currentPage = $currentPage;
+        $this->setPagerForView($this->_pageService->countPagesByTagId($id), self::LIMIT_GET_NEW_PAGE);
     }
 
     /**
@@ -130,11 +168,23 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 実装（現在スケルトン）
      */
     public function showAction()
     {
+        $id = $this->_getParam('id');
 
+        if (!is_numeric($id)) {
+            // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
+            $this->_helper->redirector('index', 'index');
+        }
+
+        // 記事情報の取得とセット
+        $page = array_pop($this->_pageService->find($id));
+        $this->_pageTitle = $page['title'];
+        $this->view->page = $page;
+
+        // ページにつけられたタグ情報の取得とセット
+        $this->view->tags = $this->_tagService->getTagsByPageId($id);
     }
 
 }
