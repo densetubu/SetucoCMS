@@ -91,7 +91,7 @@ class Default_Model_Category
      * @return array|boolean 該当のデータが存在すれば配列データ、存在しなければfalseを返す
      * @author akitsukada
      */
-    public function find($id)
+    public function findCategory($id)
     {
         return $this->_dao->find($id)->toArray();
     }

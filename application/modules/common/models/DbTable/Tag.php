@@ -83,6 +83,13 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
         return $this->fetchAll($select);
     }
 
+    /**
+     * 記事のIDを指定して、その記事につけられたタグの情報を取得して返す。
+     *
+     * @param int $pageId タグを取得したい記事のID
+     * @return array 取得したタグ情報を格納した配列
+     * @author akitsukada
+     */
     public function findTagByPageId($pageId)
     {
         $select = $this->select()->from(array('t' => $this->_name));
@@ -96,5 +103,26 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
 
     }
 
-}
+    /**
+     * タグ名をキーワード検索し、該当するタグのIDを返す。
+     *
+     * @param string $tagName 検索したいキーワード
+     * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければnull。
+     */
+    public function findTagIdsByTagName($tagName)
+    {
+        $select = $this->select()->from(array('t' => $this->_name), 'id');
+        $select->where('name LIKE ?', "%{$tagName}%");
+        $findResult = $this->fetchAll($select)->toArray();
+        if (count($findResult) > 0) {
+            $tagIds = array();
+            foreach ($findResult as $cnt => $tag) {
+                array_push($tagIds, (int)$tag['id']);
+            }
+            return $tagIds;
+        } else {
+            return null;
+        }
+    }
 
+}

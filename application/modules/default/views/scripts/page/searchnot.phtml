@@ -1,0 +1,34 @@
+<?php
+/**
+ * キーワード検索の結果、該当する記事が１個もなかったときに表示されるページ
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Default
+ * @subpackage View_Script_Page
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      var description
+ * @author     akitsukada
+ */
+?>
+<!-- entry START -->
+<div class="entry">
+    <div class="entryHead">
+        <h2><span>「<?php echo $this->keyword ?>」の検索結果（<?php echo $this->resultCount ?>件）</span></h2>
+    </div>
+    <div class="entryBody">
+        <p>「<?php echo $this->keyword ?>」に一致するページはありませんでした。<br />以下のことを確認して再度検索してみてください。</p>
+        <ul class="list">
+            <li>キーワードに誤字・脱字はありませんか？</li>
+            <li>キーワードは長すぎませんか？</li>
+            <li>一般的なキーワードに変えてみてください。</li>
+        </ul>
+        <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
+    </div>
+</div>
+<!-- entry END -->

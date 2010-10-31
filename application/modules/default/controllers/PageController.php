@@ -7,8 +7,8 @@
  * @category    Setuco
  * @package     Default
  * @subpackage  Controller
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @version
  * @link
  * @since       File available since Release 0.1.0
@@ -35,19 +35,32 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
 
     /**
-     * サービスクラス
+     * pageサービスクラスのインスタンス
+     *
+     * @var Default_Model_Page
+     *
      */
     private $_pageService = null;
 
+    /**
+     * categoryサービスクラスのインスタンス
+     *
+     * @var Default_Model_Category
+     */
     private $_categoryService = null;
-    private $_tagService = null;
 
+    /**
+     * tagサービスクラスのインスタンス
+     *
+     * @var Default_Model_Tag
+     */
+    private $_tagService = null;
 
     /**
      * アクションの共通設定
      *
      * @return void
-     * @author suzuki_mar
+     * @author suzuki_mar akitsukada
      */
     public function init()
     {
@@ -68,36 +81,44 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      */
     public function indexAction()
     {
-
+        $this->_helper->redirector('index', 'index');
     }
 
     /**
-     * 検索結果を表示するアクションです
+     * キーワード検索結果を表示するアクション。
      * 
      * @return void
      * @author akitsukada
-     * @todo 実装（現在スケルトン）
+     * @todo 一覧には、記事本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
      */
     public function searchAction()
     {
 
         $keyword = $this->_getParam('query');
         $currentPage = $this->_getPage();
-        $searchResult = $this->_pageService->search($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
+        $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 
-        $this->view->searchResult = $searchResult;
+        if ($searchResultCount == 0) {
+            // 検索結果が0件なら専用のビューを使用
+            $this->_helper->viewRenderer('searchnot');
+        } else {           
+            
+            $this->view->searchResult = $searchResult;
+
+            // ページネータ設定
+            $this->view->currentPage = $currentPage;
+            $this->setPagerForView($searchResultCount, self::LIMIT_GET_NEW_PAGE);
+        }
+
+        $this->_pageTitle = "「{$keyword}」の検索結果";
         $this->view->resultCount = $searchResultCount;
         $this->view->keyword = $keyword;
-
-        // ページネーター用の設定
-        $this->view->currentPage = $currentPage;
-        $this->setPagerForView($searchResultCount, self::LIMIT_GET_PAGE_BY_CATEGORY);
 
     }
 
     /**
-     * あるカテゴリーに属するページの一覧を表示する
+     * あるカテゴリーに属するページの一覧を表示する、
      *
      * @return void
      * @author akitsukada
@@ -111,23 +132,18 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
             $this->_helper->redirector('index', 'index');
         } elseif ($id == 0) {
-            // カテゴリ未分類が指定されたとき（todo 仕様確定待ち）
             $id = null;
         }
 
         $currentPage = $this->_getPage();
-
-        $this->_categoryService = new Default_Model_Category();
-
         $this->view->entries = $this->_pageService->getPagesByCategoryId($id, $currentPage);
 
-        $category = array_pop($this->_categoryService->find($id));
+        $category = array_pop($this->_categoryService->findCategory($id));
         if (is_null($category['name'])) {
             $category['name'] = '未分類';
         }
 
         $this->view->category = $category;
-
         $this->_pageTitle = "「{$category['name']}」カテゴリーの記事";
 
         // ページネーター用の設定
@@ -137,10 +153,11 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     }
 
     /**
-     * あるタグがつけられたページの一覧を表示する
+     * タグ名を検索して、該当するタグがつけられたページの一覧を表示する。
      *
      * @return void
      * @author akitsukada
+     * @todo 一覧には、記事本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
      */
     public function tagAction()
     {
@@ -151,11 +168,15 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $this->_helper->redirector('index', 'index');
         }
 
+        $this->_helper->viewRenderer('search');
+
         $currentPage = $this->_getPage();
-        $tag = array_pop($this->_tagService->find($id));
-        $this->view->entries = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
-        $this->view->tag = $tag;
-        $this->view->pageCount = $this->_pageService->countPagesByTagId($id);
+        $tag = array_pop($this->_tagService->findTag($id));
+
+        $this->view->searchResult = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
+        $this->view->resultCount = $this->_pageService->countPagesByTagId($id);
+        $this->view->keyword = $tag['name'];
+        
         $this->_pageTitle = "「{$tag['name']}」タグの記事";
 
         // ページネーター用の設定
@@ -164,7 +185,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     }
 
     /**
-     * ページを閲覧する
+     * IDを指定して記事を閲覧する。
      *
      * @return void
      * @author akitsukada
@@ -179,7 +200,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         // 記事情報の取得とセット
-        $page = array_pop($this->_pageService->find($id));
+        $page = array_pop($this->_pageService->findPage($id));
         $this->_pageTitle = $page['title'];
         $this->view->page = $page;
 

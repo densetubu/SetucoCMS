@@ -12,7 +12,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     suzuki-mar
+ * @author     suzuki-mar akitsukada
  */
 
 /**
@@ -20,17 +20,24 @@
  *
  * @package    Default
  * @subpackage Model
- * @author     suzuki-mar
+ * @author     suzuki-mar akitsukada
  */
 class Default_Model_Page
 {
 
     /**
-     * モデルが使用するDAO(DbTable)クラスを設定する
+     * モデルが使用するPageテーブルのDAO(DbTable)クラスを設定する
      * 
-     * @var Zend_Db_Table
+     * @var Common_Model_DbTable_Page
      */
     protected $_pageDao = null;
+
+    /**
+     * モデルが使用するPageテーブルのDAO(DbTable)クラスを設定する
+     *
+     * @var Common_Model_DbTable_Tag
+     */
+    protected $_tagDao = null;
 
     /**
      * 新着記事表示用に標準で何件取得するか
@@ -50,6 +57,7 @@ class Default_Model_Page
     public function __construct()
     {
         $this->_pageDao = new Common_Model_DbTable_Page();
+        $this->_tagDao = new Common_Model_DbTable_Tag();
     }
 
     /**
@@ -72,11 +80,11 @@ class Default_Model_Page
     }
 
     /**
-     * カテゴリを指定して記事を取得する
+     * カテゴリを指定して記事を取得する（ページネータ対応）
      *
      * @param int $catId 取得したいカテゴリのID
      * @author akitsukada
-     * @return
+     * @return array 該当するカテゴリの記事データを格納した配列
      */
     public function getPagesByCategoryId($catId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
     {
@@ -84,7 +92,11 @@ class Default_Model_Page
     }
 
     /**
-     * 指定したカテゴリに属するページの数を取得する
+     * 指定したカテゴリに属する記事の数を取得する
+     *
+     * @param int $catId 記事数を取得したいカテゴリのID
+     * @return int 該当する記事の数
+     * @author akitsukada
      */
     public function countPagesByCategoryId($catId)
     {
@@ -95,8 +107,8 @@ class Default_Model_Page
      * タグを指定して記事を取得する
      *
      * @param int $tagId 取得したいタグID
+     * @return array 該当するタグがつけられた記事のデータを格納した配列
      * @author akitsukada
-     * @return 
      */
     public function getPagesByTagId($tagId, $currentPage, $limit = self::LIMIT_GET_NEW_PAGE)
     {
@@ -104,28 +116,66 @@ class Default_Model_Page
     }
 
     /**
-     * 指定したカテゴリに属するページの数を取得する
+     * 指定したタグIDのタグがつけられたページの数を取得する
+     *
+     * @param int $tagId カウントしたいタグのID
+     * @return int 該当するページ数
+     * @author akitsukada
      */
     public function countPagesByTagId($tagId)
     {
         return count($this->_pageDao->findPagesByTagId($tagId));
     }
 
-    public function find($id)
+    /**
+     * IDを指定して記事を一件取得する
+     *
+     * @param int $id 取得したい記事のID
+     * @return array 該当するIDの記事データを格納した配列
+     * @author akitsukada
+     */
+    public function findPage($id)
     {
         return $this->_pageDao->find($id)->toArray();
     }
 
-    public function search($keyword, $currentPage = 1, $limit = self::LIMIT_GET_NEW_PAGE)
+    /**
+     * 記事のキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
+     *
+     * @param string $keyword 検索したいテキスト。
+     * @param int $currentPage ページネータの何ページ目を表示するか。
+     * @param int $limit ページネータで１ページに何件表示するか。
+     * @return array 検索結果を格納した配列
+     * @author akitsukada
+     */
+    public function searchPages($keyword, $currentPage = 1, $limit = self::LIMIT_GET_NEW_PAGE)
     {
-        return $this->_pageDao->searchPage($keyword, $currentPage, $limit)->toArray();
-        
+        $tagIds = $this->_tagDao->findTagIdsByTagName($keyword);
+        return $this->_pageDao->searchPages($keyword, $this->_findTagIdsByTagName($keyword), $currentPage, $limit)->toArray();
     }
+
+    /**
+     * 記事のキーワード検索結果の合計数を求める。
+     *
+     * @param string $keyword 
+     * @return int 該当する記事の合計数
+     * @author akitsukada
+     */
     public function countPagesByKeyword($keyword)
     {
-        $queryResult = $this->_pageDao->countPagesByKeyword($keyword)->toArray();
-        $count = $queryResult[0]['page_count'];
-        return (int)$count;
+        return (int)($this->_pageDao->countPagesByKeyword($keyword, $this->_findTagIdsByTagName($keyword)));
+    }
+
+    /**
+     * タグ名をキーワード検索し、該当するタグのIDを返す
+     *
+     * @param string $keyword 検索したいキーワード
+     * @return array|null 該当するタグのIDを格納した配列
+     */
+    private function _findTagIdsByTagName($keyword)
+    {
+        $tagIds = $this->_tagDao->findTagIdsByTagName($keyword);
+        return $tagIds;
     }
 }
 

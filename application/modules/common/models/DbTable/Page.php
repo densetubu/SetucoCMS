@@ -119,13 +119,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
     
     /**
-     * カテゴリを指定して記事を取得する
+     * カテゴリを指定して記事を取得する。currentPageとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $catId 取得したいカテゴリのID
      * @param int $currentPage ページネータの何ページ目を表示するか
      * @param int $limig １ページに表示する記事数
      * @author akitsukada
-     * @return
+     * @return array 取得した記事データ
      */
     public function findPagesByCategoryId($catId, $currentPage = null, $limit = null)
     {
@@ -160,10 +160,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * タグIDを指定して記事を取得する（ページネータ対応）
+     * タグIDを指定して記事を取得する。currentPageとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $tagId 取得したいタグのID
-     * @param int $currentPage ページネータで何ページ目を表示するか。省略すると
+     * @param int $currentPage ページネータで何ページ目を表示するか
+     * @param int $limig １ページに表示する記事数
+     * @return array 取得した記事データを格納した配列
+     * @author akitsukada
      */
     public function findPagesByTagId($tagId, $currentPage = null, $limit = null)
     {
@@ -193,7 +196,16 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         
     }
 
-    public function searchPage($keyword, $currentPage, $limit)
+    /**
+     * 記事をキーワード&タグIDで検索し、ページネータ用の記事データを取得する。
+     *
+     * @param string $keyword 検索したいキーワード。
+     * @param array $tagIds 検索したいタグのID。
+     * @param int $currentPage ページネータで何ページ目を表示するか。
+     * @param int $limit ページネータで１ページに何件表示するか。
+     * @return array 取得した記事データを格納した配列。
+     */
+    public function searchPages($keyword, $tagIds, $currentPage, $limit)
     {
         $select = $this->select();
         $select->from(
@@ -209,21 +221,32 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->order('p.update_date DESC');
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
-        $select->join(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
+        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
         $select->setIntegrityCheck(false);
 
         $select->orwhere('p.title LIKE ?', "%{$keyword}%");
         $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
         $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
 
+        if (!is_null($tagIds)) {
+            $select->orwhere('t.id IN(?)', $tagIds);
+        }
+
+        $select->group('id');
         $select->limitPage($currentPage, $limit);
-
         return $this->fetchAll($select);
 
     }
 
-    public function countPagesByKeyword($keyword)
+    /**
+     * 記事をキーワード&タグIDで検索し、該当する記事の合計数を求める。
+     *
+     * @param string $keyword 検索したいキーワード。
+     * @param array $tagIds 検索したいタグのID。
+     * @return int 検索条件に合致した記事の数。
+     */
+    public function countPagesByKeyword($keyword, $tagIds)
     {
         $select = $this->select();
         $select->from(
@@ -232,17 +255,22 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         );
         
         $select->order('p.update_date DESC');
-        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', null);
-        $select->join(array('c' => 'category'), 'c.id = p.category_id', null);
-        $select->join(array('t' => 'tag'), 't.id = pt.tag_id', null);
+        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
+        $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
+        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
         $select->setIntegrityCheck(false);
 
         $select->orwhere('p.title LIKE ?', "%{$keyword}%");
         $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
         $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
+        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
 
-        return $this->fetchAll($select);
+        if (!is_null($tagIds)) {
+            $select->orwhere('t.id IN(?)', $tagIds);
+        }
+
+        $result = $this->fetchAll($select)->toArray();
+        return $result[0]['page_count'];
         
     }
 
