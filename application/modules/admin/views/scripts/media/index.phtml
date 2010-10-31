@@ -69,7 +69,7 @@ function addElement() {
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
-              <p><a href="#" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
+              <p><a href="javascript:void(0)" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
               <p><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></p>
               <p><?php echo $this->uploadForm->getElement('up') ?></p>
           <?php else: ?>
@@ -88,10 +88,10 @@ function addElement() {
     </form>
     <table summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="20%" />
-            <col width="30%" />
-            <col width="18%" />
-            <col width="18%" />
+            <col width="16%" />
+            <col width="22%" />
+            <col width="24%" />
+            <col width="24%" />
             <col width="7%" />
             <col width="7%" />
         </colgroup>
@@ -118,7 +118,7 @@ function addElement() {
         </thead>
         <tbody>
             <?php foreach ($this->medias as $cnt => $media): ?>
-            <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : '' ?>>
+            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="checkG"' ?>>
                 <td class="thumb">
                     <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
@@ -133,7 +133,7 @@ function addElement() {
                     </a>
                 </td>
                 <td>
-                    <a href="#" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
+                    <a href="javascript:void(0)" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
                         <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
