@@ -51,7 +51,7 @@ function hideAmbitionEdit() {
                 <label for="ambition">野望</label>
             </dt>
             <dd>
-                <span  id="ambitionView">
+                <span id="ambitionView">
                     <em>「<?php echo $this->ambitionForm->getElement('ambition')->getValue() ?>」</em>
                     <a href="javascript:void(0)" onclick="showAmbitionEdit()">
                         <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
@@ -74,7 +74,7 @@ function hideAmbitionEdit() {
         <div class="topichAreaR">
             <div class="topichArea">
                 <h3>
-                    <img src="images/h_nowData.gif" alt="現在の状況" width="110" height="22" />
+                    <img src="<?php echo $this->baseUrl('/images/h_nowData.gif') ?>" alt="現在の状況" width="110" height="22" />
                 </h3>
                 <p>
                     <a href="<?php echo $this->baseUrl('/admin/index/form-goal') ?>">更新目標の編集</a>
