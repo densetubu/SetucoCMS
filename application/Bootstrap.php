@@ -1,4 +1,24 @@
 <?php
+/**
+ * SetucoCMSのブートストラップクラス
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Controller
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @version
+ * @link
+ * @since      File available since Release 0.1.0
+ * @author     Yuu Yamanaka, charlelsvineyard
+ */
+
+/**
+ * @category   Setuco
+ * @package    Controller
+ * @author     Yuu Yamanaka, charlelsvineyard
+ */
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {

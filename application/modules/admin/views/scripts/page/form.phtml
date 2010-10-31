@@ -30,32 +30,22 @@
 <div class="section"> 
 
     <div class="topichAreaL"> 
-
         <div class="topichAreaR"> 
-
             <div class="topichArea"> 
-
                 <h3><img src="<?php echo $this->baseUrl('images/h_pageNew.jpg'); ?>" width="122" height="18" alt="ページの新規作成" /></h3> 
-
             </div> 
-
         </div> 
-
     </div> 
 
     
     <form action="contribution_check.php" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
-
         <input type="hidden" id="user_id" name="user_id" value="0" /> 
-
         <ul> 
-        <li class="inputAreaL"><a href="/admin/form/preview">プレビュー</a></li> 
             <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="下書きで保存" /></li> 
             <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="公開して保存" /></li> 
         </ul> 
 
         <dl id="inputArea"> 
-
             <dt><label for="page_title">[必須]ページタイトル</label></dt> 
                 <dd><input type="text" id="page_title" name="page_title" value="" /></dd> 
 
@@ -80,7 +70,6 @@
         </dl> 
 
         <ul style="clear:both;"> 
-            <li class="inputAreaL"><a href="preview.php">プレビュー</a></li> 
             <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="下書きで保存" /></li> 
             <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="公開して保存" /></li> 
         </ul> 

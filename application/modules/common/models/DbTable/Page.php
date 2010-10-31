@@ -71,20 +71,30 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     /**
      * 最近作成(公開)したページを取得する
      *
-     * @param  int $getPageCount 何件の記事を取得するのか
+     * @param  int     $getPageCount   何件の記事を取得するのか
+     * @param  boolean $isJoinCategory カテゴリーテーブルを結合するならtrue。デフォルトはしない
+     * @param  boolean $isJoinAccount  アカウントテーブルを結合するならtrue。 デフォルトはしない
      * @author charlesvineyard
      */
-    public function findLastCreatedPages($getPageCount)
+    public function findLastCreatedPages($getPageCount, $isJoinCategory = false, $isJoinAccount = false)
     {
-        $select = $this->select()
-            ->where('status = ?', self::STATUS_OPEN)
-            ->order('create_date DESC')
-            ->limit($getPageCount);
+        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
+        if ($isJoinCategory) {
+            $select->setIntegrityCheck(false)
+                   ->join('category', 'page.category_id = category.id');
+        }
+        if ($isJoinCategory) {
+            $select->setIntegrityCheck(false)
+                   ->join('account', 'page.account_id = account.id');
+        }
+        $select->where('status = ?', self::STATUS_OPEN)
+               ->order('create_date desc')
+               ->limit($getPageCount);
         return $this->fetchAll($select)->toArray();
     }    
     
     /**
-     * 今月作成(公開)したページ数を取得する
+     * ページを数えます。
      *
      * @param  int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
      *                     指定しなければ全ての状態のものを数えます。

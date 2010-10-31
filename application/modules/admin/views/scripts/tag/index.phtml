@@ -19,6 +19,29 @@
  * @author     charlesvineyard
  */
 ?>
+<?php $this->headStyle()->captureStart() ?>
+#tagEdit {
+    display: none;
+}
+<?php $this->headStyle()->captureEnd() ?>
+
+<?php $this->headScript()->captureStart() ?>
+dojo.require('dojo.NodeList-traverse');
+function showTagEdit(switcher) {
+    dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
+    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'inline');
+}
+function hideTagEdit(switcher) {
+    dojo.query(switcher.parentNode.parentNode).style('display', 'none');
+    dojo.query(switcher.parentNode.parentNode).prev().style('display', 'inline');
+}
+function confirmRedirect(url){
+    if (confirm("本当に削除してよろしいですか？")) {
+        location.href = url;
+    }
+}
+<?php $this->headScript()->captureEnd() ?>
+
 <!-- topicPath START -->
 <div id="topicPath">
     <p>

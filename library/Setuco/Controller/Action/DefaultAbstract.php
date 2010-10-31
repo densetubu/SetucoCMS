@@ -28,7 +28,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 	 *
 	 * @var String
 	 */
-	protected $_pageTitle = '';
+	protected $_pageTitle = null;
 
 	/**
      * 一覧ページで、1ページあたり何件のデータを表示するか
@@ -88,8 +88,10 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 		//サイト情報をviewにセットする
 		$this->view->siteInfos     = $modelSite->getSiteInfos();
 		 
-		//ページタイトルをセットする
-		$this->view->pageTitle = $this->_pageTitle;
-		 
+		//セットしてある場合は、ページタイトルをセットする
+		if (!is_null($this->_pageTitle)) {
+                    $this->view->pageTitle = $this->_pageTitle;
+                }
+                
 	}
 }

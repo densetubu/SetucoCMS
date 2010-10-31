@@ -88,10 +88,10 @@ function addElement() {
     </form>
     <table summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="20%" />
-            <col width="30%" />
-            <col width="18%" />
-            <col width="18%" />
+            <col width="16%" />
+            <col width="22%" />
+            <col width="24%" />
+            <col width="24%" />
             <col width="7%" />
             <col width="7%" />
         </colgroup>
@@ -118,7 +118,7 @@ function addElement() {
         </thead>
         <tbody>
             <?php foreach ($this->medias as $cnt => $media): ?>
-            <tr <?php echo $cnt % 2 == 0 ? 'class="checkG"' : '' ?>>
+            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="checkG"' ?>>
                 <td class="thumb">
                     <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
