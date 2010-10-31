@@ -18,15 +18,39 @@
  */
 ?>
 <h1>
-    <img src="<?php echo $this->baseUrl('images/loginLogo.gif') ?>" width="268" height="67" alt="せつこCMS" />
+    <img src="<?php echo $this->baseUrl('/images/loginLogo.gif') ?>" width="268" height="67" alt="せつこCMS" />
 </h1>
 
 <p id="catch">
-    <img src="<?php echo $this->baseUrl('images/catch.gif') ?>" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" />
+    <img src="<?php echo $this->baseUrl('/images/catch.gif') ?>" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" />
 </p>
 
-<?php if ($this->errors) : ?>
-    <?php echo $this->htmlList($this->errors, false, array('class' => 'errors')) ?>
+<?php if (count($errorMessages = $this->form->getErrorMessages())): ?>
+    <div id="messageArea">
+        <?php foreach ($errorMessages as $errorMessage): ?>
+        <p><?php echo $errorMessage ?></p>
+        <?php endforeach ?>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
 <?php endif ?>
-<?php echo $this->form ?>
+
+<?php if ($this->flashMessage): ?>
+    <div id="messageArea">
+        <p><?php echo $this->flashMessage ?></p>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
+<?php endif ?>
+
+<form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->form->getAction() ?>">
+    <dl class="straight">
+        <?php echo $this->form->getElement('login_id') ?>
+        <?php echo $this->form->getElement('password') ?>
+    </dl>
+    <?php echo $this->form->getElement('sub') ?>
+</form>
+
 

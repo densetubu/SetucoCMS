@@ -25,35 +25,17 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8')
                  ->appendHttpEquiv('imagetoolbar', 'no');
 $this->headTitle('SetucoCMS')->setSeparator(':')->headTitle('ログイン画面');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+$this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 ?>
 <?php echo $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <?php echo $this->headMeta() ?>
         <?php echo $this->headTitle() ?>
+        <?php echo $this->dojo() ?>
         <?php echo $this->headScript() ?>
         <?php echo $this->headLink() ?>
         <?php echo $this->headStyle() ?>
-        <style>
-            .errors {
-                color: red;
-            }
-            body#loginBoad #container > ul.errors {
-                text-align: center;
-                margin: -10px 0 10px;
-            }
-            body#loginBoad dd {
-                margin-bottom: 15px;
-            }
-            body#loginBoad dd input {
-                margin-bottom: 0px;
-            }
-            body#loginBoad input#submit {
-                float: right;
-                width: 80px;
-                margin-bottom: 30px;
-            }
-        </style>
     </head>
     <body id="loginBoad">
 
