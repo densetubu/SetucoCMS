@@ -90,7 +90,7 @@ function closeCategory(switcher) {
                 <li class="page<?php echo ($i == $pageCount) ? ' lastChild' : '' ?>">
                     <div>
                         <p>
-                            <a href="<?php echo $page->getViewHref() ?>">
+                            <a href="<?php echo $page->getViewHref() ?>" target="_blank">
                                 <img src="<?php echo $this->baseUrl('/images/directory/icn_check.gif') ?>" width="18" height="15" alt="ページを確認" /><?php echo $page->getLabel() ?>
                             </a>
                         </p>
