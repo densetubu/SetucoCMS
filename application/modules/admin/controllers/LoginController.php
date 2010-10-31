@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     Yuu Yamanaka
  */
-class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
+class Admin_LoginController extends Setuco_Controller_Action_Abstract
 {
     /**
      * ログインフォーム
@@ -32,7 +32,10 @@ class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $this->view->errors = $this->_getParam('errors');
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->flashMessage = $flashMessages[0];
+        }
         $this->view->form = $this->_getParam('form', $this->_createLoginForm());
     }
 
@@ -47,18 +50,23 @@ class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createLoginForm();
         if (!$form->isValid($_POST)) {
+            if (!$form->getValue('login_id')) {
+                $form->addErrorMessage('アカウント名を入力してください。');
+            }
+            if (!$form->getValue('password')) {
+                $form->addErrorMessage('パスワードを入力してください。');
+            }
             $this->_setParam('form', $form);
             return $this->_forward('index');
         }
 
         $authModel = new Admin_Model_Auth();
-        if (!$authModel->login($form->getValue('loginId'),
+        if (!$authModel->login($form->getValue('login_id'),
                     $form->getValue('password'))) {
             $this->_setParam('form', $form);
-            $this->_setParam('errors',
-                    array('ログインIDまたはパスワードが間違っています'));
+            $form->addErrorMessage('アカウントIDまたはパスワードが間違っています。');
             return $this->_forward('index');
-        };
+        }
         $this->_helper->redirector('index', 'index');
     }
 
@@ -72,6 +80,7 @@ class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
+        $this->_helper->flashMessenger('ログアウトしました。');
         $this->_helper->redirector('index');
     }
 
@@ -84,26 +93,37 @@ class Admin_LoginController extends Setuco_Controller_Action_AdminAbstract
     private function _createLoginForm()
     {
         $form = new Setuco_Form();
-        $form->setMethod('post')
-             ->setAction($this->_helper->url('auth'));
-        $form->getDecorator('HtmlTag')->setOption('class', 'straight');
-
-        $form->addElement('text', 'loginId', array(
-                    'label'    => 'アカウント名',
-                    'required' => true,
-                    'filters'  => array('StringTrim')
-                    ));
-        $form->addElement('password', 'password', array(
-                    'label'    => 'パスワード',
-                    'required' => true
-                    ));
-        $form->addElement('submit', 'submit', array(
-                    'label'    => 'ログイン'
-                    ));
-
-        // デコレータの調整
-        $form->setMinimalDecoratorElements('submit');
-
+        $form->clearDecorators()
+             ->setDisableLoadDefaultDecorators(true)
+             ->setAction($this->_helper->url('auth'))
+             ->addDecorator('FormElements')
+             ->addDecorator('Form');
+        $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウント名'));
+        $accountId->setRequired(true)
+                  ->setFilters(array('StringTrim'))
+                  ->clearDecorators()
+                  ->setDisableLoadDefaultDecorators(true)
+                  ->addDecorator('ViewHelper')
+                  ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                  ->addDecorator('Label', array('tag' => 'dt'));
+        $password = new Zend_Form_Element_Password('password', array('label' => 'パスワード'));
+        $password->setRequired(true)
+                 ->clearDecorators()
+                 ->setDisableLoadDefaultDecorators(true)
+                 ->addDecorator('ViewHelper')
+                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                 ->addDecorator('Label', array('tag' => 'dt'));
+        $submit = new Zend_Form_Element_Submit('sub');
+        $submit->setLabel('ログイン')
+               ->clearDecorators()
+               ->setDisableLoadDefaultDecorators(true)
+               ->addDecorator('ViewHelper')
+               ->addDecorator('HtmlTag', array('tag' => 'p'));
+        $form->addElements(array(
+            $accountId,
+            $password,
+            $submit
+        ));
         return $form;
     }
 
