@@ -92,7 +92,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
-        $this->view->diffGoal = Setuco_Util_String::convertSign2String(
+        $this->view->diffGoal = Setuco_Data_Converter_UpdateStatus::convertDiffGoal2String(
                 $createdPageCount - $this->_goalService->loadGoalPageCountThisMonth());
 
         // 総ページ数

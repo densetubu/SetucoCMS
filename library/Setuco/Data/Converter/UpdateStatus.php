@@ -25,13 +25,13 @@ class Setuco_Data_Converter_UpdateStatus
     /**
      * 更新状況を文字列に変換します。
      *
-     * @param  int $int 更新状況（Setuco_Data_Constant_UpdateStatusの定数）
+     * @param  int $updateStatus 更新状況（Setuco_Data_Constant_UpdateStatusの定数）
      * @return string 更新状況の文字列
      * @author charlesvineyard
      */
-    public static function convertUpdateStatus2String($int)
+    public static function convertUpdateStatus2String($updateStatus)
     {
-        switch($int) {
+        switch($updateStatus) {
             case Setuco_Data_Constant_UpdateStatus::FIRST:
                 return '今月も頑張ろう';
             case Setuco_Data_Constant_UpdateStatus::NORMAL:
@@ -40,6 +40,29 @@ class Setuco_Data_Converter_UpdateStatus
                 return '良い';
             case Setuco_Data_Constant_UpdateStatus::BAD:
                 return '悪い';
+        }
+    }
+    
+    /**
+     * 目標との差分ページ数を表示用の文言に変換します。
+     *
+     * @param  int $diffGoal 目標との差分ページ数
+     * @return string 更新状況の文字列
+     * @author charlesvineyard
+     */
+    public static function convertDiffGoal2String($diffGoal)
+    {
+        if (!is_int($diffGoal)) {
+            throw new Zend_Date_Exception('目標との差分ページ数が[' . $diffGoal . ']になっています。');
+        }
+        if (0 === $diffGoal) {
+            return '目標達成！';
+        }
+        if (0 < $diffGoal) {
+            return '目標からプラス' . $diffGoal . 'ページ！';
+        }
+        if (0 > $diffGoal) {
+            return '目標まであと' . ($diffGoal * -1) . 'ページ！';
         }
     }
 }
