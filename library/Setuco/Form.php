@@ -32,15 +32,34 @@ class Setuco_Form extends Zend_Form
     {
         $this->setElementDecorators(array('ViewHelper'), (array)$elements);
     }
+
+    /**
+     * デコレータを指定のフォーム要素から削除します。
+     * 
+     * @param mixed $decorators デコレータ名かデコレータ名の配列
+     * @param mixed $elements 要素名か要素名の配列
+     * @return void
+     * @author charlesvineyard
+     */
+    public function removeDecoratorsOfElements($decorators, $elements)
+    {
+        foreach ((array)$elements as $element) {
+            foreach ((array)$decorators as $decorator) {
+                $this->getElement($element)->removeDecorator($decorator);
+            }
+        }
+        return $this;
+    }
     
     /**
      * Dojoエレメントを有効にする
      * 
-     * @return void
+     * @return 当インスタンス
      * @author Yuu Yamanaka
      */
     public function enableDojo() {
         Zend_Dojo::enableForm($this);
+        return $this;
     }
 
 

@@ -16,6 +16,12 @@
  * @author     charlesvineyard
  */
 ?>
+<?php $this->dojo()->requireModule('dijit._editor.plugins.ToggleDir')
+->requireModule('dijit._editor.plugins.FullScreen')
+->requireModule('dijit._editor.plugins.ViewSource')
+->requireModule('dijit._editor.plugins.Print')
+->requireModule('dijit._editor.plugins.NewPage')
+?>
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -26,55 +32,42 @@
 </div>
 <!-- topicpath END -->
 
-<!-- section START --> 
-<div class="section"> 
+<!-- section START -->
+<div class="section">
+    <div class="topichAreaL">
+        <div class="topichAreaR">
+            <div class="topichArea">
+                <h3><img src="<?php echo $this->baseUrl('/images/h_pageNew.jpg'); ?>" width="122" height="18" alt="ページの新規作成" /></h3>
+            </div>
+        </div>
+    </div>
 
-    <div class="topichAreaL"> 
-        <div class="topichAreaR"> 
-            <div class="topichArea"> 
-                <h3><img src="<?php echo $this->baseUrl('images/h_pageNew.jpg'); ?>" width="122" height="18" alt="ページの新規作成" /></h3> 
-            </div> 
-        </div> 
-    </div> 
+    <form action="<?php echo $this->form->getAction() ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
+        <ul>
+            <li class="inputAreaL"><?php echo $this->form->getElement('sub_draft') ?></li>
+            <li class="inputAreaL"><?php echo $this->form->getElement('sub_open') ?></li>
+        </ul>
+        <dl id="inputArea">
+            <dt><label for="page_title">[必須]ページタイトル</label></dt>
+                <dd><?php echo $this->form->getElement('page_title') ?></dd>
+            <dt><label for="category_id">カテゴリー</label></dt>
+                <dd><?php echo $this->form->getElement('category_id') ?></dd>
+            <dt style="clear:both;"><label for="page_contents">[必須]コンテンツ</label></dt>
+                <dd><?php echo $this->form->getElement('page_contents') ?></dd>
+            <dt><label for="page_outline">ページの概要</label></dt>
+                <dd><?php echo $this->form->getElement('page_outline') ?></dd>
+            <dt style="clear:both;"><label for="tag">タグ</label>（複数指定する場合はカンマ「,」で区切ってください）</dt>
+                <dd><?php echo $this->form->getElement('tag') ?></dd>
 
-    
-    <form action="contribution_check.php" method="post" ENCTYPE="MULTIPART/FORM-DATA"> 
-        <input type="hidden" id="user_id" name="user_id" value="0" /> 
-        <ul> 
-            <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="下書きで保存" /></li> 
-            <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="公開して保存" /></li> 
-        </ul> 
-
-        <dl id="inputArea"> 
-            <dt><label for="page_title">[必須]ページタイトル</label></dt> 
-                <dd><input type="text" id="page_title" name="page_title" value="" /></dd> 
-
-            <dt><label for="cat_id">カテゴリー</label></dt> 
-                <dd> 
-                    <select id="cat_id" name="cat_id"> 
-                        <option value='32'>about</option><option value='12'>contents</option><option value='19'>link</option><option value='42'>report</option><option value='46'>test</option><option value='49'>新規カテゴリー</option><option value='0' selected='selected'>未分類</option>                                        <option value="">－新規カテゴリーの追加－</option> 
-                    </select> 
-                </dd> 
-
-            <dt style="clear:both;"><label for="cat_id">[必須]コンテンツ</label></dt> 
-                <dd><textarea id="page_text" name="page_text" cols="80" rows="10"></textarea></dd> 
-
-            <dt><label for="page_title">ページの概要</label></dt> 
-                <dd><input type="text" id="page_title" name="page_title" value="" /></dd> 
-
-            <dt style="clear:both;"><label for="cat_id">タグ</label>（複数指定する場合はカンマ「,」で区切ってください）</dt> 
-                <dd><input type="text" id="page_title" name="page_title" value="" /></dd> 
-
-            <dt><label for="page_date">作成日時</label></dt> 
-                <dd><input type="text" id="page_date" name="page_date" value="2010-08-29 09:12" onblur="if(this.value == '') { this.value='2010-08-29 09:12'; }" /></dd> 
-        </dl> 
-
-        <ul style="clear:both;"> 
-            <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="下書きで保存" /></li> 
-            <li class="inputAreaL"><input type="submit" id="sub" name="sub" value="公開して保存" /></li> 
-        </ul> 
-
-    </form> 
-
-</div> 
-<!-- section END --> 
+            <dt><label for="create_date">作成日</label></dt>
+                <dd><?php echo $this->form->getElement('create_date') ?></dd>
+            <dt><label for="create_time">作成時刻</label></dt>
+                <dd><?php echo $this->form->getElement('create_time') ?></dd>
+        </dl>
+        <ul style="clear:both;">
+            <li class="inputAreaL"><?php echo $this->form->getElement('sub_draft') ?></li>
+            <li class="inputAreaL"><?php echo $this->form->getElement('sub_open') ?></li>
+        </ul>
+    </form>
+</div>
+<!-- section END -->
