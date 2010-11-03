@@ -34,7 +34,7 @@ class Setuco_Form extends Zend_Form
     }
     
     /**
-     * Dojoエレメントを有効にする
+     * 当インスタンスのdojoを有効にする
      * 
      * @return void
      * @author Yuu Yamanaka

@@ -25,7 +25,8 @@
  * @license
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action {
+abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
+{
 
     /**
      * 一覧ページで、1ページあたり何件のデータを表示するか
@@ -40,7 +41,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return void
      * @author suzuki-mar charlesvineyard
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_initLayout();
     }
@@ -51,7 +53,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return void
      * @author suzuki_mar charlesvineyard
      */
-    protected function _initLayout() {
+    protected function _initLayout()
+    {
         $layout = $this->_helper->layout();
         $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
         $layout->setLayout($this->getLayoutName());
@@ -63,7 +66,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return string レイアウト名
      * @author charlesvineyard
      */
-    protected function getLayoutName() {
+    protected function getLayoutName()
+    {
         return 'layout';
     }
 
@@ -73,9 +77,9 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return String モジュールのディレクトリーのパス
      * @author suzuki_mar
      */
-    protected function _getModulePath() {
-        $result = APPLICATION_PATH . "/modules/{$this->_getParam('module')}/";
-        return $result;
+    protected function _getModulePath()
+    {
+        return APPLICATION_PATH . "/modules/{$this->_getParam('module')}/";
     }
 
     /**
@@ -86,7 +90,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return void
      * @author suzuki-mar
      */
-    public function setPagerForView($max, $limit = null) {
+    public function setPagerForView($max, $limit = null)
+    {
         //数値ではない場合はfalseを返す (ありなえいので)
         if (!is_int($max)) {
             return false;
@@ -125,7 +130,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return int 現在ページネーターで表示すべきページ番号
      * @author akitsukada suzuki-mar
      */
-    protected function _getPageNumber() {
+    protected function _getPageNumber()
+    {
         // URLからページ番号の指定を得る ( デフォルトは1 )
         $currentPage = $this->_getParam('page');
         if (!is_numeric($currentPage)) {
@@ -145,7 +151,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      *
      * @todo メソッドの削除
      */
-    protected function _getPage() {
+    protected function _getPage()
+    {
         $result = $this->_getPageNumber();
         return $result;
     }
@@ -155,7 +162,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return int 一ページあたりの取得件数
      * @author suzuki-mar
      */
-    protected function _getPageLimit() {
+    protected function _getPageLimit()
+    {
         $result = $this->_pageLimit;
         return $result;
     }
@@ -168,7 +176,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action 
      * @return $this 自分自身のインスタンス
      * @author suzuki-mar
      */
-    protected function _setPageLimit($limitPage) {
+    protected function _setPageLimit($limitPage)
+    {
         $this->_pageLimit = $limitPage;
         return $result;
     }
