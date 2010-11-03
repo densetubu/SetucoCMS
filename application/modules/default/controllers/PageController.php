@@ -95,7 +95,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     {
 
         $keyword = $this->_getParam('query');
-        $currentPage = $this->_getPage();
+        $currentPage = $this->_getPageNumber();
         $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 
@@ -135,7 +135,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $id = null;
         }
 
-        $currentPage = $this->_getPage();
+        $currentPage = $this->_getPageNumber();
         $this->view->entries = $this->_pageService->getPagesByCategoryId($id, $currentPage);
 
         $category = array_pop($this->_categoryService->findCategory($id));
@@ -170,7 +170,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $this->_helper->viewRenderer('search');
 
-        $currentPage = $this->_getPage();
+        $currentPage = $this->_getPageNumber();
         $tag = array_pop($this->_tagService->findTag($id));
 
         $this->view->searchResult = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);

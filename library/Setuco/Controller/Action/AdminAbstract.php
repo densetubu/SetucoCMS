@@ -31,9 +31,18 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 	protected $_navigation;
 
 	/**
-	 * 一覧ページで、1ページあたり何件のデータを表示するか
-	 */
+	 * 一覧ページで、1ページあたり何件のデータを表示するか 削除するので使用しない
+         * @todo 定数の削除 検討課題のチケットチェック時に削除する
+         */
 	const PAGE_LIMIT = 10;
+
+        /**
+	 * 一覧ページで、1ページあたり何件のデータを表示するか
+         * @var int
+         * @todo PAGE_LIMITの削除
+         */
+        protected $_pageLimit = 10;
+
 
 	/**
 	 * adminモジュールコントローラの初期処理です。
@@ -47,6 +56,8 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 		$this->_navigation = $this->_initNavigation();
 		$this->_initHeader();
 	}
+
+
 
 	/**
 	 * ナビゲーションの設定情報を初期化します。

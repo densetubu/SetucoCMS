@@ -96,7 +96,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     {
 
         // ページネーターーのカレントページの取得
-        $currentPage = $this->_getPage();
+        $currentPage = $this->_getPageNumber();
 
         // ファイルタイプの絞り込み条件取得(デフォルトでは'all')
         $type = self::FILEEXT_ALL;
@@ -122,7 +122,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->condition = $condition;
 
         // viewにファイルデータを渡す
-        $this->view->medias = $this->_media->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
+        $this->view->medias = $this->_media->findMedias($condition, $currentPage, $this->_getPageLimit());
 
         // アップロードできる最大サイズをviewに教える
         $this->view->fileSizeMax = self::FILE_SIZE_MAX . 'Byte';
