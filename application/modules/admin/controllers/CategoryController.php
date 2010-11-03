@@ -198,7 +198,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         $form = new Setuco_Form();
 
         //inputタグだけのクラスを生成する
-        $inputItem = $form->createElementOfViewHelper('text', 'cat_name');
+        $inputItem = $form->createElement('text', 'cat_name');
         //バリデートルールを設定する
         $inputItem = $this->_setValidateRuleOfName($inputItem);
         $form->addElement($inputItem);
@@ -219,20 +219,20 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
 
         //カテゴリー名を入力するinputタグを生成
-        $inputItem = $form->createElementOfViewHelper('text', 'name');
+        $inputItem = $form->createElement('text', 'name');
         //バリデートルールを設定する
         $inputItem = $this->_setValidateRuleOfName($inputItem, true);
 
         $form->addElement($inputItem);
 
         //idをセットするhiddenタグを生成
-        $idItem = $form->createElementOfViewHelper('hidden', 'id');
+        $idItem = $form->createElement('hidden', 'id');
         //バリデートルールを設定する
         $idItem = $this->_setValidateRuleOfId($idItem);
         $form->addElement($idItem);
 
         //idをセットするhiddenタグを生成
-        $parentIdItem = $form->createElementOfViewHelper('hidden', 'parent_id');
+        $parentIdItem = $form->createElement('hidden', 'parent_id');
         $parentIdItem = $this->_setValidateRuleOfParentId($parentIdItem);
         $form->addElement($parentIdItem);
 
