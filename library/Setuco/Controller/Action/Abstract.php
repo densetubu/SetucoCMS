@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SetucoCMSの最基底コントローラークラスです
  * Zend_Controller_Actionを継承しています
@@ -24,9 +25,16 @@
  * @license
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action  
+abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 {
-	
+
+    /**
+     * 一覧ページで、1ページあたり何件のデータを表示するか
+     * @var null
+     * @todo PAGE_LIMITの削除
+     */
+    protected $_pageLimit = null;
+
     /**
      * 全てのコントローラ共通の初期処理です。
      *
@@ -34,10 +42,10 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      * @author suzuki-mar charlesvineyard
      */
     public function init()
-    {   
+    {
         parent::init();
         $this->_initLayout();
-    }   
+    }
 
     /**
      * レイアウトを設定します。
@@ -51,7 +59,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
         $layout->setLayout($this->getLayoutName());
     }
-    
+
     /**
      * レイアウト名を取得します。
      * 
@@ -70,9 +78,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      * @author suzuki_mar
      */
     protected function _getModulePath()
-    {   
-        $result = APPLICATION_PATH . "/modules/{$this->_getParam('module')}/";
-        return $result;
+    {
+        return APPLICATION_PATH . "/modules/{$this->_getParam('module')}/";
     }
 
     /**
@@ -86,26 +93,22 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     public function setPagerForView($max, $limit = null)
     {
         //数値ではない場合はfalseを返す (ありなえいので)
-        if(!is_int($max)) {
+        if (!is_int($max)) {
             return false;
         }
-        
+
         //指定がなければ、デフォルトを使用する
         if (is_null($limit)) {
-            
-        	//モジュールごとの取得するものを変更する
-        	//モジュール名を大文字にする。定数の名前に合わせるために
-        	$moduleConstName  = ucwords($this->_getParam('module')). "Abstract";
-        	$limit = constant("Setuco_Controller_Action_{$moduleConstName}::PAGE_LIMIT");        	
+            $limit = $this->_getPageLimit();
         }
-        
+
 
         //共通のページャーの設定をする
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
 
         //現在のページ番号を取得する
-        $page = $this->_getPage();
+        $page = $this->_getPageNumber();
 
         //現在のページ番号を渡す
         $this->view->page = $page;
@@ -119,16 +122,15 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         //ページャーをviewで使用できるようにする
         $this->view->paginator = $paginator;
-
     }
-    
+
     /**
      * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです
      *
      * @return int 現在ページネーターで表示すべきページ番号
      * @author akitsukada suzuki-mar
      */
-    protected function _getPage()
+    protected function _getPageNumber()
     {
         // URLからページ番号の指定を得る ( デフォルトは1 )
         $currentPage = $this->_getParam('page');
@@ -139,5 +141,45 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $currentPage = (int) $currentPage;
         return $currentPage;
     }
-    
+
+    /**
+     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです　削除するので使用しないで、_getPageNumberメソッドを使用してください
+     * 古いメソッド名　遅くても11月には廃止予定
+     *
+     * @return int 現在ページネーターで表示すべきページ番号
+     * @author suzuki-mar
+     *
+     * @todo メソッドの削除
+     */
+    protected function _getPage()
+    {
+        $result = $this->_getPageNumber();
+        return $result;
+    }
+
+    /**
+     * 一ページあたりの取得件数の_pageLimitのゲッター
+     * @return int 一ページあたりの取得件数
+     * @author suzuki-mar
+     */
+    protected function _getPageLimit()
+    {
+        $result = $this->_pageLimit;
+        return $result;
+    }
+
+    /**
+     * 一ページあたりの取得件数の_pageLimitのセッター
+     * メソッドチェーンを使用できる
+     *
+     * @param int $limitPage 1ページあたりの取得件数
+     * @return $this 自分自身のインスタンス
+     * @author suzuki-mar
+     */
+    protected function _setPageLimit($limitPage)
+    {
+        $this->_pageLimit = $limitPage;
+        return $result;
+    }
+
 }

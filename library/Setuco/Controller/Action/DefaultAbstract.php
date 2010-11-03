@@ -1,4 +1,5 @@
 <?php
+
 /**
  * defaultモジュールの共通のコントローラーです
  *
@@ -21,77 +22,82 @@
  * @subpackage  Controller_Action
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract
-{
-	/**
-	 * ページのタイトル
-	 *
-	 * @var String
-	 */
-	protected $_pageTitle = null;
+abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract {
 
-	/**
-     * 一覧ページで、1ページあたり何件のデータを表示するか
+    /**
+     * ページのタイトル
+     *
+     * @var String
+     */
+    protected $_pageTitle = null;
+
+    /**
+     * 一覧ページで、1ページあたり何件のデータを表示するか　削除するので使用しない
+     * @todo 定数の削除 検討事項のチケット完了時に削除する
      */
     const PAGE_LIMIT = 10;
-	
-	/**
-	 * defaultモジュールコントローラの初期処理です。
-	 *
-	 * @return void
-	 * @author suzuki-mar
-	 */
-	public function init()
-	{
-		parent::init();
 
-		//REST形式のURLにリダイレクトする リダイレクトしないとREST形式のURLにならないので
-		$redirectParams[] = array('module' => 'default', 'controller' => 'page', 'action' => 'search', 'params' => 'query');
 
-		foreach ($redirectParams as $value) {
-			if (preg_match("/^\/{$value['controller']}\/{$value['action']}/", $_SERVER['REQUEST_URI'])) {
-				if (preg_match("/[?|&]{$value['params']}=/", $_SERVER['REQUEST_URI'])) {
-					$query = $this->_getParam($value['params']);
-					$this->_helper->redirector(
-					   $value['action'], 
-					   $value['controller'], 
-					   $value['module'], 
-					   array($value['params'] => $query));
-				}
-			}
+    /**
+     * 一覧ページで、1ページあたり何件のデータを表示するか
+     * @var int
+     * @todo PAGE_LIMITの削除
+     */
+    protected $_pageLimit = 10;
 
-		}
+    /**
+     * defaultモジュールコントローラの初期処理です。
+     *
+     * @return void
+     * @author suzuki-mar
+     */
+    public function init() {
+        parent::init();
 
-	}
+        //REST形式のURLにリダイレクトする リダイレクトしないとREST形式のURLにならないので
+        $redirectParams[] = array('module' => 'default', 'controller' => 'page', 'action' => 'search', 'params' => 'query');
 
-	/**
-	 * defaultモジュール共通でviewに変数を渡す処理をします。
-	 *
-	 * @return void
-	 * @author suzuki-mar
-	 */
-	public function postDispatch()
-	{
-		//tagテーブルのモデルクラスのインスタンス生成
-		$modelTag = new Default_Model_Tag();
-		//タグクラウドをviewにセットする
-		$this->view->tagClouds = $modelTag->getTagClouds();
-		 
-		
-		//categoryテーブルのモデルクラスのインスタンス生成
-		$modelCategory = new Default_Model_Category();
-		//カテゴリー一覧をviewにセットする
-		$this->view->categoryLists = $modelCategory->getCategoryLists();
-		 
-		//siteテーブルのモデルクラスのインスタンス生成
-		$modelSite = new Default_Model_Site();
-		//サイト情報をviewにセットする
-		$this->view->siteInfos     = $modelSite->getSiteInfos();
-		 
-		//セットしてある場合は、ページタイトルをセットする
-		if (!is_null($this->_pageTitle)) {
-                    $this->view->pageTitle = $this->_pageTitle;
+        foreach ($redirectParams as $value) {
+            if (preg_match("/^\/{$value['controller']}\/{$value['action']}/", $_SERVER['REQUEST_URI'])) {
+                if (preg_match("/[?|&]{$value['params']}=/", $_SERVER['REQUEST_URI'])) {
+                    $query = $this->_getParam($value['params']);
+                    $this->_helper->redirector(
+                            $value['action'],
+                            $value['controller'],
+                            $value['module'],
+                            array($value['params'] => $query));
                 }
-                
-	}
+            }
+        }
+    }
+
+    /**
+     * defaultモジュール共通でviewに変数を渡す処理をします。
+     *
+     * @return void
+     * @author suzuki-mar
+     */
+    public function postDispatch() {
+        //tagテーブルのモデルクラスのインスタンス生成
+        $modelTag = new Default_Model_Tag();
+        //タグクラウドをviewにセットする
+        $this->view->tagClouds = $modelTag->getTagClouds();
+
+
+        //categoryテーブルのモデルクラスのインスタンス生成
+        $modelCategory = new Default_Model_Category();
+        //カテゴリー一覧をviewにセットする
+        $this->view->categoryLists = $modelCategory->getCategoryLists();
+
+        //siteテーブルのモデルクラスのインスタンス生成
+        $modelSite = new Default_Model_Site();
+        //サイト情報をviewにセットする
+        $this->view->siteInfos = $modelSite->getSiteInfos();
+
+        //セットしてある場合は、ページタイトルをセットする
+        if (!is_null($this->_pageTitle)) {
+            $this->view->pageTitle = $this->_pageTitle;
+        }
+    }
+
 }

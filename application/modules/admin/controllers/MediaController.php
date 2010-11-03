@@ -67,7 +67,12 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     const FILEEXT_ALL = 'all';
 
     /**
-     * SetucoCMSで扱えるファイルの種類（拡張子）。追加／削除したい場合はサービス(Admin_Model_Media)も編集する必要がある。
+     * 一覧表示時、１ページに何件のファイルを表示するか
+     */
+    const PAGE_LIMIT = 10;
+
+    /**
+     * SetucoCMSで扱えるファイルの種類（拡張子）。種類の追加／削除をしたい場合はサービス(Admin_Model_Media)も編集する必要がある。
      *
      * @var array
      */
@@ -83,6 +88,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     {
         parent::init();
         $this->_media = new Admin_Model_Media($this->_getThumbnailDest(), self::THUMBNAIL_WIDTH);
+        $this->_setPageLimit(self::PAGE_LIMIT);
     }
 
     /**
@@ -95,8 +101,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function indexAction()
     {
 
-        // ページネーターーのカレントページの取得
-        $currentPage = $this->_getPage();
+        // ページネーターのカレントページの取得
+        $currentPage = $this->_getPageNumber();
 
         // ファイルタイプの絞り込み条件取得(デフォルトでは'all')
         $type = self::FILEEXT_ALL;
@@ -122,7 +128,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->condition = $condition;
 
         // viewにファイルデータを渡す
-        $this->view->medias = $this->_media->findMedias($condition, $currentPage, parent::PAGE_LIMIT);
+        $this->view->medias = $this->_media->findMedias($condition, $currentPage, $this->_getPageLimit());
 
         // アップロードできる最大サイズをviewに教える
         $this->view->fileSizeMax = self::FILE_SIZE_MAX . 'Byte';
@@ -184,7 +190,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // オリジナルファイルの情報を取得
         $fileInfo = pathinfo($adapter->getFileName());
 
-        // 拡張子取得
+        // 拡張子取得(ファイル名から取得しているのみなので偽装対策が必要 @todo )
         $extType = $fileInfo['extension'];
 
         // 保存時の物理名に使う新しいファイルIDを取得
@@ -274,7 +280,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // 編集対象のファイルIDを取得（指定されていなかったらmediaトップへ）
         $id = $this->_getParam('id');
-        if ($id === null) {
+        if (is_null($id)) {
             $this->_helper->redirector('index');
         }
 
@@ -296,8 +302,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_redirect($redirectUrl);
         }
 
-        // サービスにファイルの情報を渡してUpdateさせるためのデータ
-        $dat = array(
+        // サービスにDBをUpdateさせるためのファイルの情報
+        $fileInfo = array(
             'name' => $post['name'],
             'comment' => $post['comment'],
             'update_date' => date('Y/m/d H:i:s')
@@ -340,11 +346,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_media->saveThumnailFromImage($adapter->getFileName());
 
             // 保存するファイル情報、拡張子を取得しておく
-            $dat['type'] = $extType;
+            $fileInfo['type'] = $extType;
         }
 
         // DBの更新
-        if (!$this->_media->updateMediaInfo($id, $dat)) {
+        if (!$this->_media->updateMediaInfo($id, $fileInfo)) {
             $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
             $this->_redirect($redirectUrl);
         }
@@ -365,7 +371,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     {
         // IDが渡されていなければリダイレクト
         $id = $this->_getParam('id', null);
-        if ($id === null) {
+        if (is_null($id)) {
             $this->_helper->redirector('index');
         }
 
@@ -385,7 +391,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->_helper->redirector(
             'index', null, null,
             array (
-                'page' => $this->_getPage(),
+                'page' => $this->_getPageNumber(),
                 'type' => $this->_getParam('type', 'all'),
                 'sort' => $this->_getParam('sort', 'name'),
                 'order' => $this->_getParam('order', 'asc')

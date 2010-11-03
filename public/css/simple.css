@@ -237,7 +237,8 @@ div.entryHead h2 {
     font-size: 150%;
     font-weight: normal;
 }
-div.entryHead h2 a {
+div.entryHead h2 a ,
+div.entryHead h2 span {
     text-decoration: none;
     color: #3399cc;
     background: url(../images/simple/bg_entryTitle.gif) no-repeat left center;
@@ -286,6 +287,12 @@ div.entryBody p {
 }
 div.entryBody ul li {
     margin-bottom: 10px;
+}
+div.entryBody ul.list li {
+    margin-bottom: 5px;
+    list-style-type: disc;
+    list-style-position: inside;
+    margin-left: 3px;
 }
 
 /*---------------------------------------------------------------*/
@@ -341,6 +348,47 @@ div.entryBody dl.entryTag dd {
     margin-right: 10px;
 }
 
+/*------------------------------------------------------------*/
+/*    pageNav style                                           */
+/*------------------------------------------------------------*/
+div#pageNav {
+    text-align: center;
+    margin-top:20px;
+}
+div#pageNav ul {
+    margin: 0 auto;
+    zoom:100%;
+}
+div#pageNav ul:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
+}
+div#pageNav ul li {
+    display:inline;
+    margin-right: 4px;
+    margin-left: 4px;
+}
+div#pageNav ul li.navNumber a {
+    background-color: #eaeaea;
+    padding: 4px 7px;
+    text-decoration: none;
+    border:solid 1px #dedede;
+}
+div#pageNav ul li.navNumber a:hover {
+    background-color: #f4f4f4;
+    border:solid 1px #dedede;
+}
+div#pageNav ul li.current a {
+    background-color: #dedede;
+    border:solid 1px #d0d0d0;
+    font-weight: bold;
+}
+
 /*---------------------------------------------------------------*/
 /*-- subContent style ------------------------------------------*/
 /*---------------------------------------------------------------*/
@@ -369,7 +417,7 @@ div#navArea div.navList h3 {
 }
 div#navArea div.navList ul li a,
 div#navArea div.navList ul li span {
-    background: url(../images/simple/bg_linkList.gif) no-repeat left 0.4em;
+    background: url(/images/simple/bg_linkList.gif) no-repeat left 0.4em;
     padding-left: 16px;
     margin-bottom: 6px;
     display: block;
@@ -379,110 +427,75 @@ div#navArea div.navList p {
     margin: 15px 0 6px;
 }
 
-
-/*------------------------------------------------------------*/
-/*    pageNav style                                           */
-/*------------------------------------------------------------*/
-div#pageNav {
-    margin-top: 20px;
-    text-align: center;
-}
-div#pageNav ul {
-    margin: 0 auto;
-    zoom: 100%;
-}
-div#pageNav ul li {
-    display:inline;
-    margin-right: 4px;
-    margin-left: 4px;
-}
-div#pageNav ul li.navNumber a ,
-div#pageNav ul li.current span {
-    background-color: #eaeaea;
-    padding: 4px 7px;
-    text-decoration: none;
-    border:solid 1px #dedede;
-}
-div#pageNav ul li.navNumber a:hover {
-    background-color: #f4f4f4;
-    border:solid 1px #dedede;
-}
-div#pageNav ul li.current span {
-    background-color: #dedede;
-    border:solid 1px #d0d0d0;
-    font-weight: bold;
-}
-
-
 /*---------------------------------------------------------------*/
 /*-- tagCloud style ---------------------------------------------*/
 /*---------------------------------------------------------------*/
 ul#tagCloud {
-	margin-bottom: 6px;
-	zoom: 100%;
+    margin-bottom: 6px;
+    zoom: 100%;
 }
 ul#tagCloud:after {
-	content: ".";
-	display: block;
-	visibility: hidden;
-	height: 0.1px;
-	font-size: 0.1em;
-	line-height: 0;
-	clear: left;
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: left;
 }
 div#navArea div.navList ul#tagCloud li ,
 div#mainContent div.entry ul#tagCloud li {
-	margin-right: 5px;
-	margin-bottom: 3px;
-	display: inline;
+    margin-right: 5px;
+    margin-bottom: 3px;
+    display: inline;
 }
 div#navArea div.navList ul#tagCloud li a ,
 div#mainContent div.entry ul#tagCloud li a {
-	margin-bottom: 0;
-	padding-left: 0;
-	background: none;
-	display: inline;
+    margin-bottom: 0;
+    padding-left: 0;
+    background: none;
+    display: inline;
 }
 ul#tagCloud li.level10 a {
-	font-size: 80%;
+    font-size: 80%;
 }
 ul#tagCloud li.level9 a {
-	font-size: 90%;
+    font-size: 90%;
 }
 ul#tagCloud li.level8 a {
-	font-size: 100%;
+    font-size: 100%;
 }
 ul#tagCloud li.level7 a {
-	font-size: 110%;
+    font-size: 110%;
 }
 ul#tagCloud li.level6 a {
-	font-size: 120%;
+    font-size: 120%;
 }
 ul#tagCloud li.level5 a {
-	font-size: 130%;
+    font-size: 130%;
 }
 ul#tagCloud li.level4 a {
-	font-size: 140%;
+    font-size: 140%;
 }
 ul#tagCloud li.level3 a {
-	font-size: 150%;
-	font-weight: bold;
+    font-size: 150%;
+    font-weight: bold;
 }
 ul#tagCloud li.level2 a {
-	font-size: 160%;
-	font-weight: bold;
+    font-size: 160%;
+    font-weight: bold;
 }
 ul#tagCloud li.level1 a {
-	font-size: 170%;
-	font-weight: bold;
+    font-size: 170%;
+    font-weight: bold;
 }
 ul#tagCloud li.level1 a:link ,
 ul#tagCloud li.level1 a:visited {
-	color: #144f8b;
+    color: #144f8b;
 }
 ul#tagCloud li.level1 a:hover ,
 ul#tagCloud li.level1 a:active {
-	color:#33CC33;
+    color:#33CC33;
 }
 
 /*---------------------------------------------------------------*/
