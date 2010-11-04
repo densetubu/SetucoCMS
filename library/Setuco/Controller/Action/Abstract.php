@@ -182,4 +182,18 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return $result;
     }
 
+    /**
+     * フラッシュメッセージがアクションヘルパーに設定されていればビューにセットして可視化します。
+     *
+     * @param  string $paramName ビューにセットする変数名。デフォルトは "flashMessage"。
+     * @return void
+     * @author charlesvineyard
+     */
+    protected function _showFlashMessages($paramName = 'flashMessages')
+    {
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->$paramName = $flashMessages;
+        }
+    }    
 }
