@@ -25,6 +25,18 @@
 class Admin_LoginController extends Setuco_Controller_Action_Abstract
 {
     /**
+     * 初期化処理
+     *
+     * @return void
+     * @author charlesvineyard
+     */
+    public function init()
+    {
+        parent::init();
+        $this->_setLayoutName('layout-login');
+    }
+    
+    /**
      * ログインフォーム
      *
      * @return void
@@ -125,17 +137,6 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
             $submit
         ));
         return $form;
-    }
-
-    /**
-     * レイアウト名を取得します。
-     *
-     * @return string レイアウト名
-     * @author charlesvineyard
-     */
-    protected function getLayoutName()
-    {
-        return 'layout-login';
     }
 }
 
