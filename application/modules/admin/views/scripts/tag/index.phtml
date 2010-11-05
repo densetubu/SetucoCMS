@@ -63,9 +63,11 @@ function confirmRedirect(url){
             </div>
         </div>
     </div>
-    <?php if ($this->flashMessage): ?>
+    <?php if (count($this->flashMessages)): ?>
         <div id="messageArea">
-            <p><?php echo $this->flashMessage ?></p>
+        <?php foreach ($this->flashMessages as $flashMessage): ?>
+            <p><?php echo $flashMessage ?></p>
+        <?php endforeach ?>
             <p>
                 <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
             </p>
@@ -96,8 +98,7 @@ function confirmRedirect(url){
         <tbody>
             <?php foreach($this->tags as $tag): ?>
             <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
-                <?php echo $this->partial('tag-row.phtml', array('tag' => $tag, 'editTagForm' => $this->editTagForm))?>
-
+                <?php echo $this->partial('tag-row.phtml', array('tag' => $tag, 'editTagForm' => $this->editTagForm)) ?>
             </tr>
             <?php endforeach ?>
         </tbody>
