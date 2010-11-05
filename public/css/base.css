@@ -645,12 +645,6 @@ div#mainContent dl.editArea dd input {
     padding: 4px;
     width: 100%;
 }
-div#mainContent dl.editArea dt#site_description_h {
-    height: 4em;
-}
-div#mainContent dl.editArea dd#site_description_d {
-    height: 4em;
-}
 div#mainContent dl.editArea dd textarea {
     margin-top: -2px;
     padding: 4px;
@@ -663,6 +657,22 @@ div#mainContent p.editAreaP input {
 }
 input#cat_new {
     width: 50%;
+}
+/* siteForm */
+div#mainContent dl#siteForm dt {
+    height: 4em;
+}
+div#mainContent dl#siteForm dd {
+    height: 4em;
+}
+div#mainContent dl#siteForm dt#site_description_t {
+    height: 6em;
+}
+div#mainContent dl#siteForm dd#site_description_d {
+    height: 6em;
+}
+div#mainContent dl#siteForm dd span {
+    font-size: 80%;
 }
 
 /*------------------------------------------------------------*/

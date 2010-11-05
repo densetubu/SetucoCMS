@@ -27,20 +27,20 @@
             </div>
         <?php endif; ?>
 
-            <dl class="editArea"> 
+            <dl id="siteForm" class="editArea"> 
 
                 <dt><label for="name">サイト名</label></dt> 
-                <dd><input type="text" id="name" name="name" value=<?php echo $this->sites['name'];?> onblur="if(this.value == '') { this.value='日本電子専門学校 電設部?'; }" /><br />サイト上に表示される名前です。</dd> 
+                <dd><input type="text" id="name" name="name" value=<?php echo $this->sites['name'];?> onblur="if(this.value == '') { this.value='日本電子専門学校 電設部?'; }" /><br /><span>サイト上に表示される名前です。</span></dd> 
 
                 <dt><label for="url">サイトURL<br /><span>（リンク切れに注意）</span></label></dt> 
-                <dd><input type="text" id="url" name="url" value=<?php echo $this->sites['url'];?> onblur="if(this.value == '') { this.value='http://design1.chu.jp/testsetuco/penguin/'; }" /><br />サイトを表示するURLです。</dd> 
+                <dd><input type="text" id="url" name="url" value=<?php echo $this->sites['url'];?> onblur="if(this.value == '') { this.value='http://design1.chu.jp/testsetuco/penguin/'; }" /><br /><span>サイトを表示するURLです。</span></dd> 
 
-                <dt id="site_description_h"><label for="description">説明</label></dt> 
-                <dd id="site_description_d"><textarea rows="2" id="comment" name="comment"><?php echo $this->sites['comment'];?></textarea><br />サイトの説明です。サイトの概要を入力してください。</dd> 
+                <dt id="site_description_t"><label for="description">説明</label></dt> 
+                <dd id="site_description_d"><textarea rows="2" id="comment" name="comment"><?php echo $this->sites['comment'];?></textarea><br /><span>サイトの説明です。サイトの概要を入力してください。</span></dd> 
 <!--<dd><input type="text" id="comment" name="comment" value='' /></dd>--> 
 
                 <dt><label for="keyword">キーワード<br /><span>（カンマ[&nbsp;,&nbsp;]で区切る）</span></label></dt> 
-                <dd><input type="text" id="keyword" name="keyword" value=<?php echo $this->sites['keyword'];?> /><br />サイトのキーワードです。サイトに関連する単語を入力してください。</dd> 
+                <dd><input type="text" id="keyword" name="keyword" value=<?php echo $this->sites['keyword'];?> /><br /><span>サイトのキーワードです。サイトに関連する単語を入力してください。</span></dd> 
 
             </dl> 
 
