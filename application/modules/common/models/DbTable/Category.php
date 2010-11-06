@@ -209,6 +209,23 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     }
 
     /**
+     * 指定したカラム・ソートでカテゴリー一覧を取得します。
+     *
+     * @param string|array $selectColumns 取得するカラム
+     * @param string $sortColumn 並べ替えるカラム名
+     * @param string $order 並び順(asc or desc) デフォルトは asc
+     * @return array カテゴリー情報の一覧
+     * @author charlesvineyard
+     */
+    public function findCategories($selectColumns, $sortColumn, $order = 'asc')
+    {
+        $select = $this->_initializeSelect()
+                ->from($this->_name, $selectColumns)
+                ->order("$sortColumn $order");
+        return $this->fetchAll($select)->toArray();
+    }
+
+    /**
      * 指定の親カテゴリIdを持つカテゴリーを取得します。
      *
      * @param  int $parentId 親カテゴリID

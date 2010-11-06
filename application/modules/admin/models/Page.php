@@ -24,14 +24,35 @@
  */
 class Admin_Model_Page
 {
-    
     /**
      * ページDAO
-     * 
+     *
      * @var Common_Model_DbTable_Page
      */
     private $_pageDao;
-    
+
+    /**
+     * タグDAO
+     *
+     * @var Common_Model_DbTable_Tag
+     */
+    private $_tagDao;
+
+    /**
+     * ページタグDAO
+     *
+     * @var Common_Model_DbTable_PageTag
+     */
+    private $_pageTagDao;
+
+
+    /**
+     * アカウントDAO
+     *
+     * @var Common_Model_DbTable_Account
+     */
+    private $_accountDao;
+
     /**
      * コンストラクター
      *
@@ -40,8 +61,11 @@ class Admin_Model_Page
     public function __construct()
     {
         $this->_pageDao = new Common_Model_DbTable_Page();
+        $this->_tagDao = new Common_Model_DbTable_Tag();
+        $this->_pageTagDao = new Common_Model_DbTable_PageTag();
+        $this->_accountDao = new Common_Model_DbTable_Account();
     }
-    
+
     /**
      * ページをロードします。
      *
@@ -79,7 +103,7 @@ class Admin_Model_Page
     public function loadLastCreatedPages($count)
     {
         return $this->_pageDao->findLastCreatedPages($count, true, true);
-        
+
     }
 
     /**
@@ -124,4 +148,110 @@ class Admin_Model_Page
         );
     }
 
+    /**
+     * ページを登録します。
+     *
+     * @param string    $title       ページタイトル
+     * @param string    $contents    ページコンテンツ
+     * @param string    $outline     ページの概要
+     * @param array     $tags        タグ名の配列
+     * @param Zend_Date $create_date 作成日時
+     * @param int       $status      公開状態
+     * @param int       $category_id カテゴリーID
+     * @author charlesvineyard
+     */
+    public function regist($title, $contents, $outline, $tags,
+            $create_date, $status, $category_id)
+    {
+        $pageId = $this->_registPage($title, $contents, $outline, $create_date, $status, $category_id);
+        $tagIds = $this->_registTagIfNotExist($tags);
+        foreach ($tagIds as $tagId) {
+            $this->_pageTagDao->insert(array(
+                'page_id' => $pageId,
+                'tag_id'  => $tagId
+            ));
+        }
+    }
+
+    /**
+     * ページを登録します。
+     *
+     * @param string    $title       ページタイトル
+     * @param string    $contents    ページコンテンツ
+     * @param string    $outline     ページの概要
+     * @param Zend_Date $create_date 作成日時
+     * @param int       $status      公開状態
+     * @param int       $category_id カテゴリーID
+     * @return int 登録したページのページID
+     * @author charlesvineyard
+     */
+    private function _registPage($title, $contents, $outline,
+            $create_date, $status, $category_id)
+    {
+        $account = $this->_accountDao->findByLoginId(Zend_Auth::getInstance()->getIdentity());
+        $page = array(
+            'title'       => $title,
+            'contents'    => $contents,
+            'outline'     => $outline,
+            'create_date' => $create_date,
+            'account_id'  => $account['id'],
+            'status'      => $status,
+            'category_id' => $category_id,
+            'update_date' => $create_date,
+        );
+        return $this->_pageDao->insert($page);
+    }
+
+    /**
+     * タグがもしなければ登録します。
+     * 登録後または既に存在するタグIDの配列を返します。
+     *
+     * @param  array $tags タグ名の配列
+     * @return array 指定したタグ名のタグIDの配列
+     * @author charlesvineyard
+     */
+    private function _registTagIfNotExist($tags)
+    {
+        $tagIds = array();
+        foreach ($tags as $tag) {
+            $tagId = $this->_tagDao->findTagIdByTagName($tag);
+            if ($tagId === null) {
+                $insertedTagId = $this->_tagDao->insert(array('name' => $tag));
+                $tagIds[] = $insertedTagId;
+            } else {
+                $tagIds[] = $tagId;
+            }
+        }
+        return $tagIds;
+    }
+
+//    /**
+//     * タグを更新する
+//     *
+//     * @param  $id   タグID
+//     * @param  $name タグ名
+//     * @return void
+//     * @author charlesvineyard
+//     */
+//    public function update($id, $name)
+//    {
+//        if ($this->isExistsTagName($name)) {
+//            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
+//        }
+//        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+//        $this->_tagDao->update(array('name' => $name), $where);
+//    }
+//
+//    /**
+//     * タグを削除する
+//     *
+//     * @param  $id   タグID
+//     * @return void
+//     * @author charlesvineyard
+//     */
+//    public function delete($id)
+//    {
+//        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
+//        $this->_tagDao->delete($where);
+//    }
 }

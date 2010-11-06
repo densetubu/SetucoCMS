@@ -70,7 +70,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
 
     /**
      * 指定した並び順でタグ一覧を取得します。
-     * 
+     *
      * @param string|array $order 並び順
      * @param int $page 現在のページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
@@ -123,6 +123,24 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
         } else {
             return null;
         }
+    }
+
+    /**
+     * タグ名を検索し、該当するタグのIDを返す。
+     *
+     * @param string $tagName 検索したいタグ名
+     * @return array|null タグID。該当するタグがなければnull。
+     */
+    public function findTagIdByTagName($tagName)
+    {
+        $select = $this->select()->from(array('t' => $this->_name), 'id');
+        $select->where('name = ?', $tagName);
+        $result = $this->fetchRow($select);
+        if (count($result) == 0) {
+            return null;
+        }
+        $result = $result->toArray();
+        return $result['id'];
     }
 
 }

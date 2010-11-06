@@ -24,170 +24,189 @@
  */
 class Admin_Model_Category
 {
-	/**
-	 * 初期設定をする
-	 *
-	 * @author suzuki_mar
-	 */
-	public function __construct()
-	{
-		$this->_dao = new Common_Model_DbTable_Category();
+    /**
+     * 初期設定をする
+     *
+     * @author suzuki_mar
+     */
+    public function __construct()
+    {
+        $this->_dao = new Common_Model_DbTable_Category();
 
-	}
+    }
 
-	/**
-	 * カテゴリーを取得する
-	 *
-	 * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
-	 * @param int $page 現在のページ番号
-	 * @param int $limit 1ページあたり何件のデータを取得するのか
-	 * @return array 	カテゴリー情報の一覧
-	 * @author  saniker10, suzuki-mar
-	 * @todo スタブのデータを取得している
-	 */
-	public function searchCategories($sort, $page, $limit)
-	{
+    /**
+     * カテゴリーを取得する
+     *
+     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
+     * @param int $page 現在のページ番号
+     * @param int $limit 1ページあたり何件のデータを取得するのか
+     * @return array 	カテゴリー情報の一覧
+     * @author  saniker10, suzuki-mar
+     * @todo スタブのデータを取得している
+     */
+    public function searchCategories($sort, $page, $limit)
+    {
         //pageを数値にキャストする
         $page = (int)$page;
-		
-		//ソートする方法をパラメータによって変更する desc意外は昇順(asc)
-		if($sort === 'desc') {
-			$sort = "DESC";
-		} else {
-			$sort = "ASC";
-		}
 
-		//指定したソートをしたデータを取得する
-		$searchResult = $this->_dao->findSortCategories($sort, $page, $limit);
+        //ソートする方法をパラメータによって変更する desc意外は昇順(asc)
+        if($sort === 'desc') {
+            $sort = "DESC";
+        } else {
+            $sort = "ASC";
+        }
 
-		//配列の方が操作しやすいので配列を戻り値にする
-		$result = $searchResult->toArray();
-		
-		//配列の順番が偶数かどうかを設定する
-		foreach ($result as $key => &$value) {
-			if ($key % 2 === 0) {
-				$value['is_even'] = true;
-			} else {
-				$value['is_even'] = false;
-			}
-		}
-		unset($value, $key);
-		
-		return $result;
-	}
+        //指定したソートをしたデータを取得する
+        $searchResult = $this->_dao->findSortCategories($sort, $page, $limit);
 
-	/**
-	 * 検索条件で、リミットしなかった場合に該当結果が何件あったのかを取得する
-	 *
-	 * @param String $keyword 検索するキーワード
-	 * @return int 何件該当したデータが存在したか
-	 * @author suzuki-mar
-	 */
-	public function countCategories()
-	{
-		$result = $this->_dao->count();
-		
-		return $result;
-	}
+        //配列の方が操作しやすいので配列を戻り値にする
+        $result = $searchResult->toArray();
 
-	/**
-	 * 指定したidのデータが存在するか
-	 *
-	 * @param  numeric 存在するかを調べるid
-	 * @return boolean 指定したidが存在するか
-	 * @author suzuki-mar
-	 * @todo 固定値(true)をかえしている
-	 */
-	public function isExistsId($id)
-	{
-		
-		//idのカテゴリーが存在するかを調べる
-		$category = $this->_dao->findById($id);
-		
-		//取得できたら、trueにする
-		$result = (boolean)$category;
-		
-		return $result;
-	}
+        //配列の順番が偶数かどうかを設定する
+        foreach ($result as $key => &$value) {
+            if ($key % 2 === 0) {
+                $value['is_even'] = true;
+            } else {
+                $value['is_even'] = false;
+            }
+        }
+        unset($value, $key);
 
-	/**
-	 * カテゴリーを新規作成する
-	 * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
-	 *
-	 * @param array $inputData 入力したデータ: バリデートチェックした入力データ
-	 * @return boolean 登録できたか
-	 * @author suzuki-mar
-	 */
-	public function registCategory($inputData)
-	{
-		//DBに登録するデータを生成する
-		$saveData['name'] = $inputData['cat_name'];
-		//バージョン1では、nullにする
-		$saveData['parent_id'] = null;
+        return $result;
+    }
 
-		//データを新規登録する
-		$result = $this->_regiser($saveData);
+    /**
+     * カテゴリーIDと名前のセットを取得する。
+     *
+     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
+     * @param int $page 現在のページ番号
+     * @param int $limit 1ページあたり何件のデータを取得するのか
+     * @return array キー:カテゴリーID、値:カテゴリー名の配列
+     * @author charlesvineyard
+     */
+    public function searchAllCategoryIdAndNameSet()
+    {
+        $result = $this->_dao->findCategories(array('id', 'name'), 'name');
+        $idNameSet = array();
+        foreach ($result as $row) {
+            $idNameSet[$row['id']] = $row['name'];
+        }
+        return $idNameSet;
+    }
 
-		return $result;
-	}
+    /**
+     * 検索条件で、リミットしなかった場合に該当結果が何件あったのかを取得する
+     *
+     * @param String $keyword 検索するキーワード
+     * @return int 何件該当したデータが存在したか
+     * @author suzuki-mar
+     */
+    public function countCategories()
+    {
+        $result = $this->_dao->count();
 
-	/**
-	 * カテゴリーを編集する
-	 * コントローラーから、バリデートチェックした入力パラメーターをすべてと、編集するidを取得する
-	 *
-	 * @param array $inputData 入力したデータ: バリデートチェックした入力データ
-	 * @param int   $updateId  アップデートするデータのID
-	 * @return boolean 編集できたか
-	 * @author suzuki-mar
-	 */
-	public function updateCategory($inputData, $updateId)
-	{
-		//アップデートするデータを作成する
+        return $result;
+    }
+
+    /**
+     * 指定したidのデータが存在するか
+     *
+     * @param  numeric 存在するかを調べるid
+     * @return boolean 指定したidが存在するか
+     * @author suzuki-mar
+     * @todo 固定値(true)をかえしている
+     */
+    public function isExistsId($id)
+    {
+
+        //idのカテゴリーが存在するかを調べる
+        $category = $this->_dao->findById($id);
+
+        //取得できたら、trueにする
+        $result = (boolean)$category;
+
+        return $result;
+    }
+
+    /**
+     * カテゴリーを新規作成する
+     * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
+     *
+     * @param array $inputData 入力したデータ: バリデートチェックした入力データ
+     * @return boolean 登録できたか
+     * @author suzuki-mar
+     */
+    public function registCategory($inputData)
+    {
+        //DBに登録するデータを生成する
+        $saveData['name'] = $inputData['cat_name'];
+        //バージョン1では、nullにする
+        $saveData['parent_id'] = null;
+
+        //データを新規登録する
+        $result = $this->_regiser($saveData);
+
+        return $result;
+    }
+
+    /**
+     * カテゴリーを編集する
+     * コントローラーから、バリデートチェックした入力パラメーターをすべてと、編集するidを取得する
+     *
+     * @param array $inputData 入力したデータ: バリデートチェックした入力データ
+     * @param int   $updateId  アップデートするデータのID
+     * @return boolean 編集できたか
+     * @author suzuki-mar
+     */
+    public function updateCategory($inputData, $updateId)
+    {
+        //アップデートするデータを作成する
         $updateData['name'] = $inputData['name'];
-        
+
         //アップデートする
         $result = $this->_updateByPrimary($updateData, $updateId);
-	    return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * カテゴリーを削除する
-	 *
-	 * コントローラーから、削除するidを取得する
-	 *
-	 * @param  int   $deleteId  削除するデータのID
-	 * @return boolean 削除できたか
-	 * @author suzuki-mar
-	 */
-	public function deleteCategory($deleteId)
-	{
+    /**
+     * カテゴリーを削除する
+     *
+     * コントローラーから、削除するidを取得する
+     *
+     * @param  int   $deleteId  削除するデータのID
+     * @return boolean 削除できたか
+     * @author suzuki-mar
+     */
+    public function deleteCategory($deleteId)
+    {
 
-		//データを削除する
-		$result = $this->_deleteByPrimary($deleteId);
-				
-		return $result;
-	}
-	
-	/*****************************
-	 * 使いまわせるかもしれないメソッド *
-	 *****************************/
-	
-	/**
-	 * １件のみデータを新規作成する
-	 * 
-	 * @param array $saveData 新規登録するデータ
-	 * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
-	 * @return 新規作成できたか
-	 * @author suzuki-mar
-	 */
-	protected function _regiser($saveData, $dao = null)
-	{
-	   //指定がなかったら、オブジェクト変数のdaoを使用する
-	   if (is_null($dao)) {
-	   	$dao = $this->_dao;
-	   }
-		
-       //作成に失敗したときに例外が発生する
+        //データを削除する
+        $result = $this->_deleteByPrimary($deleteId);
+
+        return $result;
+    }
+
+    /*****************************
+     * 使いまわせるかもしれないメソッド *
+     *****************************/
+
+    /**
+     * １件のみデータを新規作成する
+     *
+     * @param array $saveData 新規登録するデータ
+     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
+     * @return 新規作成できたか
+     * @author suzuki-mar
+     */
+    protected function _regiser($saveData, $dao = null)
+    {
+        //指定がなかったら、オブジェクト変数のdaoを使用する
+        if (is_null($dao)) {
+            $dao = $this->_dao;
+        }
+
+        //作成に失敗したときに例外が発生する
         try {
             //データをinsertする
             $dao->insert($saveData);
@@ -196,12 +215,12 @@ class Admin_Model_Category
         } catch (Zend_Exception $e) {
             $result = false;
         }
-        
+
         return $result;
-        
-	}
-	
-	 /**
+
+    }
+
+    /**
      * 指定したプライマリキーのデータをアップデートする
      *
      * @param array $inputData 入力したデータ: バリデートチェックした入力データ
@@ -211,64 +230,64 @@ class Admin_Model_Category
      * @author suzuki-mar
      */
     protected function _updateByPrimary($updateData, $updateId, $dao = null)
-    { 
-     //指定がなかったら、オブジェクト変数のdaoを使用する
-       if (is_null($dao)) {
-        $dao = $this->_dao;
-       }
-    	
+    {
+        //指定がなかったら、オブジェクト変数のdaoを使用する
+        if (is_null($dao)) {
+            $dao = $this->_dao;
+        }
+
         //アップデートに失敗したときに例外が発生する
         try {
             //データをupdateする
             $primary    = $dao->getPrimary();
-            
+
             //数値にキャストする
             $updateId = (int)$updateId;
             //アップデートする条件のwhere句を生成する
             $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
-                        
+
             $dao->update($updateData, $where);
             $result     = true;
 
         } catch (Zend_Exception $e) {
-            $result = false;            
+            $result = false;
         }
-        
+
         return $result;
     }
-	
+
     /**
      * 指定したプライマリキーのデータを削除する
      *
      * @param  int   $deleteId  削除するデータのID
-     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス     
+     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
      * @return boolean 削除できたか
      * @author suzuki-mar
      */
     protected  function _deleteByPrimary($deleteId, $dao = null)
     {
-     //指定がなかったら、オブジェクト変数のdaoを使用する
-       if (is_null($dao)) {
-        $dao = $this->_dao;
-       }
-    	
+        //指定がなかったら、オブジェクト変数のdaoを使用する
+        if (is_null($dao)) {
+            $dao = $this->_dao;
+        }
+
         //アップデートに失敗したときに例外が発生する
         try {
             //データをupdateする
             $primary    = $dao->getPrimary();
-            
+
             //数値にキャストする
             $deleteId = (int)$deleteId;
             //アップデートする条件のwhere句を生成する
             $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $deleteId);
-                        
+
             $dao->delete($where);
             $result     = true;
 
         } catch (Zend_Exception $e) {
-            $result = false;            
+            $result = false;
         }
-        
+
         return $result;
     }
 

@@ -54,7 +54,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     public function findLastUpdatePages($getPageCount)
     {
         $select = $this->select();
-        
+
         //公開しているものしか取得しない
         $select->where('status = ?', self::STATUS_OPEN);
 
@@ -91,8 +91,8 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
                ->order('create_date desc')
                ->limit($getPageCount);
         return $this->fetchAll($select)->toArray();
-    }    
-    
+    }
+
     /**
      * ページを数えます。
      *
@@ -111,13 +111,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         }
         if (! is_null($createDateStart)) {
             $select->where('create_date >= ?', $createDateStart);
-        }                
+        }
         if (! is_null($createDateEnd)) {
             $select->where('create_date < ?', $createDateEnd);
         }
         return $this->fetchAll($select)->count();
     }
-    
+
     /**
      * カテゴリを指定して記事を取得する。currentPageとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
@@ -193,7 +193,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         }
 
         return $this->fetchAll($select);
-        
+
     }
 
     /**
@@ -253,7 +253,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             array('p' => $this->_name),
             array('page_count' => 'COUNT(DISTINCT p.id)')
         );
-        
+
         $select->order('p.update_date DESC');
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
@@ -271,7 +271,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 
         $result = $this->fetchAll($select)->toArray();
         return $result[0]['page_count'];
-        
-    }
 
+    }
 }
