@@ -53,7 +53,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         $this->view->newTagForm = $this->_getParam('newTagForm', $this->_createNewTagForm());
         $this->view->editTagForm = $this->_getParam('editTagForm', $this->_createEditTagForm());
-        $this->view->tags = $this->_tagService->loadAllTags($this->_getParam('order', 'asc'), $this->_getPageNumber(), $this->_getPageLimit());
+        $this->view->tags = $this->_tagService->loadTags($this->_getParam('order', 'asc'), $this->_getPageNumber(), $this->_getPageLimit());
         $this->setPagerForView($this->_tagService->countAllTags());
         $this->_showFlashMessages();
     }

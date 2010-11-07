@@ -81,14 +81,14 @@ class Admin_Model_Tag
      * @return array タグ情報の一覧
      * @author saniker10, suzuki-mar, charlesvineyard
      */
-    public function loadAllTags($order, $pageNumber, $limit)
+    public function loadTags($order, $pageNumber, $limit)
     {
             return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
     }
 
     /**
      * すべてのタグを数えます
-     * 
+     *
      * @return int すべてのタグの個数
      * @author charlesvineyard
      */
