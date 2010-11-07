@@ -73,7 +73,7 @@ class Admin_Model_Tag
     }
 
     /**
-     * すべてのタグ情報を取得する
+     * タグ情報を取得する
      *
      * @param  string $order       asc か　desc
      * @param  int    $pageNumber  ページ番号(オフセットカウント)
@@ -83,7 +83,7 @@ class Admin_Model_Tag
      */
     public function loadTags($order, $pageNumber, $limit)
     {
-            return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
+        return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
     }
 
     /**
