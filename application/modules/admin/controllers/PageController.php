@@ -110,7 +110,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'sub_open',
                  array(
                      'label'   => '公開して保存',
-                     'onclick' => 'setStatus(this)',
                  )
              )
              ->addElement(
@@ -118,7 +117,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'sub_draft',
                  array(
                      'label' => '下書きして保存',
-                     'onclick' => 'setStatus(this)',
                      )
              )
              ->addElement(
@@ -220,7 +218,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'id' => 'create_time',
                      'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
-                     'TimePattern' => 'HH:mm:ss',    // JSのフォーマット、表示用
+                     'TimePattern' => 'HH:mm:ss',    // 表示用フォーマット
                  )
              );
         $form->setMinimalDecoratorElements(array(
