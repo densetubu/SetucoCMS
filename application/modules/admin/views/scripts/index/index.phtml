@@ -82,23 +82,24 @@ function hideAmbitionEdit() {
             </div>
         </div>
     </div>
-    <dl class="check">
-        <dt>更新状況</dt>
-        <dd><?php echo $this->updateStatus ?></dd>
-    </dl>
     <dl class="straight">
+        <dt>更新状況</dt>
+        <dd><img src="<?php echo $this->baseUrl('/images/status_good.jpg') ?>" alt="すごい！最高！！！" width="237" height="87" /></dd>
+        <!-- <dd><?php echo $this->updateStatus ?></dd> -->
+    </dl>
+    <dl class="check">
         <dt>最終更新日</dt>
         <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
     </dl>
-    <dl class="check">
+    <dl class="straight">
         <dt>今月の作成数</dt>
         <dd><?php echo $this->createdPageCount ?>ページ（<?php echo $this->diffGoal ?>）</dd>
     </dl>
-    <dl class="straight">
+    <dl class="check">
         <dt>総ページ数</dt>
         <dd><?php echo $this->totalPageCount ?>ページ</dd>
     </dl>
-    <dl class="check">
+    <dl class="straight">
         <dt>経過日数</dt>
         <dd><?php echo $this->pastDaysFromOpen ?>日目（<?php echo $this->openDate ?>開設）</dd>
     </dl>
