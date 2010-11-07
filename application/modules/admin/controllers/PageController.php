@@ -61,7 +61,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var string
      */
-    private $_uncategorizedValue = '0';
+    private $_uncategorizedValue = 'default';
 
     /**
      * 初期処理
@@ -259,6 +259,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function createAction()
     {
         $form = $this->_createForm();
+        d($form, 'created');
         if (!$form->isValid($_POST)) {
             $this->_setParam('form', $form);
             return $this->_forward('form');
