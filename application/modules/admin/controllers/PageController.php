@@ -41,6 +41,22 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private $_categoryService;
 
     /**
+     * 日付テキストボックスのvalue属性のフォーマット
+     * (画面に表示されるものではない)
+     *
+     * @var string
+     */
+    const FORMAT_DATE_TEXT_BOX = 'YYYY-MM-dd';
+
+    /**
+     * 時刻テキストボックスのvalue属性のフォーマット
+     * (画面に表示されるものではない)
+     *
+     * @var string
+     */
+    const FORMAT_TIME_TEXT_BOX = 'THH:mm:ss';
+
+    /**
      * 初期処理
      *
      * @author charlesvineyard
@@ -85,6 +101,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createForm()
     {
         $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
              ->setAction($this->_helper->url('create'))
@@ -194,6 +211,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'create_date',
                  array(
                      'id' => 'create_date',
+                     'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
                  )
              )
              ->addElement(
@@ -201,6 +219,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'create_time',
                  array(
                      'id' => 'create_time',
+                     'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
+                     'TimePattern' => 'HH:mm:ss',    // JSのフォーマット、表示用
                  )
              );
         $form->setMinimalDecoratorElements(array(
@@ -278,10 +298,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $nowDate = Zend_Date::now();
         $createDate = $this->_getParam('create_date');
-        $createDate = Setuco_Util_String::getDefaultIfEmpty($createDate, $nowDate->toString('YYYY-MM-dd'));
+        $createDate = Setuco_Util_String::getDefaultIfEmpty(
+            $createDate, $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
         $createTime = $this->_getParam('create_time');
-        $createTime = Setuco_Util_String::getDefaultIfEmpty($createTime, $nowDate->toString('THH:mm:00'));
-        return new Zend_Date($createDate . $createTime, 'YYYY-MM-ddTHH:mm:00');
+        $createTime = Setuco_Util_String::getDefaultIfEmpty(
+            $createTime, $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+        return new Zend_Date(
+            $createDate . $createTime,
+            self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX);
     }
 
     /**
