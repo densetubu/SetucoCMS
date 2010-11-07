@@ -95,6 +95,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formAction()
     {
+        $flashMessages = $this->_helper->flashMessenger->getMessages();
+        if (count($flashMessages)) {
+            $this->view->flashMessage = $flashMessages[0];
+        }
         $this->view->form = $this->_getParam('form', $this->_createForm());
     }
 
@@ -259,7 +263,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function createAction()
     {
         $form = $this->_createForm();
-        d($form, 'created');
         if (!$form->isValid($_POST)) {
             $this->_setParam('form', $form);
             return $this->_forward('form');

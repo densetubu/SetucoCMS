@@ -12,7 +12,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      
+ * @param
  * @author     charlesvineyard
  */
 ?>
@@ -41,6 +41,15 @@
             </div>
         </div>
     </div>
+
+<?php if ($this->flashMessage): ?>
+    <div id="messageArea">
+        <p><?php echo $this->flashMessage ?></p>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
+<?php endif ?>
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
         <ul>
