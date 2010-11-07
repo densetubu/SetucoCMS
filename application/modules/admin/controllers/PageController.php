@@ -57,6 +57,13 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     const FORMAT_TIME_TEXT_BOX = 'THH:mm:ss';
 
     /**
+     * 未分類カテゴリーのvalue属性
+     *
+     * @var string
+     */
+    private $_uncategorizedValue = '0';
+
+    /**
      * 初期処理
      *
      * @author charlesvineyard
@@ -88,8 +95,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formAction()
     {
-        $form = $this->_createForm();
-        $this->view->form = $form;
+        $this->view->form = $this->_getParam('form', $this->_createForm());
     }
 
     /**
@@ -101,6 +107,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createForm()
     {
         $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
@@ -117,17 +124,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'sub_draft',
                  array(
                      'label' => '下書きして保存',
-                     )
+                 )
              )
              ->addElement(
                  'Text',
                  'page_title',
                  array(
                      'id' => 'page_title',
-                     'value' => '',
-                     'validators' => array(
-                         'notEmpty'
-                     ),
+                     'required' => true,
                      'filters' => array(
                          'StringTrim'
                      )
@@ -137,7 +141,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'Select',
                  'category_id',
                  array(
-                     'multiOptions' => $categories
+                     'required' => true,
+                     'multiOptions' => $categories,
+                     'value' => $this->_uncategorizedValue,    // selected指定
                  )
              )
              ->addElement(
@@ -170,9 +176,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                         'viewsource',   // HTMLソース表示
                         'newpage',      // 新規ページ
                      ),
-                     'validators' => array(
-                         'notEmpty'
-                     ),
+                     'required' => true,
                      'filters' => array(
                          'StringTrim'
                      )
@@ -183,9 +187,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'page_outline',
                  array(
                      'id' => 'page_outline',
-                     'validators' => array(
-                         'notEmpty'
-                     ),
                      'filters' => array(
                          'StringTrim'
                      )
@@ -196,9 +197,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'tag',
                  array(
                      'id' => 'tag',
-                     'validators' => array(
-                         'notEmpty'
-                     ),
                      'filters' => array(
                          'StringTrim'
                      )
@@ -210,6 +208,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'id' => 'create_date',
                      'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
+                     'filters' => array(
+                         'StringTrim'
+                     )
                  )
              )
              ->addElement(
@@ -219,6 +220,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'id' => 'create_time',
                      'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
                      'TimePattern' => 'HH:mm:ss',    // 表示用フォーマット
+                     'filters' => array(
+                         'StringTrim'
+                     )
                  )
              );
         $form->setMinimalDecoratorElements(array(
