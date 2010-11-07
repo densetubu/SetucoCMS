@@ -45,11 +45,12 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     {
         parent::init();
         $this->_initLayout();
+        $this->view->addScriptPath($this->_getModulePath() . 'views/partials');
     }
 
     /**
      * レイアウトを設定します。
-     * 
+     *
      * @return void
      * @author suzuki_mar charlesvineyard
      */
@@ -62,9 +63,9 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
     /**
      * レイアウト名を設定します。
-     * 
+     *
      * レイアウト名はレイアウトファイルの拡張子無しのファイル名です。
-     * 
+     *
      * @return void
      * @author charlesvineyard
      */
@@ -197,5 +198,5 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         if (count($flashMessages)) {
             $this->view->$paramName = $flashMessages;
         }
-    }    
+    }
 }
