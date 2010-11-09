@@ -68,6 +68,7 @@ class Admin_Model_Page
 
     /**
      * ページ情報を取得する
+     * アカウント情報も取得します(パスワード以外)
      *
      * @param string  $sortColmn  並べ替えをするカラムのカラム名
      * @param  string $order       asc か　desc
@@ -78,7 +79,11 @@ class Admin_Model_Page
      */
     public function loadPages($sortColmn, $order, $pageNumber, $limit)
     {
-        return $this->_pageDao->findSortedPages($sortColmn, $order, $pageNumber, $limit);
+        $pages = $this->_pageDao->findSortedPages($sortColmn, $order, $pageNumber, $limit, true);
+        foreach ($pages as $key => $page) {
+            unset($pages[$key]['password']);
+        }
+        return $pages;
     }
 
     /**

@@ -284,9 +284,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    public function findSortedPages($sortColmn, $order, $page, $limit)
+    public function findSortedPages($sortColmn, $order, $page, $limit, $isJoinAccount = false)
     {
-        $select = $this->select()->limitPage($page, $limit)->order("{$sortColmn} {$order}");
+        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
+        if ($isJoinAccount) {
+            $select->setIntegrityCheck(false)
+                   ->join('account', 'page.account_id = account.id');
+        }
+
+        $select->limitPage($page, $limit)->order("{$sortColmn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 }

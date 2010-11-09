@@ -163,7 +163,7 @@ function confirmRedirect(url){
                 <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
             </td>
             <td><?php echo $page['create_date'] // TODO フォーマット YYYY/MM/dd?></td>
-            <td><?php echo $page['account_id'] // TODO ニックネーム?></td>
+            <td><?php echo $page['nickname'] // TODO ニックネーム?></td>
             <td>
                 <form id="page_category_form" enctype="application/x-www-form-urlencoded" method="post" action="/setucocms/admin/page/update/id/<?php echo $page['id'] ?>">
                     <select id="not_cat" name="not_cat" onchange="showCategoryEdit(this);">
