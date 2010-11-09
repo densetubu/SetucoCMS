@@ -149,7 +149,7 @@ function confirmRedirect(url){
         </thead>
         <tbody>
     <?php foreach ($this->pages as $page):?>
-        <tr>
+        <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
             <td>
             <?php if ($page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
                 <a href="<?php echo $this->baseUrl('/page/id/' . $page['id']) ?>" target='_blank'>
