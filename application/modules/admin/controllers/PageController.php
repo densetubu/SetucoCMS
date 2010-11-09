@@ -95,7 +95,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             // 規定のもの以外はascに
             $order = 'asc';
         }
-        $this->view->pages = $this->_pageService->loadPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
+        $pages = $this->_pageService->loadPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
+        foreach ($pages as $key => $page) {
+            $createDate = new Zend_Date($page['create_date'], 'YYYY-MM-dd hh:mm:ss');
+            $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
+        }
+        $this->view->pages = $pages;
         $this->setPagerForView($this->_pageService->countPages());
     }
 

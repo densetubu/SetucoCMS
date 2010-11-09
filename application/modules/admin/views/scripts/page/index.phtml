@@ -148,7 +148,7 @@ function confirmRedirect(url){
             </tr>
         </thead>
         <tbody>
-    <?php foreach ($this->pages as $page):?>
+    <?php foreach ($this->pages as $page): ?>
         <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
             <td>
             <?php if ($page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
@@ -162,8 +162,8 @@ function confirmRedirect(url){
             <td>
                 <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
             </td>
-            <td><?php echo $page['create_date'] // TODO フォーマット YYYY/MM/dd?></td>
-            <td><?php echo $page['nickname'] // TODO ニックネーム?></td>
+            <td><?php echo $page['create_date'] ?></td>
+            <td><?php echo $page['nickname'] ?></td>
             <td>
                 <form id="page_category_form" enctype="application/x-www-form-urlencoded" method="post" action="/setucocms/admin/page/update/id/<?php echo $page['id'] ?>">
                     <select id="not_cat" name="not_cat" onchange="showCategoryEdit(this);">
