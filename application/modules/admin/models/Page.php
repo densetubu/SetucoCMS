@@ -67,28 +67,18 @@ class Admin_Model_Page
     }
 
     /**
-     * ページをロードします。
+     * ページ情報を取得する
      *
      * @param string  $sortColmn  並べ替えをするカラムのカラム名
-     * @param boolean $isAsc      昇順なら true
-     * @param int     $beginIndex 取得開始位置(0から始まる）
-     * @param int     $endIndex   取得終了位置(この位置自体は含みません)
-     * @return array ページ情報の配列
+     * @param  string $order       asc か　desc
+     * @param  int    $pageNumber  ページ番号(オフセットカウント)
+     * @param  int    $limit       一つのページに出力する数(オフセット)
+     * @return array ページ情報の一覧
      * @author charlesvineyard
      */
-    public function loadPages($sortColmn, $isAsc, $beginIndex, $endIndex)
+    public function loadPages($sortColmn, $order, $pageNumber, $limit)
     {
-        return array(
-            'id'          => 1,
-            'title'       => 'ページ1',
-            'contents'    => 'ぺーじの内容だよ1',
-            'outline'     => 'ページの概要1',
-            'createDate' => '2011/09/01 00:00:00',
-            'accountId'  => '1',
-            'status'      => '0',
-            'categoryId' => '1',
-            'updateDate' => '2011/09/01 00:00:00'
-        );
+        return $this->_pageDao->findSortedPages($sortColmn, $order, $pageNumber, $limit);
     }
 
     /**

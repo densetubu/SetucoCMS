@@ -273,4 +273,20 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         return $result[0]['page_count'];
 
     }
+
+    /**
+     * 指定した並び順とオフセットでページ一覧を取得します。
+     *
+     * @param string  $sortColmn  並べ替えをするカラムのカラム名
+     * @param string  $order 並び順 asc か desc
+     * @param int $page 現在のページ番号
+     * @param int $limit 1ページあたり何件のデータを取得するのか
+     * @return array ページ情報の配列
+     * @author charlesvineyard
+     */
+    public function findSortedPages($sortColmn, $order, $page, $limit)
+    {
+        $select = $this->select()->limitPage($page, $limit)->order("{$sortColmn} {$order}");
+        return $this->fetchAll($select)->toArray();
+    }
 }

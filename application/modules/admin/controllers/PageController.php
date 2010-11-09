@@ -79,12 +79,24 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページの一覧表示のアクション
      *
      * @return void
-     * @author	akitsukada
-     * @todo 内容の実装 現在はスケルトン
+     * @author akitsukada charlesvineyard
      */
     public function indexAction()
     {
-
+        $sortColumn = $this->_getParam('sort', 'title');
+        $sortValidator = new Zend_Validate_InArray(array('title', 'create_date'));
+        if (!$sortValidator->isValid($sortColumn)) {
+            // 規定のもの以外はタイトルに
+            $sortColumn = 'title';
+        }
+        $order = $this->_getParam('order', 'asc');
+        $orderValidator = new Zend_Validate_InArray(array('asc', 'desc'));
+        if (!$orderValidator->isValid($order)) {
+            // 規定のもの以外はascに
+            $order = 'asc';
+        }
+        $this->view->pages = $this->_pageService->loadPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
+        $this->setPagerForView($this->_pageService->countPages());
     }
 
     /**
@@ -277,7 +289,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_getParam('category_id')
         );
         $this->_helper->flashMessenger('新規ページを作成しました。');
-        $this->_helper->redirector('form');
+        $this->_helper->redirector('form');    // TODO 作ったページの編集ページに飛ぶ
     }
 
     /**
