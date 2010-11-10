@@ -30,28 +30,28 @@ class Admin_Model_Site
      * @var Common_Model_DbTable_Site
      */
     private $_siteDao;
-    
+
     /**
      * ページDAO
-     * 
+     *
      * @var Common_Model_DbTable_Page
      */
     private $_pageDao;
-    
+
     /**
      * ページサービス
-     * 
+     *
      * @var Admin_Model_Page
      */
     private $_pageService;
-    
+
     /**
      * 目標サービス
-     * 
+     *
      * @var Admin_Model_Goal
      */
     private $_goalService;
-    
+
     /**
      * コンストラクター
      *
@@ -64,34 +64,34 @@ class Admin_Model_Site
         $this->_pageService = new Admin_Model_Page();
         $this->_goalService = new Admin_Model_Goal();
     }
-    
+
     /**
      * サイトの情報を更新する
-     * 
+     *
      * @param array 更新するデータ
      * @return boolean 更新に成功したか
      * @author suzuki-mar
      */
     public function updateSite($inputData)
     {
-    	$updateData = $inputData;
-    	unset($updateData['module'], $updateData['controller'], $updateData['action'], 
-            $updateData['sub']);
-    	
+        $updateData = $inputData;
+        unset($updateData['module'], $updateData['controller'], $updateData['action'],
+        $updateData['sub']);
+         
         //アップデートに失敗したときに例外が発生する
         try {
 
-        	//データは1件しかないないので、whereはいらない
+            //データは1件しかないないので、whereはいらない
             $this->_siteDao->update($updateData, true);
             $result     = true;
 
         } catch (Zend_Exception $e) {
-            $result = false;            
+            $result = false;
         }
 
         return $result;
     }
-    
+
     /**
      * サイト情報を取得する
      *
@@ -106,13 +106,16 @@ class Admin_Model_Site
     /**
      * サイトの更新状況を取得します。
      *
-     * @return int 更新状況
+     * @return int 更新状況(Setuco_Data_Constant_UpdateStatus)
      * @author charlesvineyard
      */
     public function getUpdateStatus()
     {
         $lastGoalPageCount = $this->_goalService->loadGoalPageCountThisMonth();
         $todayGoal = $this->_goalService->findTodayGoal($lastGoalPageCount);
+        if ($todayGoal === 0) {
+            return Setuco_Data_Constant_UpdateStatus::FIRST;
+        }
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;
@@ -135,7 +138,7 @@ class Admin_Model_Site
     {
         $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
         $lastUpdateDate = new Zend_Date();
-        $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd', 'ja_JP');
+        $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
         return array('lastUpdateDate' => $lastUpdateDate,
                      'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
     }
@@ -149,9 +152,9 @@ class Admin_Model_Site
     public function getOpenDateWithPastDays()
     {
         $site = $this->getSiteInfo();
-        $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd', 'ja_JP');
+        $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd');
         return array('openDate' => $openDate,
                      'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
     }
-    
+
 }
