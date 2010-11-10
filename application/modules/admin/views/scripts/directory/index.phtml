@@ -65,15 +65,21 @@ function closeCategory(switcher) {
         $pageCount = $category->count();
     ?>
         <li class="category<?php echo $this->cycle(array(' check', ''))->next() ?>">
+            <?php if ($pageCount === 0): // カテゴリーの中身が空のとき ?>
             <div>
-            <?php if ($pageCount == 0): ?>
                 <p class="folder">
-                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" />
-            <?php else: ?>
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" /><?php echo $category->getLabel() ?>
+                </p>
+                <p>
+                    <a href="<?php echo $category->getHref() ?>">
+                        <img src="<?php echo $this->baseUrl('/images/directory/icn_page.gif') ?>" width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
+                    </a>
+                </p>
+            </div>
+            <?php else: // カテゴリーの中身があるとき ?>
+            <div>
                 <p class="folder" onclick="openCategory(this)">
-                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" />
-            <?php endif ?>
-                    <?php echo $category->getLabel() ?>
+                    <img src="<?php echo $this->baseUrl('/images/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" /><?php echo $category->getLabel() ?>
                 </p>
                 <p>
                     <a href="<?php echo $category->getHref() ?>">
@@ -87,7 +93,7 @@ function closeCategory(switcher) {
             foreach ($category as $page):
                 $i++;
             ?>
-                <li class="page<?php echo ($i == $pageCount) ? ' lastChild' : '' ?>">
+                <li class="page<?php echo ($i === $pageCount) ? ' lastChild' : '' ?>">
                     <div>
                         <p>
                             <a href="<?php echo $page->getViewHref() ?>" target="_blank">
@@ -103,6 +109,7 @@ function closeCategory(switcher) {
                 </li>
             <?php endforeach ?>
             </ul>
+            <?php endif ?>
         </li>
     <?php endforeach ?>
     </ul>
