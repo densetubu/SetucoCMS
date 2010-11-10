@@ -100,12 +100,20 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 
         if ($searchResultCount == 0) {
-            // 検索結果が0件なら専用のビューを使用
-            $this->_helper->viewRenderer('searchnot');
-        } else {           
-            
-            $this->view->searchResult = $searchResult;
 
+            // 検索結果が0件の場合ビュー切り替え
+            $this->_helper->viewRenderer('searchnot');
+
+        } else {
+
+            $date = new Zend_Date();
+            foreach($searchResult as $key => $entry) {
+                $date->set($entry['update_date'], Zend_Date::ISO_8601);
+                $searchResult[$key]['update_date'] = $date->toString('Y年MM月dd日');
+                $searchResult[$key]['contents'] = mb_substr(strip_tags($entry['contents']), 0, 15, 'UTF-8');
+            }
+
+            $this->view->searchResult = $searchResult;
             // ページネータ設定
             $this->view->currentPage = $currentPage;
             $this->setPagerForView($searchResultCount, self::LIMIT_GET_NEW_PAGE);
@@ -202,6 +210,12 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         // 記事情報の取得とセット
         $page = array_pop($this->_pageService->findPage($id));
         $this->_pageTitle = $page['title'];
+        $catId = $page['category_id'];
+        $category = array_pop($this->_categoryService->findCategory($catId));
+        if (is_null($category['name'])) {
+            $category['name'] = '未分類';
+        }
+        $this->view->category = $category;
         $this->view->page = $page;
 
         // ページにつけられたタグ情報の取得とセット

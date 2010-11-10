@@ -6,7 +6,9 @@
     </div>
     <dl class="category">
         <dt>カテゴリー：</dt>
-        <dd><a href="cat.php">contents</a></dd>
+        <dd>
+            <a href="<?php echo $this->baseUrl('page/category/id/') . $this->category['id'] ?>"><?php echo $this->category['name'] ?></a>
+        </dd>
     </dl>
     <div class="entryBody">
         <?php echo $this->page['contents'] ?>

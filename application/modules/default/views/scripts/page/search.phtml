@@ -27,7 +27,7 @@
         <?php foreach ($this->searchResult as $cnt => $entry): ?>
         <tr>
             <td><a href="<?php echo $this->baseUrl('page/show/id/').$entry['id'] ?>"><?php echo $entry['title'] ?></a></td>
-            <td><?php echo mb_substr($entry['contents'],0,15,'UTF-8') ?>... （<?php echo date('Y年m月d日', strtotime($entry['update_date'])) ?>）</td>
+            <td><?php echo $entry['contents'] ?>... （<?php echo $entry['update_date'] ?>）</td>
         </tr>
         <?php endforeach ?>
     </table>
