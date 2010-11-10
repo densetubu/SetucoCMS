@@ -80,9 +80,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
                 $this->_createAmbitionForm());
 
         // 更新状況
-        $updateStatus = $this->_siteService->getUpdateStatus();
-        $updateStatusStr = Setuco_Data_Converter_UpdateStatus::convertUpdateStatus2String($updateStatus);
-        $this->view->updateStatus = $updateStatusStr;
+        $this->view->updateStatus = $this->_siteService->getUpdateStatus();
 
         // 最終更新日
         $lastUpdateInfo = $this->_siteService->getLastUpdateDateWithPastDays();

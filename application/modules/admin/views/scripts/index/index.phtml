@@ -84,8 +84,15 @@ function hideAmbitionEdit() {
     </div>
     <dl class="straight">
         <dt>更新状況</dt>
+        <?php if ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::GOOD): ?>
         <dd><img src="<?php echo $this->baseUrl('/images/status_good.jpg') ?>" alt="すごい！最高！！！" width="237" height="87" /></dd>
-        <!-- <dd><?php echo $this->updateStatus ?></dd> -->
+        <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::NORMAL): ?>
+        <dd><img src="<?php echo $this->baseUrl('/images/status_normal.jpg') ?>" alt="その調子っ" width="237" height="87" /></dd>
+        <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::BAD): ?>
+        <dd><img src="<?php echo $this->baseUrl('/images/status_bad.jpg') ?>" alt="もっと頑張って" width="237" height="87" /></dd>
+        <?php else: ?>
+        <dd><img src="<?php echo $this->baseUrl('/images/status_first.jpg') ?>" alt="今月も頑張ろう" width="237" height="87" /></dd>
+        <?php endif ?>
     </dl>
     <dl class="check">
         <dt>今月の作成数</dt>
