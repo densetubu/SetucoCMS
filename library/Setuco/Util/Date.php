@@ -33,8 +33,8 @@ class Setuco_Util_Date
      */
     public static function findPastDays($fromDate, $toDate)
     {
-        $fromDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
-        $toDate->setTime('00:00:00', 'HH:mm:ss', 'ja_JP');
+        $fromDate->setTime('00:00:00', 'HH:mm:ss');
+        $toDate->setTime('00:00:00', 'HH:mm:ss');
         $pastDaysValue = $toDate->toValue() - $fromDate->toValue();
         return (int)($pastDaysValue / 60 / 60 / 24);
     }

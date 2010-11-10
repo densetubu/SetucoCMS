@@ -66,7 +66,7 @@ class Admin_Model_Goal
      */
     private function _isGoalOfThisMonth($goal)
     {
-        $goalDate = new Zend_Date($goal['target_month'], 'YYYY-MM-dd', 'ja_JP');
+        $goalDate = new Zend_Date($goal['target_month'], 'YYYY-MM-dd');
         $now = new Zend_Date();
         if($now->get(Zend_Date::MONTH) != $goalDate->get(Zend_Date::MONTH)) {
             return false;
@@ -86,7 +86,7 @@ class Admin_Model_Goal
         $thisMonth->set(1, Zend_Date::DAY);
         $thisMonth = $thisMonth->toString('YYYY-MM-dd');
         for ($fillingGoal = $lastGoal; $fillingGoal['target_month'] !== $thisMonth; $lastGoal = $fillingGoal) {
-            $lastGoalDate = new Zend_Date($lastGoal['target_month'], 'YYYY-MM-dd', 'ja_JP');
+            $lastGoalDate = new Zend_Date($lastGoal['target_month'], 'YYYY-MM-dd');
             $fillingGoal['target_month'] = $lastGoalDate->addMonth(1)->toString('YYYY-MM-dd');
             unset($fillingGoal['id']);
             $this->_goalDao->insert($fillingGoal);
