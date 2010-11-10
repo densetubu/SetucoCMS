@@ -61,7 +61,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var string
      */
-    private $_uncategorizedValue = 'default';
+    const UNCATEGORIZED_VALUE = 'default';
 
     /**
      * 初期処理
@@ -128,7 +128,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createForm()
     {
         $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
-        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
@@ -164,7 +164,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'required' => true,
                      'multiOptions' => $categories,
-                     'value' => $this->_uncategorizedValue,    // selected指定
+                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
                  )
              )
              ->addElement(
@@ -284,6 +284,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form');
         }
+        $categoryId = $this->_getParam('category_id');
+        if ($categoryId === self::UNCATEGORIZED_VALUE) {
+            $categoryId = null;
+        }
         $this->_pageService->regist(
             $this->_getParam('page_title'),
             $this->_getParam('page_contents'),
@@ -291,7 +295,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             Setuco_Util_String::splitCsvString($this->_getParam('tag')),
             $this->_findCreateDate(),
             $this->_findStatus(),
-            $this->_getParam('category_id')
+            $categoryId
         );
         $this->_helper->flashMessenger('新規ページを作成しました。');
         $this->_helper->redirector('form');    // TODO 作ったページの編集ページに飛ぶ
