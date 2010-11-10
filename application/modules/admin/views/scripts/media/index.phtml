@@ -65,7 +65,7 @@ function addElement() {
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
     <?php endif ?>
-    <form action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA" name="upload_img">
+    <form action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA" name="upload_img">
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>

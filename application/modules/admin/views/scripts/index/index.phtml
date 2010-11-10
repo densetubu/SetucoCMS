@@ -88,16 +88,16 @@ function hideAmbitionEdit() {
         <!-- <dd><?php echo $this->updateStatus ?></dd> -->
     </dl>
     <dl class="check">
-        <dt>最終更新日</dt>
-        <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
-    </dl>
-    <dl class="straight">
         <dt>今月の作成数</dt>
         <dd><?php echo $this->createdPageCount ?>ページ（<?php echo $this->diffGoal ?>）</dd>
     </dl>
-    <dl class="check">
+    <dl class="straight">
         <dt>総ページ数</dt>
         <dd><?php echo $this->totalPageCount ?>ページ</dd>
+    </dl>
+    <dl class="check">
+        <dt>最終更新日</dt>
+        <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
     </dl>
     <dl class="straight">
         <dt>経過日数</dt>
