@@ -10,17 +10,17 @@
     </dl>
     <div class="entryBody">
         <?php echo $this->page['contents'] ?>
+        <dl class="entryTag">
+            <dt>タグ：</dt>
+            <?php if (count($this->tags) > 0) : ?>
+                <?php foreach ($this->tags as $cnt => $tag): ?>
+                <dd><a href="<?php echo $this->baseUrl('page/tag/id/') . $tag['id'] ?>"><?php echo $tag['name'] ?></a></dd>
+                <?php endforeach ?>
+            <?php else: ?>
+                <dd>なし</dd>
+            <?php endif; ?>
+        </dl>
     </div>
-    <dl class="pageInfo">
-        <dt>タグ：</dt>
-        <?php if (count($this->tags) > 0) : ?>
-            <?php foreach ($this->tags as $cnt => $tag): ?>
-            <dd><a href="<?php echo $this->baseUrl('page/tag/id/') . $tag['id'] ?>"><?php echo $tag['name'] ?></a></dd>
-            <?php endforeach ?>
-        <?php else: ?>
-            <dd>なし</dd>
-        <?php endif; ?>
-    </dl>
     <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
 </div>
 <!-- entry END -->
