@@ -96,7 +96,6 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $keyword = $this->_getParam('query');
         $currentPage = $this->_getPageNumber();
-        $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 
         if ($searchResultCount == 0) {
@@ -106,6 +105,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         } else {
 
+            $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
                 $date->set($entry['update_date'], Zend_Date::ISO_8601);
@@ -175,21 +175,40 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
             $this->_helper->redirector('index', 'index');
         }
-
-        $this->_helper->viewRenderer('search');
-
-        $currentPage = $this->_getPageNumber();
-        $tag = array_pop($this->_tagService->findTag($id));
-
-        $this->view->searchResult = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
-        $this->view->resultCount = $this->_pageService->countPagesByTagId($id);
-        $this->view->keyword = $tag['name'];
         
-        $this->_pageTitle = "「{$tag['name']}」タグの記事";
+        $currentPage = $this->_getPageNumber();
+        $searchResultCount = $this->_pageService->countPagesByTagId($id);
+        $tag = array_pop($this->_tagService->findTag($id));
+        $keyword = is_null($tag['name']) ? '？？？(該当タグなし)' : $tag['name'];
 
-        // ページネーター用の設定
-        $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_pageService->countPagesByTagId($id), self::LIMIT_GET_NEW_PAGE);
+        if ($searchResultCount == 0) {
+                
+            // 検索結果が0件の場合 該当記事なしのビュー
+            $this->_helper->viewRenderer('searchnot');
+
+        } else {
+
+            // 検索結果が0件の場合 検索結果表示ビュー
+            $this->_helper->viewRenderer('search');
+            $searchResult = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
+            
+            $date = new Zend_Date();
+            foreach($searchResult as $key => $entry) {
+                $date->set($entry['update_date'], Zend_Date::ISO_8601);
+                $searchResult[$key]['update_date'] = $date->toString('Y年MM月dd日');
+                $searchResult[$key]['contents'] = mb_substr(strip_tags($entry['contents']), 0, 15, 'UTF-8');
+            }
+
+            $this->view->searchResult = $searchResult;
+            // ページネータ設定
+            $this->view->currentPage = $currentPage;
+            $this->setPagerForView($searchResultCount, self::LIMIT_GET_NEW_PAGE);
+        }
+
+        $this->view->resultCount = $searchResultCount;
+        $this->view->keyword = $keyword;
+        $this->_pageTitle = "「{$keyword}」タグの記事";
+
     }
 
     /**
@@ -207,14 +226,28 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $this->_helper->redirector('index', 'index');
         }
 
-        // 記事情報の取得とセット
+        // 記事情報の取得
         $page = array_pop($this->_pageService->findPage($id));
-        $this->_pageTitle = $page['title'];
+
+        if (is_null($page)) {
+            // idに該当するページなし（通常おこらない不適切なアクセス ex.URL手入力など）
+            // @todo 仕様策定と実装
+        }
+
+        // カテゴリー情報の取得
         $catId = $page['category_id'];
         $category = array_pop($this->_categoryService->findCategory($catId));
         if (is_null($category['name'])) {
             $category['name'] = '未分類';
         }
+        print_r($category);
+
+        // 日時情報のフォーマット編集
+        $date = new Zend_Date();
+        $page['update_date'] = $date->set($page['update_date'], Zend_Date::ISO_8601)->toString('Y/MM/dd HH:mm');
+        $page['create_date'] = $date->set($page['create_date'], Zend_Date::ISO_8601)->toString('Y/MM/dd HH:mm');
+
+        $this->_pageTitle = $page['title'];
         $this->view->category = $category;
         $this->view->page = $page;
 
