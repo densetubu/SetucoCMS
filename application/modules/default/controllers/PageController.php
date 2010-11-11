@@ -240,7 +240,6 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         if (is_null($category['name'])) {
             $category['name'] = '未分類';
         }
-        print_r($category);
 
         // 日時情報のフォーマット編集
         $date = new Zend_Date();
