@@ -420,6 +420,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル選択パーツ作成と余分な装飾タグの除去
         $fileSelector = new Zend_Form_Element_File('upload_img');
         $fileSelector->setLabel(null)
+                ->removeDecorator('HtmlTag')
                 ->setMultiFile(1) // @todo 複数ファイルアップロード
                 ->addDecorator('Label', array('tag' => null));
 
