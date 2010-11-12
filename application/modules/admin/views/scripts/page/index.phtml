@@ -28,20 +28,12 @@
 dojo.require('dojo.NodeList-traverse');
 dojo.require('dojo.NodeList-html');
 
-function showCategoryEdit(switcher) {
-    dojo.query(switcher).next().style('display', 'inline');
+function showPageElementEdit(switcher) {
+    dojo.query(switcher).parent().next().style('display', 'inline');
     defaultHtml = switcher.innerHTML;
 }
-function hideCategoryEdit(switcher) {
-    dojo.query(switcher).parent().prev().html(defaultHtml);
-    dojo.query(switcher).parent().style('display', 'none');
-}
-function showStatusEdit(switcher) {
-    dojo.query(switcher).next().style('display', 'inline');
-    defaultHtml = switcher.innerHTML;
-}
-function hideStatusEdit(switcher) {
-    dojo.query(switcher).parent().prev().html(defaultHtml);
+function hidePageElementEdit(switcher) {
+    dojo.query(switcher).parent().prev().children().at(0).html(defaultHtml);
     dojo.query(switcher).parent().style('display', 'none');
 }
 function confirmRedirect(url){
@@ -70,6 +62,16 @@ function confirmRedirect(url){
             </div>
         </div>
     </div>
+    <?php if (count($this->flashMessages)): ?>
+        <div id="messageArea">
+        <?php foreach ($this->flashMessages as $flashMessage): ?>
+            <p><?php echo $flashMessage ?></p>
+        <?php endforeach ?>
+            <p>
+                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+            </p>
+        </div>
+    <?php endif ?>
 
     <form action="#" method="post">
         <div id="pageSearch">
@@ -148,58 +150,11 @@ function confirmRedirect(url){
             </tr>
         </thead>
         <tbody>
-    <?php foreach ($this->pages as $page): ?>
-        <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
-            <td>
-            <?php if ($page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
-                <a href="<?php echo $this->baseUrl('/page/id/' . $page['id']) ?>" target='_blank'>
-                    <img src="<?php echo $this->baseUrl('/images/btn_check.png') ?>" alt='表示' width='27' height='27' />
-                </a>
-            <?php else: ?>
-                <img src="<?php echo $this->baseUrl('/images/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
-            <?php endif ?>
-            </td>
-            <td>
-                <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
-            </td>
-            <td><?php echo $page['create_date'] ?></td>
-            <td><?php echo $page['nickname'] ?></td>
-            <td>
-                <form id="page_category_form" ENCTYPE="application/x-www-form-urlencoded" method="post" action="/setucocms/admin/page/update/id/<?php echo $page['id'] ?>">
-                    <select id="not_cat" name="not_cat" onchange="showCategoryEdit(this);">
-                        <option value='32'>about</option>
-                        <option value='12'>contents</option>
-                        <option value='19' selected='selected'>link</option>
-                        <option value='42'>report</option>
-                        <option value='46'>test</option>
-                        <option value='49'>新規カテゴリー</option>
-                        <option value='0'>未分類</option>
-                    </select>
-                    <span id="category_edit">
-                        <br />
-                        <input type="submit" id="sub" name="sub" value="変更" />
-                        <button name="cancel" id="cancel" type="button" onclick="hideCategoryEdit(this);">キャンセル</button>
-                    </span>
-                </form>
-            </td>
-            <td>
-                <select id="status" name="status" onchange="showStatusEdit(this);">
-                    <option value='0'>下書き</option>
-                    <option value='1' selected='selected'>公開</option>
-                </select>
-                <span id="status_edit">
-                    <br />
-                    <input type="submit" id="sub" name="sub" value="変更" />
-                    <button name="cancel" id="cancel" type="button" onclick="hideStatusEdit(this);">キャンセル</button>
-                </span>
-            </td>
-            <td>
-                <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{page['id']}") ?>');">
-                    <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                </a>
-            </td>
-        </tr>
-    <?php endforeach ?>
+        <?php foreach ($this->pages as $page): ?>
+            <tr<?php echo $this->cycle(array('', ' class="checkG"'))->next() ?>>
+                <?php echo $this->partial('page-row.phtml', array('page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
+            </tr>
+        <?php endforeach ?>
         </tbody>
     </table>
     <?php echo $this->paginator //ページャーの表示 ?>

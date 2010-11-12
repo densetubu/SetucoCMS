@@ -101,7 +101,126 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
         }
         $this->view->pages = $pages;
+        $this->view->categoryForm = $this->_createCategoryForm();
+        $this->view->statusForm = $this->_createStatusForm();
+        $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
+    }
+    
+    /**
+     * カテゴリー変更フォームを作成します。
+     *
+     * @return Setuco_Form フォーム
+     * @author charlesvineyard
+     */
+    private function _createCategoryForm()
+    {
+        $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $form = new Setuco_Form();
+        $form->setAction($this->_helper->url('update-category'))
+            ->addElement(
+                'Select',    // selected 指定はビューでする
+                'category_id',
+                array(
+                    'required' => true,
+                    'onchange' => 'showPageElementEdit(this);',
+                    'multiOptions' => $categories,
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'hidden_page_id',
+                array(
+                    'required' => true,
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'hidden_page_title',
+                array(
+                    'required' => true,
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Submit',
+                'sub_category',
+                array(
+                    'label'   => '変更',
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'button',
+                'cancel_category',
+                array(
+                    'id'      => 'cancel',
+                    'label'   => 'キャンセル',
+                    'onclick' => 'hidePageElementEdit(this);',
+                    'decorators' => array('ViewHelper')
+                )
+            );
+        return $form;
+    }
+
+    /**
+     * 状態変更フォームを作成します。
+     *
+     * @return Setuco_Form フォーム
+     * @author charlesvineyard
+     */
+    private function _createStatusForm()
+    {
+        $form = new Setuco_Form();
+        $form->setAction($this->_helper->url('update-status'))
+            ->addElement(
+                'Select',    // selected 指定はビューでする
+                'status',
+                array(
+                    'required' => true,
+                    'onchange' => 'showPageElementEdit(this);',
+                    'multiOptions' => Setuco_Data_Constant_Page::allStatus(),
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'hidden_page_id',
+                array(
+                    'required' => true,
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'hidden_page_title',
+                array(
+                    'required' => true,
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Submit',
+                'sub_category',
+                array(
+                    'label'   => '変更',
+                    'decorators' => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'button',
+                'cancel_category',
+                array(
+                    'id'      => 'cancel',
+                    'label'   => 'キャンセル',
+                    'onclick' => 'hidePageElementEdit(this);',
+                    'decorators' => array('ViewHelper')
+                )
+            );
+        return $form;
     }
 
     /**
@@ -361,16 +480,71 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
+     * ページのカテゴリーを更新するアクション
+     * indexアクションに遷移します
+     *
+     * @return void
+     * @author charlesvineyard
+     */
+    public function updateCategoryAction()
+    {
+        $form = $this->_createCategoryForm();
+        if (!$form->isValid($_POST)) {
+            $this->_setParam('categoryForm', $form);
+            return $this->_forward('index');
+        }
+        $this->_pageService->update(
+            $form->getValue('hidden_page_id'),
+            array(
+                'category_id' => $form->getValue('category_id')
+            )
+        );
+        $this->_helper->flashMessenger('「' . $form->getValue('hidden_page_title') . '」のカテゴリーを変更しました。');
+        $this->_helper->redirector('index');
+    }
+
+    /**
+     * ページのカテゴリーを更新するアクション
+     * indexアクションに遷移します
+     *
+     * @return void
+     * @author charlesvineyard
+     */
+    public function updateStatusAction()
+    {
+        $form = $this->_createStatusForm();
+        if (!$form->isValid($_POST)) {
+            $this->_setParam('statusForm', $form);
+            return $this->_forward('index');
+        }
+        $this->_pageService->update(
+            $form->getValue('hidden_page_id'),
+            array(
+                'status' => $form->getValue('status')
+            )
+        );
+        $this->_helper->flashMessenger('「' . $form->getValue('hidden_page_title') . '」の状態を変更しました。');
+        $this->_helper->redirector('index');
+    }
+
+    /**
      * ページを削除するアクション
      * indexアクションに遷移します
      *
      * @return void
-     * @author	akitsukada
-     * @todo 内容の実装 現在はスケルトン
+     * @author akitsukada charlesvineyard
      */
     public function deleteAction()
     {
-        $this->_redirect('/admin/page/index');
+        $id = $this->_getParam('id');
+        $validator = new Zend_Validate_Digits();
+        if (!$validator->isValid($id)) {
+            $this->_helper->redirector('index');
+        }
+        $page = $this->_pageService->load($id);
+        $this->_pageService->delete($id);
+        $this->_helper->flashMessenger('「' . $page['title'] . '」を削除しました。');
+        $this->_helper->redirector('index');
     }
 
 }
