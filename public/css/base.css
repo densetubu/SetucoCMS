@@ -164,34 +164,19 @@ div#header ul li#utilLogout {
     padding-right: 15px;
 }
 div#header ul li#utilManual a ,
-div#header ul li#utilAccount a {
-    background-repeat: no-repeat;
-    background-position: left center;
+div#header ul li#utilAccount span {
     padding-left: 12px;
 }
 div#header ul li#utilManual a {
-    background-image: url(../images/header/bg_manual.gif);
+    background: url(../images/header/bg_manual.gif) no-repeat left center;
 }
 div#header ul li#utilAccount span {
-    background-image: url(../images/header/bg_nowLogin.gif);
-    background-repeat: no-repeat;
+    background: url(../images/header/bg_nowLogin.gif) no-repeat left center;
     font-weight: bold;
-    padding-left: 15px;
 }
-div#header li#utilLogout input ,
-div#header li#utilLogout input.logoutNormal {
-    background: none;
-    background-image: url(../images/header/bg_logout.gif);
-    background-repeat: no-repeat;
-    background-position: left center;
-    border: none;
-    display: block;
-    width: 75px;
-    text-indent: -999px;
-}
-div#header li#utilLogout input.logoutOver {
-    background-image: url(../images/header/bg_logout_over.gif);
-    cursor: pointer;
+div#header li#utilLogout a {
+    background: url(../images/header/bg_logout.gif) no-repeat left center;
+    padding-left: 22px;
 }
 
 /*------------------------------------------------------------*/
