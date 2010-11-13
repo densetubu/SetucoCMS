@@ -168,14 +168,14 @@ div#header ul li#utilAccount span {
     padding-left: 12px;
 }
 div#header ul li#utilManual a {
-    background: url(../images/header/bg_manual.gif) no-repeat left center;
+    background: url(../images/admin/header/bg_manual.gif) no-repeat left center;
 }
 div#header ul li#utilAccount span {
-    background: url(../images/header/bg_nowLogin.gif) no-repeat left center;
+    background: url(../images/admin/header/bg_nowLogin.gif) no-repeat left center;
     font-weight: bold;
 }
 div#header li#utilLogout a {
-    background: url(../images/header/bg_logout.gif) no-repeat left center;
+    background: url(../images/admin/header/bg_logout.gif) no-repeat left center;
     padding-left: 22px;
 }
 
@@ -196,7 +196,7 @@ div #content div#mainContent {
     float: right;
 }
 div#mainContent div#mainContentInner {
-    background: url(../images/bg_borderLine.gif) repeat-y left;
+    background: url(../images/admin/gNav/bg_borderLine.gif) repeat-y left;
     margin-left: 160px;
     padding-left: 12px;
 }
@@ -205,7 +205,7 @@ div#mainContent div#mainContentInner {
 /*    gNav style                                                  */
 /*------------------------------------------------------------*/
 div #content ul#gNav {
-    background: url(../images/bg_borderLine.gif) repeat-y right;
+    background: url(../images/admin/gNav/bg_borderLine.gif) repeat-y right;
     float: left;
     padding-right: 12px;
     width: 150px;
@@ -222,21 +222,21 @@ ul#gNav li dl dd {
     padding-left: 8px;
 }
 ul#gNav li dl dd a {
-    background: url(../images/gNav/bg_menuLink.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink.gif) no-repeat left center;
     padding: 8px 8px 8px 16px;
     display: block;
     width: auto;
     height: auto;
 }
 ul#gNav li dl dd a:hover {
-    background: url(../images/gNav/bg_menuLink_over.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink_over.gif) no-repeat left center;
 }
 ul#gNav li dl dd#active {
     background: #e4f6ff;
 }
 ul#gNav li dl dd#active a ,
 ul#gNav li dl dd#active a:hover {
-    background: url(../images/gNav/bg_menuLink_act.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink_act.gif) no-repeat left center;
     font-weight:bold;
     color:#5f5f5f;
     text-decoration:none;
@@ -283,18 +283,18 @@ div#mainContent div#topicSection {
     padding: 5px;
 }
 div#topicSection div.topichAreaL {
-    background: url(../images/bg_topic_l.jpg) no-repeat left top;
+    background: url(../images/admin/share/bg_topic_l.jpg) no-repeat left top;
     margin-bottom: 5px;
     padding-left: 5px;
     height: 38px;
 }
 div#topicSection div.topichAreaR {
-    background: url(../images/bg_topic_r.jpg) no-repeat right top;
+    background: url(../images/admin/share/bg_topic_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
 div#topicSection div.topichArea {
-    background: url(../images/bg_topic.jpg) repeat-x top;
+    background: url(../images/admin/share/bg_topic.jpg) repeat-x top;
     padding: 10px 5px;
     height: 38px;
     zoom: 100%;
@@ -307,7 +307,7 @@ div#topicSection div.topichArea p {
     margin-top: 2px;
 }
 div#topicSection div.topichArea p a {
-    background: url(../images/bg_topicLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_topicLink.gif) no-repeat left center;
     padding-left: 18px;
 }
 
@@ -345,7 +345,7 @@ div#mainContent div.hArea {
 }
 div#mainContent div.hArea h3 {
     float: left;
-    background: url(../images/bg_hArea.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hArea.gif) no-repeat left center;
     font-size: 120%;
     font-weight: normal;
     padding-left: 20px;
@@ -359,7 +359,7 @@ div.hArea p {
     margin-top: 2px;
 }
 div.hArea p a {
-    background: url(../images/bg_hLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
     padding-left: 18px;
 }
 
@@ -367,18 +367,18 @@ div.hArea p a {
 /*    section topichArea style                                  */
 /*------------------------------------------------------------*/
 div.section div.topichAreaL {
-    background: url(../images/bg_topicB_l.jpg) no-repeat left top;
+    background: url(../images/admin/share/bg_topicB_l.jpg) no-repeat left top;
     margin-bottom: 15px;
     padding-left: 5px;
     height: 38px;
 }
 div.section div.topichAreaR {
-    background: url(../images/bg_topicB_r.jpg) no-repeat right top;
+    background: url(../images/admin/share/bg_topicB_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
 div.section div.topichArea {
-    background: url(../images/bg_topicB.jpg) repeat-x top;
+    background: url(../images/admin/share/bg_topicB.jpg) repeat-x top;
     padding: 9px 10px;
     height: 38px;
     zoom: 100%;
@@ -393,7 +393,7 @@ div.section div.topichArea p {
     margin-top: 2px;
 }
 div.topichArea p a {
-    background: url(../images/bg_hLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
     padding-left: 18px;
 }
 
@@ -497,7 +497,7 @@ dl#designs dd em input {
 /*    dl style                                                  */
 /*------------------------------------------------------------*/
 div#mainContent dl dd {
-    background: url(../images/bg_dlLine.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
     padding-left: 10px;
     zoom: 1;
 }
@@ -785,12 +785,12 @@ div.section ul#directory li.check {
     background-color: #f1faff;
 }
 div.section ul#directory ul li {
-    background: url("../images/directory/bg_childLine.gif") no-repeat left center;
+    background: url("../images/admin/directory/bg_childLine.gif") no-repeat left center;
     margin: 0 0 0 41px;
     padding: 0 0 0 38px;
 }
 div.section ul#directory ul li.lastChild {
-    background: url("../images/directory/bg_childLine_last.gif") no-repeat left center;
+    background: url("../images/admin/directory/bg_childLine_last.gif") no-repeat left center;
 }
 ul#directory li div {
     padding: 3px 16px;
@@ -855,7 +855,7 @@ body#loginBoad dt {
     margin-bottom: 10px;
 }
 body#loginBoad dd {
-    background: url(../images/bg_dlLine.gif) no-repeat left 5px;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left 5px;
     margin-left: 6em;
     padding-left: 15px;
     zoom: 1;

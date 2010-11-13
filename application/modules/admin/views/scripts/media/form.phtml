@@ -24,11 +24,11 @@
 <div id="topicPath">
     <p>
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
-        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
     <p>
         <a href="<?php echo $this->baseUrl('/admin/media') ?>">ファイルの追加・編集・削除</a>
-        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
     <p><?php echo '「' . $this->mediaData['name'] . '」(' . $this->mediaData['id'] . '.' . $this->mediaData['type'] . ')' ?>の編集</p>
 </div>
@@ -49,7 +49,7 @@
     <form action="<?php echo $this->updateForm->getAction() ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
         <dl id="inputArea">
             <dt><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></dt>
-            <dd><a href="#"><img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" width="152" height="39" /></a></dd>
+            <dd><a href="#"><img src="<?php echo $this->baseUrl('/images/admin/header/logo.jpg') ?>" width="152" height="39" /></a></dd>
             <dd>ファイル名: <?php echo $this->updateForm->getElement('name') ?></dd>
             <dd>説明: <?php echo $this->updateForm->getElement('comment') ?></dd>
             <dd class="upload">ファイル: <?php echo $this->updateForm->getElement('upload_img') ?></dd>
