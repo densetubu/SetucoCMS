@@ -33,6 +33,10 @@ body {
     text-align: center;
     line-height: 1.5;
 }
+
+/*------------------------------------------------------------*/
+/*    common style                                                   */
+/*------------------------------------------------------------*/
 em {
     font-style: normal;
     font-weight: bold;
@@ -45,6 +49,24 @@ input {
 }
 .clear {
     clear:both;
+}
+/* -- シマシマ背景用 -- */
+.check {
+    background-color: #f1faff;
+}
+/* -- 横並びdl -- */
+dl.straight {
+    zoom: 100%
+}
+dl.straight dt {
+    float:left;
+    clear: left;
+}
+dl.straight dd {
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
+    padding-left: 10px;
+    zoom: 1;
+    margin-left: 8em;
 }
 
 /*------------------------------------------------------------*/
@@ -68,12 +90,10 @@ div#container div#header:after ,
 div#container div#content:after ,
 div.section div.topichArea:after ,
 div#mainContent div.section:after ,
-dl.straight:after ,
-dl.check:after ,
+div#topicSection dl:after ,
 dl#designs:after ,
 div#mainContent div.hArea:after ,
-div#mainContent dl.contentsListK:after ,
-div#mainContent dl.contentsListG:after ,
+div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
 div#messageArea:after ,
 dl.editArea:after ,
@@ -310,29 +330,10 @@ div#topicSection div.topichArea p a {
     background: url(../images/admin/share/bg_topicLink.gif) no-repeat left center;
     padding-left: 18px;
 }
-
-/* -- 横並びdl -- */
-dl.check {
-    zoom: 100%
-}
-dl.check dt {
-    float:left;
-    clear: left;
-}
-dl.check dd {
-    margin-left: 8em;
-}
-div#topicSection dl.check {
-    background-color: #f1faff;
-    zoom: 100%;
-}
-div#topicSection dl.straight dt ,
-div#topicSection dl.straight dd ,
-div#topicSection dl.check dt ,
-div#topicSection dl.check dd {
+div#topicSection dl dt ,
+div#topicSection dl dd  {
     padding: 5px 10px;
 }
-
 
 /*------------------------------------------------------------*/
 /*    hArea style                                                  */
@@ -400,35 +401,25 @@ div.topichArea p a {
 /*------------------------------------------------------------*/
 /*    contentsList style                                          */
 /*------------------------------------------------------------*/
-div#mainContent dl.contentsListK ,
-div#mainContent dl.contentsListG {
+div#mainContent dl.contentsList {
     padding: 10px 15px;
     zoom: 100%;
 }
-div#mainContent dl.contentsListK {
-    background-color: #f1faff;
-}
-div#mainContent dl.contentsListK dt ,
-div#mainContent dl.contentsListK dd ,
-div#mainContent dl.contentsListG dt ,
-div#mainContent dl.contentsListG dd {
+div#mainContent dl.contentsList dt ,
+div#mainContent dl.contentsList dd {
     float: left;
 }
-div#mainContent dl.contentsListK dt ,
-div#mainContent dl.contentsListG dt {
+div#mainContent dl.contentsList dt {
     margin-right: 5px;
 }
-div#mainContent dl.contentsListK dd ,
-div#mainContent dl.contentsListG dd {
+div#mainContent dl.contentsList dd {
     margin-right: 20px;
 }
-div#mainContent dl.contentsListK dt.pageDate ,
-div#mainContent dl.contentsListG dt.pageDate {
+div#mainContent dl.contentsList dt.pageDate {
     float: none;
     margin-bottom: 10px;
 }
-div#mainContent dl.contentsListK dd.pageTitle ,
-div#mainContent dl.contentsListG dd.pageTitle {
+div#mainContent dl.contentsList dd.pageTitle {
     float: none;
     background: none;
     font-weight: bold;
@@ -491,31 +482,6 @@ dl#designs dd em {
 }
 dl#designs dd em input {
     width: 70%;
-}
-
-/*------------------------------------------------------------*/
-/*    dl style                                                  */
-/*------------------------------------------------------------*/
-div#mainContent dl dd {
-    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
-    padding-left: 10px;
-    zoom: 1;
-}
-div#mainContent dl dd.noLine {
-    background: none;
-    padding-left: 0;
-}
-
-/* -- 横並びdl -- */
-dl.straight {
-    zoom: 100%
-}
-dl.straight dt {
-    float:left;
-    clear: left;
-}
-dl.straight dd {
-    margin-left: 8em;
 }
 
 /*------------------------------------------------------------*/

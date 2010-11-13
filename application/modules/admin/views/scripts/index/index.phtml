@@ -94,7 +94,7 @@ function hideAmbitionEdit() {
         <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_first.jpg') ?>" alt="今月も頑張ろう" width="237" height="87" /></dd>
         <?php endif ?>
     </dl>
-    <dl class="check">
+    <dl class="straight check">
         <dt>今月の作成数</dt>
         <dd><?php echo $this->createdPageCount ?>ページ（<?php echo $this->diffGoal ?>）</dd>
     </dl>
@@ -102,7 +102,7 @@ function hideAmbitionEdit() {
         <dt>総ページ数</dt>
         <dd><?php echo $this->totalPageCount ?>ページ</dd>
     </dl>
-    <dl class="check">
+    <dl class="straight check">
         <dt>最終更新日</dt>
         <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
     </dl>
@@ -128,7 +128,7 @@ function hideAmbitionEdit() {
         </div>
     </div>
     <?php foreach ($this->lastCreatedPages as $page): ?>
-        <dl class="contentsList<?php echo $this->cycle(array('K', 'G'))->next() ?>">
+        <dl class="contentsList<?php echo $this->cycle(array('', ' check'))->next() ?>">
             <dt class="pageDate"><?php echo $page['create_date'] ?></dt>
             <dd class="pageTitle">
                 <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
