@@ -502,9 +502,6 @@ table {
 thead tr {
     height: 30px;
 }
-tr.checkG {
-    background-color: #f1faff;
-}
 th {
     background-color: #e8effe;
     border: solid 1px #abcce5;
@@ -522,7 +519,7 @@ td {
     border-right: solid 1px #f6f6f6;
     padding: 7px 5px 7px 15px;
 }
-tr.checkG td {
+tr.check td {
     border-right: solid 1px #fff;
 }
 td span#autoCatMessage ,
@@ -746,9 +743,6 @@ div.section ul#directory {
 }
 div.section ul#directory ul {
     margin: 0;
-}
-div.section ul#directory li.check {
-    background-color: #f1faff;
 }
 div.section ul#directory ul li {
     background: url("../images/admin/directory/bg_childLine.gif") no-repeat left center;

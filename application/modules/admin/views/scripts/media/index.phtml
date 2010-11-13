@@ -115,7 +115,7 @@ function addElement() {
         </thead>
         <tbody>
             <?php foreach ($this->medias as $cnt => $media): ?>
-            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="checkG"' ?>>
+            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
                     <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
