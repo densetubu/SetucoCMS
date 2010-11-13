@@ -32,13 +32,11 @@
     </h2>
 </div>
 
-<form action="<?php echo $this->baseUrl('/admin/login/logout') ?>" method="post">
     <ul>
         <li id="utilLogout">
-            <input onmouseover="this.className='logoutOver'" onmouseout="this.className='logoutNormal'" type="submit" id="sub" name="sub" value="ログアウト" />
+            <a href="<?php echo $this->baseUrl('/admin/login/logout') ?>">ログアウト</a>
         </li>
         <li id="utilAccount">
             <span><?php echo $this->nickName ?></span>でログイン中
         </li>
     </ul>
-</form>
