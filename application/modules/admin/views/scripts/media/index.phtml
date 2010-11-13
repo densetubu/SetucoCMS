@@ -32,7 +32,6 @@ function addElement() {
     objBody.appendChild(element);
 }
 <?php $this->headScript()->captureEnd() ?>
-
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -65,7 +64,7 @@ function addElement() {
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
     <?php endif ?>
-    <form action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA" id="upload_img">
+    <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
@@ -80,7 +79,7 @@ function addElement() {
           <?php endif ?>
         </div>
     </form>
-    <form action="<?php echo $this->searchForm->getAction() ?>" method="post" id="searchForm">
+    <form id="searchForm" action="<?php echo $this->searchForm->getAction() ?>" method="post">
         <div class="default">
             <p><?php echo $this->searchForm->getElement('fileType') ?></p>
             <p><?php echo $this->searchForm->getElement('search') ?></p>
