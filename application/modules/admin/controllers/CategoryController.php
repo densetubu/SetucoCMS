@@ -143,10 +143,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
             }
         }
 
+
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
         if (!isset($isSetFlashMessage)) {
             $this->_helper->flashMessenger('カテゴリーの編集に失敗しました');
         }
+
 
         $this->_redirect('/admin/category/index');
 
