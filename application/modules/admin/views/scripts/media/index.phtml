@@ -32,12 +32,11 @@ function addElement() {
     objBody.appendChild(element);
 }
 <?php $this->headScript()->captureEnd() ?>
-
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
-        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
     <p>ファイルの追加・編集・削除</p>
 </div>
@@ -52,7 +51,7 @@ function addElement() {
     <div class="topichAreaL">
         <div class="topichAreaR">
             <div class="topichArea">
-                <h3><img src="<?php echo $this->baseUrl('/images/h_file.jpg') ?>"
+                <h3><img src="<?php echo $this->baseUrl('/images/admin/media/h_media.jpg') ?>"
                     width="193" height="18" alt="ファイルの追加・編集・削除" /></h3>
             </div>
         </div>
@@ -65,7 +64,7 @@ function addElement() {
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
     <?php endif ?>
-    <form action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA" name="upload_img">
+    <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
@@ -80,7 +79,7 @@ function addElement() {
           <?php endif ?>
         </div>
     </form>
-    <form action="<?php echo $this->searchForm->getAction() ?>" method="post" name="searchForm">
+    <form id="searchForm" action="<?php echo $this->searchForm->getAction() ?>" method="post">
         <div class="default">
             <p><?php echo $this->searchForm->getElement('fileType') ?></p>
             <p><?php echo $this->searchForm->getElement('search') ?></p>
@@ -88,10 +87,10 @@ function addElement() {
     </form>
     <table summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="16%" />
+            <col width="18%" />
             <col width="22%" />
-            <col width="24%" />
-            <col width="24%" />
+            <col width="23%" />
+            <col width="23%" />
             <col width="7%" />
             <col width="7%" />
         </colgroup>
@@ -99,16 +98,16 @@ function addElement() {
             <tr>
                 <th scope="col" id="tableFirst">表示</th>
                 <th scope="col">ファイル
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">更新日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/asc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">アップロード日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">編集</th>
                 <th scope="col">削除</th>
@@ -116,7 +115,7 @@ function addElement() {
         </thead>
         <tbody>
             <?php foreach ($this->medias as $cnt => $media): ?>
-            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="checkG"' ?>>
+            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
                     <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
@@ -127,12 +126,12 @@ function addElement() {
                 <td><?php echo $media['create_date'] ?></td>
                 <td>
                     <a href="<?php echo $this->baseUrl('/admin/media/form/id/' . $media['id']) ?>">
-                        <img src="<?php echo $this->baseUrl('/images/btn_edit.png') ?>" alt='編集' width='27' height='27' />
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt='編集' width='27' height='27' />
                     </a>
                 </td>
                 <td>
                     <a href="javascript:void(0)" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
-                        <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt='削除' width='27' height='27' />
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
             </tr>            

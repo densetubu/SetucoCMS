@@ -21,10 +21,10 @@
                 <td>
                 <?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
                     <a href="<?php echo $this->baseUrl('/page/id/' . $this->page['id']) ?>" target='_blank'>
-                        <img src="<?php echo $this->baseUrl('/images/btn_check.png') ?>" alt='表示' width='27' height='27' />
+                        <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check.png') ?>" alt='表示' width='27' height='27' />
                     </a>
                 <?php else: ?>
-                    <img src="<?php echo $this->baseUrl('/images/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
+                    <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
                 <?php endif ?>
                 </td>
                 <td>
@@ -60,7 +60,6 @@
                 </td>
                 <td>
                     <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
                     </a>
                 </td>
-

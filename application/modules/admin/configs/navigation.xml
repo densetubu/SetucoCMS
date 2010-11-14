@@ -10,7 +10,7 @@
             <action>index</action>
             <order>-10</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/btn_menu_top.jpg</src>
+            <src>images/admin/gNav/btn_menu_top.jpg</src>
             <pages>
                 <index_index>
                     <id>index_index</id>
@@ -39,7 +39,7 @@
             <action>index</action>
             <order>0</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_page.jpg</src>
+            <src>images/admin/gNav/h_menu_page.jpg</src>
             <pages>
                 <page_form>
                     <id>page_form</id>
@@ -68,7 +68,7 @@
             <action>index</action>
             <order>10</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_directory.jpg</src>
+            <src>images/admin/gNav/h_menu_directory.jpg</src>
             <pages>
                 <directory_index>
                     <id>directory_index</id>
@@ -89,7 +89,7 @@
             <action>index</action>
             <order>20</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_category.jpg</src>
+            <src>images/admin/gNav/h_menu_category.jpg</src>
             <pages>
                 <category_index>
                     <id>category_index</id>
@@ -110,7 +110,7 @@
             <action>index</action>
             <order>30</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_tag.jpg</src>
+            <src>images/admin/gNav/h_menu_tag.jpg</src>
             <pages>
                 <tag_index>
                     <id>tag_index</id>
@@ -131,7 +131,7 @@
             <action>index</action>
             <order>40</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_file.jpg</src>
+            <src>images/admin/gNav/h_menu_file.jpg</src>
             <pages>
                 <media_index>
                     <id>media_index</id>
@@ -152,7 +152,7 @@
             <action>index</action>
             <order>50</order>
             <type>Setuco_Navigation_Page</type>
-            <src>images/gNav/h_menu_site.jpg</src>
+            <src>images/admin/gNav/h_menu_site.jpg</src>
             <pages>
                 <site_index>
                     <id>site_index</id>

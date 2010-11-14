@@ -21,24 +21,22 @@
 <div>
     <h1>
         <a href="<?php echo $this->baseUrl('/admin') ?>" title="管理画面のトップに戻ります">
-            <img src="<?php echo $this->baseUrl('/images/header/logo.jpg') ?>" alt="せつこCMS"  width="152" height="39" />
+            <img src="<?php echo $this->baseUrl('/images/admin/header/logo.jpg') ?>" alt="せつこCMS"  width="152" height="39" />
         </a>
     </h1>
     <h2>
         <a href="<?php echo $this->siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
             <span><?php echo $this->siteName ?></span>
-            <img src="<?php echo $this->baseUrl('/images/header/btn_watchSite.jpg') ?>" alt="サイトを確認する" width="108" height="29" />
+            <img src="<?php echo $this->baseUrl('/images/admin/header/btn_watchSite.jpg') ?>" alt="サイトを確認する" width="108" height="29" />
         </a>
     </h2>
 </div>
 
-<form action="<?php echo $this->baseUrl('/admin/login/logout') ?>" method="post">
     <ul>
         <li id="utilLogout">
-            <input onmouseover="this.className='logoutOver'" onmouseout="this.className='logoutNormal'" type="submit" id="sub" name="sub" value="ログアウト" />
+            <a href="<?php echo $this->baseUrl('/admin/login/logout') ?>">ログアウト</a>
         </li>
         <li id="utilAccount">
             <span><?php echo $this->nickName ?></span>でログイン中
         </li>
     </ul>
-</form>

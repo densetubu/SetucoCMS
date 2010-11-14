@@ -33,6 +33,10 @@ body {
     text-align: center;
     line-height: 1.5;
 }
+
+/*------------------------------------------------------------*/
+/*    common style                                                   */
+/*------------------------------------------------------------*/
 em {
     font-style: normal;
     font-weight: bold;
@@ -45,6 +49,24 @@ input {
 }
 .clear {
     clear:both;
+}
+/* -- シマシマ背景用 -- */
+.check {
+    background-color: #f1faff;
+}
+/* -- 横並びdl -- */
+dl.straight {
+    zoom: 100%
+}
+dl.straight dt {
+    float:left;
+    clear: left;
+}
+dl.straight dd {
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
+    padding-left: 10px;
+    zoom: 1;
+    margin-left: 8em;
 }
 
 /*------------------------------------------------------------*/
@@ -68,12 +90,10 @@ div#container div#header:after ,
 div#container div#content:after ,
 div.section div.topichArea:after ,
 div#mainContent div.section:after ,
-dl.straight:after ,
-dl.check:after ,
+div#topicSection dl:after ,
 dl#designs:after ,
 div#mainContent div.hArea:after ,
-div#mainContent dl.contentsListK:after ,
-div#mainContent dl.contentsListG:after ,
+div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
 div#messageArea:after ,
 dl.editArea:after ,
@@ -164,34 +184,19 @@ div#header ul li#utilLogout {
     padding-right: 15px;
 }
 div#header ul li#utilManual a ,
-div#header ul li#utilAccount a {
-    background-repeat: no-repeat;
-    background-position: left center;
+div#header ul li#utilAccount span {
     padding-left: 12px;
 }
 div#header ul li#utilManual a {
-    background-image: url(../images/header/bg_manual.gif);
+    background: url(../images/admin/header/bg_manual.gif) no-repeat left center;
 }
 div#header ul li#utilAccount span {
-    background-image: url(../images/header/bg_nowLogin.gif);
-    background-repeat: no-repeat;
+    background: url(../images/admin/header/bg_nowLogin.gif) no-repeat left center;
     font-weight: bold;
-    padding-left: 15px;
 }
-div#header li#utilLogout input ,
-div#header li#utilLogout input.logoutNormal {
-    background: none;
-    background-image: url(../images/header/bg_logout.gif);
-    background-repeat: no-repeat;
-    background-position: left center;
-    border: none;
-    display: block;
-    width: 75px;
-    text-indent: -999px;
-}
-div#header li#utilLogout input.logoutOver {
-    background-image: url(../images/header/bg_logout_over.gif);
-    cursor: pointer;
+div#header li#utilLogout a {
+    background: url(../images/admin/header/bg_logout.gif) no-repeat left center;
+    padding-left: 22px;
 }
 
 /*------------------------------------------------------------*/
@@ -211,7 +216,7 @@ div #content div#mainContent {
     float: right;
 }
 div#mainContent div#mainContentInner {
-    background: url(../images/bg_borderLine.gif) repeat-y left;
+    background: url(../images/admin/gNav/bg_borderLine.gif) repeat-y left;
     margin-left: 160px;
     padding-left: 12px;
 }
@@ -220,7 +225,7 @@ div#mainContent div#mainContentInner {
 /*    gNav style                                                  */
 /*------------------------------------------------------------*/
 div #content ul#gNav {
-    background: url(../images/bg_borderLine.gif) repeat-y right;
+    background: url(../images/admin/gNav/bg_borderLine.gif) repeat-y right;
     float: left;
     padding-right: 12px;
     width: 150px;
@@ -237,21 +242,21 @@ ul#gNav li dl dd {
     padding-left: 8px;
 }
 ul#gNav li dl dd a {
-    background: url(../images/gNav/bg_menuLink.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink.gif) no-repeat left center;
     padding: 8px 8px 8px 16px;
     display: block;
     width: auto;
     height: auto;
 }
 ul#gNav li dl dd a:hover {
-    background: url(../images/gNav/bg_menuLink_over.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink_over.gif) no-repeat left center;
 }
 ul#gNav li dl dd#active {
     background: #e4f6ff;
 }
 ul#gNav li dl dd#active a ,
 ul#gNav li dl dd#active a:hover {
-    background: url(../images/gNav/bg_menuLink_act.gif) no-repeat left center;
+    background: url(../images/admin/gNav/bg_menuLink_act.gif) no-repeat left center;
     font-weight:bold;
     color:#5f5f5f;
     text-decoration:none;
@@ -298,18 +303,18 @@ div#mainContent div#topicSection {
     padding: 5px;
 }
 div#topicSection div.topichAreaL {
-    background: url(../images/bg_topic_l.jpg) no-repeat left top;
+    background: url(../images/admin/share/bg_topic_l.jpg) no-repeat left top;
     margin-bottom: 5px;
     padding-left: 5px;
     height: 38px;
 }
 div#topicSection div.topichAreaR {
-    background: url(../images/bg_topic_r.jpg) no-repeat right top;
+    background: url(../images/admin/share/bg_topic_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
 div#topicSection div.topichArea {
-    background: url(../images/bg_topic.jpg) repeat-x top;
+    background: url(../images/admin/share/bg_topic.jpg) repeat-x top;
     padding: 10px 5px;
     height: 38px;
     zoom: 100%;
@@ -322,32 +327,13 @@ div#topicSection div.topichArea p {
     margin-top: 2px;
 }
 div#topicSection div.topichArea p a {
-    background: url(../images/bg_topicLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_topicLink.gif) no-repeat left center;
     padding-left: 18px;
 }
-
-/* -- 横並びdl -- */
-dl.check {
-    zoom: 100%
-}
-dl.check dt {
-    float:left;
-    clear: left;
-}
-dl.check dd {
-    margin-left: 8em;
-}
-div#topicSection dl.check {
-    background-color: #f1faff;
-    zoom: 100%;
-}
-div#topicSection dl.straight dt ,
-div#topicSection dl.straight dd ,
-div#topicSection dl.check dt ,
-div#topicSection dl.check dd {
+div#topicSection dl dt ,
+div#topicSection dl dd  {
     padding: 5px 10px;
 }
-
 
 /*------------------------------------------------------------*/
 /*    hArea style                                                  */
@@ -360,7 +346,7 @@ div#mainContent div.hArea {
 }
 div#mainContent div.hArea h3 {
     float: left;
-    background: url(../images/bg_hArea.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hArea.gif) no-repeat left center;
     font-size: 120%;
     font-weight: normal;
     padding-left: 20px;
@@ -374,7 +360,7 @@ div.hArea p {
     margin-top: 2px;
 }
 div.hArea p a {
-    background: url(../images/bg_hLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
     padding-left: 18px;
 }
 
@@ -382,18 +368,18 @@ div.hArea p a {
 /*    section topichArea style                                  */
 /*------------------------------------------------------------*/
 div.section div.topichAreaL {
-    background: url(../images/bg_topicB_l.jpg) no-repeat left top;
+    background: url(../images/admin/share/bg_topicB_l.jpg) no-repeat left top;
     margin-bottom: 15px;
     padding-left: 5px;
     height: 38px;
 }
 div.section div.topichAreaR {
-    background: url(../images/bg_topicB_r.jpg) no-repeat right top;
+    background: url(../images/admin/share/bg_topicB_r.jpg) no-repeat right top;
     padding-right: 5px;
     height: 38px;
 }
 div.section div.topichArea {
-    background: url(../images/bg_topicB.jpg) repeat-x top;
+    background: url(../images/admin/share/bg_topicB.jpg) repeat-x top;
     padding: 9px 10px;
     height: 38px;
     zoom: 100%;
@@ -408,42 +394,32 @@ div.section div.topichArea p {
     margin-top: 2px;
 }
 div.topichArea p a {
-    background: url(../images/bg_hLink.gif) no-repeat left center;
+    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
     padding-left: 18px;
 }
 
 /*------------------------------------------------------------*/
 /*    contentsList style                                          */
 /*------------------------------------------------------------*/
-div#mainContent dl.contentsListK ,
-div#mainContent dl.contentsListG {
+div#mainContent dl.contentsList {
     padding: 10px 15px;
     zoom: 100%;
 }
-div#mainContent dl.contentsListK {
-    background-color: #f1faff;
-}
-div#mainContent dl.contentsListK dt ,
-div#mainContent dl.contentsListK dd ,
-div#mainContent dl.contentsListG dt ,
-div#mainContent dl.contentsListG dd {
+div#mainContent dl.contentsList dt ,
+div#mainContent dl.contentsList dd {
     float: left;
 }
-div#mainContent dl.contentsListK dt ,
-div#mainContent dl.contentsListG dt {
+div#mainContent dl.contentsList dt {
     margin-right: 5px;
 }
-div#mainContent dl.contentsListK dd ,
-div#mainContent dl.contentsListG dd {
+div#mainContent dl.contentsList dd {
     margin-right: 20px;
 }
-div#mainContent dl.contentsListK dt.pageDate ,
-div#mainContent dl.contentsListG dt.pageDate {
+div#mainContent dl.contentsList dt.pageDate {
     float: none;
     margin-bottom: 10px;
 }
-div#mainContent dl.contentsListK dd.pageTitle ,
-div#mainContent dl.contentsListG dd.pageTitle {
+div#mainContent dl.contentsList dd.pageTitle {
     float: none;
     background: none;
     font-weight: bold;
@@ -509,31 +485,6 @@ dl#designs dd em input {
 }
 
 /*------------------------------------------------------------*/
-/*    dl style                                                  */
-/*------------------------------------------------------------*/
-div#mainContent dl dd {
-    background: url(../images/bg_dlLine.gif) no-repeat left center;
-    padding-left: 10px;
-    zoom: 1;
-}
-div#mainContent dl dd.noLine {
-    background: none;
-    padding-left: 0;
-}
-
-/* -- 横並びdl -- */
-dl.straight {
-    zoom: 100%
-}
-dl.straight dt {
-    float:left;
-    clear: left;
-}
-dl.straight dd {
-    margin-left: 8em;
-}
-
-/*------------------------------------------------------------*/
 /*    copyright style                                              */
 /*------------------------------------------------------------*/
 p#copyright {
@@ -550,9 +501,6 @@ table {
 }
 thead tr {
     height: 30px;
-}
-tr.checkG {
-    background-color: #f1faff;
 }
 th {
     background-color: #e8effe;
@@ -571,7 +519,7 @@ td {
     border-right: solid 1px #f6f6f6;
     padding: 7px 5px 7px 15px;
 }
-tr.checkG td {
+tr.check td {
     border-right: solid 1px #fff;
 }
 td span#autoCatMessage ,
@@ -796,16 +744,13 @@ div.section ul#directory {
 div.section ul#directory ul {
     margin: 0;
 }
-div.section ul#directory li.check {
-    background-color: #f1faff;
-}
 div.section ul#directory ul li {
-    background: url("../images/directory/bg_childLine.gif") no-repeat left center;
+    background: url("../images/admin/directory/bg_childLine.gif") no-repeat left center;
     margin: 0 0 0 41px;
     padding: 0 0 0 38px;
 }
 div.section ul#directory ul li.lastChild {
-    background: url("../images/directory/bg_childLine_last.gif") no-repeat left center;
+    background: url("../images/admin/directory/bg_childLine_last.gif") no-repeat left center;
 }
 ul#directory li div {
     padding: 3px 16px;
@@ -870,7 +815,7 @@ body#loginBoad dt {
     margin-bottom: 10px;
 }
 body#loginBoad dd {
-    background: url(../images/bg_dlLine.gif) no-repeat left 5px;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left 5px;
     margin-left: 6em;
     padding-left: 15px;
     zoom: 1;

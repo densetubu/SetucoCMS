@@ -25,7 +25,7 @@
 <div id="topicPath">
     <p>
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
-        <img src="<?php echo $this->baseUrl('/images/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
     <p>カテゴリーの追加・編集・削除</p>
 </div>
@@ -36,7 +36,7 @@
     <div class="topichAreaL">
         <div class="topichAreaR">
             <div class="topichArea">
-                <h3><img src="<?php echo $this->baseUrl('/images/h_catAll.jpg')?>" width="208" height="18" alt="カテゴリーの追加・編集・削除" /></h3>
+                <h3><img src="<?php echo $this->baseUrl('/images/admin/category/h_catAll.jpg')?>" width="208" height="18" alt="カテゴリーの追加・編集・削除" /></h3>
             </div>
         </div>
     </div>
@@ -65,8 +65,8 @@
                 <tr>
                     <th scope="col" id="tableFirst">
                         カテゴリー名
-                        <a href="<?php echo $this->baseUrl('/admin/category/index/sort/desc')?>"><img src="<?php echo $this->baseUrl('images/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                        <a href="<?php echo $this->baseUrl('/admin/category/index/sort/asc')?>"><img src="<?php echo $this->baseUrl('images/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                        <a href="<?php echo $this->baseUrl('/admin/category/index/sort/desc')?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                        <a href="<?php echo $this->baseUrl('/admin/category/index/sort/asc')?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                     </th>
                     <th scope="col">編集</th>
                     <th scope="col">削除</th>
@@ -78,7 +78,7 @@
                 <?php if ($value['is_even'] === true): //配列のループが偶数か ?>
                 <tr>
                 <?php else: ?>
-                <tr class='checkG'>
+                <tr class='check'>
                 <?php endif; ?>
 
                 <?php if ($value['id'] !== false): //登録したカテゴリーか　編集削除できるか ?> 
@@ -100,7 +100,7 @@
                 <?php endif; ?>
 
                 <td>
-                    <a href='<?php echo $this->baseUrl("/admin/category/index/page/{$this->page}/id/{$value['id']}")?>'><img src='<?php echo $this->baseUrl('/images/btn_edit.png')?>' alt='編集' width='27' height='27' /></a>
+                    <a href='<?php echo $this->baseUrl("/admin/category/index/page/{$this->page}/id/{$value['id']}")?>'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_edit.png')?>' alt='編集' width='27' height='27' /></a>
                 </td>
                 <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="get">
                     <input type='hidden' id='cat_id' name='cat_id' value='<?php echo $value['id'] ?>' />
@@ -108,7 +108,7 @@
                     <input type='hidden' name='sort' value='<?php echo $this->sort?>'>
                 </form>
                 <td>
-                    <a href='javascript:void(0)' onclick='confirmRedirect("<?php echo $this->baseUrl("/admin/category/delete/id/{$value['id']}")?>");'><img src='<?php echo $this->baseUrl('/images/btn_delete.png')?>' alt='削除' width='27' height='27' /></a>
+                    <a href='javascript:void(0)' onclick='confirmRedirect("<?php echo $this->baseUrl("/admin/category/delete/id/{$value['id']}")?>");'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png')?>' alt='削除' width='27' height='27' /></a>
                 </td>
 
                 <?php else: //デフォルトのカテゴリー 編集削除できない ?>

@@ -54,7 +54,7 @@ function hideAmbitionEdit() {
                 <span id="ambitionView">
                     <em>「<?php echo $this->ambitionForm->getElement('ambition')->getValue() ?>」</em>
                     <a href="javascript:void(0)" onclick="showAmbitionEdit()">
-                        <img src="<?php echo $this->baseUrl('/images/btn_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
+                        <img src="<?php echo $this->baseUrl('/images/admin/index/btn_ambition_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
                     </a>
                 </span>
                 <span id="ambitionEdit">
@@ -74,7 +74,7 @@ function hideAmbitionEdit() {
         <div class="topichAreaR">
             <div class="topichArea">
                 <h3>
-                    <img src="<?php echo $this->baseUrl('/images/h_nowData.gif') ?>" alt="現在の状況" width="110" height="22" />
+                    <img src="<?php echo $this->baseUrl('/images/admin/index/h_nowData.jpg') ?>" alt="現在の状況" width="112" height="22" />
                 </h3>
                 <p>
                     <a href="<?php echo $this->baseUrl('/admin/index/form-goal') ?>">更新目標の編集</a>
@@ -85,16 +85,16 @@ function hideAmbitionEdit() {
     <dl class="straight">
         <dt>更新状況</dt>
         <?php if ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::GOOD): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/status_good.jpg') ?>" alt="すごい！最高！！！" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_good.jpg') ?>" alt="すごい！最高！！！" width="237" height="87" /></dd>
         <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::NORMAL): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/status_normal.jpg') ?>" alt="その調子っ" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_normal.jpg') ?>" alt="その調子っ" width="237" height="87" /></dd>
         <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::BAD): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/status_bad.jpg') ?>" alt="もっと頑張って" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_bad.jpg') ?>" alt="もっと頑張って" width="237" height="87" /></dd>
         <?php else: ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/status_first.jpg') ?>" alt="今月も頑張ろう" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_first.jpg') ?>" alt="今月も頑張ろう" width="237" height="87" /></dd>
         <?php endif ?>
     </dl>
-    <dl class="check">
+    <dl class="straight check">
         <dt>今月の作成数</dt>
         <dd><?php echo $this->createdPageCount ?>ページ（<?php echo $this->diffGoal ?>）</dd>
     </dl>
@@ -102,7 +102,7 @@ function hideAmbitionEdit() {
         <dt>総ページ数</dt>
         <dd><?php echo $this->totalPageCount ?>ページ</dd>
     </dl>
-    <dl class="check">
+    <dl class="straight check">
         <dt>最終更新日</dt>
         <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
     </dl>
@@ -119,7 +119,7 @@ function hideAmbitionEdit() {
         <div class="topichAreaR">
             <div class="topichArea">
                 <h3 id="recentry">
-                    <img src="<?php echo $this->baseUrl('/images/h_recentlyPage.jpg') ?>" alt="最近作ったページ" width="194" height="23" />
+                    <img src="<?php echo $this->baseUrl('/images/admin/index/h_recentlyPage.jpg') ?>" alt="最近作ったページ" width="194" height="23" />
                 </h3>
                 <p>
                     <a href="<?php echo $this->baseUrl('/admin/page') ?>"> ページの一覧（編集・削除）へ</a>
@@ -128,7 +128,7 @@ function hideAmbitionEdit() {
         </div>
     </div>
     <?php foreach ($this->lastCreatedPages as $page): ?>
-        <dl class="contentsList<?php echo $this->cycle(array('K', 'G'))->next() ?>">
+        <dl class="contentsList<?php echo $this->cycle(array('', ' check'))->next() ?>">
             <dt class="pageDate"><?php echo $page['create_date'] ?></dt>
             <dd class="pageTitle">
                 <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>

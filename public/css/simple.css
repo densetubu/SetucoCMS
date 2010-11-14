@@ -55,7 +55,7 @@ div#wrapper {
 /*-- HEADER style -----------------------------------------------*/
 /*---------------------------------------------------------------*/
 div#header_innerL{
-    background: url(../images/simple/bg_headerL.jpg) no-repeat left top;
+    background: url(../images/front/simple/bg_headerL.jpg) no-repeat left top;
     height: 100px;
     padding-left: 20px;
     margin-bottom: 20px;
@@ -71,12 +71,12 @@ div#header_innerL:after {
     clear: both;
 }
 div#header_innerL div#header_innerR {
-    background: url(../images/simple/bg_headerR.jpg) no-repeat right top;
+    background: url(../images/front/simple/bg_headerR.jpg) no-repeat right top;
     padding-right: 20px;
     height: 100px;
 }
 div#header_innerL div#header_innerR div#header_inner {
-    background: url(../images/simple/bg_header.jpg) repeat-x;
+    background: url(../images/front/simple/bg_header.jpg) repeat-x;
     height: 100px;
 }
 
@@ -124,7 +124,7 @@ div#header_inner ul li {
     display: inline;
 }
 div#header_inner ul li#RSS {
-    background: url(../images/simple/bg_RSS.gif) no-repeat left center;
+    background: url(../images/front/simple/bg_RSS.gif) no-repeat left center;
 }
 div#header_inner ul li#RSS a {
     padding-left: 20px;
@@ -149,7 +149,7 @@ div#header_inner form p {
 div#header_inner dl dt {
     height: 23px;
     width:22px;
-    background: url(../images/simple/search.gif) no-repeat 0 0;
+    background: url(../images/front/simple/search.gif) no-repeat 0 0;
     margin-right: -1px;
     display: block;
     text-indent: -999px;
@@ -167,7 +167,7 @@ div#header_inner dl dd input {
     margin-top: 2px;
 }
 div#header_inner form p input {
-    background: url(../images/simple/btn_search.jpg) no-repeat 0 0;
+    background: url(../images/front/simple/btn_search.jpg) no-repeat 0 0;
     border: none;
     display: block;
     width: 43px;
@@ -241,7 +241,7 @@ div.entryHead h2 a ,
 div.entryHead h2 span {
     text-decoration: none;
     color: #3399cc;
-    background: url(../images/simple/bg_entryTitle.gif) no-repeat left center;
+    background: url(../images/front/simple/bg_entryTitle.gif) no-repeat left center;
     padding-left: 24px;
     display: block;
 }
@@ -418,7 +418,7 @@ div#navArea div.navList h3 {
 }
 div#navArea div.navList ul li a,
 div#navArea div.navList ul li span {
-    background: url(/images/simple/bg_linkList.gif) no-repeat left 0.4em;
+    background: url(/images/front/simple/bg_linkList.gif) no-repeat left 0.4em;
     padding-left: 16px;
     margin-bottom: 6px;
     display: block;
