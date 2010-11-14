@@ -68,22 +68,31 @@ class Admin_Model_Page
 
     /**
      * ページ情報を取得する
-     * アカウント情報も取得します(パスワード以外)
+     *
+     * @param int $id  ページID
+     * @return array ページ情報
+     * @author charlesvineyard
+     */
+    public function load($id)
+    {
+        return $this->_pageDao->find($id)->current()->toArray();
+    }
+    
+    /**
+     * ページ情報を取得する
+     * アカウント情報も取得します。
      *
      * @param string  $sortColmn  並べ替えをするカラムのカラム名
-     * @param  string $order       asc か　desc
-     * @param  int    $pageNumber  ページ番号(オフセットカウント)
-     * @param  int    $limit       一つのページに出力する数(オフセット)
+     * @param string $order       asc か　desc
+     * @param int    $pageNumber  ページ番号(オフセットカウント)
+     * @param int    $limit       一つのページに出力する数(オフセット)
      * @return array ページ情報の一覧
      * @author charlesvineyard
      */
     public function loadPages($sortColmn, $order, $pageNumber, $limit)
     {
-        $pages = $this->_pageDao->findSortedPages($sortColmn, $order, $pageNumber, $limit, true);
-        foreach ($pages as $key => $page) {
-            unset($pages[$key]['password']);
-        }
-        return $pages;
+        return $this->_pageDao->findSortedPages(
+            $sortColmn, $order, $pageNumber, $limit, true);
     }
 
     /**
@@ -220,33 +229,30 @@ class Admin_Model_Page
         return $tagIds;
     }
 
-//    /**
-//     * タグを更新する
-//     *
-//     * @param  $id   タグID
-//     * @param  $name タグ名
-//     * @return void
-//     * @author charlesvineyard
-//     */
-//    public function update($id, $name)
-//    {
-//        if ($this->isExistsTagName($name)) {
-//            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
-//        }
-//        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
-//        $this->_tagDao->update(array('name' => $name), $where);
-//    }
-//
-//    /**
-//     * タグを削除する
-//     *
-//     * @param  $id   タグID
-//     * @return void
-//     * @author charlesvineyard
-//     */
-//    public function delete($id)
-//    {
-//        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
-//        $this->_tagDao->delete($where);
-//    }
+    /**
+     * ページを更新する
+     *
+     * @param int   $id       ページID
+     * @param array $pageInfo ページ情報の配列
+     * @return void
+     * @author charlesvineyard
+     */
+    public function update($id, $pageInfo)
+    {
+        $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_pageDao->update($pageInfo, $where);
+    }
+
+    /**
+     * ページを削除する
+     *
+     * @param int $id ページID
+     * @return void
+     * @author charlesvineyard
+     */
+    public function delete($id)
+    {
+        $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
+        $this->_pageDao->delete($where);
+    }
 }

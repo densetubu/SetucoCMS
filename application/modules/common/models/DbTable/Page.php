@@ -281,6 +281,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param string  $order 並び順 asc か desc
      * @param int $page 現在のページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
+     * @param boolean $isJoinAccount アカウントテーブルを結合するなら true。 デフォルトは false
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
@@ -289,7 +290,9 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
         if ($isJoinAccount) {
             $select->setIntegrityCheck(false)
-                   ->join('account', 'page.account_id = account.id');
+                   ->join(array('a' => 'account'),
+                      'page.account_id = a.id',
+                       array('account_id' => 'a.id', 'a.nickname'));
         }
 
         $select->limitPage($page, $limit)->order("{$sortColmn} {$order}");

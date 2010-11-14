@@ -29,7 +29,7 @@
 dojo.require('dojo.NodeList-traverse');
 function showTagEdit(switcher) {
     dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
-    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'inline');
+    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'block');
 }
 function hideTagEdit(switcher) {
     dojo.query(switcher.parentNode.parentNode).style('display', 'none');

@@ -1,0 +1,65 @@
+<?php
+/**
+ * ページの編集・削除画面内のページ情報表示部分
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Partial
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array $page ページ情報の配列
+ * @param      Setuco_Form $categoryForm カテゴリー編集フォーム
+ * @param      Setuco_Form $statusForm   状態編集フォーム
+ * @author     charlesvineyard
+ */
+?>
+                <td>
+                <?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
+                    <a href="<?php echo $this->baseUrl('/page/id/' . $this->page['id']) ?>" target='_blank'>
+                        <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check.png') ?>" alt='表示' width='27' height='27' />
+                    </a>
+                <?php else: ?>
+                    <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
+                <?php endif ?>
+                </td>
+                <td>
+                    <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $this->page['id']) ?>"><?php echo $this->page['title'] ?></a>
+                </td>
+                <td><?php echo $this->page['create_date'] ?></td>
+                <td><?php echo $this->page['nickname'] ?></td>
+                <td>
+                    <form id="page_category_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->categoryForm->getAction() ?>">
+                        <p>
+                            <?php echo $this->categoryForm->getElement('category_id')->setValue($this->page['category_id']) ?>
+                            <?php echo $this->categoryForm->getElement('hidden_page_id')->setValue($this->page['id']) ?>
+                            <?php echo $this->categoryForm->getElement('hidden_page_title')->setValue($this->page['title']) ?>
+                        </p>
+                        <p id="category_edit">
+                            <?php echo $this->categoryForm->getElement('sub_category') ?>
+                            <?php echo $this->categoryForm->getElement('cancel_category') ?>
+                        </p>
+                    </form>
+                </td>
+                <td>
+                    <form id="page_status_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->statusForm->getAction() ?>">
+                        <p>
+                            <?php echo $this->statusForm->getElement('status')->setValue($this->page['status']) ?>
+                            <?php echo $this->statusForm->getElement('hidden_page_id')->setValue($this->page['id']) ?>
+                            <?php echo $this->statusForm->getElement('hidden_page_title')->setValue($this->page['title']) ?>
+                        </p>
+                        <p id="status_edit">
+                            <?php echo $this->statusForm->getElement('sub_category') ?>
+                            <?php echo $this->statusForm->getElement('cancel_category') ?>
+                        </p>
+                    </form>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>');">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+                    </a>
+                </td>
