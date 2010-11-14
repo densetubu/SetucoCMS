@@ -41,11 +41,11 @@ function addElement() {
     <p>ファイルの追加・編集・削除</p>
 </div>
 <!-- topicpath END -->
-
-<?php $type = $this->condition['type']  ?>
-<?php $sort = $this->condition['sort']  ?>
-<?php $order = $this->condition['order']  ?>
-
+<?php
+$type = $this->condition['type'];
+$sort = $this->condition['sort'];
+$order = $this->condition['order'];
+?>
 <!-- section START -->
 <div class="section">
     <div class="topichAreaL">
@@ -116,7 +116,7 @@ function addElement() {
             <?php foreach ($this->medias as $cnt => $media): ?>
             <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
-                    <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
+                    <a href="<?php echo $this->baseUrl("/images/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
                     </a>
                 </td>
