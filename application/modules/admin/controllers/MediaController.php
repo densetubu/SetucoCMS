@@ -54,7 +54,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     /**
      * サムネイルの表示時の幅。ビュー的な要素だがサムネイル生成時にも参照するためここで定義。
      */
-    const THUMBNAIL_WIDTH = 48;
+    const THUMBNAIL_WIDTH = 65;
 
     /**
      * 絞り込み処理で使うファイル種別「全て」のインデックス
@@ -315,9 +315,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル関連はファイルが選択された場合のみ処理
         if ($adapter->getFileName()) {
 
-            // オリジナルファイルの情報を取得
-            $fileInfo = pathinfo($adapter->getFileName());
-            $extType = $fileInfo['extension'];             // 拡張子取得
+            // 新しくアップロードされたオリジナルファイルの情報を取得
+            $newFileInfo = pathinfo($adapter->getFileName());
+            $extType = $newFileInfo['extension'];             // 拡張子取得
             // 既存のファイルと新ファイルで拡張子が違う場合は既存のファイル情報を取得（新ファイルアップロード後に古いファイルをremoveできるようにするため）
             $oldFileInfo = $this->_media->findMediaById($id);
             if ($extType !== $oldFileInfo['type']) {
@@ -658,7 +658,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getUploadDest()
     {
-        return APPLICATION_PATH . '/../public/media/upload';
+        return APPLICATION_PATH . '/../public/images/media/upload';
     }
 
     /**
@@ -669,7 +669,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getThumbnailDest()
     {
-        return APPLICATION_PATH . '/../public/media/thumbnail';
+        return APPLICATION_PATH . '/../public/images/media/thumbnail';
     }
 
     /**

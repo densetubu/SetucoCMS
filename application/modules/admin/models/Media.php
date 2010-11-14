@@ -27,17 +27,17 @@ class Admin_Model_Media
     /**
      * サムネイル保存ディレクトリのbaseUrl用パス。
      */
-    const THUMB_DIR_PATH_FROM_PUBLIC = '/media/thumbnail/';
+    const THUMB_DIR_PATH_FROM_PUBLIC = '/images/media/thumbnail/';
 
     /**
      * PDFファイル用アイコンファイルのパス
      */
-    const ICON_PATH_PDF = '/images/media/icn_pdf.gif';
+    const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
 
     /**
      * TXTファイル用アイコンファイルのパス
      */
-    const ICON_PATH_TXT = '/images/media/icn_txt.gif';
+    const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
 
     /**
      * メディア表のDAO
@@ -235,22 +235,19 @@ class Admin_Model_Media
      * 受け取ったファイルの情報で、Media表の指定されたIDのレコードを更新する
      *
      * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
-     * @return boolean true:更新成功、false:更新失敗
+     * @return boolean 更新に成功したらtrue、失敗したらfalse
      * @author akitsukada
      */
     public function updateMediaInfo($id, $mediaInfo)
     {
         // DBにデータを登録
-        try {
-            //アップデートする条件のwhere句を生成する
-            $where = $this->_mediadao->getAdapter()->quoteInto("id = ?", $id);
-            $this->_mediadao->update($mediaInfo, $where);
-            $result = true;
-        } catch (Zend_Exception $e) {
-            $result = false;
+        //アップデートする条件のwhere句を生成する
+        $where = $this->_mediadao->getAdapter()->quoteInto("id = ?", (int)$id); 
+        if ($this->_mediadao->update($mediaInfo, $where) == 1) { // 更新した行数として必ず1か0が返ってくる
+            return true;
+        } else {
+            return false;
         }
-        echo $result;
-        return $result;
     }
 
     /**

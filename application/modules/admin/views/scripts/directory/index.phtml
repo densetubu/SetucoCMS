@@ -71,9 +71,7 @@ function closeCategory(switcher) {
                     <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" /><?php echo $category->getLabel() ?>
                 </p>
                 <p>
-                    <a href="<?php echo $category->getHref() ?>">
-                        <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_page.gif') ?>" width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
-                    </a>
+                    <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_page.gif') ?>" width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
                 </p>
             </div>
             <?php else: // カテゴリーの中身があるとき ?>
