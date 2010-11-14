@@ -468,14 +468,18 @@ dl#designs {
 }
 dl#designs dt ,
 dl#designs dd {
-    float:left;
     font-size: 120%;
 }
 dl#designs dt {
     margin-right: 7px;
+    float:left;
 }
 dl#designs dd {
     width: 70%;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
+    padding-left: 10px;
+    zoom: 1;
+    margin-left: 2.5em;
 }
 dl#designs dd em {
     margin-right: 5px;
