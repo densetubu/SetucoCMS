@@ -1,12 +1,13 @@
 <?php if ($this->pageCount): ?>
 <div id="pageNav">
     <ul>
+        <?php if (isset($this->previous)): ?>
         <!-- 前のページへのリンク -->
         <li>
-        <?php if (isset($this->previous)): ?>
-            <a href="<?php echo $this->url(array('page' => $this->pervious)) ?>">前へ</a>
-        <?php endif ?>
+            <a href="<?php echo $this->url(array('page' => $this->previous)) ?>">前へ</a>
         </li>
+        <?php endif ?>
+        
         
         <!-- ページ番号へのリンク -->
     <?php foreach ($this->pagesInRange as $page): ?>
@@ -20,13 +21,14 @@
         </li>
         <?php endif ?>
     <?php endforeach ?>
-        
+
+        <?php if (isset($this->next)): ?>
         <!-- 次のページへのリンク -->
         <li>
-        <?php if (isset($this->next)): ?>
             <a href="<?php echo $this->url(array('page' => $this->next)) ?>">次へ</a>
-        <?php endif ?>
         </li>
+        <?php endif ?>
+        
     </ul>
 </div>
 <?php endif ?>

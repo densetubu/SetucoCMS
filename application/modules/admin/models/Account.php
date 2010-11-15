@@ -52,5 +52,20 @@ class Admin_Model_Account
     {
         return $this->_accountDao->findByLoginId($loginId);
     }
-}
+
+    /**
+     * アカウントIDとニックネームのセットを取得する。
+     *
+     * @return array キー:アカウントID、値:ニックネームの配列
+     * @author charlesvineyard
+     */
+    public function findAllAccountIdAndNicknameSet()
+    {
+        $result = $this->_accountDao->findAccounts(array('id', 'nickname'), 'nickname');
+        $idNameSet = array();
+        foreach ($result as $row) {
+            $idNameSet[$row['id']] = $row['nickname'];
+        }
+        return $idNameSet;
+    }}
 

@@ -25,6 +25,11 @@
 class Admin_Model_Category
 {
     /**
+     * parent_idで一番最上のID　親IDがない場合のID
+     */
+    const PARENT_ROOT_ID = -1;
+
+    /**
      * 初期設定をする
      *
      * @author suzuki_mar
@@ -85,7 +90,7 @@ class Admin_Model_Category
      * @return array キー:カテゴリーID、値:カテゴリー名の配列
      * @author charlesvineyard
      */
-    public function searchAllCategoryIdAndNameSet()
+    public function findAllCategoryIdAndNameSet()
     {
         $result = $this->_dao->findCategories(array('id', 'name'), 'name');
         $idNameSet = array();
@@ -142,7 +147,7 @@ class Admin_Model_Category
         //DBに登録するデータを生成する
         $saveData['name'] = $inputData['cat_name'];
         //バージョン1では、nullにする
-        $saveData['parent_id'] = null;
+        $saveData['parent_id'] = self::PARENT_ROOT_ID;
 
         //データを新規登録する
         $result = $this->_regiser($saveData);
@@ -164,9 +169,26 @@ class Admin_Model_Category
         //アップデートするデータを作成する
         $updateData['name'] = $inputData['name'];
 
-        //アップデートする
-        $result = $this->_updateByPrimary($updateData, $updateId);
+        //アップデートに失敗したときに例外が発生する
+        try {
+            //データをupdateする
+            $primary    = $this->_dao->getPrimary();
+
+            //数値にキャストする
+            $updateId = (int)$updateId;
+            //アップデートする条件のwhere句を生成する
+            $where      = $this->_dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
+
+            $this->_dao->update($updateData, $where);
+            $result     = true;
+
+        } catch (Zend_Exception $e) {
+            $result = false;
+            throw $e;
+        }
+
         return $result;
+
     }
 
     /**

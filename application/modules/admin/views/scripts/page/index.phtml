@@ -72,50 +72,27 @@ function confirmRedirect(url){
             </p>
         </div>
     <?php endif ?>
-
-    <form action="#" method="post">
+    <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->searchForm->getAction() ?>" method="post">
         <div id="pageSearch">
             <dl class="over">
-                <dt><label for="keyword">キーワード</label></dt>
-                    <dd><input id="keyword" name="keyword" type="text" class="defaultInput" /></dd>
-                    <dd class="clear"><input id="oora1" type="radio" name="oora" checked="checked" /><label for="oora1">OR</label></dd>
-                    <dd><input id="oora2" type="radio" name="oora" /><label for="oora2">AND</label></dd>
-                    <dd><input id="qora1" type="checkbox" name="qora" /><label for="qora1">タイトル</label></dd>
-                    <dd><input id="qora2" type="checkbox" name="qora" /><label for="qora2">本文</label></dd>
-                    <dd><input id="qora3" type="checkbox" name="qora" /><label for="qora3">概要</label></dd>
-                    <dd><input id="qora4" type="checkbox" name="qora" /><label for="qora4">キーワード</label></dd>
-                    <dd><input id="qora5" type="checkbox" name="qora" /><label for="qora5">タグ</label></dd>
+                <dt>
+                    <label for="keyword">キーワード</label>
+                </dt>
+                <dd><?php echo $this->searchForm->getElement('keyword') ?></dd>
+                <dd class="clear"><?php echo $this->searchForm->getElement('or_and') ?></dd>
+                <dd><?php echo $this->searchForm->getElement('targets') ?></dd>
             </dl>
             <dl class="under">
                 <dt>カテゴリー</dt>
-                    <dd><select>
-                        <option value="0" selected="selected">--指定なし--</option>
-                        <option value="1">カテゴリー1</option>
-                        <option value="2">カテゴリー2</option>
-                        <option value="3">カテゴリー3</option>
-                        <option value="4">カテゴリー4</option>
-                    </select></dd>
-
+                <dd><?php echo $this->searchForm->getElement('category_id') ?></dd>
                 <dt>制作者</dt>
-                    <dd><select>
-                        <option value="0" selected="selected">--指定なし--</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </select></dd>
-
+                <dd><?php echo $this->searchForm->getElement('account_id') ?></dd>
                 <dt>公開状態</dt>
-                    <dd><select>
-                    <option value="0" selected="selected">--指定なし--</option>
-                    <option value="1">公開</option>
-                    <option value="2">非公開</option>
-                    </select></dd>
+                <dd><?php echo $this->searchForm->getElement('status') ?></dd>
             </dl>
-            <p><input type="button" value="検索" /></p>
+            <p><?php echo $this->searchForm->getElement('sub_search') ?></p>
         </div>
     </form>
-
     <table summary="ページ一覧の表です。タイトルのリンクと編集ボタンから、ページの編集ができます。削除ボタンから削除ができます。" cellpadding="0" cellspacing="0">
         <colgroup>
             <col width="7%" />

@@ -138,9 +138,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     private function _createAmbitionForm()
     {
         $form = new Setuco_Form();
-        $form->clearDecorators()
-             ->setDisableLoadDefaultDecorators(true)
-             ->setAttrib('id', 'ambitionForm')
+        $form->setAttrib('id', 'ambitionForm')
              ->setMethod('post')
              ->setAction($this->_helper->url('update-ambition'));
         $form->addElement('text', 'ambition', array(
@@ -172,26 +170,11 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formGoalAction()
     {
-        $this->view->goalForm = $this->_findGoalForm();
+        $this->view->goalForm = $this->_getParam('form', $this->_createGoalForm());
         $flashMessages = $this->_helper->flashMessenger->getMessages();
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
         }
-    }
-
-    /**
-     * 目標更新フォームを取得します。
-     *
-     * @return Setuco_Form
-     * @author charlesvineyard
-     */
-    private function _findGoalForm()
-    {
-        // validation でエラーになったとき
-        if ($this->_hasParam('form')) {
-            return $this->_getParam('form');
-        }
-        return $this->_createGoalForm();
     }
 
     /**
@@ -203,34 +186,29 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     private function _createGoalForm()
     {
         $form = new Setuco_Form();
-        $form->clearDecorators()
-             ->setDisableLoadDefaultDecorators(true)
-             ->addPrefixPath('Setuco_Form_Decorator_', 'Setuco/Form/Decorator/', 'decorator')
+        $form->addPrefixPath('Setuco_Form_Decorator_', 'Setuco/Form/Decorator/', 'decorator')
              ->setAttrib('id', 'goalForm')
              ->setMethod('post')
              ->setAction($this->_helper->url('update-goal'))
-             ->addDecorator('FormElements')
-             ->addDecorator('Form');
+             ->setDecorators(array('FormElements', 'Form'));
         $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
         $goalValue = $this->_goalService->loadGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
              ->setRequired(true)
-             ->setValidators(array('int'))
+             ->addValidator('Int')
+             ->addValidator('Between', false, array('min' => 0, 'max' => 999))
              ->setFilters(array('StringTrim'))
-             ->clearDecorators()
-             ->setDisableLoadDefaultDecorators(true)
-             ->addDecorator('ViewHelper')
-             ->addDecorator('SuffixString', array('value' => 'ページ'))    // テキストボックスの後ろの文字列
-             ->addDecorator('Errors')
-             ->addDecorator('HtmlTag', array('tag' => 'dd'))
-             ->addDecorator('Label', array('tag' => 'dt'));
+             ->setDecorators(array(
+                 'ViewHelper', 
+                 array('SuffixString', array('value' => 'ページ')),    // テキストボックスの後ろの文字列
+                 array('HtmlTag', array('tag' => 'dd')),
+                 array('Label', array('tag' => 'dt'))));
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('更新目標を変更')
-               ->clearDecorators()
-               ->setDisableLoadDefaultDecorators(true)
-               ->addDecorator('ViewHelper')
-               ->addDecorator('HtmlTag', array('tag' => 'p', 'class' => 'editAreaP'));
+               ->setDecorators(array(
+                   'ViewHelper',
+                   array('HtmlTag', array('tag' => 'p', 'class' => 'editAreaP'))));
         $form->addElements(array(
             $goal,
             $submit

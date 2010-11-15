@@ -41,6 +41,13 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private $_categoryService;
 
     /**
+     * アカウントサービス
+     *
+     * @var Admin_Model_Account
+     */
+    private $_accountService;
+
+    /**
      * 日付テキストボックスのvalue属性のフォーマット
      * (画面に表示されるものではない)
      *
@@ -61,7 +68,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var string
      */
-    const UNCATEGORIZED_VALUE = 'default';
+    const UNCATEGORIZED_VALUE = 'uncategorized';
+
+    /**
+     * 指定なしのvalue属性
+     *
+     * @var string
+     */
+    const UNSELECTED_VALUE = 'default';
 
     /**
      * 初期処理
@@ -73,6 +87,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         parent::init();
         $this->_pageService = new Admin_Model_Page();
         $this->_categoryService = new Admin_Model_Category();
+        $this->_accountService = new Admin_Model_Account();
     }
 
     /**
@@ -101,12 +116,131 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
         }
         $this->view->pages = $pages;
+        $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = $this->_createStatusForm();
         $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
     }
 
+    /**
+     * 検索フォームを作成します。
+     * 
+     * @return Setuco_Form フォーム
+     * @author charlesvineyard
+     */
+    private function _createSearchForm()
+    {
+        $orAndOptions = array(
+            0 => 'OR',
+            1 => 'AND',
+        );
+        $targetOptions = array(
+            0 => 'タイトル',
+            1 => '本文',
+            2 => '概要',
+            3 => 'タグ',
+        );
+        $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
+        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $form = new Setuco_Form();
+        $form->setAction($this->_helper->url('create'))
+             ->addElement(
+                 'Text',
+                 'keyword',
+                 array(
+                     'id' => 'keyword',
+                     'class' => 'defaultInput',
+                     'required' => true,
+                     'filters' => array(
+                         'StringTrim'
+                     )
+                 )
+             )
+             ->addElement(
+                 'Radio',
+                 'or_and',
+                 array(
+                     'required' => true,
+                     'multiOptions' => $orAndOptions,
+                     'separator' => "</dd>\n<dd>",
+                     'value' => 'OR',    // selected指定
+                 )
+             )
+             ->addElement(
+                 'MultiCheckbox',
+                 'targets',
+                 array(
+                     'required' => true,
+                     'multiOptions' => $targetOptions,
+                     'separator' => "</dd>\n<dd>",
+                 )
+             )
+             ->addElement(
+                 'Select',
+                 'category_id',
+                 array(
+                     'required' => true,
+                     'multiOptions' => $this->_addUnselectedOption($categories),
+                     'value' => self::UNSELECTED_VALUE,    // selected指定
+                 )
+             )
+             ->addElement(
+                 'Select',
+                 'account_id',
+                 array(
+                     'required' => true,
+                     'multiOptions' => $this->_addUnselectedOption(
+                         $this->_accountService->findAllAccountIdAndNicknameSet()),
+                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
+                 )
+             )
+             ->addElement(
+                 'Select',
+                 'status',
+                 array(
+                     'required' => true,
+                     'multiOptions' => $this->_addUnselectedOption(
+                         Setuco_Data_Constant_Page::allStatus()),
+                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
+                 )
+             )
+             ->addElement(
+                 'Submit',
+                 'sub_search',
+                 array(
+                     'label'   => '検索',
+                 )
+             );
+        $form->setMinimalDecoratorElements(array(
+            'keyword',
+            'or_and',
+            'targets',
+            'category_id',
+            'account_id',
+            'status',
+            'sub_search',
+            
+        ));
+        return $form;
+    }
+    
+    /**
+     * オプションに「指定なし」を追加します。
+     * 
+     * @param array $options オプション
+     * @return array 指定なしを追加したオプション
+     * @author charlesvineyard
+     */
+    private function _addUnselectedOption($options)
+    {
+        $addedOptions = array(self::UNSELECTED_VALUE => '--指定なし--');
+        foreach ($options as $key => $value) {
+            $addedOptions[$key] = $value;
+        }
+        return $addedOptions;
+    }
+    
     /**
      * カテゴリー変更フォームを作成します。
      *
@@ -115,7 +249,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createCategoryForm()
     {
-        $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('update-category'))
@@ -246,7 +380,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createForm()
     {
-        $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
@@ -458,7 +592,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * 作成したページを公開前にプレビューするアクション
      *
      * @return void
-     * @author	akitsukada
+     * @author akitsukada
      * @todo 内容の実装 現在はスケルトン
      */
     public function previewAction()
@@ -471,7 +605,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ※ただしスケルトンのときだけ
      *
      * @return void
-     * @author	akitsukada
+     * @author akitsukada
      * @todo 内容の実装 現在はスケルトン
      */
     public function updateAction()

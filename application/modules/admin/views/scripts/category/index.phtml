@@ -50,8 +50,8 @@
 
         <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
             <p class="default">
-                <input type="text" name="cat_name" id="cat_name" class="defaultInput" value="新規カテゴリー"> 
-                <input type="submit" class="sub" value="追加"> 
+                <input type="text" name="cat_name" id="cat_name" class="defaultInput" value="新規カテゴリー" />
+                <input type="submit" class="sub" value="追加" />
             </p> 
         </form>
 
@@ -87,10 +87,12 @@
 
                 <td> 
                     <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="post">
-                        <input type="text" name="name" id="name" value="<?php echo $value['name']?>">
-                        <input type="hidden" name="id" id="id" value="<?php echo $value['id']?>">
-                        <input type="hidden" name="parent_id" id="parent_id" value="<?php echo $value['parent_id']?>">
-                        <input type="submit" class="sub" value="保存">
+                        <p>
+                            <input type="text" name="name" id="name<?php echo $value['id']?>" value="<?php echo $value['name']?>"　/>
+                            <input type="hidden" name="id" id="id<?php echo $value['id']?>" value="<?php echo $value['id']?>" />
+                            <input type="hidden" name="parent_id" id="parent_id<?php echo $value['id']?>" value="<?php echo $value['parent_id']?>" />
+                            <input type="submit" class="sub" value="保存" />
+                        </p>
                     </form> 
                 </td> 
 
@@ -101,12 +103,14 @@
 
                 <td>
                     <a href='<?php echo $this->baseUrl("/admin/category/index/page/{$this->page}/id/{$value['id']}")?>'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_edit.png')?>' alt='編集' width='27' height='27' /></a>
+                    <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="get">
+                        <p>
+                            <input type='hidden' id='cat_id<?php echo $value['id']?>' name='cat_id' value='<?php echo $value['id'] ?>' />
+                            <input type='hidden' id='cat_no<?php echo $value['id']?>' name='cat_no' value='' />
+                            <input type='hidden' name='sort' value='<?php echo $this->sort?>' />
+                        </p>
+                    </form>
                 </td>
-                <form action="<?php echo $this->baseUrl('/admin/category/update')?>" method="get">
-                    <input type='hidden' id='cat_id' name='cat_id' value='<?php echo $value['id'] ?>' />
-                    <input type='hidden' id='cat_no' name='cat_no' value='' />
-                    <input type='hidden' name='sort' value='<?php echo $this->sort?>'>
-                </form>
                 <td>
                     <a href='javascript:void(0)' onclick='confirmRedirect("<?php echo $this->baseUrl("/admin/category/delete/id/{$value['id']}")?>");'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png')?>' alt='削除' width='27' height='27' /></a>
                 </td>
@@ -119,7 +123,6 @@
 
            </tbody>
         </table>
-    </form>
 
     <?php echo $this->paginator; ?>
     
