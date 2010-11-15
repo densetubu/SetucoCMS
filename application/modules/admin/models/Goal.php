@@ -118,7 +118,7 @@ class Admin_Model_Goal
      */
     public function calcTodayGoal($lastGoalPageCount)
     {
-        if ($lastGoalPageCount === 0) {
+        if ($lastGoalPageCount == 0) {
             return 0;
         }
         $now = new Zend_Date();
