@@ -1,12 +1,12 @@
 @charset "utf-8";
 
 /*--------------------------------------------------------------/
-/ Theme Name: SetucoCMS                                            /
-/ Author: 三上絵利菜                                            /
+/ Theme Name: SetucoCMS                                         /
+/ Author: ErinaMikami with SetucoCMS Project                    /
 ---------------------------------------------------------------*/
 
 /*------------------------------------------------------------*/
-/*    reset style                                                     */
+/*    reset style                                             */
 /*------------------------------------------------------------*/
 * {
     margin: 0;
@@ -21,7 +21,7 @@ ul li {
 }
 
 /*------------------------------------------------------------*/
-/*    base style                                                   */
+/*    base style                                              */
 /*------------------------------------------------------------*/
 html {
     overflow-y: scroll;
@@ -35,7 +35,7 @@ body {
 }
 
 /*------------------------------------------------------------*/
-/*    common style                                                   */
+/*    common style                                            */
 /*------------------------------------------------------------*/
 em {
     font-style: normal;
@@ -49,6 +49,17 @@ input {
 }
 .clear {
     clear:both;
+}
+/* -- 空き、幅、調整用 -- */
+.default {
+    margin-bottom: 20px;
+    margin-left: 5px;
+}
+.defaultOver {
+    margin: 20px 15px;
+}
+input.defaultInput {
+    width: 15em;
 }
 /* -- シマシマ背景用 -- */
 .check {
@@ -68,9 +79,17 @@ dl.straight dd {
     zoom: 1;
     margin-left: 8em;
 }
+/* -- 横並びinput -- */
+.inputStraight {
+    zoom: 100%;
+}
+.inputStraight input {
+    float: left;
+    margin-right: 25px;
+}
 
 /*------------------------------------------------------------*/
-/*    link style                                                  */
+/*    link style                                              */
 /*------------------------------------------------------------*/
 a:link, a:visited {
     color: #535c5c;
@@ -84,7 +103,7 @@ a:hover img {
 }
 
 /*------------------------------------------------------------*/
-/*    clearfix style                                              */
+/*    clearfix style                                          */
 /*------------------------------------------------------------*/
 div#container div#header:after ,
 div#container div#content:after ,
@@ -97,8 +116,8 @@ div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
 div#messageArea:after ,
 dl.editArea:after ,
-div#mainContent ul:after ,
 div#pageNav ul:after ,
+.inputStraight:after,
 ul#directory li div:after ,
 div#pageSearch dl:after {
     content: ".";
@@ -111,7 +130,7 @@ div#pageSearch dl:after {
 }
 
 /*------------------------------------------------------------*/
-/*    container style                                              */
+/*    container style                                         */
 /*------------------------------------------------------------*/
 div#container {
     text-align: left;
@@ -121,7 +140,7 @@ div#container {
 }
 
 /*------------------------------------------------------------*/
-/*    header style                                              */
+/*    header style                                            */
 /*------------------------------------------------------------*/
 div#container div#header {
     position: relative;
@@ -200,7 +219,7 @@ div#header li#utilLogout a {
 }
 
 /*------------------------------------------------------------*/
-/*    content style                                              */
+/*    content style                                           */
 /*------------------------------------------------------------*/
 div#container div#content {
     background-color: #f1f1f1;
@@ -209,7 +228,7 @@ div#container div#content {
 }
 
 /*------------------------------------------------------------*/
-/*    mainContent style                                          */
+/*    mainContent style                                       */
 /*------------------------------------------------------------*/
 div #content div#mainContent {
     width: 100%;
@@ -222,7 +241,7 @@ div#mainContent div#mainContentInner {
 }
 
 /*------------------------------------------------------------*/
-/*    gNav style                                                  */
+/*    gNav style                                              */
 /*------------------------------------------------------------*/
 div #content ul#gNav {
     background: url(../images/admin/gNav/bg_borderLine.gif) repeat-y right;
@@ -263,7 +282,7 @@ ul#gNav li dl dd#active a:hover {
 }
 
 /*------------------------------------------------------------*/
-/*    topicPath style                                              */
+/*    topicPath style                                         */
 /*------------------------------------------------------------*/
 div#topicPath {
     background-color: #fff;
@@ -283,7 +302,7 @@ div#topicPath p img {
 }
 
 /*------------------------------------------------------------*/
-/*    section style                                              */
+/*    section style                                           */
 /*------------------------------------------------------------*/
 div#mainContent div.section {
     background-color: #fff;
@@ -294,7 +313,7 @@ div#mainContent div.section {
 }
 
 /*------------------------------------------------------------*/
-/*    topicSection style                                          */
+/*    topicSection style                                      */
 /*------------------------------------------------------------*/
 div#mainContent div#topicSection {
     background-color: #fff;
@@ -336,7 +355,7 @@ div#topicSection dl dd  {
 }
 
 /*------------------------------------------------------------*/
-/*    hArea style                                                  */
+/*    hArea style                                             */
 /*------------------------------------------------------------*/
 div#mainContent div.hArea {
     zoom: 100%;
@@ -365,7 +384,7 @@ div.hArea p a {
 }
 
 /*------------------------------------------------------------*/
-/*    section topichArea style                                  */
+/*    section topichArea style                                */
 /*------------------------------------------------------------*/
 div.section div.topichAreaL {
     background: url(../images/admin/share/bg_topicB_l.jpg) no-repeat left top;
@@ -399,7 +418,7 @@ div.topichArea p a {
 }
 
 /*------------------------------------------------------------*/
-/*    contentsList style                                          */
+/*    contentsList style                                      */
 /*------------------------------------------------------------*/
 div#mainContent dl.contentsList {
     padding: 10px 15px;
@@ -489,7 +508,7 @@ dl#designs dd em input {
 }
 
 /*------------------------------------------------------------*/
-/*    copyright style                                              */
+/*    copyright style                                         */
 /*------------------------------------------------------------*/
 p#copyright {
     text-align: right;
@@ -497,7 +516,7 @@ p#copyright {
 }
 
 /*------------------------------------------------------------*/
-/*    table style                                                  */
+/*    table style                                             */
 /*------------------------------------------------------------*/
 table {
     width: 100%;
@@ -523,19 +542,15 @@ td {
     border-right: solid 1px #f6f6f6;
     padding: 7px 5px 7px 15px;
 }
-tr.check td {
-    border-right: solid 1px #fff;
-}
-td span#autoCatMessage ,
 div#mainContent div.section dl.editArea dt span {
     font-size: 80%;
     color: #dd0000;
-    padding-left: 5px;
 }
 span.attentionMessage {
     font-size: 80%;
     color: #dd0000;
     padding-left: 5px;
+    font-weight: normal !important;
 }
 td.thumb {
     text-align: center;
@@ -545,7 +560,7 @@ td.thumb a {
 }
 
 /*------------------------------------------------------------*/
-/*    messageArea style                                          */
+/*    messageArea style                                       */
 /*------------------------------------------------------------*/
 div#messageArea {
     clear: both;
@@ -565,7 +580,7 @@ div#messageArea p.nonF {
 }
 
 /*------------------------------------------------------------*/
-/*    dl.editArea style                                          */
+/*    dl.editArea style                                       */
 /*------------------------------------------------------------*/
 dl.editArea {
     margin-left: 5px;
@@ -575,7 +590,7 @@ dl.editArea {
 dl.editArea dt {
     float:left;
     clear: left;
-    background-color: #f6f6f6;
+    background-color: #e8effe;
     margin-bottom: 10px;
     padding: 5px 15px;
     width: 20%;
@@ -603,14 +618,10 @@ div#mainContent dl.editArea dd textarea {
     font-size: 100%;
     width: 100%;
 }
-div#mainContent p.editAreaP input {
-    margin: 10px 0 10px 5px;
-    width: 120px;
-}
-input#cat_new {
-    width: 50%;
-}
-/* siteForm */
+
+/*------------------------------------------------------------*/
+/*    dl#siteForm style                                       */
+/*------------------------------------------------------------*/
 div#mainContent dl#siteForm dt {
     height: 4em;
 }
@@ -628,7 +639,7 @@ div#mainContent dl#siteForm dd span {
 }
 
 /*------------------------------------------------------------*/
-/*    pageSearch style                                          */
+/*    pageSearch style                                        */
 /*------------------------------------------------------------*/
 div#pageSearch {
     background-color: #f1faff;
@@ -668,79 +679,40 @@ div#pageSearch p input {
 }
 
 /*------------------------------------------------------------*/
-/*    form.accountEdit style                                      */
+/*    form.accountEdit style                                  */
 /*------------------------------------------------------------*/
 form.accountEdit {
     margin-bottom: 30px;
 }
 
 /*------------------------------------------------------------*/
-/*    dl#inputArea style                                            */
+/*    dl#inputArea style                                      */
 /*------------------------------------------------------------*/
 dl#inputArea {
     width: 70%;
     max-width: 50em;
     margin-left: 15px;
 }
-dl#inputArea input ,
-dl#inputArea textarea {
+dl#inputArea dt {
+    margin-top: 20px;
+    margin-bottom: 3px;
+}
+dl#inputArea dt span {
+    color: #dd0000;
+    padding-right: 5px;
+    font-weight: bold;
+}
+dl#inputArea input {
     font-size: 100%;
     padding: 4px;
     width: 100%;
 }
-dl#inputArea select {
-    padding: 2px;
+dl#inputArea input.upSub {
+    width: auto;
 }
-dl#inputArea input#page_date {
-    width: 10em;
-}
-dl#inputArea dt {
-    clear: both;
-    margin-top: 10px;
-}
-div#mainContent dl#inputArea dd {
-    background: none;
-    padding: 0;
-    margin-bottom: 15px;
-}
-div#mainContent ul {
-    margin: 30px 15px 10px;
-    zoom: 100%;
-}
-div#mainContent ul li.inputAreaL input {
-    float: left;
-    margin-right: 25px;
-    padding: 4px;
-    width: 140px;
-}
-div#mainContent dl dd.upload {
-    float: left;
-}
-div#mainContent dl dd.upload input {
-    height: 25px;
-}
-div#mainContent dl dd.upload input.upSub {
-    width: 80px;
-    margin-left: 20px;
-    padding: 0;
-}
-div#mainContent dl dd.tags {
-    float: left;
-    margin-right: 10px;
-}
-div#mainContent dl dd.tags input.tag {
-    width: 60px;
-    padding: 2px 4px;
-}
-.default {
-    margin-bottom: 20px;
-    margin-left: 5px;
-}
-input.defaultInput {
-    width: 15em;
-}
+
 /*------------------------------------------------------------*/
-/*    ul#directory style                                            */
+/*    ul#directory style                                      */
 /*------------------------------------------------------------*/
 div.section ul#directory {
     margin: 0 2px;
@@ -789,7 +761,7 @@ ul#directory li p.folder img {
 }
 
 /*------------------------------------------------------------*/
-/*    loginBoard container style                                  */
+/*    loginBoard container style                              */
 /*------------------------------------------------------------*/
 body#loginBoad {
     background-color: #f7f7f7;
@@ -837,4 +809,3 @@ body#loginBoad p#copyright {
     clear: right;
     text-align: left;
 }
-

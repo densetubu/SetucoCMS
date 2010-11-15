@@ -106,7 +106,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
     }
-    
+
     /**
      * カテゴリー変更フォームを作成します。
      *
@@ -263,7 +263,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'Submit',
                  'sub_draft',
                  array(
-                     'label' => '下書きして保存',
+                     'label' => '下書きで保存',
                  )
              )
              ->addElement(

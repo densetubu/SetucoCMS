@@ -46,14 +46,16 @@
         <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
     </div>
     <?php endif ?>
-    <form action="<?php echo $this->updateForm->getAction() ?>" method="post" ENCTYPE="MULTIPART/FORM-DATA">
+    <form action="<?php echo $this->updateForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <dl id="inputArea">
-            <dt><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></dt>
-            <dd><a href="#"><img src="<?php echo $this->baseUrl('/images/admin/header/logo.jpg') ?>" width="152" height="39" /></a></dd>
-            <dd>ファイル名: <?php echo $this->updateForm->getElement('name') ?></dd>
-            <dd>説明: <?php echo $this->updateForm->getElement('comment') ?></dd>
-            <dd class="upload">ファイル: <?php echo $this->updateForm->getElement('upload_img') ?></dd>
-            <dt><span class="attentionMessage">**MB</span></dt><?php // @todo ファイルサイズの取得？ ?>
+            <dt><a href="#"><img src="<?php echo $this->baseUrl('/images/admin/header/logo.jpg') ?>" width="152" height="39" alt="" /></a></dt>
+            <dt>ファイル名</dt>
+            <dd><?php echo $this->updateForm->getElement('name') ?></dd>
+            <dt>説明</dt>
+            <dd><?php echo $this->updateForm->getElement('comment') ?></dd>
+            <dt>ファイル<span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></dt>
+            <dd><?php echo $this->updateForm->getElement('upload_img') ?></dd>
+            <dd><span class="attentionMessage">**MB</span></dd><?php // @todo ファイルサイズの取得？ ?>
             <dd><?php echo $this->updateForm->getElement('up') ?></dd>
         </dl>
     </form>
