@@ -47,6 +47,24 @@ class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
     {
         $select = $this->select()->where('login_id = ?', $loginId);
         return $this->fetchAll($select)->current()->toArray();
+    }
+    
+
+    /**
+     * 指定したカラム・ソートでアカウント一覧を取得します。
+     *
+     * @param string|array $selectColumns 取得するカラム
+     * @param string $sortColumn 並べ替えるカラム名
+     * @param string $order 並び順(asc or desc) デフォルトは asc
+     * @return array アカウント情報の一覧
+     * @author charlesvineyard
+     */
+    public function findAccounts($selectColumns, $sortColumn, $order = 'asc')
+    {
+        $select = $this->select()
+                ->from($this->_name, $selectColumns)
+                ->order("$sortColumn $order");
+        return $this->fetchAll($select)->toArray();
     }    
     
 }
