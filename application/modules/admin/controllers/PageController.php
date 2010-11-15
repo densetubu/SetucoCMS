@@ -115,7 +115,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createCategoryForm()
     {
-        $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('update-category'))
@@ -246,7 +246,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createForm()
     {
-        $categories = $this->_categoryService->searchAllCategoryIdAndNameSet();
+        $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
@@ -458,7 +458,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * 作成したページを公開前にプレビューするアクション
      *
      * @return void
-     * @author	akitsukada
+     * @author akitsukada
      * @todo 内容の実装 現在はスケルトン
      */
     public function previewAction()
@@ -471,7 +471,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ※ただしスケルトンのときだけ
      *
      * @return void
-     * @author	akitsukada
+     * @author akitsukada
      * @todo 内容の実装 現在はスケルトン
      */
     public function updateAction()

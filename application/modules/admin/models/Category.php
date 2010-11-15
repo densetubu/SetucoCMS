@@ -90,7 +90,7 @@ class Admin_Model_Category
      * @return array キー:カテゴリーID、値:カテゴリー名の配列
      * @author charlesvineyard
      */
-    public function searchAllCategoryIdAndNameSet()
+    public function findAllCategoryIdAndNameSet()
     {
         $result = $this->_dao->findCategories(array('id', 'name'), 'name');
         $idNameSet = array();
