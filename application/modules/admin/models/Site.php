@@ -22,15 +22,8 @@
  * @subpackage Model
  * @author     ece_m charlesvineyard
  */
-class Admin_Model_Site
+class Admin_Model_Site extends Common_Model_SiteAbstract
 {
-    /**
-     * サイトDAO
-     *
-     * @var Common_Model_DbTable_Site
-     */
-    private $_siteDao;
-
     /**
      * ページDAO
      *
@@ -71,10 +64,11 @@ class Admin_Model_Site
      * @param array 更新するデータ
      * @return boolean 更新に成功したか
      * @author suzuki-mar
+     * @todo 引数は必要なものだけ渡す
      */
-    public function updateSite($inputData)
+    public function updateSite($siteInfo)
     {
-        $updateData = $inputData;
+        $updateData = $siteInfo;
         unset($updateData['module'], $updateData['controller'], $updateData['action'],
         $updateData['sub']);
          
@@ -90,17 +84,6 @@ class Admin_Model_Site
         }
 
         return $result;
-    }
-
-    /**
-     * サイト情報を取得する
-     *
-     * @return array サイト情報
-     * @author charlesvineyard
-     */
-    public function getSiteInfo()
-    {
-        return $this->_siteDao->fetchRow()->toArray();
     }
 
     /**

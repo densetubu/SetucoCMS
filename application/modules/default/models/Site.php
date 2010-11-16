@@ -22,41 +22,29 @@
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Default_Model_Site
+class Default_Model_Site extends Common_Model_SiteAbstract
 {
-	/**
-     * モデルが使用するDAO(DbTable)クラスを設定する
-     * 
-     * @var Zend_Db_Table
+    /**
+     * 初期設定をする
+     *
+     * @author suzuki_mar
      */
-    protected $_dao = null;
-	
-	/**
-	 * 初期設定をする
-	 *
-	 * @author suzuki_mar
-	 */
-	public function __construct()
-	{
-		$this->_dao = new Common_Model_DbTable_Site();
-	}
-	
-	/**
-	 * サイト情報を取得する
-	 * 
-	 * @return array サイト情報
-	 * @author suzuki_mar
-	 */
-	public function getSiteInfos()
-	{
-		$result = $this->_dao->findSiteInfo();
-		//開設年を取得する
-		$result['start_year'] = substr($result['open_date'], 0, 4);
-		return $result;
-	}
-	
+    public function __construct()
+    {
+        $this->_siteDao = new Common_Model_DbTable_Site();
+    }
 
+    /**
+     * サイト情報を取得する。開設年も取得します。
+     *
+     * @return array サイト情報
+     * @author suzuki-mar charlesvineyard
+     */
+    public function getSiteInfo()
+    {
+        $result = parent::getSiteInfo();
+        $openDate = new Zend_Date($result['open_date'], Zend_Date::ISO_8601);
+        $result['start_year'] = $openDate->toValue(Zend_Date::YEAR_8601);
+        return $result;
+    }
 }
-
-
-

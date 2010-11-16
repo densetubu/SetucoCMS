@@ -92,7 +92,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         //siteテーブルのモデルクラスのインスタンス生成
         $modelSite = new Default_Model_Site();
         //サイト情報をviewにセットする
-        $this->view->siteInfos = $modelSite->getSiteInfos();
+        $this->view->siteInfos = $modelSite->getSiteInfo();
 
         //セットしてある場合は、ページタイトルをセットする
         if (!is_null($this->_pageTitle)) {
