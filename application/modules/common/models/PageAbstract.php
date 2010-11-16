@@ -1,26 +1,26 @@
 <?php
 /**
- * 閲覧側のページ情報管理用サービス
+ * ページ情報管理用サービス
  *
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Default
+ * @package    Common
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     suzuki-mar akitsukada
+ * @author     charlesvineyard
  */
 
 /**
  * ページ情報管理クラス
  *
- * @package    Default
+ * @package    Common
  * @subpackage Model
- * @author     suzuki-mar akitsukada
+ * @author     charlesvineyard
  */
 abstract class Common_Model_PageAbstract
 {
@@ -87,6 +87,7 @@ abstract class Common_Model_PageAbstract
      *
      * @param string $keyword 検索したいキーワード
      * @return array|null 該当するタグのIDを格納した配列
+     * @author akitsukada
      */
     protected function _searchTagIdsByTagName($keyword)
     {

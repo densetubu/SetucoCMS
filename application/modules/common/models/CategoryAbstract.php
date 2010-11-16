@@ -5,7 +5,7 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Default
+ * @package    Common
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -18,9 +18,9 @@
 /**
  * カテゴリー管理クラス
  *
- * @package    Default
+ * @package    Common
  * @subpackage Model
- * @author     charlesvineyard-mar
+ * @author     charlesvineyard
  */
 abstract class Common_Model_CategoryAbstract
 {
