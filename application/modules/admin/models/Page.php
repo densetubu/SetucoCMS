@@ -22,29 +22,14 @@
  * @subpackage Model
  * @author     charlesvineyard
  */
-class Admin_Model_Page
+class Admin_Model_Page extends Common_Model_PageAbstract
 {
-    /**
-     * ページDAO
-     *
-     * @var Common_Model_DbTable_Page
-     */
-    private $_pageDao;
-
-    /**
-     * タグDAO
-     *
-     * @var Common_Model_DbTable_Tag
-     */
-    private $_tagDao;
-
     /**
      * ページタグDAO
      *
      * @var Common_Model_DbTable_PageTag
      */
     private $_pageTagDao;
-
 
     /**
      * アカウントDAO
@@ -66,17 +51,6 @@ class Admin_Model_Page
         $this->_accountDao = new Common_Model_DbTable_Account();
     }
 
-    /**
-     * ページ情報を取得する
-     *
-     * @param int $id  ページID
-     * @return array ページ情報
-     * @author charlesvineyard
-     */
-    public function load($id)
-    {
-        return $this->_pageDao->find($id)->current()->toArray();
-    }
     
     /**
      * ページ情報を取得する
@@ -89,7 +63,7 @@ class Admin_Model_Page
      * @return array ページ情報の一覧
      * @author charlesvineyard
      */
-    public function loadPages($sortColmn, $order, $pageNumber, $limit)
+    public function findPages($sortColmn, $order, $pageNumber, $limit)
     {
         return $this->_pageDao->findSortedPages(
             $sortColmn, $order, $pageNumber, $limit, true);
@@ -100,13 +74,13 @@ class Admin_Model_Page
      *
      * 取得順序は作成日時の降順です。
      *
-     * @param  int $count 取得ページ数
+     * @param  int $limit 取得ページ数
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    public function loadLastCreatedPages($count)
+    public function findLastCreatedPages($limit)
     {
-        return $this->_pageDao->findLastCreatedPages($count, true, true);
+        return $this->_pageDao->findLastCreatedPages($limit, true, true);
 
     }
 
@@ -168,7 +142,7 @@ class Admin_Model_Page
             $create_date, $status, $category_id)
     {
         $pageId = $this->_registPage($title, $contents, $outline, $create_date, $status, $category_id);
-        $tagIds = $this->_registTagIfNotExist($tags);
+        $tagIds = $this->_registTagsIfNotExist($tags);
         foreach ($tagIds as $tagId) {
             $this->_pageTagDao->insert(array(
                 'page_id' => $pageId,
@@ -190,18 +164,18 @@ class Admin_Model_Page
      * @author charlesvineyard
      */
     private function _registPage($title, $contents, $outline,
-            $create_date, $status, $category_id)
+            $createDate, $status, $categoryId)
     {
         $account = $this->_accountDao->findByLoginId(Zend_Auth::getInstance()->getIdentity());
         $page = array(
             'title'       => $title,
             'contents'    => $contents,
             'outline'     => $outline,
-            'create_date' => $create_date,
+            'create_date' => $createDate,
             'account_id'  => $account['id'],
             'status'      => $status,
-            'category_id' => $category_id,
-            'update_date' => $create_date,
+            'category_id' => $categoryId,
+            'update_date' => $createDate,
         );
         return $this->_pageDao->insert($page);
     }
@@ -210,14 +184,14 @@ class Admin_Model_Page
      * タグがもしなければ登録します。
      * 登録後または既に存在するタグIDの配列を返します。
      *
-     * @param  array $tags タグ名の配列
+     * @param  array $tagNames タグ名の配列
      * @return array 指定したタグ名のタグIDの配列
      * @author charlesvineyard
      */
-    private function _registTagIfNotExist($tags)
+    private function _registTagsIfNotExist($tagNames)
     {
         $tagIds = array();
-        foreach ($tags as $tag) {
+        foreach ($tagNames as $tag) {
             $tagId = $this->_tagDao->findTagIdByTagName($tag);
             if ($tagId === null) {
                 $insertedTagId = $this->_tagDao->insert(array('name' => $tag));
@@ -237,7 +211,7 @@ class Admin_Model_Page
      * @return void
      * @author charlesvineyard
      */
-    public function update($id, $pageInfo)
+    public function updatePage($id, $pageInfo)
     {
         $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_pageDao->update($pageInfo, $where);
@@ -250,7 +224,7 @@ class Admin_Model_Page
      * @return void
      * @author charlesvineyard
      */
-    public function delete($id)
+    public function deletePage($id)
     {
         $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_pageDao->delete($where);

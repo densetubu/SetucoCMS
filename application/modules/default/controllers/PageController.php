@@ -144,7 +144,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         $currentPage = $this->_getPageNumber();
-        $this->view->entries = $this->_pageService->getPagesByCategoryId($id, $currentPage);
+        $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage);
 
         $category = array_pop($this->_categoryService->findCategory($id));
         if (is_null($category['name'])) {
@@ -190,7 +190,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
             // 検索結果が0件の場合 検索結果表示ビュー
             $this->_helper->viewRenderer('search');
-            $searchResult = $this->_pageService->getPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
+            $searchResult = $this->_pageService->findPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
             
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
@@ -227,8 +227,8 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         // 記事情報の取得
-        $page = array_pop($this->_pageService->findPage($id));
-
+        $page = $this->_pageService->findPage($id);
+        
         if (is_null($page)) {
             // idに該当するページなし（通常おこらない不適切なアクセス ex.URL手入力など）
             // @todo 仕様策定と実装

@@ -22,13 +22,8 @@
  * @subpackage Model
  * @author     saniker10, suzuki-mar
  */
-class Admin_Model_Category
+class Admin_Model_Category extends Common_Model_CategoryAbstract
 {
-    /**
-     * parent_idで一番最上のID　親IDがない場合のID
-     */
-    const PARENT_ROOT_ID = -1;
-
     /**
      * 初期設定をする
      *
@@ -36,8 +31,7 @@ class Admin_Model_Category
      */
     public function __construct()
     {
-        $this->_dao = new Common_Model_DbTable_Category();
-
+        $this->_categoryDao = new Common_Model_DbTable_Category();
     }
 
     /**
@@ -48,7 +42,6 @@ class Admin_Model_Category
      * @param int $limit 1ページあたり何件のデータを取得するのか
      * @return array 	カテゴリー情報の一覧
      * @author  saniker10, suzuki-mar
-     * @todo スタブのデータを取得している
      */
     public function searchCategories($sort, $page, $limit)
     {
@@ -63,7 +56,7 @@ class Admin_Model_Category
         }
 
         //指定したソートをしたデータを取得する
-        $searchResult = $this->_dao->findSortCategories($sort, $page, $limit);
+        $searchResult = $this->_categoryDao->findSortCategories($sort, $page, $limit);
 
         //配列の方が操作しやすいので配列を戻り値にする
         $result = $searchResult->toArray();
@@ -92,7 +85,7 @@ class Admin_Model_Category
      */
     public function findAllCategoryIdAndNameSet()
     {
-        $result = $this->_dao->findCategories(array('id', 'name'), 'name');
+        $result = $this->_categoryDao->findCategories(array('id', 'name'), 'name');
         $idNameSet = array();
         foreach ($result as $row) {
             $idNameSet[$row['id']] = $row['name'];
@@ -109,7 +102,7 @@ class Admin_Model_Category
      */
     public function countCategories()
     {
-        $result = $this->_dao->count();
+        $result = $this->_categoryDao->count();
 
         return $result;
     }
@@ -126,7 +119,7 @@ class Admin_Model_Category
     {
 
         //idのカテゴリーが存在するかを調べる
-        $category = $this->_dao->findById($id);
+        $category = $this->_categoryDao->findById($id);
 
         //取得できたら、trueにする
         $result = (boolean)$category;
@@ -147,7 +140,7 @@ class Admin_Model_Category
         //DBに登録するデータを生成する
         $saveData['name'] = $inputData['cat_name'];
         //バージョン1では、nullにする
-        $saveData['parent_id'] = self::PARENT_ROOT_ID;
+        $saveData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
 
         //データを新規登録する
         $result = $this->_regiser($saveData);
@@ -172,14 +165,14 @@ class Admin_Model_Category
         //アップデートに失敗したときに例外が発生する
         try {
             //データをupdateする
-            $primary    = $this->_dao->getPrimary();
+            $primary    = $this->_categoryDao->getPrimary();
 
             //数値にキャストする
             $updateId = (int)$updateId;
             //アップデートする条件のwhere句を生成する
-            $where      = $this->_dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
+            $where      = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
 
-            $this->_dao->update($updateData, $where);
+            $this->_categoryDao->update($updateData, $where);
             $result     = true;
 
         } catch (Zend_Exception $e) {
@@ -225,7 +218,7 @@ class Admin_Model_Category
     {
         //指定がなかったら、オブジェクト変数のdaoを使用する
         if (is_null($dao)) {
-            $dao = $this->_dao;
+            $dao = $this->_categoryDao;
         }
 
         //作成に失敗したときに例外が発生する
@@ -255,7 +248,7 @@ class Admin_Model_Category
     {
         //指定がなかったら、オブジェクト変数のdaoを使用する
         if (is_null($dao)) {
-            $dao = $this->_dao;
+            $dao = $this->_categoryDao;
         }
 
         //アップデートに失敗したときに例外が発生する
@@ -290,7 +283,7 @@ class Admin_Model_Category
     {
         //指定がなかったら、オブジェクト変数のdaoを使用する
         if (is_null($dao)) {
-            $dao = $this->_dao;
+            $dao = $this->_categoryDao;
         }
 
         //アップデートに失敗したときに例外が発生する
@@ -314,6 +307,3 @@ class Admin_Model_Category
     }
 
 }
-
-
-

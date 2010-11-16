@@ -22,30 +22,17 @@
  * @subpackage Model
  * @author     suzuki-mar akitsukada
  */
-class Default_Model_Page
+class Default_Model_Page extends Common_Model_PageAbstract
 {
-
-    /**
-     * モデルが使用するPageテーブルのDAO(DbTable)クラスを設定する
-     * 
-     * @var Common_Model_DbTable_Page
-     */
-    protected $_pageDao = null;
-
-    /**
-     * モデルが使用するPageテーブルのDAO(DbTable)クラスを設定する
-     *
-     * @var Common_Model_DbTable_Tag
-     */
-    protected $_tagDao = null;
-
     /**
      * 新着記事表示用に標準で何件取得するか
+     * @deprecated コントローラへ移動
      */
     const LIMIT_GET_NEW_PAGE = 10;
 
     /**
      * カテゴリ別検索で標準で何件取得するか
+     * @deprecated コントローラへ移動
      */
     const LIMIT_GET_PAGE_BY_CATEGORY = 5;
 
@@ -65,15 +52,16 @@ class Default_Model_Page
      *
      * @param int[option] 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
+     * @todo limitのデフォルト修正
      */
-    public function getLastUpdatePages($limitGetNewPage = self::LIMIT_GET_NEW_PAGE)
+    public function findLastUpdatedPages($limit = self::LIMIT_GET_NEW_PAGE)
     {
-    	//更新順の記事を取得する
-        $result = $this->_pageDao->findLastUpdatePages($limitGetNewPage);
+        //更新順の記事を取得する
+        $result = $this->_pageDao->findLastUpdatePages($limit);
         
         //からならfalseを返す
         if (empty($result)) {
-        	$result = false;
+            $result = false;
         }
         
         return $result;
@@ -82,25 +70,26 @@ class Default_Model_Page
     /**
      * カテゴリを指定して記事を取得する（ページネータ対応）
      *
-     * @param int $catId 取得したいカテゴリのID
+     * @param int $categoryId 取得したいカテゴリのID
      * @author akitsukada
      * @return array 該当するカテゴリの記事データを格納した配列
+     * @todo limitのデフォルト修正
      */
-    public function getPagesByCategoryId($catId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
+    public function findPagesByCategoryId($categoryId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
     {
-        return $this->_pageDao->findPagesByCategoryId($catId, $currentPage, $limit);
+        return $this->_pageDao->findPagesByCategoryId($categoryId, $currentPage, $limit);
     }
 
     /**
      * 指定したカテゴリに属する記事の数を取得する
      *
-     * @param int $catId 記事数を取得したいカテゴリのID
+     * @param int $categoryId 記事数を取得したいカテゴリのID
      * @return int 該当する記事の数
      * @author akitsukada
      */
-    public function countPagesByCategoryId($catId)
+    public function countPagesByCategoryId($categoryId)
     {
-        return count($this->_pageDao->findPagesByCategoryId($catId));
+        return count($this->_pageDao->findPagesByCategoryId($categoryId));
     }
 
     /**
@@ -109,8 +98,9 @@ class Default_Model_Page
      * @param int $tagId 取得したいタグID
      * @return array 該当するタグがつけられた記事のデータを格納した配列
      * @author akitsukada
+     * @todo limitのデフォルト修正
      */
-    public function getPagesByTagId($tagId, $currentPage, $limit = self::LIMIT_GET_NEW_PAGE)
+    public function findPagesByTagId($tagId, $currentPage, $limit = self::LIMIT_GET_NEW_PAGE)
     {
         return $this->_pageDao->findPagesByTagId($tagId, $currentPage, $limit)->toArray();
     }
@@ -125,57 +115,6 @@ class Default_Model_Page
     public function countPagesByTagId($tagId)
     {
         return count($this->_pageDao->findPagesByTagId($tagId));
-    }
-
-    /**
-     * IDを指定して記事を一件取得する
-     *
-     * @param int $id 取得したい記事のID
-     * @return array 該当するIDの記事データを格納した配列
-     * @author akitsukada
-     */
-    public function findPage($id)
-    {
-        return $this->_pageDao->find($id)->toArray();
-    }
-
-    /**
-     * 記事のキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
-     *
-     * @param string $keyword 検索したいテキスト。
-     * @param int $currentPage ページネータの何ページ目を表示するか。
-     * @param int $limit ページネータで１ページに何件表示するか。
-     * @return array 検索結果を格納した配列
-     * @author akitsukada
-     */
-    public function searchPages($keyword, $currentPage = 1, $limit = self::LIMIT_GET_NEW_PAGE)
-    {
-        $tagIds = $this->_tagDao->findTagIdsByTagName($keyword);
-        return $this->_pageDao->searchPages($keyword, $this->_findTagIdsByTagName($keyword), $currentPage, $limit)->toArray();
-    }
-
-    /**
-     * 記事のキーワード検索結果の合計数を求める。
-     *
-     * @param string $keyword 
-     * @return int 該当する記事の合計数
-     * @author akitsukada
-     */
-    public function countPagesByKeyword($keyword)
-    {
-        return (int)($this->_pageDao->countPagesByKeyword($keyword, $this->_findTagIdsByTagName($keyword)));
-    }
-
-    /**
-     * タグ名をキーワード検索し、該当するタグのIDを返す
-     *
-     * @param string $keyword 検索したいキーワード
-     * @return array|null 該当するタグのIDを格納した配列
-     */
-    private function _findTagIdsByTagName($keyword)
-    {
-        $tagIds = $this->_tagDao->findTagIdsByTagName($keyword);
-        return $tagIds;
     }
 }
 

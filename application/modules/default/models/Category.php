@@ -22,16 +22,8 @@
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Default_Model_Category
+class Default_Model_Category extends Common_Model_CategoryAbstract
 {
-
-    /**
-     * モデルが使用するDAO(DbTable)クラスを設定する
-     *
-     * @var Zend_Db_Table
-     */
-    protected $_dao = null;
-
     /**
      * 初期設定をする
      *
@@ -39,7 +31,7 @@ class Default_Model_Category
      */
     public function __construct()
     {
-        $this->_dao = new Common_Model_DbTable_Category();
+        $this->_categoryDao = new Common_Model_DbTable_Category();
     }
 
     /**
@@ -51,7 +43,7 @@ class Default_Model_Category
     public function getCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        $categories = $this->_dao->findCategoryLists(true);
+        $categories = $this->_categoryDao->findCategoryLists(true);
 
 
         //取得できた場合のみ整形する
@@ -75,9 +67,9 @@ class Default_Model_Category
 
         if (isset($result)) {
             //未分類のカテゴリーを追加する
-            $result = $this->_dao->addDefaultCategory($result);
+            $result = $this->_categoryDao->addDefaultCategory($result);
         } else { //カテゴリーがなかったら未分類カテゴリーのみ追加する
-            $result = $this->_dao->addDefaultCategory();
+            $result = $this->_categoryDao->addDefaultCategory();
         }
 
         return $result;
@@ -93,7 +85,8 @@ class Default_Model_Category
      */
     public function findCategory($id)
     {
-        return $this->_dao->find($id)->toArray();
+        return $this->_categoryDao->find($id)->toArray();
     }
+    
 }
 

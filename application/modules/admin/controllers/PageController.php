@@ -110,7 +110,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             // 規定のもの以外はascに
             $order = 'asc';
         }
-        $pages = $this->_pageService->loadPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
+        $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
         foreach ($pages as $key => $page) {
             $createDate = new Zend_Date($page['create_date'], 'YYYY-MM-dd hh:mm:ss');
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
@@ -627,7 +627,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('categoryForm', $form);
             return $this->_forward('index');
         }
-        $this->_pageService->update(
+        $this->_pageService->updatePage(
             $form->getValue('hidden_page_id'),
             array(
                 'category_id' => $form->getValue('category_id')
@@ -651,7 +651,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('statusForm', $form);
             return $this->_forward('index');
         }
-        $this->_pageService->update(
+        $this->_pageService->updatePage(
             $form->getValue('hidden_page_id'),
             array(
                 'status' => $form->getValue('status')
@@ -675,8 +675,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$validator->isValid($id)) {
             $this->_helper->redirector('index');
         }
-        $page = $this->_pageService->load($id);
-        $this->_pageService->delete($id);
+        $page = $this->_pageService->findPage($id);
+        $this->_pageService->deletePage($id);
         $this->_helper->flashMessenger('「' . $page['title'] . '」を削除しました。');
         $this->_helper->redirector('index');
     }

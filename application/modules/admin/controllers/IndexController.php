@@ -102,7 +102,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pastDaysFromOpen = $siteDateInfo['pastDays'];
 
         // 最近作ったページ
-        $lastCreatedPages = $this->_pageService->loadLastCreatedPages(5);
+        $lastCreatedPages = $this->_pageService->findLastCreatedPages(5);
         $modifiedLastCreatedPages = array();
         foreach ($lastCreatedPages as $page) {
             $page['status'] = Setuco_Data_Converter_PageInfo::convertStatus2String($page['status']);

@@ -44,9 +44,11 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     protected $_alias = 'c';
 
     /**
-     * 表示しないレコードのID
+     * 親が無いカテゴリーの仮想親ID
+     * 
+     * @var int
      */
-    const NO_DISPLAY_ID = -1;
+    const PARENT_ROOT_ID = -1;
 
     /**
      * 未分類のカテゴリー
@@ -68,9 +70,9 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         //外部結合するか
         if ($isJoinTable) {
             //取得しないカテゴリーを設定する
-            $select->where('c.id != ?', self::NO_DISPLAY_ID);
+            $select->where('c.id != ?', self::PARENT_ROOT_ID);
         } else {
-            $select->where('id != ?', self::NO_DISPLAY_ID);
+            $select->where('id != ?', self::PARENT_ROOT_ID);
         }
 
 
