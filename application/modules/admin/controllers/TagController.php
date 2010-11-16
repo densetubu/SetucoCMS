@@ -53,7 +53,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         $this->view->newTagForm = $this->_getParam('newTagForm', $this->_createNewTagForm());
         $this->view->editTagForm = $this->_getParam('editTagForm', $this->_createEditTagForm());
-        $this->view->tags = $this->_tagService->loadTags($this->_getParam('order', 'asc'), $this->_getPageNumber(), $this->_getPageLimit());
+        $this->view->tags = $this->_tagService->findTags($this->_getParam('order', 'asc'), $this->_getPageNumber(), $this->_getPageLimit());
         $this->setPagerForView($this->_tagService->countAllTags());
         $this->_showFlashMessages();
     }
@@ -156,7 +156,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('newTagform', $form);
             return $this->_forward('index');
         }
-        $this->_tagService->regist($form->getValue('tag'));
+        $this->_tagService->registTag($form->getValue('tag'));
         $this->_helper->flashMessenger('新規タグを作成しました。');
         $this->_helper->redirector('index');
     }
@@ -175,7 +175,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('editTagform', $form);
             return $this->_forward('index');
         }
-        $this->_tagService->update($form->getValue('id'), $form->getValue('tag'));
+        $this->_tagService->updateTag($form->getValue('id'), $form->getValue('tag'));
         $this->_helper->flashMessenger('「' . $form->getValue('preTag') . '」を「' . $form->getValue('tag') . '」に変更しました。');
         $this->_helper->redirector('index');
     }
@@ -194,8 +194,8 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         if (!$validator->isValid($id)) {
             $this->_helper->redirector('index');
         }
-        $tag = $this->_tagService->load($id);
-        $this->_tagService->delete($id);
+        $tag = $this->_tagService->findTag($id);
+        $this->_tagService->deleteTag($id);
         $this->_helper->flashMessenger('「' . $tag['name'] . '」を削除しました。');
         $this->_helper->redirector('index');
     }

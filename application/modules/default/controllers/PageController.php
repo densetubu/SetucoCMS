@@ -178,7 +178,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         
         $currentPage = $this->_getPageNumber();
         $searchResultCount = $this->_pageService->countPagesByTagId($id);
-        $tag = array_pop($this->_tagService->findTag($id));
+        $tag = $this->_tagService->findTag($id);
         $keyword = is_null($tag['name']) ? '？？？(該当タグなし)' : $tag['name'];
 
         if ($searchResultCount == 0) {

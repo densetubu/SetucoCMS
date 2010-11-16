@@ -22,15 +22,8 @@
  * @subpackage Model
  * @author     saniker10, suzuki-mar
  */
-class Admin_Model_Tag
+class Admin_Model_Tag extends Common_Model_TagAbstract
 {
-    /**
-     * タグDAO
-     *
-     * @var Common_Model_DbTable_Tag
-     */
-    private $_tagDao;
-
     /**
      * コンストラクター
      *
@@ -42,19 +35,7 @@ class Admin_Model_Tag
     }
 
     /**
-     * 指定したIDのタグ情報を取得する
-     *
-     * @param  int $id タグID
-     * @return array タグ情報
-     * @author charlesvineyard
-     */
-    public function load($id)
-    {
-        return $this->_tagDao->find($id)->current()->toArray();
-    }
-
-    /**
-     * 存在するタグ名か調べます
+     * 存在するタグ名か調べます。
      *
      * @param  string $name タグ名
      * @return boolean 存在すれば true
@@ -73,7 +54,7 @@ class Admin_Model_Tag
     }
 
     /**
-     * タグ情報を取得する
+     * タグ情報を取得する。タグ名でソートします。
      *
      * @param  string $order       asc か　desc
      * @param  int    $pageNumber  ページ番号(オフセットカウント)
@@ -81,13 +62,13 @@ class Admin_Model_Tag
      * @return array タグ情報の一覧
      * @author saniker10, suzuki-mar, charlesvineyard
      */
-    public function loadTags($order, $pageNumber, $limit)
+    public function findTags($order, $pageNumber, $limit)
     {
         return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
     }
 
     /**
-     * すべてのタグを数えます
+     * すべてのタグを数えます。
      *
      * @return int すべてのタグの個数
      * @author charlesvineyard
@@ -98,13 +79,13 @@ class Admin_Model_Tag
     }
 
     /**
-     * タグを登録する
+     * タグを登録する。
      *
      * @param  string $name タグ名
      * @return void
      * @author saniker10, suzuki-mar
      */
-    public function regist($name)
+    public function registTag($name)
     {
         if ($this->isExistsTagName($name)) {
             throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
@@ -113,14 +94,14 @@ class Admin_Model_Tag
     }
 
     /**
-     * タグを更新する
+     * タグを更新する。
      *
      * @param  $id   タグID
      * @param  $name タグ名
      * @return void
      * @author charlesvineyard
      */
-    public function update($id, $name)
+    public function updateTag($id, $name)
     {
         if ($this->isExistsTagName($name)) {
             throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
@@ -130,13 +111,13 @@ class Admin_Model_Tag
     }
 
     /**
-     * タグを削除する
+     * タグを削除する。
      *
      * @param  $id   タグID
      * @return void
      * @author charlesvineyard
      */
-    public function delete($id)
+    public function deleteTag($id)
     {
         $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_tagDao->delete($where);
