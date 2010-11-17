@@ -87,7 +87,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
 
         $loginId = $auth->getIdentity();
         $accountService = new Admin_Model_Account();
-        $account = $accountService->load($loginId);
+        $account = $accountService->findAccountByLoginId($loginId);
         $this->view->nickName = $account['nickname'];
 
         $siteService = new Admin_Model_Site();

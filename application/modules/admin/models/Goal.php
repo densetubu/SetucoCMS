@@ -47,7 +47,7 @@ class Admin_Model_Goal
      * @return int 更新目標ページ数
      * @author charlesvineyard
      */
-    public function loadGoalPageCountThisMonth()
+    public function findGoalPageCountThisMonth()
     {
         $lastGoal = $this->_goalDao->findLastGoal();
         if(! $this->_isGoalOfThisMonth($lastGoal)) {

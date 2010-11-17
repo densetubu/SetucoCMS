@@ -91,7 +91,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
         $this->view->diffGoal = Setuco_Data_Converter_UpdateStatus::convertDiffGoal2String(
-                $createdPageCount - $this->_goalService->loadGoalPageCountThisMonth());
+                $createdPageCount - $this->_goalService->findGoalPageCountThisMonth());
 
         // 総ページ数
         $this->view->totalPageCount = $this->_pageService->countPages();
@@ -125,7 +125,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('ambitionForm', $form);
             return $this->_forward('index');
         }
-        $this->_ambitionService->update($form->getValue('ambition'));
+        $this->_ambitionService->updateAmbition($form->getValue('ambition'));
         $this->_helper->redirector('index');
     }
 
@@ -144,7 +144,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $form->addElement('text', 'ambition', array(
             'id'      => 'ambition',
             'name'    => 'ambition',
-            'value'   => $this->_ambitionService->load(),
+            'value'   => $this->_ambitionService->findAmbition(),
             'filters' => array('StringTrim')
         ));
         $form->addElement('submit', 'submit', array(
@@ -192,7 +192,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->setAction($this->_helper->url('update-goal'))
              ->setDecorators(array('FormElements', 'Form'));
         $goal = new Zend_Form_Element_Text('goal', array('label' => '一ヶ月の新規作成数'));
-        $goalValue = $this->_goalService->loadGoalPageCountThisMonth();
+        $goalValue = $this->_goalService->findGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
              ->setRequired(true)

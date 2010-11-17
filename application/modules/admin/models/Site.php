@@ -94,7 +94,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      */
     public function getUpdateStatus()
     {
-        $lastGoalPageCount = $this->_goalService->loadGoalPageCountThisMonth();
+        $lastGoalPageCount = $this->_goalService->findGoalPageCountThisMonth();
         $todayGoal = $this->_goalService->calcTodayGoal($lastGoalPageCount);
         if ($todayGoal === 0) {
             return Setuco_Data_Constant_UpdateStatus::FIRST;

@@ -37,26 +37,26 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     /**
      * カテゴリーを取得する
      *
-     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
-     * @param int $page 現在のページ番号
+     * @param String $order カテゴリーを昇順か降順でソートするのか 文字列
+     * @param int $pageNumber 取得するページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
-     * @return array 	カテゴリー情報の一覧
-     * @author  saniker10, suzuki-mar
+     * @return array カテゴリー情報の一覧
+     * @author saniker10, suzuki-mar
      */
-    public function searchCategories($sort, $page, $limit)
+    public function findCategories($order, $pageNumber, $limit)
     {
         //pageを数値にキャストする
-        $page = (int)$page;
+        $pageNumber = (int)$pageNumber;
 
         //ソートする方法をパラメータによって変更する desc意外は昇順(asc)
-        if($sort === 'desc') {
-            $sort = "DESC";
+        if($order === 'desc') {
+            $order = "DESC";
         } else {
-            $sort = "ASC";
+            $order = "ASC";
         }
 
         //指定したソートをしたデータを取得する
-        $searchResult = $this->_categoryDao->findSortCategories($sort, $page, $limit);
+        $searchResult = $this->_categoryDao->findSortCategories($order, $pageNumber, $limit);
 
         //配列の方が操作しやすいので配列を戻り値にする
         $result = $searchResult->toArray();
@@ -77,9 +77,6 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     /**
      * カテゴリーIDと名前のセットを取得する。
      *
-     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
-     * @param int $page 現在のページ番号
-     * @param int $limit 1ページあたり何件のデータを取得するのか
      * @return array キー:カテゴリーID、値:カテゴリー名の配列
      * @author charlesvineyard
      */
@@ -96,7 +93,6 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     /**
      * 検索条件で、リミットしなかった場合に該当結果が何件あったのかを取得する
      *
-     * @param String $keyword 検索するキーワード
      * @return int 何件該当したデータが存在したか
      * @author suzuki-mar
      */
@@ -113,7 +109,6 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * @param  numeric 存在するかを調べるid
      * @return boolean 指定したidが存在するか
      * @author suzuki-mar
-     * @todo 固定値(true)をかえしている
      */
     public function isExistsId($id)
     {
@@ -152,15 +147,15 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * カテゴリーを編集する
      * コントローラーから、バリデートチェックした入力パラメーターをすべてと、編集するidを取得する
      *
-     * @param array $inputData 入力したデータ: バリデートチェックした入力データ
-     * @param int   $updateId  アップデートするデータのID
+     * @param int   $id  アップデートするデータのID
+     * @param array $categoryInfo 入力したデータ: バリデートチェックした入力データ
      * @return boolean 編集できたか
      * @author suzuki-mar
      */
-    public function updateCategory($inputData, $updateId)
+    public function updateCategory($id, $categoryInfo)
     {
         //アップデートするデータを作成する
-        $updateData['name'] = $inputData['name'];
+        $updateData['name'] = $categoryInfo['name'];
 
         //アップデートに失敗したときに例外が発生する
         try {
@@ -168,9 +163,9 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
             $primary    = $this->_categoryDao->getPrimary();
 
             //数値にキャストする
-            $updateId = (int)$updateId;
+            $id = (int)$id;
             //アップデートする条件のwhere句を生成する
-            $where      = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
+            $where      = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
             $this->_categoryDao->update($updateData, $where);
             $result     = true;
@@ -193,11 +188,11 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * @return boolean 削除できたか
      * @author suzuki-mar
      */
-    public function deleteCategory($deleteId)
+    public function deleteCategory($id)
     {
 
         //データを削除する
-        $result = $this->_deleteByPrimary($deleteId);
+        $result = $this->_deleteByPrimary($id);
 
         return $result;
     }

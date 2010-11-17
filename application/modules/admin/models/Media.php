@@ -76,18 +76,18 @@ class Admin_Model_Media
     /**
      * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件（オフセット$currentPage-1）のデータを取得する
      *
-     * @param    array $condition 		「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
-     * @param    int   $currentPage 	ページネーター用の、現在表示したいページ番号
-     * @param    int  	$limit	 		ページネーター用の、1ページに表示する最大件数
-     * @return 	 array	取得したデータを格納した二次元配列
+     * @param    array $condition    「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
+     * @param    int   $pageNumber   ページネーター用の、現在表示したいページ番号
+     * @param    int   $limit        ページネーター用の、1ページに表示する最大件数
+     * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($condition, $currentPage, $limit)
+    public function findMedias($condition, $pageNumber, $limit)
     {
 
         $select = $this->_mediadao->select()
                         ->order("{$condition['sort']} {$condition['order']}")
-                        ->limitPage($currentPage, $limit);
+                        ->limitPage($pageNumber, $limit);
 
         if ($condition['type'] !== 'all') {
             // 拡張子絞り込み指定されていた場合のみWhere句を設定
@@ -209,9 +209,9 @@ class Admin_Model_Media
     /**
      * DBのMedia表から、指定したIDのレコードを削除する
      *
-     * @param  int 		$id 削除したいファイルのID
-     * @return boolean	true:削除成功、false:削除失敗
-     * @todo page_media表からの子レコード削除
+     * @param  int        $id 削除したいファイルのID
+     * @return boolean    true:削除成功、false:削除失敗
+     * @todo   page_media 表からの子レコード削除
      * @author akitsukada
      */
     public function deleteMediaById($id)
