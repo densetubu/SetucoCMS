@@ -48,7 +48,7 @@ class Admin_Model_Ambition
      * @return string 野望文字列
      * @author charlesvineyard
      */
-    public function load()
+    public function findAmbition()
     {
         $result = $this->_ambitionDao->fetchRow()->toArray();
         return $result['ambition'];
@@ -61,7 +61,7 @@ class Admin_Model_Ambition
      * @return void
      * @author charlesvineyard
      */
-    public function update($ambition)
+    public function updateAmbition($ambition)
     {
         $this->_ambitionDao->update(array('ambition' => $ambition));
     }

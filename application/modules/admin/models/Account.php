@@ -48,7 +48,7 @@ class Admin_Model_Account
      * @return array アカウント情報の配列
      * @author charlesvineyard
      */
-    public function load($loginId)
+    public function findAccountByLoginId($loginId)
     {
         return $this->_accountDao->findByLoginId($loginId);
     }
