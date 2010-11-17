@@ -146,7 +146,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $currentPage = $this->_getPageNumber();
         $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage);
 
-        $category = array_pop($this->_categoryService->findCategory($id));
+        $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
             $category['name'] = '未分類';
         }
@@ -236,7 +236,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         // カテゴリー情報の取得
         $catId = $page['category_id'];
-        $category = array_pop($this->_categoryService->findCategory($catId));
+        $category = $this->_categoryService->findCategory($catId);
         if (is_null($category['name'])) {
             $category['name'] = '未分類';
         }

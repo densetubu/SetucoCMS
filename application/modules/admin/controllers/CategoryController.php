@@ -74,7 +74,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         }
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_categoryService->searchCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
+        $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
         $max = $this->_categoryService->countCategories();
         $this->setPagerForView($max);
 
@@ -137,7 +137,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         if ($validateForm->isValid($this->_getAllParams())) {
 
             //カテゴリーを編集する
-            if ($this->_categoryService->updateCategory($this->_getAllParams(), $this->_getParam('id'))) {
+            if ($this->_categoryService->updateCategory($this->_getParam('id'), $this->_getAllParams())) {
                 $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
                 $isSetFlashMessage = true;
             }
