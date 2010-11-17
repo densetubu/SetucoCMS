@@ -658,7 +658,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getUploadDest()
     {
-        return APPLICATION_PATH . '/../public/images/media/upload';
+        return APPLICATION_PATH . '/../public/media/upload';
     }
 
     /**
@@ -669,7 +669,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getThumbnailDest()
     {
-        return APPLICATION_PATH . '/../public/images/media/thumbnail';
+        return APPLICATION_PATH . '/../public/media/thumbnail';
     }
 
     /**

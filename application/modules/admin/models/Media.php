@@ -27,7 +27,7 @@ class Admin_Model_Media
     /**
      * サムネイル保存ディレクトリのbaseUrl用パス。
      */
-    const THUMB_DIR_PATH_FROM_PUBLIC = '/images/media/thumbnail/';
+    const THUMB_DIR_PATH_FROM_PUBLIC = '/media/thumbnail/';
 
     /**
      * PDFファイル用アイコンファイルのパス
@@ -120,7 +120,7 @@ class Admin_Model_Media
                     $thumbUrl = self::ICON_PATH_TXT;
                     $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth;
                     break;
-                case 'jpg' : // 以下の３種類の場合はまとめて処理
+                case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
                 case 'gif' :
                 case 'png' :
                     $thumbUrl = self::THUMB_DIR_PATH_FROM_PUBLIC . $media['id'] . '.gif';
@@ -260,8 +260,9 @@ class Admin_Model_Media
     public function findMediaById($id)
     {
 
-        $media = $this->_mediadao->find($id)->toArray();
-        return $media[0];
+        $medias = $this->_mediadao->find($id)->toArray();
+        $medias = $this->_addThumbnailPathInfo($medias);
+        return $medias[0];
     }
 
     /**

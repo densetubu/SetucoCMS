@@ -116,8 +116,8 @@ $order = $this->condition['order'];
             <?php foreach ($this->medias as $cnt => $media): ?>
             <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
-                    <a href="<?php echo $this->baseUrl("/images/media/upload/{$media['id']}.{$media['type']}") ?>" onclick=""> <?php //そのファイルを開く？プレビューをJSで表示？ ?>
-                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" width="<?php echo $media['thumbWidth'] ?>" height="auto" alt="<?php echo $media['name'] . '(' . $media['type'] . ' ファイル)' ?>" />
+                    <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>">
+                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['comment'] ?>" />
                     </a>
                 </td>
                 <td><?php echo "{$media['name']} [{$media['type']}]" ?></td>
