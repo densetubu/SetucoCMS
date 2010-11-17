@@ -61,10 +61,10 @@ abstract class Common_Model_PageAbstract
      * @author akitsukada
      * @todo limitのデフォルト修正
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10)
+    public function searchPages($keyword, $currentPage, $limit)
     {
         return $this->_pageDao->searchPages($keyword,
-                $this->_searchTagIdsByTagName($keyword),
+                $this->_findTagIdsByTagName($keyword),
                 $currentPage, $limit)
                 ->toArray();
     }
@@ -79,7 +79,7 @@ abstract class Common_Model_PageAbstract
     public function countPagesByKeyword($keyword)
     {
         return (int)($this->_pageDao->countPagesByKeyword(
-                $keyword, $this->_searchTagIdsByTagName($keyword)));
+                $keyword, $this->_findTagIdsByTagName($keyword)));
     }
 
     /**
@@ -89,7 +89,7 @@ abstract class Common_Model_PageAbstract
      * @return array|null 該当するタグのIDを格納した配列
      * @author akitsukada
      */
-    protected function _searchTagIdsByTagName($keyword)
+    protected function _findTagIdsByTagName($keyword)
     {
         return $this->_tagDao->findTagIdsByTagName($keyword);
     }
