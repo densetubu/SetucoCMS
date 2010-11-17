@@ -77,17 +77,17 @@ class Admin_Model_Media
      * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件（オフセット$currentPage-1）のデータを取得する
      *
      * @param    array $condition    「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
-     * @param    int   $currentPage  ページネーター用の、現在表示したいページ番号
+     * @param    int   $pageNumber   ページネーター用の、現在表示したいページ番号
      * @param    int   $limit        ページネーター用の、1ページに表示する最大件数
      * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($condition, $currentPage, $limit)
+    public function findMedias($condition, $pageNumber, $limit)
     {
 
         $select = $this->_mediadao->select()
                         ->order("{$condition['sort']} {$condition['order']}")
-                        ->limitPage($currentPage, $limit);
+                        ->limitPage($pageNumber, $limit);
 
         if ($condition['type'] !== 'all') {
             // 拡張子絞り込み指定されていた場合のみWhere句を設定
