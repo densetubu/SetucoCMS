@@ -28,6 +28,13 @@ class Setuco_Data_Constant_Category
      * @var string
      */
     const UNCATEGORIZED_STRING = '未分類';
+    
+    /**
+     * 未分類カテゴリーのvalue属性
+     *
+     * @var string
+     */
+    const UNCATEGORIZED_VALUE = 'uncategorized';
 
     /**
      * カテゴリー１段目の親ID

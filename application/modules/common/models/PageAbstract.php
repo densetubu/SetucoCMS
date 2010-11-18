@@ -60,26 +60,40 @@ abstract class Common_Model_PageAbstract
      * @return array 検索結果を格納した配列
      * @author akitsukada
      * @todo limitのデフォルト修正
+     * @todo 取得するカラムを動的にしたい。今は全取得。
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10)
+    public function searchPages($keyword, $currentPage = 1, $limit = 10,
+        $targetColumns = null, $refinements = null)
     {
+        if ($targetColumns == null) {
+            $targetColumns = array('title', 'contents', 'outline', 'tag');
+        }
+        
         return $this->_pageDao->searchPages($keyword,
                 $this->_searchTagIdsByTagName($keyword),
-                $currentPage, $limit)
-                ->toArray();
+                $currentPage, $limit, $targetColumns, $refinements);
     }
 
     /**
      * 記事のキーワード検索結果の合計数を求める。
      *
-     * @param string $keyword 
+     * @param string $keyword 検索キーワード
+     * @param array $targetColumns 検索対象の配列 (title|contents|outline|tag)
+     * @param array $refinements 絞り込み条件 カテゴリー、アカウント、状態を指定
      * @return int 該当する記事の合計数
      * @author akitsukada
      */
-    public function countPagesByKeyword($keyword)
+    public function countPagesByKeyword($keyword, $targetColumns = null, $refinements = null)
     {
+        if ($targetColumns == null) {
+            $targetColumns = array('title', 'contents', 'outline', 'tag');
+        }
+        $tagIds = array();
+        if (in_array('tag', $targetColumns)) {
+            $tagIds = $this->_searchTagIdsByTagName($keyword);
+        }
         return (int)($this->_pageDao->countPagesByKeyword(
-                $keyword, $this->_searchTagIdsByTagName($keyword)));
+                $keyword, $tagIds, $targetColumns, $refinements));
     }
 
     /**

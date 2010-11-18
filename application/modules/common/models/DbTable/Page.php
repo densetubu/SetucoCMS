@@ -119,15 +119,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * カテゴリを指定して記事を取得する。currentPageとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
+     * カテゴリを指定して記事を取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $catId 取得したいカテゴリのID
-     * @param int $currentPage ページネータの何ページ目を表示するか
+     * @param int $pageNumber ページネータの何ページ目を表示するか
      * @param int $limig １ページに表示する記事数
      * @author akitsukada
      * @return array 取得した記事データ
      */
-    public function findPagesByCategoryId($catId, $currentPage = null, $limit = null)
+    public function findPagesByCategoryId($catId, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -150,9 +150,9 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         //編集日時の降順にソートする
         $select->order('update_date DESC');
 
-        if (!is_null($currentPage) && !is_null($limit)) {
+        if (!is_null($pageNumber) && !is_null($limit)) {
             //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
-            $select->limitPage($currentPage, $limit);
+            $select->limitPage($pageNumber, $limit);
         }
 
         return $this->fetchAll($select);
@@ -160,15 +160,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * タグIDを指定して記事を取得する。currentPageとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
+     * タグIDを指定して記事を取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $tagId 取得したいタグのID
-     * @param int $currentPage ページネータで何ページ目を表示するか
+     * @param int $pageNumber ページネータで何ページ目を表示するか
      * @param int $limig １ページに表示する記事数
      * @return array 取得した記事データを格納した配列
      * @author akitsukada
      */
-    public function findPagesByTagId($tagId, $currentPage = null, $limit = null)
+    public function findPagesByTagId($tagId, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -187,9 +187,9 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->where('p.status = ?', self::STATUS_OPEN);
         $select->where('pt.tag_id = ?', $tagId);
 
-        if (!is_null($currentPage) && !is_null($limit)) {
+        if (!is_null($pageNumber) && !is_null($limit)) {
             //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）
-            $select->limitPage($currentPage, $limit);
+            $select->limitPage($pageNumber, $limit);
         }
 
         return $this->fetchAll($select);
@@ -201,41 +201,16 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
-     * @param int $currentPage ページネータで何ページ目を表示するか。
+     * @param int $pageNumber ページネータで何ページ目を表示するか。
      * @param int $limit ページネータで１ページに何件表示するか。
      * @return array 取得した記事データを格納した配列。
      */
-    public function searchPages($keyword, $tagIds, $currentPage, $limit)
+    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null)
     {
-        $select = $this->select();
-        $select->from(
-            array('p' => $this->_name),
-            array(
-                'id' => 'id',
-                'title' => 'title',
-                'contents',
-                'update_date'
-            )
-        );
-
-        $select->order('p.update_date DESC');
-        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
-        $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
-        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
-        $select->setIntegrityCheck(false);
-
-        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
-        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
-
-        if (!is_null($tagIds)) {
-            $select->orwhere('t.id IN(?)', $tagIds);
-        }
-
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, false, $targetColumns, $refinements);
         $select->group('id');
-        $select->limitPage($currentPage, $limit);
-        return $this->fetchAll($select);
+        $select->limitPage($pageNumber, $limit);
+        return $this->fetchAll($select)->toArray();
 
     }
 
@@ -244,34 +219,100 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
+     * @param array $targetColumns 検索したいカラムの配列
      * @return int 検索条件に合致した記事の数。
      */
-    public function countPagesByKeyword($keyword, $tagIds)
+    public function countPagesByKeyword($keyword, $tagIds, $targetColumns = null, $refinements = null)
+    {
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, true, $targetColumns, $refinements);
+        $result = $this->fetchAll($select)->toArray();
+        return $result[0]['page_count'];
+    }
+    
+    /**
+     * キーワード検索用のセレクトを作成します。
+     * 
+     * @param string $keyword 検索したいキーワード。
+     * @param array $tagIds 検索したいタグのID。
+     * @param int $pageNumber ページネータで何ページ目を表示するか。
+     * @param int $limit ページネータで１ページに何件表示するか。
+     * @param boolean $isCounting 件数を取得するセレクトなら true。行を取得するなら false。
+     * @param array $targetColumns 検索したいカラム名の配列 デフォルトは 'title', 'contents', 'outline', 'tag'
+     * @return Zend_Db_Table_Select
+     * @author akitsukada charlesvineyard
+     */
+    private function _createSelectByKeyword($keyword, $tagIds, $isCounting = false, $targetColumns = null, $refinements = null)
     {
         $select = $this->select();
-        $select->from(
-            array('p' => $this->_name),
-            array('page_count' => 'COUNT(DISTINCT p.id)')
-        );
+        if ($isCounting) {
+            $select->from(
+                array('p' => $this->_name),
+                array('page_count' => 'COUNT(DISTINCT p.id)')
+            );
+        } else {
+            $select->from(
+                array('p' => $this->_name)
+            );
+        }
 
         $select->order('p.update_date DESC');
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
-        $select->join(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
+        $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
         $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
+        $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
+        
         $select->setIntegrityCheck(false);
 
-        $select->orwhere('p.title LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.contents LIKE ?', "%{$keyword}%");
-        $select->orwhere('p.outline LIKE ?', "%{$keyword}%");
-        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
-
-        if (!is_null($tagIds)) {
-            $select->orwhere('t.id IN(?)', $tagIds);
+        if ($targetColumns == null) {
+            $targetColumns = array('title', 'contents', 'outline', 'tag');
         }
-
-        $result = $this->fetchAll($select)->toArray();
-        return $result[0]['page_count'];
-
+        $orwhere = '';
+        $bind = array();
+        if (in_array('title', $targetColumns)) {
+            $orwhere .= 'p.title LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('contents', $targetColumns)) {
+            if ($orwhere !== '') {
+                $orwhere .= ' OR ';
+            }
+            $orwhere .= 'p.contents LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('outline', $targetColumns)) {
+            if ($orwhere !== '') {
+                $orwhere .= ' OR ';
+            }
+            $orwhere.= 'p.outline LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('tag', $targetColumns)) {
+            $tagIds[] = 4;
+            if (!is_null($tagIds)) {
+                if ($orwhere !== '') {
+                    $orwhere .= ' OR ';
+                }
+                $orwhere .= 't.id IN(:tagIds)';
+                $bind[':tagIds'] = implode(",", $tagIds);
+            }
+        }
+        if ($orwhere !== '') {
+            $select->where($orwhere);
+        }
+        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
+        if (is_array($refinements) && !empty($refinements)) {
+            foreach ($refinements as $column => $value) {
+                if ($column === 'category_id' && $value === null) {
+                    $select->where("category_id is null");
+                    continue;
+                }
+                $select->where("{$column} = :{$column}");
+                $bind[":{$column}"] = $value;
+            }
+        }
+        array_unique($bind);
+        $select->bind($bind);
+        return $select;
     }
 
     /**
@@ -285,7 +326,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    public function findSortedPages($sortColmn, $order, $page, $limit, $isJoinAccount = false)
+    public function findSortedPages($sortColumn, $order, $pageNumber, $limit, $isJoinAccount = false)
     {
         $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
         if ($isJoinAccount) {
@@ -295,7 +336,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
                        array('account_id' => 'a.id', 'a.nickname'));
         }
 
-        $select->limitPage($page, $limit)->order("{$sortColmn} {$order}");
+        $select->limitPage($pageNumber, $limit)->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 }

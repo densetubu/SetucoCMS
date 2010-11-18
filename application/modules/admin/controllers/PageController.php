@@ -64,18 +64,18 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     const FORMAT_TIME_TEXT_BOX = 'THH:mm:ss';
 
     /**
-     * 未分類カテゴリーのvalue属性
-     *
-     * @var string
-     */
-    const UNCATEGORIZED_VALUE = 'uncategorized';
-
-    /**
      * 指定なしのvalue属性
      *
      * @var string
      */
     const UNSELECTED_VALUE = 'default';
+    
+    /**
+     * カテゴリーが未分類のvalue属性
+     * 
+     * @var string
+     */
+    private $_uncategorizedValue = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
 
     /**
      * 初期処理
@@ -111,16 +111,93 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $order = 'asc';
         }
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
-        foreach ($pages as $key => $page) {
-            $createDate = new Zend_Date($page['create_date'], 'YYYY-MM-dd hh:mm:ss');
-            $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
-        }
+        $pages = $this->_adjustPages($pages);
+        
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = $this->_createStatusForm();
         $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
+    }
+
+    /**
+     * ページを検索して一覧表示するアクション
+     *
+     * @return void
+     * @author charlesvineyard
+     * @todo logic(OR AND)での検索
+     */
+    public function searchAction()
+    {
+        $searchForm = $this->_createSearchForm();
+        if (!$searchForm->isValid($_POST)) {
+            $this->_setParam('searchForm', $searchForm);
+            return $this->_forward('index');
+        }
+//        $logic = $searchForm->getValue('logic');
+        
+        $keyword = $searchForm->getValue('query');
+        $targets = $searchForm->getValue('targets');
+        $refinements = $this->_makeRefinements($searchForm);
+        $pages = $this->_pageService->searchPages(
+            $keyword,
+            $this->_getPageNumber(),
+            $this->_getPageLimit(),
+            $targets,
+            $refinements
+        );
+        $pages = $this->_adjustPages($pages);
+        $this->_helper->viewRenderer('index');
+        $this->view->pages = $pages;
+        $this->view->searchForm = $searchForm;
+        $this->view->categoryForm = $this->_createCategoryForm();
+        $this->view->statusForm = $this->_createStatusForm();
+        $this->setPagerForView($this->_pageService->countPagesByKeyword(
+                $keyword, $targets, $refinements));
+    }
+    
+    /**
+     * 絞り込み条件を作成します。
+     * 
+     * @param Setuco_Form $searchForm 検索フォーム
+     * @return array 絞り込み条件のペア
+     * @author charlesvineyard
+     */
+    private function _makeRefinements($searchForm)
+    {
+        $refinements = array();
+        if ($searchForm->getValue('category_id') !== self::UNSELECTED_VALUE) {
+            $refinements['category_id'] = 
+                ($searchForm->getValue('category_id') === $this->_uncategorizedValue) ? 
+                    null : $searchForm->getValue('category_id');
+        }
+        if ($searchForm->getValue('account_id') !== self::UNSELECTED_VALUE) {
+            $refinements['account_id'] = $searchForm->getValue('account_id');
+        }
+        if ($searchForm->getValue('status') !== self::UNSELECTED_VALUE) {
+            $refinements['status'] = $searchForm->getValue('status');
+        }
+        return $refinements;
+    }
+    
+    /**
+     * ページの内容をビュー用に整形します。
+     * 
+     * @param array $pages ページ情報の配列
+     * @return array ページ情報の配列
+     * @author charlesvineyard
+     */
+    private function _adjustPages($pages)
+    {
+        foreach ($pages as $key => $page) {
+            $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
+            $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
+            if ($page['category_id'] === null) {
+                $pages[$key]['category_id'] = $this->_uncategorizedValue;
+            }
+        }
+        return $pages;
     }
 
     /**
@@ -131,23 +208,23 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createSearchForm()
     {
-        $orAndOptions = array(
+        $logicOptions = array(
             0 => 'OR',
             1 => 'AND',
         );
         $targetOptions = array(
-            0 => 'タイトル',
-            1 => '本文',
-            2 => '概要',
-            3 => 'タグ',
+            'title' => 'タイトル',
+            'contents' => '本文',
+            'outline' => '概要',
+            'tag' => 'タグ',
         );
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('create'))
+        $form->setAction($this->_helper->url('search'))
              ->addElement(
                  'Text',
-                 'keyword',
+                 'query',
                  array(
                      'id' => 'keyword',
                      'class' => 'defaultInput',
@@ -159,10 +236,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
              )
              ->addElement(
                  'Radio',
-                 'or_and',
+                 'logic',
                  array(
                      'required' => true,
-                     'multiOptions' => $orAndOptions,
+                     'multiOptions' => $logicOptions,
                      'separator' => "</dd>\n<dd>",
                      'value' => 'OR',    // selected指定
                  )
@@ -174,6 +251,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'multiOptions' => $targetOptions,
                      'separator' => "</dd>\n<dd>",
+                     'value' => array('title', 'contents', 'outline', 'tag'),
                  )
              )
              ->addElement(
@@ -192,7 +270,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          $this->_accountService->findAllAccountIdAndNicknameSet()),
-                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
+                     'value' => $this->_uncategorizedValue,    // selected指定
                  )
              )
              ->addElement(
@@ -202,7 +280,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          Setuco_Data_Constant_Page::allStatus()),
-                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
+                     'value' => $this->_uncategorizedValue,    // selected指定
                  )
              )
              ->addElement(
@@ -214,13 +292,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
              );
         $form->setMinimalDecoratorElements(array(
             'keyword',
-            'or_and',
+            'logic',
             'targets',
             'category_id',
             'account_id',
             'status',
             'sub_search',
-            
         ));
         return $form;
     }
@@ -250,7 +327,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createCategoryForm()
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('update-category'))
             ->addElement(
@@ -381,7 +458,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createForm()
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[self::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
@@ -417,7 +494,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'required' => true,
                      'multiOptions' => $categories,
-                     'value' => self::UNCATEGORIZED_VALUE,    // selected指定
+                     'value' => $this->_uncategorizedValue,    // selected指定
                  )
              )
              ->addElement(
@@ -538,7 +615,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('form');
         }
         $categoryId = $this->_getParam('category_id');
-        if ($categoryId === self::UNCATEGORIZED_VALUE) {
+        if ($categoryId === $this->_uncategorizedValue) {
             $categoryId = null;
         }
         $this->_pageService->regist(
@@ -630,7 +707,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService->updatePage(
             $form->getValue('hidden_page_id'),
             array(
-                'category_id' => $form->getValue('category_id')
+                'category_id' => 
+                    ($form->getValue('category_id') === $this->_uncategorizedValue) ? 
+                    null : $form->getValue('category_id')
             )
         );
         $this->_helper->flashMessenger('「' . $form->getValue('hidden_page_title') . '」のカテゴリーを変更しました。');
