@@ -70,7 +70,7 @@ abstract class Common_Model_PageAbstract
         }
         
         return $this->_pageDao->searchPages($keyword,
-                $this->_searchTagIdsByTagName($keyword),
+                $this->_findTagIdsByTagName($keyword),
                 $currentPage, $limit, $targetColumns, $refinements);
     }
 
@@ -103,7 +103,7 @@ abstract class Common_Model_PageAbstract
      * @return array|null 該当するタグのIDを格納した配列
      * @author akitsukada
      */
-    protected function _searchTagIdsByTagName($keyword)
+    protected function _findTagIdsByTagName($keyword)
     {
         return $this->_tagDao->findTagIdsByTagName($keyword);
     }

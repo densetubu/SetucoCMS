@@ -48,7 +48,9 @@
     <?php endif ?>
     <form action="<?php echo $this->updateForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <dl id="inputArea">
-            <dt><a href="#"><img src="<?php echo $this->baseUrl('/images/admin/header/logo.jpg') ?>" width="152" height="39" alt="" /></a></dt>
+            <dt>
+                <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>"><img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" /></a>
+            </dt>
             <dt>ファイル名</dt>
             <dd><?php echo $this->updateForm->getElement('name') ?></dd>
             <dt>説明</dt>

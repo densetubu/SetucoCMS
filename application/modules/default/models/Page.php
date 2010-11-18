@@ -75,7 +75,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      * @return array 該当するカテゴリの記事データを格納した配列
      * @todo limitのデフォルト修正
      */
-    public function findPagesByCategoryId($categoryId, $currentPage, $limit = self::LIMIT_GET_PAGE_BY_CATEGORY)
+    public function findPagesByCategoryId($categoryId, $currentPage, $limit)
     {
         return $this->_pageDao->findPagesByCategoryId($categoryId, $currentPage, $limit);
     }
@@ -100,7 +100,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      * @author akitsukada
      * @todo limitのデフォルト修正
      */
-    public function findPagesByTagId($tagId, $currentPage, $limit = self::LIMIT_GET_NEW_PAGE)
+    public function findPagesByTagId($tagId, $currentPage, $limit)
     {
         return $this->_pageDao->findPagesByTagId($tagId, $currentPage, $limit)->toArray();
     }

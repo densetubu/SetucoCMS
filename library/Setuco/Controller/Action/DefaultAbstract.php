@@ -54,21 +54,30 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     public function init() {
         parent::init();
 
+
+        
         //REST形式のURLにリダイレクトする リダイレクトしないとREST形式のURLにならないので
+        //検索が多くなったら、xmlにしてもいいのかもしれない
         $redirectParams[] = array('module' => 'default', 'controller' => 'page', 'action' => 'search', 'params' => 'query');
 
         foreach ($redirectParams as $value) {
-            if (preg_match("/^\/{$value['controller']}\/{$value['action']}/", $_SERVER['REQUEST_URI'])) {
-                if (preg_match("/[?|&]{$value['params']}=/", $_SERVER['REQUEST_URI'])) {
-                    $query = $this->_getParam($value['params']);
-                    $this->_helper->redirector(
+            //REQUEST_URIは使用できない、バーチャルホストを使用していないのには使用できないので
+            if ($this->_getParam('module') === $value['module'] ) {
+                if ($this->_getParam('controller') === $value['controller']) {
+                    if (strpos($_SERVER['QUERY_STRING'], "{$value['params']}=") !== false) {
+
+                        $query = $this->_getParam($value['params']);
+                        $this->_helper->redirector(
                             $value['action'],
                             $value['controller'],
                             $value['module'],
                             array($value['params'] => $query));
+                    }
                 }
             }
         }
+        
+
     }
 
     /**
