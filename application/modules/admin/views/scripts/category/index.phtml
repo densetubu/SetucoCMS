@@ -73,9 +73,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($this->categories as $value): ?>
+                <?php foreach ($this->categories as $key => $value): ?>
 
-                <?php if ($value['is_even'] === true): //配列のループが偶数か ?>
+                <?php if ($key % 2 === 0): //配列のループが偶数か ?>
                 <tr>
                 <?php else: ?>
                 <tr class='check'>

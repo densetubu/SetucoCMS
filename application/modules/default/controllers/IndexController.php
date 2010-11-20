@@ -26,6 +26,13 @@
  */
 class IndexController extends Setuco_Controller_Action_DefaultAbstract
 {
+    /**
+     * ページのサービスクラス
+     * 
+     * @var Default_Model_Page
+     * 
+     */
+    private $_pageService = null;
 
     /** 
      * アクションの共通設定
@@ -38,6 +45,8 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
         //モジュール間の共通の設定を実行
         parent::init();
 
+        $this->_pageService = new Default_Model_Page();
+
     }
 
     /**
@@ -49,24 +58,12 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
     public function indexAction()
     {
         //新着記事を取得する
-        $modelPage = new Default_Model_Page();
-        $this->view->newPages = $modelPage->findLastUpdatedPages(); 
+        $this->view->newPages = $this->_pageService->findLastUpdatedPages();
         
         
     }
 
-    /**
-     * カテゴリーの記事を表示するアクションです
-     *
-     * @return void
-     * @author 
-     * @todo 内容を実装する　現在はスケルトン
-     */
-    public function categoryAction()
-    {
-
-    }
-
+   
 
 }
 

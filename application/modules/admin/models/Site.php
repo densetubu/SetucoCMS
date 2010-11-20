@@ -114,12 +114,18 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      *
      * 最終更新日はページの公開日時が最新のものです。
      *
-     * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列
-     * @author charlesvineyard
+     * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列 登録されていない場合は、false
+     * @author charlesvineyard suzuki-mar
      */
     public function getLastUpdateDateWithPastDays()
     {
         $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
+
+        //登録されていない場合は、falseを返す
+        if (empty($newPages)) {
+            return false;
+        }
+
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
         return array('lastUpdateDate' => $lastUpdateDate,

@@ -43,36 +43,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
     public function getCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        $categories = $this->_categoryDao->findCategoryLists(true);
-
-
-        //取得できた場合のみ整形する
-        if ($categories !== false) {
-
-            foreach ($categories as $value) {
-                //使用しているかどうかを判定する
-                if (is_null($value['title'])) {
-                    $value['is_used'] = false;
-                } else {
-                    $value['is_used'] = true;
-                }
-
-                //必要のないものは削除する
-                unset($value['title'], $value['parent_id']);
-                $result[] = $value;
-            }
-        } else {
-            $isNoData = true;
-        }
-
-        if (isset($result)) {
-            //未分類のカテゴリーを追加する
-            $result = $this->_categoryDao->addDefaultCategory($result);
-        } else { //カテゴリーがなかったら未分類カテゴリーのみ追加する
-            $result = $this->_categoryDao->addDefaultCategory();
-        }
-
-        return $result;
+        return $this->_categoryDao->findCategoryLists(true);
     }
 
     /**

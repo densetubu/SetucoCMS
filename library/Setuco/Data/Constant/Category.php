@@ -37,10 +37,38 @@ class Setuco_Data_Constant_Category
     const UNCATEGORIZED_VALUE = 'uncategorized';
 
     /**
+     * 未分類カテゴリーのID
+     *
+     * @var int
+     */
+    const UNCATEGORIZED_ID = 0;
+
+    /**
+     * 未分類のカテゴリーデータ
+     * 
+     * @var array
+     * 
+     */
+    private static $_unCategorizeds = array('id' => self::UNCATEGORIZED_ID, 'name' => self::UNCATEGORIZED_STRING, 'is_default' => true);
+
+
+    /**
      * カテゴリー１段目の親ID
      *
      * @var int
      */
     const NO_PARENT_ID = -1;
+
+    /**
+     * 未分類のカテゴリーを取得する
+     *
+     * @var array
+     * @return array
+     * @author suzuki-mar
+     */
+    public static function getUnCategorizeds()
+    {
+        return self::$_unCategorizeds;
+    }
 
 }

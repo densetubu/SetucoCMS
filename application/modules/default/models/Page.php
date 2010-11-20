@@ -68,6 +68,19 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
+     * 記事を登録しているか
+     *
+     * @return boolean 記事を登録している
+     * @author suzuki-mar
+     */
+    public function isEntryedPage()
+    {
+        $pages = $this->findLastUpdatedPages(1);
+        $result = (boolean)$pages;
+        return $result;
+    }
+
+    /**
      * カテゴリを指定して記事を取得する（ページネータ対応）
      *
      * @param int $categoryId 取得したいカテゴリのID
