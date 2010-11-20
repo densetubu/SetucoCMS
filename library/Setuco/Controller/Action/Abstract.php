@@ -147,20 +147,6 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return $currentPage;
     }
 
-    /**
-     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです　削除するので使用しないで、_getPageNumberメソッドを使用してください
-     * 古いメソッド名　遅くても11月には廃止予定
-     *
-     * @return int 現在ページネーターで表示すべきページ番号
-     * @author suzuki-mar
-     *
-     * @todo メソッドの削除
-     */
-    protected function _getPage()
-    {
-        $result = $this->_getPageNumber();
-        return $result;
-    }
 
     /**
      * 一ページあたりの取得件数の_pageLimitのゲッター
@@ -181,9 +167,9 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      * @return $this 自分自身のインスタンス
      * @author suzuki-mar
      */
-    protected function _setPageLimit($limitPage)
+    protected function _setPageLimit($pageLimit)
     {
-        $this->_pageLimit = $limitPage;
+        $this->_pageLimit = $pageLimit;
         return $this;
     }
 

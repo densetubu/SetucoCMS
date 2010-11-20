@@ -84,6 +84,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
 
     /**
      * 検索条件で、リミットしなかった場合に該当結果が何件あったのかを取得する
+     * no-parentの文は除外する
      *
      * @return int 何件該当したデータが存在したか
      * @author suzuki-mar
@@ -91,6 +92,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     public function countCategories()
     {
         $result = $this->_categoryDao->count();
+        $result--;
 
         return $result;
     }
