@@ -28,7 +28,7 @@ class Setuco_Data_Constant_Category
      * @var string
      */
     const UNCATEGORIZED_STRING = '未分類';
-    
+
     /**
      * 未分類カテゴリーのvalue属性
      *
@@ -45,9 +45,9 @@ class Setuco_Data_Constant_Category
 
     /**
      * 未分類のカテゴリーデータ
-     * 
+     *
      * @var array
-     * 
+     *
      */
     private static $_unCategorizeds = array('id' => self::UNCATEGORIZED_ID, 'name' => self::UNCATEGORIZED_STRING, 'is_default' => true);
 

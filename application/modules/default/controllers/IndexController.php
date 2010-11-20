@@ -58,7 +58,7 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
     public function indexAction()
     {
         //新着記事を取得する
-        $this->view->newPages = $this->_pageService->findLastUpdatedPages(parent::LIMIT_GET_NEW_PAGE);
+        $this->view->newPages = $this->_pageService->findLastUpdatedPages(Setuco_Data_Constant_Module_Default::LIMIT_GET_NEW_PAGE);
     }
 
    
