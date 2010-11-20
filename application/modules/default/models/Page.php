@@ -24,17 +24,6 @@
  */
 class Default_Model_Page extends Common_Model_PageAbstract
 {
-    /**
-     * 新着記事表示用に標準で何件取得するか
-     * @deprecated コントローラへ移動
-     */
-    const LIMIT_GET_NEW_PAGE = 10;
-
-    /**
-     * カテゴリ別検索で標準で何件取得するか
-     * @deprecated コントローラへ移動
-     */
-    const LIMIT_GET_PAGE_BY_CATEGORY = 5;
 
     /**
      * 初期設定をする
@@ -50,11 +39,11 @@ class Default_Model_Page extends Common_Model_PageAbstract
     /**
      * 最新の編集した記事を取得する
      *
-     * @param int[option] 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
+     * @param int 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
      * @todo limitのデフォルト修正
      */
-    public function findLastUpdatedPages($limit = self::LIMIT_GET_NEW_PAGE)
+    public function findLastUpdatedPages($limit)
     {
         //更新順の記事を取得する
         $result = $this->_pageDao->findLastUpdatePages($limit);
