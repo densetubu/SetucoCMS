@@ -225,9 +225,6 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         return $result;
     }
 
-    /******************************
-     *  使いまわせるかもしれないメソッド *
-     ******************************/
 
     /**
      * データの取得件数をカウントする
@@ -273,6 +270,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         return $result;
     }
+    
 
     /**
      * プライマリキーを取得する

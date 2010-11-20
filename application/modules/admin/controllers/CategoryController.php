@@ -88,7 +88,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * @return true
      * @author charlesvineyard suzuki-mar
      */
-    public function createAction() {
+    public function createAction()
+    {
         //フォームから値を送信されなかったら、indexに遷移する
         if (!$this->_request->isPost()) {
             $this->_redirect('/admin/category/index');
@@ -141,6 +142,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
                 $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
                 $isSetFlashMessage = true;
             }
+
+            $validateForm->getMessages();
         }
 
 
