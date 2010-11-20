@@ -108,7 +108,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         //共通のページャーの設定をする
         Zend_Paginator::setDefaultScrollingStyle('Jumping');
-        Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('pager.phtml');
 
         //現在のページ番号を取得する
         $page = $this->_getPageNumber();
@@ -184,7 +184,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     protected function _setPageLimit($limitPage)
     {
         $this->_pageLimit = $limitPage;
-        return $result;
+        return $this;
     }
 
     /**
