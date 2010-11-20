@@ -128,17 +128,10 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         $saveData['name'] = $categoryData['cat_name'];
         //バージョン1では、nullにする
         $saveData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
+        //データをinsertする
+        $this->_categoryDao->insert($saveData);
 
-        //作成に失敗したときに例外が発生する
-        try {
-            //データをinsertする
-            $this->_categoryDao->insert($saveData);
-            $result = true;
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
-
-        return $result;
+        return true;
     }
 
     /**
@@ -155,24 +148,17 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         //アップデートするデータを作成する
         $updateData['name'] = $categoryInfo['name'];
 
-        //アップデートに失敗したときに例外が発生する
-        try {
-            //データをupdateする
-            $primary = $this->_categoryDao->getPrimary();
+        //データをupdateする
+        $primary = $this->_categoryDao->getPrimary();
 
-            //数値にキャストする
-            $id = (int) $id;
-            //アップデートする条件のwhere句を生成する
-            $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
+        //数値にキャストする
+        $id = (int) $id;
+        //アップデートする条件のwhere句を生成する
+        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
-            $this->_categoryDao->update($updateData, $where);
-            $result = true;
-        } catch (Zend_Exception $e) {
-            $result = false;
-            throw $e;
-        }
+        $this->_categoryDao->update($updateData, $where);
 
-        return $result;
+        return true;
     }
 
     /**
@@ -186,24 +172,16 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function deleteCategory($id)
     {
-        //アップデートに失敗したときに例外が発生する
-        try {
-            //データをupdateする
-            $primary = $this->_categoryDao->getPrimary();
+        //データをupdateする
+        $primary = $this->_categoryDao->getPrimary();
 
-            //数値にキャストする
-            $id = (int) $id;
-            //アップデートする条件のwhere句を生成する
-            $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
-            $this->_categoryDao->delete($where);
-            $result = true;
-            
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
+        //数値にキャストする
+        $id = (int) $id;
+        //アップデートする条件のwhere句を生成する
+        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
+        $this->_categoryDao->delete($where);
 
-        return $result;
+        return true;
     }
-
 
 }
