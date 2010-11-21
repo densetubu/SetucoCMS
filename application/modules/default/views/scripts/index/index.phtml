@@ -51,11 +51,11 @@
     <div class="entryBody">
         <?php if($this->newPages !== false): //記事が公開されている場合のみ表示する ?>
         <ul>
-            <li>
-                <?php foreach ($this->newPages as $value): ?>
-                <a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a>
-                <?php endforeach; ?>
-            </li>
+            
+            <?php foreach ($this->newPages as $value): ?>
+            <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
+            <?php endforeach; ?>
+            
         </ul>        
         
         <?php else: //記事が公開されていない場合 ?>
