@@ -12,7 +12,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     charlesvineyard
+ * @author     charlesvineyard akitsukada
  */
 
 /**
@@ -20,10 +20,18 @@
  *
  * @package    Common
  * @subpackage Model
- * @author     charlesvineyard
+ * @author     charlesvineyard akitsukada
  */
 abstract class Common_Model_PageAbstract
 {
+
+    /**
+     * キーワード検索のデフォルト検索対象カラム
+     *
+     * @var array
+     */
+     private $_searchTargetColumns = array('title', 'contents', 'outline', 'tag');
+
     /**
      * PageテーブルのDAO
      * 
@@ -62,16 +70,20 @@ abstract class Common_Model_PageAbstract
      * @todo limitのデフォルト修正
      * @todo 取得するカラムを動的にしたい。今は全取得。
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10,
-        $targetColumns = null, $refinements = null)
+    public function searchPages($keyword, $currentPage = 1, $limit = 10, $targetColumns = null, $refinements = null)
     {
         if ($targetColumns == null) {
-            $targetColumns = array('title', 'contents', 'outline', 'tag');
+            $targetColumns = $this->_searchTargetColumns;
         }
         
-        return $this->_pageDao->searchPages($keyword,
-                $this->_findTagIdsByTagName($keyword),
-                $currentPage, $limit, $targetColumns, $refinements);
+        return $this->_pageDao->searchPages(
+            $keyword,
+            $this->_findTagIdsByTagName($keyword),
+            $currentPage,
+            $limit,
+            $targetColumns,
+            $refinements
+        );
     }
 
     /**
@@ -86,13 +98,12 @@ abstract class Common_Model_PageAbstract
     public function countPagesByKeyword($keyword, $targetColumns = null, $refinements = null)
     {
         if ($targetColumns == null) {
-            $targetColumns = array('title', 'contents', 'outline', 'tag');
+            $targetColumns = $this->_searchTargetColumns;
         }
         $tagIds = array();
         if (in_array('tag', $targetColumns)) {
         }
-        return (int)($this->_pageDao->countPagesByKeyword(
-                $keyword, $tagIds, $targetColumns, $refinements));
+        return (int)($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns));
     }
 
     /**

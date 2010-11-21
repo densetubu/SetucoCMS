@@ -153,8 +153,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->searchForm = $searchForm;
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = $this->_createStatusForm();
-        $this->setPagerForView($this->_pageService->countPagesByKeyword(
-                $keyword, $targets, $refinements));
+        $this->setPagerForView(
+            $this->_pageService->countPagesByKeyword(
+                $keyword, $targets, $refinements
+            )
+        );
     }
     
     /**
@@ -168,9 +171,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $refinements = array();
         if ($searchForm->getValue('category_id') !== self::UNSELECTED_VALUE) {
-            $refinements['category_id'] = 
-                ($searchForm->getValue('category_id') === $this->_uncategorizedValue) ? 
-                    null : $searchForm->getValue('category_id');
+            $refinements['category_id'] =
+                ($searchForm->getValue('category_id') === $this->_uncategorizedValue) ?
+                null : $searchForm->getValue('category_id');
         }
         if ($searchForm->getValue('account_id') !== self::UNSELECTED_VALUE) {
             $refinements['account_id'] = $searchForm->getValue('account_id');

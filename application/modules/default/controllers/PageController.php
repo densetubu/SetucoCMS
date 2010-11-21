@@ -84,7 +84,6 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      * 
      * @return void
      * @author akitsukada
-     * @todo 一覧には、記事本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
      */
     public function searchAction()
     {
@@ -131,11 +130,13 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     {
 
         $id = $this->_getParam('id');
-        if (!is_numeric($id) && !is_null($id) || is_numeric($id) && $id < 0) {
-            // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
-            $this->_helper->redirector('index', 'index');
-        } elseif ($id == 0) {
+
+        if ($id == '0') {
+            // id=0,'uncategorize'は未分類扱いとする
             $id = null;
+        } elseif (!is_numeric($id) && !is_null($id) || is_numeric($id) && $id < 0) {
+            // 不正なIDが指定されたら例外発生させる（暫定仕様）
+            throw new Zend_Exception("不正なカテゴリID");
         }
 
         $currentPage = $this->_getPageNumber();
@@ -143,6 +144,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
+            $category['id'] = 0;
             $category['name'] = '未分類';
         }
 
