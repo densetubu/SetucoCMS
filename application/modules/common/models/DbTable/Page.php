@@ -155,7 +155,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             $select->limitPage($pageNumber, $limit);
         }
 
-        return $this->fetchAll($select);
+        return $this->fetchAll($select)->toArray();
 
     }
 
@@ -204,11 +204,12 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param int $pageNumber ページネータで何ページ目を表示するか。
      * @param int $limit ページネータで１ページに何件表示するか。
      * @return array 取得した記事データを格納した配列。
+     * @author akitsukada charlesvineyard
      */
     public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null)
     {
-        $select = $this->_createSelectByKeyword($keyword, $tagIds, false, $targetColumns, $refinements);
-        $select->group('id');
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements);
+
         $select->limitPage($pageNumber, $limit);
         return $this->fetchAll($select)->toArray();
 
@@ -219,14 +220,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
-     * @param array $targetColumns 検索したいカラムの配列
+     * @param array $targetColumns 検索対象のカラムの配列
      * @return int 検索条件に合致した記事の数。
      */
-    public function countPagesByKeyword($keyword, $tagIds, $targetColumns = null, $refinements = null)
+    public function countPagesByKeyword($keyword, $tagIds, $targetColumns)
     {
-        $select = $this->_createSelectByKeyword($keyword, $tagIds, true, $targetColumns, $refinements);
-        $result = $this->fetchAll($select)->toArray();
-        return $result[0]['page_count'];
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns);
+        return count($this->fetchAll($select));
     }
     
     /**
@@ -237,25 +237,21 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param int $pageNumber ページネータで何ページ目を表示するか。
      * @param int $limit ページネータで１ページに何件表示するか。
      * @param boolean $isCounting 件数を取得するセレクトなら true。行を取得するなら false。
-     * @param array $targetColumns 検索したいカラム名の配列 デフォルトは 'title', 'contents', 'outline', 'tag'
+     * @param array $targetColumns 検索対象のカラム名の配列
      * @return Zend_Db_Table_Select
      * @author akitsukada charlesvineyard
      */
-    private function _createSelectByKeyword($keyword, $tagIds, $isCounting = false, $targetColumns = null, $refinements = null)
+    private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null)
     {
         $select = $this->select();
-        if ($isCounting) {
-            $select->from(
-                array('p' => $this->_name),
-                array('page_count' => 'COUNT(DISTINCT p.id)')
-            );
-        } else {
-            $select->from(
-                array('p' => $this->_name)
-            );
-        }
 
+        $select->from(array('p' => $this->_name));
+
+        // grouping & sort
+        $select->group('p.id');
         $select->order('p.update_date DESC');
+
+        // join
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
         $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
@@ -263,58 +259,38 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         
         $select->setIntegrityCheck(false);
 
-        if ($targetColumns == null) {
-            $targetColumns = array('title', 'contents', 'outline', 'tag');
-        }
-        $orwhere = '';
-        $bind = array();
-        if (in_array('title', $targetColumns)) {
-            $orwhere .= 'p.title LIKE :keyword';
-            $bind[':keyword'] = "%{$keyword}%";
-        }
-        if (in_array('contents', $targetColumns)) {
-            if ($orwhere !== '') {
-                $orwhere .= ' OR ';
+        // make where expression
+        foreach($targetColumns as $columnName) {
+
+            switch ($columnName) {
+                case 'tag' :        // タグはIN条件
+                    if (!empty($tagIds)) {
+                        $select->orwhere('t.id IN (?)', $tagIds);
+                    }
+                    break;
+                case 'title' :      // タイトル、コンテンツ、概要は同様に処理
+                case 'contents' :
+                case 'outline' :
+                    $select->orwhere("p.{$columnName} LIKE ?", "%{$keyword}%");
+                default :           // 対応外のカラム名が指定されていたら無視
+                    continue;
             }
-            $orwhere .= 'p.contents LIKE :keyword';
-            $bind[':keyword'] = "%{$keyword}%";
+
         }
-        if (in_array('outline', $targetColumns)) {
-            if ($orwhere !== '') {
-                $orwhere .= ' OR ';
-            }
-            $orwhere.= 'p.outline LIKE :keyword';
-            $bind[':keyword'] = "%{$keyword}%";
-        }
-        if (in_array('tag', $targetColumns)) {
-            $tagIds[] = 4;
-            if (!is_null($tagIds)) {
-                if ($orwhere !== '') {
-                    $orwhere .= ' OR ';
-                }
-                $orwhere .= 't.id IN(:tagIds)';
-                $bind[':tagIds'] = implode(",", $tagIds);
-            }
-        }
-        if ($orwhere !== '') {
-            $select->where($orwhere);
-        }
-        //$select->orwhere('c.name LIKE ?', "%{$keyword}%");
+
         if (is_array($refinements) && !empty($refinements)) {
             foreach ($refinements as $column => $value) {
                 if ($column === 'category_id' && $value === null) {
                     $select->where("category_id is null");
                     continue;
                 }
-                $select->where("{$column} = :{$column}");
-                $bind[":{$column}"] = $value;
+                $select->where("{$column} = ?", $value);
             }
         }
-        array_unique($bind);
-        $select->bind($bind);
+        
         return $select;
     }
-
+    
     /**
      * 指定した並び順とオフセットでページ一覧を取得します。
      *

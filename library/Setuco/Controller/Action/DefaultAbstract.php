@@ -38,11 +38,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     const PAGE_LIMIT = 10;
 
-    /**
-     * 新着記事表示用に標準で何件取得するか
-     */
-    const LIMIT_GET_NEW_PAGE = 10;
-
+    
     /**
      * 一覧ページで、1ページあたり何件のデータを表示するか
      * @var int
