@@ -104,7 +104,7 @@ class Admin_Model_Media
      * データベースから取得したMediaデータの、ファイル種別に応じてサムネイルのパス情報を付加する
      * 
      * @param array $medias DBからfetchAllしてきたデータ
-     * @return array サムネイル情報付加済みの配列
+     * @return array|false サムネイル情報付加済みの配列。途中で処理に失敗したらその時点でfalseを返す。
      * @author akitsukada
      */
     private function _addThumbnailPathInfo(array $medias)
@@ -128,6 +128,8 @@ class Admin_Model_Media
                     $thumbWidth = imagesx($thumbImage);
                     $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth > $thumbWidth ? $thumbWidth : $this->_thumbnailWidth;
                     break;
+                default :
+                    return false;
             }
             $medias[$cnt]['thumbUrl'] = $thumbUrl;
         }
