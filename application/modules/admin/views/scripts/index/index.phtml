@@ -85,13 +85,13 @@ function hideAmbitionEdit() {
     <dl class="straight">
         <dt>更新状況</dt>
         <?php if ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::GOOD): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_good.png') ?>" alt="すごい！最高！！！" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_good.jpg') ?>" alt="すごい！最高！！！" width="270" height="140" /></dd>
         <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::NORMAL): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_normal.png') ?>" alt="いい調子！" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_normal.jpg') ?>" alt="いい調子！" width="270" height="140" /></dd>
         <?php elseif ($this->updateStatus === Setuco_Data_Constant_UpdateStatus::BAD): ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_bad.png') ?>" alt="がんばって！" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_bad.jpg') ?>" alt="がんばって！" width="270" height="140" /></dd>
         <?php else: ?>
-        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_first.png') ?>" alt="今月もがんばろう" width="237" height="87" /></dd>
+        <dd><img src="<?php echo $this->baseUrl('/images/admin/index/status_first.jpg') ?>" alt="今月もがんばろう" width="270" height="140" /></dd>
         <?php endif ?>
     </dl>
     <dl class="straight check">
