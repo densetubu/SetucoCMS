@@ -13,7 +13,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author  ece_m
+ * @author      suzuki-mar
  */
 
 /**
@@ -54,11 +54,8 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $siteService = new Admin_Model_Site();
         $this->view->sites = $siteService->getSiteInfo();
 
-        //フラッシュメッセージがある場合のみ設定する
-        if ($this->_helper->flashMessenger->hasMessages()) {
-            $flashMessages = $this->_helper->flashMessenger->getMessages();
-            $this->view->flashMessage = $flashMessages[0];
-        }
+        //フラッシュメッセージを設定する
+        $this->_showFlashMessages();
     }
 
     /**
@@ -72,7 +69,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームから値を送信されなかったら、indexに遷移する
         if (!$this->_request->isPost()) {
-            $this->_redirect('/admin/category/index');
+            $this->_helper->redirector('index');
         }
 
         //バリデートするFormオブジェクトを取得する
@@ -80,23 +77,33 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         //入力したデータをバリデートチェックをする
         if ($validateForm->isValid($this->_getAllParams())) {
-           $inputData = $this->_getInputParams();
-           unset($inputData['sub']);
 
+           $validateData = $validateForm->getValues();
+           
             //カテゴリーを編集する
-            if ($this->_siteService->updateSite($inputData, $this->_getParam('id'))) {
-                $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
+            if ($this->_siteService->updateSite($validateData, $this->_getParam('id'))) {
+                $this->_helper->flashMessenger('サイト情報を編集しました。');
                 $isSetFlashMessage = true;
             }
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
         if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger('カテゴリーの編集に失敗しました');
+
+            //フォームのnameと項目の名前の対応表
+            $fields = array('name' => 'サイト名', 'url' => 'サイトURL', 'comment' => '説明', 'keyword' => 'キーワード');
+
+            foreach ($validateForm->getMessages() as $field => $messages) {
+
+                foreach ($messages as $value) {
+                    $message = "{$fields[$field]} : {$value}";
+                    $this->_helper->flashMessenger->addMessage($message);
+                }
+            }
+            unset($value);
         }
 
-        $this->_redirect('/admin/site/index');
-
+        $this->_helper->redirector('index');
         return true;
     }
 
@@ -116,15 +123,18 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                 ->addValidators(array(
                     array('NotEmpty', true),
                     //文字列の長さを指定する
-                    array('stringLength', true, array(1, 100)),
+                    array('stringLength', true, array(20, 100)),
                 ));
         $form->addElement($textElement);
 
         $urlElement = $form->createElement('text', 'url');
+
+        $urlElement->addPrefixPath('Setuco_Validator', 'Setuco/Validator', 'validate');
         $urlElement->setRequired()
                 ->addFilter('StringTrim')
                 ->addValidators(array(
                     array('NotEmpty', true),
+                    array('url',true),
                     //文字列の長さを指定する
                     array('stringLength', true, array(6, 30)),
                 ));
@@ -136,7 +146,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                 ->addValidators(array(
                     array('NotEmpty', true),
                     //文字列の長さを指定する
-                    array('stringLength', true, array(2, 300)),
+                    array('stringLength', true, array(20, 300)),
                 ));
         $form->addElement($commentElement);
 
@@ -149,8 +159,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                     //文字列の長さを指定する
                     array('stringLength', true, array(2, 300)),
                 ));
-        $form->addElement($commentElement);
-
+        $form->addElement($keywordElement);
         return $form;
     }
 

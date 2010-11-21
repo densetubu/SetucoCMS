@@ -27,6 +27,13 @@
 class IndexController extends Setuco_Controller_Action_DefaultAbstract
 {
     /**
+     * 新着記事表示用に標準で何件取得するか
+     *
+     * @var string
+     */
+    const LIMIT_GET_NEW_PAGE = 10;
+
+    /**
      * ページのサービスクラス
      * 
      * @var Default_Model_Page

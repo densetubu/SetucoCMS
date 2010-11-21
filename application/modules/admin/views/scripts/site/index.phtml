@@ -1,3 +1,24 @@
+<?php
+/**
+ * サイト情報更新画面
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Category
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array            $sites   サイト情報データ
+ * @param      array[option]    $flashMessages
+ * @author     suzuki-mar
+ */
+?>
+
+
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -8,6 +29,7 @@
 </div>
 <!-- topicpath END -->
 
+    
     <!-- section START --> 
     <div class="section"> 
         <div class="topichAreaL"> 
@@ -16,16 +38,12 @@
                     <h3><img src="<?php echo $this->baseUrl('/images/admin/site/h_site.jpg') ?>" width="122" height="18" alt="サイト情報の編集" /></h3>
                 </div> 
             </div> 
-        </div> 
+        </div>
+
+        <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
         <form action="/admin/site/update" method="post"> 
 
-        <?php if (count($this->flashMessage)) : ?>
-            <div id='messageArea'>
-                <p><?php echo $this->flashMessage ?></p>
-                <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
-            </div>
-        <?php endif; ?>
 
             <dl id="siteForm" class="editArea"> 
 
