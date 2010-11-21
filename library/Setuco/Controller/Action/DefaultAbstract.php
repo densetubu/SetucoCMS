@@ -125,20 +125,14 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 
         //すでに登録されていたら、未分類のカテゴリーを追加する
         if (is_array($categories)) {
-            //カテゴリーが使われているかのプロパティを設定する
-            foreach ($categories as &$value) {
-                $value['is_used'] = !is_null($value['title']);
-            }
-            unset($value);
             $result = $this->_addDefaultCategory($categories);
         } else {
             $modelPage = new Default_Model_Page();
-            if ($modelPage->isEntryedPage()) {
-                $unCategorizes = Setuco_Data_Constant_Category::getUnCategorizeds();
-                $unCategorizes['is_used'] = true;
-                $categories[] = $unCategorizes;
-                $result = $categories;
-            }
+            $unCategorizes = Setuco_Data_Constant_Category::getUnCategorizeds();
+            //ひとつも出記事が登録されていたら、リンクする
+            $unCategorizes['is_used'] = $modelPage->isEntryedPage();
+            $categories[] = $unCategorizes;
+            $result = $categories;
         }
 
 

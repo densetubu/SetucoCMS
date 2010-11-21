@@ -26,7 +26,6 @@
     <div class="navList">
 
         <h3>カテゴリー</h3>
-        <?php if ($this->categoryLists !== false): //未分類も含めてひとつもカテゴリーが登録されていないか?>
         <ul>
             <?php foreach ($this->categoryLists as $category): ?>
             
@@ -39,9 +38,6 @@
             </li>
             <?php endforeach; ?>
         </ul>
-        <?php else: ?>
-        <p>カテゴリーは登録されていません。</p>
-        <?php endif; ?>
     </div>
     <!-- navList END -->
 
