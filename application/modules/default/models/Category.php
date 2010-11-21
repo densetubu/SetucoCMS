@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 閲覧側のカテゴリー管理用サービス
  *
@@ -24,6 +25,7 @@
  */
 class Default_Model_Category extends Common_Model_CategoryAbstract
 {
+
     /**
      * 初期設定をする
      *
@@ -43,7 +45,36 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
     public function getCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        return $this->_categoryDao->findCategoryLists(true);
+        $categories = $this->_categoryDao->findAllCategories();
+
+        if ($categories === false) {
+            return false;
+        }
+
+
+        //使用されているカテゴリーを取得する
+        $useCategories = $this->_categoryDao->findUseCategories();
+
+        //使用されているカテゴリーのIDの配列を取得する
+        foreach ($useCategories as $value) {
+            $useIds[] = $value['id'];
+        }
+
+        if ($useCategories !== false) {
+            foreach ($categories as &$value) {
+                $value['is_used'] = in_array($value['id'], $useIds);
+            }
+            unset($value);
+        
+        //ひとつも使用されていない場合は、すべて失敗にする
+        } else {
+            foreach ($categories as &$value) {
+                $value['is_used'] = false;
+            }
+            unset($value);
+        }
+
+        return $categories;
     }
 
     /**
@@ -62,6 +93,6 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
         }
         return $result->toArray();
     }
-    
+
 }
 
