@@ -23,10 +23,28 @@
  */
 class PageController extends Setuco_Controller_Action_DefaultAbstract
 {
+
     /**
-     * カテゴリ別検索で標準で何件取得するか
+     * キーワード検索で何件取得するか
+     *
+     * @var int
      */
-    const LIMIT_GET_PAGE_BY_CATEGORY = 5;
+    const LIMIT_PAGE_SEARCH = self::PAGE_LIMIT;
+
+
+    /**
+     * カテゴリ別検索で何件取得するか
+     *
+     * @var int
+     */
+    const LIMIT_PAGE_CATEGORY = 5;
+
+    /**
+     * タグ別検索で何件取得するか
+     *
+     * @var int
+     */
+    const LIMIT_PAGE_TAG = self::LIMIT_PAGE_SEARCH;
 
 
     /**
@@ -72,7 +90,6 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author suzuki-mar
-     * @todo 内容を実装する　現在はスケルトン
      */
     public function indexAction()
     {
@@ -93,13 +110,11 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 
         if ($searchResultCount == 0) {
-
             // 検索結果が0件の場合ビュー切り替え
             $this->_helper->viewRenderer('searchnot');
-
         } else {
 
-            $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_GET_NEW_PAGE);
+            $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_PAGE_SEARCH);
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
                 $date->set($entry['update_date'], Zend_Date::ISO_8601);
@@ -110,7 +125,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $this->view->searchResult = $searchResult;
             // ページネータ設定
             $this->view->currentPage = $currentPage;
-            $this->setPagerForView($searchResultCount, self::LIMIT_GET_NEW_PAGE);
+            $this->setPagerForView($searchResultCount, self::LIMIT_PAGE_SEARCH);
         }
 
         $this->_pageTitle = "「{$keyword}」の検索結果";
@@ -140,7 +155,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         $currentPage = $this->_getPageNumber();
-        $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage, self::LIMIT_GET_PAGE_BY_CATEGORY);
+        $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage, self::LIMIT_PAGE_CATEGORY);
 
         $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
@@ -153,7 +168,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_pageService->countPagesByCategoryId($id), self::LIMIT_GET_PAGE_BY_CATEGORY);
+        $this->setPagerForView($this->_pageService->countPagesByCategoryId($id), self::LIMIT_PAGE_CATEGORY);
 
     }
 
@@ -187,7 +202,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
             // 検索結果が0件の場合 検索結果表示ビュー
             $this->_helper->viewRenderer('search');
-            $searchResult = $this->_pageService->findPagesByTagId($id, $currentPage, self::LIMIT_GET_NEW_PAGE);
+            $searchResult = $this->_pageService->findPagesByTagId($id, $currentPage, self::LIMIT_PAGE_TAG);
             
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
@@ -199,7 +214,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $this->view->searchResult = $searchResult;
             // ページネータ設定
             $this->view->currentPage = $currentPage;
-            $this->setPagerForView($searchResultCount, self::LIMIT_GET_NEW_PAGE);
+            $this->setPagerForView($searchResultCount, self::LIMIT_PAGE_TAG);
         }
 
         $this->view->resultCount = $searchResultCount;

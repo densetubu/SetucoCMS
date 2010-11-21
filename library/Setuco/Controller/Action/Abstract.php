@@ -11,7 +11,8 @@
  * @subpackage Action
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
- * @version
+ * @ve/**
+rsion
  * @link
  * @since      File available since Release 0.1.0
  * @author     suzuki_mar
@@ -186,19 +187,6 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         if (count($flashMessages)) {
             $this->view->$paramName = $flashMessages;
         }
-    }
-
-    /**
-     * 入力したデータ(フォームに送信したデータ）を取得する
-     *
-     * @return array 入力したデータ
-     * @author suzuki-mar
-     */
-    protected function _getInputParams()
-    {
-        $result = $this->_getAllParams();
-        unset($result['module'], $result['controller'], $result['action']);
-        return $result;
     }
 
 }
