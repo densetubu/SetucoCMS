@@ -41,13 +41,9 @@
         </div>
     </div>
 
-        <?php if (count($this->flashMessage)) : ?>
-            <div id='messageArea'>
-                <p><?php echo $this->flashMessage ?></p>
-                <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
-            </div>
-        <?php endif; ?>
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
+    
         <form action="<?php echo $this->baseUrl('/admin/category/create');?>" method="post">
             <p class="default">
                 <input type="text" name="cat_name" id="cat_name" class="defaultInput" value="新規カテゴリー" />
@@ -112,7 +108,11 @@
                     </form>
                 </td>
                 <td>
-                    <a href='javascript:void(0)' onclick='confirmRedirect("<?php echo $this->baseUrl("/admin/category/delete/id/{$value['id']}")?>");'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png')?>' alt='削除' width='27' height='27' /></a>
+                    <?php
+                    $redirectUrl = $this->baseUrl("/admin/category/delete/id/{$value['id']}");
+                    $deleteItem  = "{$value['name']}のカテゴリー";
+                    ?>
+                    <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $deleteItem ?>");'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png')?>' alt='削除' width='27' height='27' /></a>
                 </td>
 
                 <?php endif; ?>
@@ -132,9 +132,9 @@
 <?php //htmlのheadタグで出力するためにキャプチャーする
 $this->headScript()->captureStart() ?>
 <!--
-function confirmRedirect(url){
+function confirmDeleteRedirect(url, item){
 
-    if (confirm("本当に削除してよろしいですか？")) {
+    if (confirm(item + "を本当に削除してよろしいですか？")) {
         location.href = url;
     }
 }

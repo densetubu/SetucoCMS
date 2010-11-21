@@ -30,6 +30,21 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
     private $_categoryService = null;
 
     /**
+     * 新規登録用のバリデーションチェックフォーム
+     * 
+     * @var Setuco_Form
+     */
+    private $_validateCreateForm = null;
+
+    /**
+     * 編集用のバリデーションチェックフォーム
+     * 
+     * @var Setuco_Form
+     */
+    private $_validateUpdateForm = null;
+
+
+    /**
      * コントローラーの共通設定をする
      * 全アクションで使用するサービスクラスのインスタンスをオブジェクト変数にする 
      *
@@ -42,6 +57,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
         //全アクションで使用するサービスクラスのインスタンを生成する
         $this->_categoryService = new Admin_Model_Category();
+
+        //新規作成用のバリデートフォーム
+        $this->_validateCreateForm = $this->_validateCreate();
+
+        //編集用のバリデートフォーム
+        $this->_validateUpdateForm = $this->_validateUpdate();
 
         return true;
     }
@@ -68,10 +89,13 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         }
 
         //フラッシュメッセージがある場合のみ設定する
+        $this->_showFlashMessages();
+        /*
         if ($this->_helper->flashMessenger->hasMessages()) {
             $flashMessages = $this->_helper->flashMessenger->getMessages();
             $this->view->flashMessage = $flashMessages[0];
         }
+         */
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
         $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
@@ -99,18 +123,20 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         $validateForm = $this->_validateCreate();
 
         //入力したデータをバリデートチェックをする
-        if ($validateForm->isValid($this->_getAllParams())) {
+        if ($this->_validateCreateForm->isValid($this->_getAllParams())) {
+            $inputData = $this->_validateCreateForm->getValues();
+            $registData['name'] = $inputData['cat_name'];
 
             //カテゴリーを新規作成する
-            if ($this->_categoryService->registCategory($this->_getAllParams())) {
-                $this->_helper->flashMessenger('カテゴリーの新規作成に成功しました');
+            if ($this->_categoryService->registCategory($registData)) {
+                $this->_helper->flashMessenger("{$registData['name']}のカテゴリーを新規作成しました");
                 $isSetFlashMessage = true;
             }
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
         if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger('カテゴリーの新規作成に失敗しました');
+            $this->_helper->flashMessenger($this->_getErrorMessage());
         }
 
         $this->_redirect('/admin/category/index');
@@ -131,30 +157,35 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
             $this->_redirect('/admin/category/index');
         }
 
-        //バリデートするFormオブジェクトを取得する
-        $validateForm = $this->_validateUpdate();
-
         //入力したデータをバリデートチェックをする
-        if ($validateForm->isValid($this->_getAllParams())) {
+        if ($this->_validateUpdateForm->isValid($this->_getAllParams())) {
+            $validateData  = $this->_validateUpdateForm->getValues();
+            $updateData['name'] = $validateData['name'];
+
+           $oldName = $this->_categoryService->findNameById($validateData['id']);
 
             //カテゴリーを編集する
-            if ($this->_categoryService->updateCategory($this->_getParam('id'), $this->_getAllParams())) {
-                $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
+            if ($this->_categoryService->updateCategory($validateData['id'], $updateData)) {
+
+                //カテゴリー名が同じ場合は,違うメッセージを表示する
+                if ($oldName === $updateData['name']) {
+                    $actionMessage = "{$updateData['name']}のカテゴリーを編集しました。";
+                } else {
+                    $actionMessage = "{$oldName}から{$updateData['name']}にカテゴリー名を編集しました。";
+                }
+
+                $this->_helper->flashMessenger($actionMessage);
                 $isSetFlashMessage = true;
             }
-
-            $validateForm->getMessages();
         }
-
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
         if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger('カテゴリーの編集に失敗しました');
+            $this->_helper->flashMessenger($this->_getErrorMessage('update'));
         }
-
+        
 
         $this->_redirect('/admin/category/index');
-
         return true;
     }
 
@@ -174,9 +205,11 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         $validator = new Zend_Validate_Digits($this->_getParam('id'));
         if ($validator->isValid($this->_getParam('id'))) {
 
+            $categoryName = $this->_categoryService->findNameById($this->_getParam('id'));
+
             //カテゴリーを削除する
             if ($this->_categoryService->deleteCategory($this->_getParam('id'))) {
-                $this->_helper->flashMessenger('カテゴリーの削除に成功しました');
+                $this->_helper->flashMessenger("カテゴリー{$categoryName}の削除に成功しました");
                 $isSetFlashMessage = true;
             }
         }
@@ -308,5 +341,37 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         return $element;
     }
 
+    /**
+     * バリデートエラーメッセージを取得する
+     * 
+     * @param  String[option] $validateType createだと新規作成 updateだと編集　デフォルトは、create
+     * @return String バリデートエラーメッセージ
+     * @author suzuki-mar
+     */
+    private function _getErrorMessage($validateType = 'create')
+    {
+        
+        if ($validateType === 'create') {
+           $errors = $this->_validateCreateForm->getMessages('cat_name');
+        } else {
+           $errors = $this->_validateUpdateForm->getMessages('name');
+        }
+        
+            //なんのメッセージが来るかわからないが、エラーメッセージは一つなので
+            foreach ($errors as $key => $value) {
+              $errorMessage = $value;
+              //文字を入力しなかった場合
+              if ($key === 'isEmpty') {
+                  $errorMessage = 'カテゴリー名を入力してください。';
+              }
+            }
+
+            //不正なエラー IDを文字列にするとか
+            if (!isset($errorMessage)) {
+                $errorMessage = 'カテゴリーの新規作成に失敗しました';
+            }
+
+       return $errorMessage;
+    }
 }
 

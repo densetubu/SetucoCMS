@@ -67,6 +67,28 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     }
 
     /**
+     * カテゴリー名をIDから取得する
+     *
+     * @param int $id 取得するカテゴリーのID
+     * @return Sring カテゴリー名 取得できなかったらfalse
+     * @author suzuki-mar
+     */
+    public function findNameById($id)
+    {
+        $id = (int)$id;
+
+        $categoryData = $this->_categoryDao->findById($id);
+
+        if ($categoryData === false) {
+            return false;
+        }
+
+        $result = $categoryData['name'];
+        return $result;
+
+    }
+
+    /**
      * カテゴリーIDと名前のセットを取得する。
      *
      * @return array キー:カテゴリーID、値:カテゴリー名の配列
@@ -120,18 +142,17 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * カテゴリーを新規作成する
      * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
      *
-     * @param array $categoryData 新規登録するカテゴリーのデータ
+     * @param array $registData 新規登録するカテゴリーのデータ
      * @return boolean 登録できたか
      * @author suzuki-mar
      */
-    public function registCategory($categoryData)
+    public function registCategory($registData)
     {
-        //DBに登録するデータを生成する
-        $saveData['name'] = $categoryData['cat_name'];
         //バージョン1では、nullにする
-        $saveData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
+        $registData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
+
         //データをinsertする
-        $this->_categoryDao->insert($saveData);
+        $this->_categoryDao->insert($registData);
 
         return true;
     }
@@ -145,16 +166,13 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * @return boolean 編集できたか
      * @author suzuki-mar
      */
-    public function updateCategory($id, $categoryInfo)
+    public function updateCategory($id, $updateData)
     {
-        //アップデートするデータを作成する
-        $updateData['name'] = $categoryInfo['name'];
-
         //データをupdateする
         $primary = $this->_categoryDao->getPrimary();
 
         //数値にキャストする
-        $id = (int) $id;
+        $id = (int)$id;
         //アップデートする条件のwhere句を生成する
         $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
@@ -174,10 +192,10 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function deleteCategory($id)
     {
-        //データをupdateする
+        
         $primary = $this->_categoryDao->getPrimary();
 
-        //数値にキャストする
+        //文字列の可能性があるので、数値にキャストする
         $id = (int) $id;
         //アップデートする条件のwhere句を生成する
         $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
