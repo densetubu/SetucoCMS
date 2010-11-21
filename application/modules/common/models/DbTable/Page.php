@@ -244,51 +244,70 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null)
     {
         $select = $this->select();
+        $select->from(
+            array('p' => $this->_name)
+        );
 
-        $select->from(array('p' => $this->_name));
-
-        // grouping & sort
-        $select->group('p.id');
         $select->order('p.update_date DESC');
-
-        // join
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
         $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
         $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
-        
+
         $select->setIntegrityCheck(false);
 
-        // make where expression
-        foreach($targetColumns as $columnName) {
-
-            switch ($columnName) {
-                case 'tag' :        // タグはIN条件
-                    if (!empty($tagIds)) {
-                        $select->orwhere('t.id IN (?)', $tagIds);
-                    }
-                    break;
-                case 'title' :      // タイトル、コンテンツ、概要は同様に処理
-                case 'contents' :
-                case 'outline' :
-                    $select->orwhere("p.{$columnName} LIKE ?", "%{$keyword}%");
-                default :           // 対応外のカラム名が指定されていたら無視
-                    continue;
+        if ($targetColumns == null) {
+            $targetColumns = array('title', 'contents', 'outline', 'tag');
+        }
+        $orwhere = '';
+        $bind = array();
+        if (in_array('title', $targetColumns)) {
+            $orwhere .= 'p.title LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('contents', $targetColumns)) {
+            if ($orwhere !== '') {
+                $orwhere .= ' OR ';
             }
-
+            $orwhere .= 'p.contents LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('outline', $targetColumns)) {
+            if ($orwhere !== '') {
+                $orwhere .= ' OR ';
+            }
+            $orwhere.= 'p.outline LIKE :keyword';
+            $bind[':keyword'] = "%{$keyword}%";
+        }
+        if (in_array('tag', $targetColumns)) {
+            if (!is_null($tagIds)) {
+                if ($orwhere !== '') {
+                    $orwhere .= ' OR ';
+                }
+                $orwhere .= 't.id IN(:tagIds)';
+                $bind[':tagIds'] = implode(",", $tagIds);
+            }
+        }
+        if ($orwhere !== '') {
+            $select->where($orwhere);
         }
 
+        // 管理側ページ編集・削除画面で、カテゴリー・制作者・公開状態が指定された場合にWhere句を編集
         if (is_array($refinements) && !empty($refinements)) {
             foreach ($refinements as $column => $value) {
                 if ($column === 'category_id' && $value === null) {
                     $select->where("category_id is null");
                     continue;
                 }
-                $select->where("{$column} = ?", $value);
+                $select->where("{$column} = :{$column}");
+                $bind[":{$column}"] = $value;
             }
         }
-        
+
+        array_unique($bind);
+        $select->bind($bind);
         return $select;
+
     }
     
     /**
