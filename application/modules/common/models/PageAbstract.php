@@ -90,7 +90,7 @@ abstract class Common_Model_PageAbstract
         }
         $tagIds = array();
         if (in_array('tag', $targetColumns)) {
-            $tagIds = $this->_searchTagIdsByTagName($keyword);
+            $tagIds = $this->_findTagIdsByTagName($keyword);
         }
         return (int)($this->_pageDao->countPagesByKeyword(
                 $keyword, $tagIds, $targetColumns, $refinements));
@@ -103,7 +103,7 @@ abstract class Common_Model_PageAbstract
      * @return array|null 該当するタグのIDを格納した配列
      * @author akitsukada
      */
-    protected function _searchTagIdsByTagName($keyword)
+    protected function _findTagIdsByTagName($keyword)
     {
         return $this->_tagDao->findTagIdsByTagName($keyword);
     }
