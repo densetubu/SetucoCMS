@@ -516,6 +516,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $txtFileComment->clearDecorators()
                 ->setRequired(false)
                 ->setValue($comment)
+                ->addFilter('StringTrim')
                 ->addDecorator('ViewHelper')
                 ->addDecorator('Label', array('tag' => null));
 
