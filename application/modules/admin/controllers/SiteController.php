@@ -80,9 +80,11 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         //入力したデータをバリデートチェックをする
         if ($validateForm->isValid($this->_getAllParams())) {
+           $inputData = $this->_getInputParams();
+           unset($inputData['sub']);
 
             //カテゴリーを編集する
-            if ($this->_siteService->updateSite($this->_getAllParams(), $this->_getParam('id'))) {
+            if ($this->_siteService->updateSite($inputData, $this->_getParam('id'))) {
                 $this->_helper->flashMessenger('カテゴリーの編集に成功しました');
                 $isSetFlashMessage = true;
             }

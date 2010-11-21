@@ -108,7 +108,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         //共通のページャーの設定をする
         Zend_Paginator::setDefaultScrollingStyle('Jumping');
-        Zend_View_Helper_PaginationControl::setDefaultViewPartial('common/pager.phtml');
+        Zend_View_Helper_PaginationControl::setDefaultViewPartial('pager.phtml');
 
         //現在のページ番号を取得する
         $page = $this->_getPageNumber();
@@ -147,20 +147,6 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return $currentPage;
     }
 
-    /**
-     * ページネーターで使う現在の（クリックされた）ページ番号を取得するメソッドです　削除するので使用しないで、_getPageNumberメソッドを使用してください
-     * 古いメソッド名　遅くても11月には廃止予定
-     *
-     * @return int 現在ページネーターで表示すべきページ番号
-     * @author suzuki-mar
-     *
-     * @todo メソッドの削除
-     */
-    protected function _getPage()
-    {
-        $result = $this->_getPageNumber();
-        return $result;
-    }
 
     /**
      * 一ページあたりの取得件数の_pageLimitのゲッター
@@ -181,10 +167,10 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      * @return $this 自分自身のインスタンス
      * @author suzuki-mar
      */
-    protected function _setPageLimit($limitPage)
+    protected function _setPageLimit($pageLimit)
     {
-        $this->_pageLimit = $limitPage;
-        return $result;
+        $this->_pageLimit = $pageLimit;
+        return $this;
     }
 
     /**
@@ -201,4 +187,18 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             $this->view->$paramName = $flashMessages;
         }
     }
+
+    /**
+     * 入力したデータ(フォームに送信したデータ）を取得する
+     *
+     * @return array 入力したデータ
+     * @author suzuki-mar
+     */
+    protected function _getInputParams()
+    {
+        $result = $this->_getAllParams();
+        unset($result['module'], $result['controller'], $result['action']);
+        return $result;
+    }
+
 }

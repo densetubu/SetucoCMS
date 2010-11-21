@@ -24,11 +24,6 @@
 class PageController extends Setuco_Controller_Action_DefaultAbstract
 {
     /**
-     * 新着記事表示用に標準で何件取得するか
-     */
-    const LIMIT_GET_NEW_PAGE = 10;
-
-    /**
      * カテゴリ別検索で標準で何件取得するか
      */
     const LIMIT_GET_PAGE_BY_CATEGORY = 5;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 閲覧側のカテゴリー管理用サービス
  *
@@ -24,6 +25,7 @@
  */
 class Default_Model_Category extends Common_Model_CategoryAbstract
 {
+
     /**
      * 初期設定をする
      *
@@ -43,36 +45,36 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
     public function getCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        $categories = $this->_categoryDao->findCategoryLists(true);
+        $categories = $this->_categoryDao->findAllCategories();
+
+        if ($categories === false) {
+            return false;
+        }
 
 
-        //取得できた場合のみ整形する
-        if ($categories !== false) {
+        //使用されているカテゴリーを取得する
+        $useCategories = $this->_categoryDao->findUseCategories();
 
-            foreach ($categories as $value) {
-                //使用しているかどうかを判定する
-                if (is_null($value['title'])) {
-                    $value['is_used'] = false;
-                } else {
-                    $value['is_used'] = true;
-                }
+        //使用されているカテゴリーのIDの配列を取得する
+        foreach ($useCategories as $value) {
+            $useIds[] = $value['id'];
+        }
 
-                //必要のないものは削除する
-                unset($value['title'], $value['parent_id']);
-                $result[] = $value;
+        if ($useCategories !== false) {
+            foreach ($categories as &$value) {
+                $value['is_used'] = in_array($value['id'], $useIds);
             }
+            unset($value);
+        
+        //ひとつも使用されていない場合は、すべて失敗にする
         } else {
-            $isNoData = true;
+            foreach ($categories as &$value) {
+                $value['is_used'] = false;
+            }
+            unset($value);
         }
 
-        if (isset($result)) {
-            //未分類のカテゴリーを追加する
-            $result = $this->_categoryDao->addDefaultCategory($result);
-        } else { //カテゴリーがなかったら未分類カテゴリーのみ追加する
-            $result = $this->_categoryDao->addDefaultCategory();
-        }
-
-        return $result;
+        return $categories;
     }
 
     /**
@@ -91,6 +93,6 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
         }
         return $result->toArray();
     }
-    
+
 }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * サイト情報管理サービス
  *
@@ -24,20 +25,19 @@
  */
 class Admin_Model_Site extends Common_Model_SiteAbstract
 {
+
     /**
      * ページDAO
      *
      * @var Common_Model_DbTable_Page
      */
     private $_pageDao;
-
     /**
      * ページサービス
      *
      * @var Admin_Model_Page
      */
     private $_pageService;
-
     /**
      * 目標サービス
      *
@@ -64,26 +64,17 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      * @param array 更新するデータ
      * @return boolean 更新に成功したか
      * @author suzuki-mar
-     * @todo 引数は必要なものだけ渡す
      */
     public function updateSite($siteInfo)
     {
         $updateData = $siteInfo;
-        unset($updateData['module'], $updateData['controller'], $updateData['action'],
-        $updateData['sub']);
-         
-        //アップデートに失敗したときに例外が発生する
-        try {
+        
 
-            //データは1件しかないないので、whereはいらない
-            $this->_siteDao->update($updateData, true);
-            $result     = true;
 
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
+        //データは1件しかないないので、whereはいらない
+        $this->_siteDao->update($updateData, true);
 
-        return $result;
+        return true;
     }
 
     /**
@@ -114,16 +105,21 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      *
      * 最終更新日はページの公開日時が最新のものです。
      *
-     * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列
-     * @author charlesvineyard
+     * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列 登録されていない場合は、false
+     * @author charlesvineyard suzuki-mar
      */
     public function getLastUpdateDateWithPastDays()
     {
         $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
+        //登録されていない場合は、falseを返す
+        if (empty($newPages)) {
+            return false;
+        }
+
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
         return array('lastUpdateDate' => $lastUpdateDate,
-                     'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
+            'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
     }
 
     /**
@@ -137,7 +133,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         $site = $this->getSiteInfo();
         $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd');
         return array('openDate' => $openDate,
-                     'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
+            'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
     }
 
 }

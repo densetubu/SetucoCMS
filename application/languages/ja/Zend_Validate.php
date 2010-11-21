@@ -67,8 +67,8 @@ return array(
     "'%value%' does not fit the date format '%format%'" => "'%value%' は '%format%' フォーマットに一致していません",
 
     // Zend_Validate_Db_Abstract
-    "No record matching %value% was found" => " %value% に一致するレコードは見つかりませんでした",
-    "A record matching %value% was found" => " %value% に一致するレコードが見つかりました",
+    "No record matching %value% was found" => " %value% は登録されていません。",
+    "A record matching %value% was found" => " %value% はすでに登録されています。",
 
     // Zend_Validate_Digits
     "Invalid type given, value should be string, integer or float" => "不正な形式です。値は文字列、整数、もしくは小数である必要があります",

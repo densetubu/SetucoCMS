@@ -6,3 +6,4 @@ public/media/upload/*.*
 public/media/thumbnail/*.*
 Thumbs.db
 application/configs/application.ini
+.DS_Store

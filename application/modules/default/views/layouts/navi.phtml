@@ -26,28 +26,18 @@
     <div class="navList">
 
         <h3>カテゴリー</h3>
-        <?php if ($this->categoryList !== false): //未分類も含めてひとつもカテゴリーが登録されていないか?>
         <ul>
             <?php foreach ($this->categoryLists as $category): ?>
-            <?php 
-                //デフォルト(未分類のカテゴリー名を選択する)
-                if (isset($category['is_default'])) {
-                	$category['name'] = '未分類';
-                }           
-            ?>
             
             <li>
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
                 <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
                 <?php else: //使用していない場合はリンクしない?>
-                <span> <?php echo $category['name'] ?> </span> 
+                <span><?php echo $category['name'] ?></span> 
                 <?php endif; ?>
             </li>
             <?php endforeach; ?>
         </ul>
-        <?php else: ?>
-        <p>カテゴリーは登録されていません。</p>
-        <?php endif; ?>
     </div>
     <!-- navList END -->
 
@@ -65,7 +55,7 @@
        </ul> 
        
        <?php else: ?>
-       <p>タグが登録されていません</p>
+       <p>タグは登録されていません。</p>
        <?php endif;?>                     
     </div>
      <!-- navList END -->    

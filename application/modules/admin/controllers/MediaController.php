@@ -110,7 +110,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $type = array_key_exists($this->_getParam('fileType'), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL;
             $currentPage = 1; // 新たに絞り込みされた場合は常に1ページ目表示
         } else {
-            $type = $this->_getParam('type', 'all');     // ソートリンクでの指定
+            $type = $this->_getParam('type', self::FILEEXT_ALL);     // ソートリンクでの指定
         }
 
         // ソート指定のカラムとオーダー取得 (デフォルトではファイル名'name'の昇順'asc')

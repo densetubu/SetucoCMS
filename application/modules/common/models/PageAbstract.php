@@ -70,7 +70,7 @@ abstract class Common_Model_PageAbstract
         }
         
         return $this->_pageDao->searchPages($keyword,
-                $this->_findTagIdsByTagName($keyword),
+                $this->_searchTagIdsByTagName($keyword),
                 $currentPage, $limit, $targetColumns, $refinements);
     }
 
@@ -90,7 +90,7 @@ abstract class Common_Model_PageAbstract
         }
         $tagIds = array();
         if (in_array('tag', $targetColumns)) {
-            $tagIds = $this->_searchTagIdsByTagName($keyword);
+            $tagIds = $this->_findTagIdsByTagName($keyword);
         }
         return (int)($this->_pageDao->countPagesByKeyword(
                 $keyword, $tagIds, $targetColumns, $refinements));

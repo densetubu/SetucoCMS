@@ -84,8 +84,11 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
 
         // 最終更新日
         $lastUpdateInfo = $this->_siteService->getLastUpdateDateWithPastDays();
-        $this->view->lastUpdateDate = $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd');
-        $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
+        if ($lastUpdateInfo !== false) {
+            $this->view->lastUpdateDate = $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd');
+            $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
+        }
+        
 
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();

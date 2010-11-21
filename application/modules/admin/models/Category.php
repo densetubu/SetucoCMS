@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 管理側のカテゴリー管理用サービス
  *
@@ -24,6 +25,7 @@
  */
 class Admin_Model_Category extends Common_Model_CategoryAbstract
 {
+
     /**
      * 初期設定をする
      *
@@ -46,10 +48,10 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     public function findCategories($order, $pageNumber, $limit)
     {
         //pageを数値にキャストする
-        $pageNumber = (int)$pageNumber;
+        $pageNumber = (int) $pageNumber;
 
         //ソートする方法をパラメータによって変更する desc意外は昇順(asc)
-        if($order === 'desc') {
+        if ($order === 'desc') {
             $order = "DESC";
         } else {
             $order = "ASC";
@@ -61,17 +63,29 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         //配列の方が操作しやすいので配列を戻り値にする
         $result = $searchResult->toArray();
 
-        //配列の順番が偶数かどうかを設定する
-        foreach ($result as $key => &$value) {
-            if ($key % 2 === 0) {
-                $value['is_even'] = true;
-            } else {
-                $value['is_even'] = false;
-            }
-        }
-        unset($value, $key);
-
         return $result;
+    }
+
+    /**
+     * カテゴリー名をIDから取得する
+     *
+     * @param int $id 取得するカテゴリーのID
+     * @return Sring カテゴリー名 取得できなかったらfalse
+     * @author suzuki-mar
+     */
+    public function findNameById($id)
+    {
+        $id = (int)$id;
+
+        $categoryData = $this->_categoryDao->findById($id);
+
+        if ($categoryData === false) {
+            return false;
+        }
+
+        $result = $categoryData['name'];
+        return $result;
+
     }
 
     /**
@@ -92,6 +106,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
 
     /**
      * 検索条件で、リミットしなかった場合に該当結果が何件あったのかを取得する
+     * no-parentの文は除外する
      *
      * @return int 何件該当したデータが存在したか
      * @author suzuki-mar
@@ -99,6 +114,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     public function countCategories()
     {
         $result = $this->_categoryDao->count();
+        $result--;
 
         return $result;
     }
@@ -117,7 +133,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         $category = $this->_categoryDao->findById($id);
 
         //取得できたら、trueにする
-        $result = (boolean)$category;
+        $result = (boolean) $category;
 
         return $result;
     }
@@ -126,21 +142,19 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * カテゴリーを新規作成する
      * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
      *
-     * @param array $inputData 入力したデータ: バリデートチェックした入力データ
+     * @param array $registData 新規登録するカテゴリーのデータ
      * @return boolean 登録できたか
      * @author suzuki-mar
      */
-    public function registCategory($inputData)
+    public function registCategory($registData)
     {
-        //DBに登録するデータを生成する
-        $saveData['name'] = $inputData['cat_name'];
         //バージョン1では、nullにする
-        $saveData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
+        $registData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
 
-        //データを新規登録する
-        $result = $this->_regiser($saveData);
+        //データをinsertする
+        $this->_categoryDao->insert($registData);
 
-        return $result;
+        return true;
     }
 
     /**
@@ -152,31 +166,19 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * @return boolean 編集できたか
      * @author suzuki-mar
      */
-    public function updateCategory($id, $categoryInfo)
+    public function updateCategory($id, $updateData)
     {
-        //アップデートするデータを作成する
-        $updateData['name'] = $categoryInfo['name'];
+        //データをupdateする
+        $primary = $this->_categoryDao->getPrimary();
 
-        //アップデートに失敗したときに例外が発生する
-        try {
-            //データをupdateする
-            $primary    = $this->_categoryDao->getPrimary();
+        //数値にキャストする
+        $id = (int)$id;
+        //アップデートする条件のwhere句を生成する
+        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
-            //数値にキャストする
-            $id = (int)$id;
-            //アップデートする条件のwhere句を生成する
-            $where      = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
+        $this->_categoryDao->update($updateData, $where);
 
-            $this->_categoryDao->update($updateData, $where);
-            $result     = true;
-
-        } catch (Zend_Exception $e) {
-            $result = false;
-            throw $e;
-        }
-
-        return $result;
-
+        return true;
     }
 
     /**
@@ -190,115 +192,16 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function deleteCategory($id)
     {
+        
+        $primary = $this->_categoryDao->getPrimary();
 
-        //データを削除する
-        $result = $this->_deleteByPrimary($id);
+        //文字列の可能性があるので、数値にキャストする
+        $id = (int) $id;
+        //アップデートする条件のwhere句を生成する
+        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
+        $this->_categoryDao->delete($where);
 
-        return $result;
-    }
-
-    /*****************************
-     * 使いまわせるかもしれないメソッド *
-     *****************************/
-
-    /**
-     * １件のみデータを新規作成する
-     *
-     * @param array $saveData 新規登録するデータ
-     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
-     * @return 新規作成できたか
-     * @author suzuki-mar
-     */
-    protected function _regiser($saveData, $dao = null)
-    {
-        //指定がなかったら、オブジェクト変数のdaoを使用する
-        if (is_null($dao)) {
-            $dao = $this->_categoryDao;
-        }
-
-        //作成に失敗したときに例外が発生する
-        try {
-            //データをinsertする
-            $dao->insert($saveData);
-            $result = true;
-
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
-
-        return $result;
-
-    }
-
-    /**
-     * 指定したプライマリキーのデータをアップデートする
-     *
-     * @param array $inputData 入力したデータ: バリデートチェックした入力データ
-     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
-     * @param int   $updateId  アップデートするデータのID
-     * @return boolean 編集できたか
-     * @author suzuki-mar
-     */
-    protected function _updateByPrimary($updateData, $updateId, $dao = null)
-    {
-        //指定がなかったら、オブジェクト変数のdaoを使用する
-        if (is_null($dao)) {
-            $dao = $this->_categoryDao;
-        }
-
-        //アップデートに失敗したときに例外が発生する
-        try {
-            //データをupdateする
-            $primary    = $dao->getPrimary();
-
-            //数値にキャストする
-            $updateId = (int)$updateId;
-            //アップデートする条件のwhere句を生成する
-            $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $updateId);
-
-            $dao->update($updateData, $where);
-            $result     = true;
-
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     * 指定したプライマリキーのデータを削除する
-     *
-     * @param  int   $deleteId  削除するデータのID
-     * @param Zend_Db_DbTable[option] $dao 使用するDAO(DbTable)のインスタンス
-     * @return boolean 削除できたか
-     * @author suzuki-mar
-     */
-    protected  function _deleteByPrimary($deleteId, $dao = null)
-    {
-        //指定がなかったら、オブジェクト変数のdaoを使用する
-        if (is_null($dao)) {
-            $dao = $this->_categoryDao;
-        }
-
-        //アップデートに失敗したときに例外が発生する
-        try {
-            //データをupdateする
-            $primary    = $dao->getPrimary();
-
-            //数値にキャストする
-            $deleteId = (int)$deleteId;
-            //アップデートする条件のwhere句を生成する
-            $where      = $dao->getAdapter()->quoteInto("{$primary} = ?", $deleteId);
-
-            $dao->delete($where);
-            $result     = true;
-
-        } catch (Zend_Exception $e) {
-            $result = false;
-        }
-
-        return $result;
+        return true;
     }
 
 }
