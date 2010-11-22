@@ -245,20 +245,29 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     {
         $select = $this->select();
         $select->from(
-            array('p' => $this->_name)
+            array('p' => $this->_name),
+            array('*')
         );
 
+        // ORDER BY
         $select->order('p.update_date DESC');
+
+        // JOIN
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
         $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
         $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
-
         $select->setIntegrityCheck(false);
 
+        // 必要ならデフォルトの検索対象列を設定
         if ($targetColumns == null) {
             $targetColumns = array('title', 'contents', 'outline', 'tag');
         }
+
+        // グルーピングの指定
+        $select->group('p.id');
+
+        // WHERE句の生成
         $orwhere = '';
         $bind = array();
         if (in_array('title', $targetColumns)) {
