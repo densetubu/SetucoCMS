@@ -88,7 +88,7 @@ div#header_inner h1 {
     margin-top: 25px;
 }
 input:hover {
-    fillter:Alpha(opacity:80%);
+    filter:Alpha(opacity:80%);
     opacity: 0.8;
 }
 div#header_inner div#discript {
@@ -163,6 +163,7 @@ div#header_inner dl dd {
 }
 div#header_inner dl dd input {
     width: 12em;
+    padding-right: 0.5em;
     border: none;
     margin-top: 2px;
 }
@@ -173,6 +174,7 @@ div#header_inner form p input {
     width: 43px;
     height: 22px;
     text-indent: -999px;
+    cursor:pointer;
 }
 
 /*---------------------------------------------------------------*/
@@ -418,7 +420,7 @@ div#navArea div.navList h3 {
 }
 div#navArea div.navList ul li a,
 div#navArea div.navList ul li span {
-    background: url(/images/front/simple/bg_linkList.gif) no-repeat left 0.4em;
+    background: url(/images/front/simple/bg_linkList.gif) no-repeat 0 0.4em;
     padding-left: 16px;
     margin-bottom: 6px;
     display: block;
