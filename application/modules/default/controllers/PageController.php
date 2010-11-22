@@ -146,8 +146,8 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $id = $this->_getParam('id');
 
-        if ($id == '0') {
-            // id=0は未分類扱いとする
+        if ($id === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE || $id === '0') { // @todo 未分類カテゴリの指定方法確定
+            // id='uncategorized'は未分類扱いとする
             $id = null;
         } elseif (!is_numeric($id) && !is_null($id) || is_numeric($id) && $id < 0) {
             // 不正なIDが指定されたら例外発生させる（暫定仕様）
@@ -163,7 +163,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
             // 未分類カテゴリのIDは0、カテゴリ名を「未分類」に設定
-            $category['id'] = 0;
+            $category['id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
             $category['name'] = '未分類';
         }
 
