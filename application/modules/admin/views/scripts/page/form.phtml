@@ -106,7 +106,9 @@
             <li><?php echo $this->form->getElement('sub_draft2') ?></li>
             <li><?php echo $this->form->getElement('sub_open2') ?></li>
         </ul>
+        <?php if ($this->form->getElement('hidden_id') != null): ?>
         <p><?php echo $this->form->getElement('hidden_id') ?></p>
+        <?php endif ?>
     </form>
 </div>
 <!-- section END -->

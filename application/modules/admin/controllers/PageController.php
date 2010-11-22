@@ -792,7 +792,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページを更新するアクション
      *
      * @return void
-     * @author akitsukada
+     * @author akitsukada charlesvineyard
      */
     public function updateAction()
     {
