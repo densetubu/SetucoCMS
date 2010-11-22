@@ -53,30 +53,60 @@
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <ul class="inputStraight defaultOver">
-            <li><?php echo $this->form->getElement('sub_draft') ?></li>
-            <li><?php echo $this->form->getElement('sub_open') ?></li>
+            <li><?php echo $this->form->getElement('sub_draft1') ?></li>
+            <li><?php echo $this->form->getElement('sub_open1') ?></li>
         </ul>
         <dl id="inputArea">
-            <dt><label for="page_title"><span>[必須]</span>ページタイトル</label></dt>
-                <dd><?php echo $this->form->getElement('page_title') ?></dd>
-            <dt><label for="category_id">カテゴリー</label></dt>
-                <dd><?php echo $this->form->getElement('category_id') ?></dd>
-            <dt><label for="page_contents"><span>[必須]</span>コンテンツ</label></dt>
-                <dd><?php echo $this->form->getElement('page_contents') ?></dd>
-            <dt><label for="page_outline">ページの概要</label></dt>
-                <dd><?php echo $this->form->getElement('page_outline') ?></dd>
-            <dt><label for="tag">タグ</label>（複数指定する場合はカンマ「,」で区切ってください）</dt>
-                <dd><?php echo $this->form->getElement('tag') ?></dd>
-
-            <dt><label for="create_date">作成日</label></dt>
-                <dd><?php echo $this->form->getElement('create_date') ?></dd>
-            <dt><label for="create_time">作成時刻</label></dt>
-                <dd><?php echo $this->form->getElement('create_time') ?></dd>
+            <dt>
+                <label for="page_title">
+                    <span>[必須]</span>ページタイトル
+                </label>
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('page_title') ?>
+            </dd>
+            <dt>
+                <label for="category_id">カテゴリー</label>
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('category_id') ?>
+            </dd>
+            <dt>
+                <label for="page_contents">
+                    <span>[必須]</span>コンテンツ
+                </label>
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('page_contents') ?>
+            </dd>
+            <dt>
+                <label for="page_outline">ページの概要</label>
+            </dt>
+            <dd><?php echo $this->form->getElement('page_outline') ?></dd>
+            <dt>
+                <label for="tag">タグ</label>（複数指定する場合はカンマ「,」で区切ってください）
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('tag') ?>
+            </dd>
+            <dt>
+                <label for="create_date">作成日</label>
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('create_date') ?>
+            </dd>
+            <dt>
+                <label for="create_time">作成時刻</label>
+            </dt>
+            <dd>
+                <?php echo $this->form->getElement('create_time') ?>
+            </dd>
         </dl>
         <ul class="inputStraight defaultOver">
-            <li><?php echo $this->form->getElement('sub_draft') ?></li>
-            <li><?php echo $this->form->getElement('sub_open') ?></li>
+            <li><?php echo $this->form->getElement('sub_draft2') ?></li>
+            <li><?php echo $this->form->getElement('sub_open2') ?></li>
         </ul>
+        <p><?php echo $this->form->getElement('hidden_id') ?></p>
     </form>
 </div>
 <!-- section END -->

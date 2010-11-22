@@ -136,35 +136,11 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      * @param Zend_Date $create_date 作成日時
      * @param int       $status      公開状態
      * @param int       $category_id カテゴリーID
+     * @return int 登録したページのID
      * @author charlesvineyard
      */
-    public function regist($title, $contents, $outline, $tags,
+    public function registPage($title, $contents, $outline, $tags,
             $create_date, $status, $category_id)
-    {
-        $pageId = $this->_registPage($title, $contents, $outline, $create_date, $status, $category_id);
-        $tagIds = $this->_registTagsIfNotExist($tags);
-        foreach ($tagIds as $tagId) {
-            $this->_pageTagDao->insert(array(
-                'page_id' => $pageId,
-                'tag_id'  => $tagId
-            ));
-        }
-    }
-
-    /**
-     * ページを登録します。
-     *
-     * @param string    $title       ページタイトル
-     * @param string    $contents    ページコンテンツ
-     * @param string    $outline     ページの概要
-     * @param Zend_Date $create_date 作成日時
-     * @param int       $status      公開状態
-     * @param int       $category_id カテゴリーID
-     * @return int 登録したページのページID
-     * @author charlesvineyard
-     */
-    private function _registPage($title, $contents, $outline,
-            $createDate, $status, $categoryId)
     {
         $account = $this->_accountDao->findByLoginId(Zend_Auth::getInstance()->getIdentity());
         $page = array(
@@ -177,7 +153,15 @@ class Admin_Model_Page extends Common_Model_PageAbstract
             'category_id' => $categoryId,
             'update_date' => $createDate,
         );
-        return $this->_pageDao->insert($page);
+        $pageId = $this->_pageDao->insert($page);
+        $tagIds = $this->_registTagsIfNotExist($tags);
+        foreach ($tagIds as $tagId) {
+            $this->_pageTagDao->insert(array(
+                'page_id' => $pageId,
+                'tag_id'  => $tagId
+            ));
+        }
+        return $pageId;
     }
 
     /**
@@ -213,6 +197,17 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     public function updatePage($id, $pageInfo)
     {
+        $this->_pageTagDao->delete($this->_pageTagDao->getAdapter()->quoteInto('page_id = ?', $id));
+        
+        $tagIds = $this->_registTagsIfNotExist($pageInfo['tag']);
+        foreach ($tagIds as $tagId) {
+            $this->_pageTagDao->insert(array(
+                'page_id' => $id,
+                'tag_id'  => $tagId
+            ));
+        }
+        unset($pageInfo['tag']);
+        
         $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_pageDao->update($pageInfo, $where);
     }
