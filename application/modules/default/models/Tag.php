@@ -107,16 +107,6 @@ class Default_Model_Tag extends Common_Model_TagAbstract
 
     }
 
-    /**
-     * ページIDで指定された記事につけられたタグの情報を返す。
-     *
-     * @param int $pageId タグを取得したい記事のID
-     * @return array 取得したタグ情報を格納した配列
-     * @author akitsukada
-     */
-    public function getTagsByPageId($pageId)
-    {
-        return $this->_tagDao->findTagByPageId($pageId)->toArray();
-    }
+
 
 }
