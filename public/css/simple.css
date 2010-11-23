@@ -152,7 +152,7 @@ div#header_inner dl dt {
     background: url(../images/front/simple/search.gif) no-repeat 0 0;
     margin-right: -1px;
     display: block;
-    text-indent: -999px;
+    text-indent: -9999px;
 }
 div#header_inner dl dd {
     height: 20px;
@@ -173,7 +173,7 @@ div#header_inner form p input {
     display: block;
     width: 43px;
     height: 22px;
-    text-indent: -999px;
+    text-indent: -9999px;
     cursor:pointer;
 }
 
