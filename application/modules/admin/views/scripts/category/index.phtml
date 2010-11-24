@@ -118,21 +118,20 @@
                     </tr>
             <?php endforeach; ?>
 
-                </tbody>
-            </table>
+        </tbody>
+    </table>
 
     <?php echo $this->paginator; ?>
-        </div>
-        <!-- section END -->
+</div>
+<!-- section END -->
 
-<?php //htmlのheadタグで出力するためにキャプチャーする
-                                    $this->headScript()->captureStart() ?>
-                                    <!--
-                                    function confirmDeleteRedirect(url, item){
+<?php $this->headScript()->captureStart() //htmlのheadタグで出力するためにキャプチャーする　?>
+    <!--
+        function confirmDeleteRedirect(url, item){
 
-                                        if (confirm(item + "を本当に削除してよろしいですか？")) {
-                                            location.href = url;
-                                        }
-                                    }
-                                    // -->
+            if (confirm(item + "を本当に削除してよろしいですか？")) {
+                location.href = url;
+            }
+        }
+    // -->
 <?php $this->headScript()->captureEnd() ?>
