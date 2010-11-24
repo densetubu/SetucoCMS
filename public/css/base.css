@@ -774,7 +774,7 @@ body#loginBoad div#container {
     width: 310px;
     min-width: 0;
 }
-*html body#loginBoad div#container {
+* html body#loginBoad div#container {
     width: 270px;
 }
 body#loginBoad div#messageArea {
@@ -791,7 +791,7 @@ body#loginBoad dt {
     margin-bottom: 10px;
 }
 body#loginBoad dd {
-    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left 5px;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat 0 5px;
     margin-left: 6em;
     padding-left: 15px;
     zoom: 1;
