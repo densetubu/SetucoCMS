@@ -121,13 +121,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     /**
      * カテゴリを指定して記事を取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
-     * @param int $catId 取得したいカテゴリのID
+     * @param int $categoryId 取得したいカテゴリのID
      * @param int $pageNumber ページネータの何ページ目を表示するか
      * @param int $limig １ページに表示する記事数
      * @author akitsukada
      * @return array 取得した記事データ
      */
-    public function findPagesByCategoryId($catId, $pageNumber = null, $limit = null)
+    public function findPagesByCategoryId($categoryId, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -141,10 +141,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->where('status = ?', self::STATUS_OPEN);
 
         //指定されたカテゴリの記事のみ取得する
-        if (is_null($catId)) {
+        if (is_null($categoryId)) {
             $select->where('category_id is null');
         } else {
-            $select->where('category_id = ?', $catId);
+            $select->where('category_id = ?', (int)$categoryId);
         }
 
         //編集日時の降順にソートする
