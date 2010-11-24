@@ -235,23 +235,18 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             return false;
         }
 
-        
-        foreach ($redirectParams as $key => $value) {
-            if ($key === $this->_getParam('module')) {
-                //可読性を上げるために一時変数を作成する
-                $controller = $this->_getParam('controller');
-                $action     = $this->_getParam('action');
+        foreach ($redirectParams as $value) {
+            //可読性を上げるために一時変数を作成する
+            $controller = $this->_getParam('controller');
+            $action = $this->_getParam('action');
+            if (isset($redirectParams[$controller][$action])) {
+                $query = $redirectParams[$controller][$action];
 
-                if (isset($redirectParams[$key][$controller][$action])) {
-                    $query = $redirectParams[$key][$controller][$action];
-
-                    if (strpos($_SERVER['QUERY_STRING'], "{$query}=") !== false) {
-                        return true;
-                    }
+                if (strpos($_SERVER['QUERY_STRING'], "{$query}=") !== false) {
+                    return true;
                 }
             }
         }
-
 
 
         return false;
@@ -278,11 +273,11 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         //アクションまでは常に存在する
         //REST形式でリダイレクトするかチェックしていないかもしれないので
-        if (!isset($redirectParams[$module][$controller][$action])) {
+        if (!isset($redirectParams[$controller][$action])) {
             return false;
         }
 
-        $queryName = $redirectParams[$module][$controller][$action];
+        $queryName = $redirectParams[$controller][$action];
         $queryParam = $this->_getParam($queryName);
 
         return $this->_helper->redirector(

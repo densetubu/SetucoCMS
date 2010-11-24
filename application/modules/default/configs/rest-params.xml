@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    モジュール名
-        コントローラー名
-            アクション名:パラメーター
+   コントローラー名
+    アクション名:パラメーター
 
 -->
 
 
-
 <config>
-    <default>
-        <page>
-            <search>query</search>
-        </page>
-    </default>
+    <page>
+        <search value="query" />
+    </page>
 </config>
