@@ -206,9 +206,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array 取得した記事データを格納した配列。
      * @author akitsukada charlesvineyard
      */
-    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null)
+    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null,
+            $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
-        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements);
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements, $sortColumn, $order);
 
         $select->limitPage($pageNumber, $limit);
         return $this->fetchAll($select)->toArray();
@@ -241,14 +242,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return Zend_Db_Table_Select
      * @author akitsukada charlesvineyard
      */
-    private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null)
+    private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null,
+            $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->select();
         $select->from(
             array('p' => $this->_name)
         );
 
-        $select->order('p.update_date DESC');
+        $select->order("{$sortColumn} {$order}");
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
         $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));

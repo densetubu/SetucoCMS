@@ -68,9 +68,10 @@ abstract class Common_Model_PageAbstract
      * @return array 検索結果を格納した配列
      * @author akitsukada
      * @todo 取得するカラムを動的にしたい。今は全取得。
-     * @todo ソート順序を動的にしたい。今はupdate_date(DAOで指定)
+     * @todo 引数まとめてクラス化する?
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10, $targetColumns = null, $refinements = null)
+    public function searchPages($keyword, $currentPage = 1, $limit = 10, 
+            $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         if ($targetColumns == null) {
             $targetColumns = $this->_searchTargetColumns;
@@ -82,7 +83,9 @@ abstract class Common_Model_PageAbstract
             $currentPage,
             $limit,
             $targetColumns,
-            $refinements
+            $refinements,
+            $sortColumn,
+            $order
         );
     }
 
