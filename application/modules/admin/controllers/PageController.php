@@ -48,6 +48,13 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private $_accountService;
 
     /**
+     * タグサービス
+     *
+     * @var Admin_Model_Tag
+     */
+    private $_tagService;
+    
+    /**
      * 日付テキストボックスのvalue属性のフォーマット
      * (画面に表示されるものではない)
      *
@@ -88,6 +95,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService = new Admin_Model_Page();
         $this->_categoryService = new Admin_Model_Category();
         $this->_accountService = new Admin_Model_Account();
+        $this->_tagService = new Admin_Model_Tag();
     }
 
     /**
@@ -449,9 +457,90 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
         }
+        if ($this->_isUpdating()) {
+            $this->_formActionWhenUpdate();
+            return;
+        }
         $this->view->form = $this->_getParam('form', $this->_createForm());
     }
+    
+    /**
+     * 更新フォームを表示するか判断します。
+     * 
+     * @return 更新なら true
+     * @author charlesvineyard
+     */
+    private function _isUpdating() {
+        return $this->_getParam('id') !== null;
+    }
+    
+    /**
+     * 新規作成フォームではなく更新フォームを表示する処理
+     * 
+     * @return void
+     * @author charlesvineyard
+     */
+    private function _formActionWhenUpdate()
+    {
+        $idValidator = new Zend_Validate_Db_RecordExists(array(
+            'table' => 'page',
+            'field' => 'id'
+        ));
+        $id = $this->_getParam('id');
+        if (!$idValidator->isValid($id)) {
+            throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
+        }
+        $page = $this->_pageService->findPage($id);
+        $tagValue = $this->_createCSTagNames($id);
+        $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
+        $currentPageValues = array(
+            'page_title'    => $page['title'],
+            'category_id'   => $page['category_id'],
+            'page_contents' => $page['contents'],
+            'page_outline'  => $page['outline'],
+            'tag'           => $tagValue,
+            'create_date'   => $createDate->toString(self::FORMAT_DATE_TEXT_BOX),
+            'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
+            'hidden_id'     => $id,
+        );
+        $form = $this->_createUpdateForm();
+        $form->setDefaults($currentPageValues);
+        $this->view->form = $form;
+    }
+    
+    /**
+     * ページ更新用フォームを作成します。
+     * 
+     * @return Setuco_Form ページ更新用フォーム
+     * @author charlesvineyard
+     */
+    private function _createUpdateForm()
+    {
+        $form = $this->_createForm();
+        $form->setAction($this->_helper->url('update'));
+        $form->addElement('Hidden', 'hidden_id');
+        $form->setMinimalDecoratorElements('hidden_id');
+        return $form;
+    }
 
+    /**
+     * ページIDからカンマ区切りのタグ名を取得します。
+     * 
+     * @param int ページID
+     * @return string カンマ区切りのタグ名
+     * @author charlesvineyard
+     */
+    private function _createCSTagNames($pageId)
+    {
+        $tags = $this->_tagService->findTagsByPageId($pageId);
+        $tagValue = '';
+        foreach ($tags as $tag) {
+            $tagValue .= $tag['name'] . ',';
+        }
+        $tagValue = rtrim($tagValue, ',');
+        return $tagValue;
+    }
+    
     /**
      * ページ編集フォームを作成します。
      *
@@ -468,18 +557,32 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
              ->setAction($this->_helper->url('create'))
              ->addElement(
                  'Submit',
-                 'sub_open',
+                 'sub_open1',
                  array(
                      'label'   => '公開して保存',
                  )
              )
              ->addElement(
                  'Submit',
-                 'sub_draft',
+                 'sub_draft1',
                  array(
                      'label' => '下書きで保存',
                  )
              )
+             ->addElement(
+                 'Submit',
+                 'sub_open2',
+                 array(
+                     'label'   => '公開して保存',
+                 )
+             )
+             ->addElement(
+                 'Submit',
+                 'sub_draft2',
+                 array(
+                     'label' => '下書きで保存',
+                 )
+             )             
              ->addElement(
                  'Text',
                  'page_title',
@@ -488,7 +591,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'filters' => array(
                          'StringTrim'
-                     )
+                     ),
+                     'escape' => true,
                  )
              )
              ->addElement(
@@ -533,7 +637,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'filters' => array(
                          'StringTrim'
-                     )
+                     ),
+                     'escape' => true,
                  )
              )
              ->addElement(
@@ -543,7 +648,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'id' => 'page_outline',
                      'filters' => array(
                          'StringTrim'
-                     )
+                     ),
+                     'escape' => true,
                  )
              )
              ->addElement(
@@ -553,7 +659,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'id' => 'tag',
                      'filters' => array(
                          'StringTrim'
-                     )
+                     ),
+                     'escape' => true,
                  )
              )
              ->addElement(
@@ -580,8 +687,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  )
              );
         $form->setMinimalDecoratorElements(array(
-            'sub_open',
-            'sub_draft',
+            'sub_open1',
+            'sub_draft1',
+            'sub_open2',
+            'sub_draft2',
             'page_title',
             'category_id',
             'page_outline',
@@ -621,26 +730,26 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if ($categoryId === $this->_uncategorizedValue) {
             $categoryId = null;
         }
-        $this->_pageService->regist(
+        $pageId = $this->_pageService->registPage(
             $this->_getParam('page_title'),
             $this->_getParam('page_contents'),
             $this->_getParam('page_outline'),
             Setuco_Util_String::splitCsvString($this->_getParam('tag')),
-            $this->_findCreateDate(),
-            $this->_findStatus(),
+            $this->_getInputCreateDate(),
+            $this->_getInputStatus(),
             $categoryId
         );
         $this->_helper->flashMessenger('新規ページを作成しました。');
-        $this->_helper->redirector('form');    // TODO 作ったページの編集ページに飛ぶ
+        $this->_helper->redirector('form', null, null, array('id' => $pageId));
     }
 
     /**
-     * 入力されたページの状態を求めます。
+     * 入力されたページの状態を取得します。
      *
      * @return ページの状態
      * @author charlesvineyard
      */
-    private function _findStatus()
+    private function _getInputStatus()
     {
         if ($this->_getParam('sub_open') !== null) {
             return Setuco_Data_Constant_Page::STATUS_RELEASE;
@@ -649,12 +758,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * 入力された作成日時を求めます。
+     * 入力された作成日時を取得します。
      *
      * @return 作成日時
      * @author charlesvineyard
      */
-    private function _findCreateDate()
+    private function _getInputCreateDate()
     {
         $nowDate = Zend_Date::now();
         $createDate = $this->_getParam('create_date');
@@ -680,17 +789,35 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * ページを更新処理するアクション
-     * indexアクションに遷移します ※
-     * ※ただしスケルトンのときだけ
+     * ページを更新するアクション
      *
      * @return void
      * @author akitsukada
-     * @todo 内容の実装 現在はスケルトン
      */
     public function updateAction()
     {
-        $this->_redirect('/admin/page/index');
+        $form = $this->_createUpdateForm();
+        if (!$form->isValid($_POST)) {
+            $this->_setParam('form', $form);
+            return $this->_forward('form', null, null, array('id', $form->getValue('hidden_id')));
+        }
+        $categoryId = $this->_getParam('category_id');
+        if ($categoryId === $this->_uncategorizedValue) {
+            $categoryId = null;
+        }
+        $updatePageInfo = array(
+            'title'       => $form->getValue('page_title'),
+            'category_id' => $form->getValue('category_id'),
+            'contents'    => $form->getValue('page_contents'),
+            'outline'     => $form->getValue('page_outline'),
+            'tag'         => Setuco_Util_String::splitCsvString($form->getValue('tag')),
+            'create_date' => $this->_getInputCreateDate(),
+            'status'      => $this->_getInputStatus(),
+        );
+        $id = $form->getValue('hidden_id');
+        $this->_pageService->updatePage($id, $updatePageInfo);
+        $this->_helper->flashMessenger('ページを更新しました。');
+        $this->_helper->redirector('form', null, null, array('id' => $id));
     }
 
     /**

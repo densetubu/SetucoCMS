@@ -67,8 +67,8 @@ abstract class Common_Model_PageAbstract
      * @param int $limit ページネータで１ページに何件表示するか。
      * @return array 検索結果を格納した配列
      * @author akitsukada
-     * @todo limitのデフォルト修正
      * @todo 取得するカラムを動的にしたい。今は全取得。
+     * @todo ソート順序を動的にしたい。今はupdate_date(DAOで指定)
      */
     public function searchPages($keyword, $currentPage = 1, $limit = 10, $targetColumns = null, $refinements = null)
     {
@@ -78,7 +78,7 @@ abstract class Common_Model_PageAbstract
         
         return $this->_pageDao->searchPages(
             $keyword,
-            $this->_findTagIdsByTagName($keyword),
+            $this->_searchTagIdsByKeyword($keyword),
             $currentPage,
             $limit,
             $targetColumns,
@@ -102,6 +102,7 @@ abstract class Common_Model_PageAbstract
         }
         $tagIds = array();
         if (in_array('tag', $targetColumns)) {
+            $tagIds = $this->_searchTagIdsByKeyword($keyword);
         }
         return (int)($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns));
     }
@@ -113,7 +114,7 @@ abstract class Common_Model_PageAbstract
      * @return array|null 該当するタグのIDを格納した配列
      * @author akitsukada
      */
-    protected function _findTagIdsByTagName($keyword)
+    protected function _searchTagIdsByKeyword($keyword)
     {
         return $this->_tagDao->findTagIdsByTagName($keyword);
     }
