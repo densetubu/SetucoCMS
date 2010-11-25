@@ -90,7 +90,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
         if (!isset($isSetFlashMessage)) {
 
-            //フォームのnameと項目の名前の対応表
+            //フォームのnameと項目の名前の対応表　項目 : メッセージの形式にする。
             $fields = array('name' => 'サイト名', 'url' => 'サイトURL', 'comment' => '説明', 'keyword' => 'キーワード');
 
             foreach ($validateForm->getMessages() as $field => $messages) {

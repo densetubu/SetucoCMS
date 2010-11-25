@@ -12,7 +12,7 @@
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @ve/**
-rsion
+  rsion
  * @link
  * @since      File available since Release 0.1.0
  * @author     suzuki_mar
@@ -45,6 +45,14 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     public function init()
     {
         parent::init();
+
+        //REST形式でリダイレクトするURLだったら、リダイレクトする
+        // /page/search/query/test みたいなURLにリダイレクトする
+        if ($this->_isRestRedirect($this->_getRedirectParams())) {
+            $this->_restRedirect($this->_getRedirectParams());
+        }
+
+
         $this->_initLayout();
         $this->view->addScriptPath($this->_getModulePath() . 'views/partials');
     }
@@ -120,8 +128,8 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         //ページャークラスを生成する
         $paginator = Zend_Paginator::factory($max);
         $paginator->setCurrentPageNumber($page)
-            ->setItemCountPerPage($limit)
-            ->setPageRange(5);
+                ->setItemCountPerPage($limit)
+                ->setPageRange(5);
 
         //viewでpaginationControlを使用しなくても、表示できるようにする
         $paginator->setView($this->view);
@@ -147,7 +155,6 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $currentPage = (int) $currentPage;
         return $currentPage;
     }
-
 
     /**
      * 一ページあたりの取得件数の_pageLimitのゲッター
@@ -187,6 +194,97 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         if (count($flashMessages)) {
             $this->view->$paramName = $flashMessages;
         }
+    }
+
+    /**
+     * REST形式にリダイレクトするパラメーターを取得する
+     * module controller action parameter
+     * ファイル名はrest_url.xml
+     *
+     * @return array REST形式にリダイレクトするパラメーター
+     * @author suzuki-mar
+     */
+    protected function _getRedirectParams()
+    {
+
+        //restリダイレクトしないモジュールはファイルが存在しない
+        if (!file_exists($this->_getModulePath()
+                        . 'configs/rest-params.xml')) {
+            return null;
+        }
+
+        $restUrlConfig = new Zend_Config_Xml($this->_getModulePath()
+                        . 'configs/rest-params.xml');
+
+        $redirectParams = $restUrlConfig->toArray();
+        return $redirectParams;
+    }
+
+    /**
+     * REST形式にリダイレクトするか
+     * 同じactionにしかリダイレクトしない
+     *
+     * @param array $redirectParams REST形式にリダイレクトするデータ配列
+     * @return boolean リダイレクトするか
+     * @author suzuki-mar
+     */
+    protected function _isRestRedirect($redirectParams)
+    {
+        //リダイレクトしないモジュールは、nullが渡ってくる
+        if (is_null($redirectParams)) {
+            return false;
+        }
+
+        foreach ($redirectParams as $value) {
+            //可読性を上げるために一時変数を作成する
+            $controller = $this->_getParam('controller');
+            $action = $this->_getParam('action');
+            if (isset($redirectParams[$controller][$action])) {
+                $query = $redirectParams[$controller][$action];
+
+                if (strpos($_SERVER['QUERY_STRING'], "{$query}=") !== false) {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
+    /**
+     * REST形式のURLにリダイレクトする
+     * 同じactionにしかリダイレクトしない
+     *
+     * @param array $redirectParams リダイレクトするパラメーター配列
+     * @return void redirectするので redirectしないばあいはfalse
+     * @author suzuki-mar
+     */
+    protected function _restRedirect($redirectParams)
+    {
+        //リダイレクトしないモジュールは、nullが渡ってくる
+        if (is_null($redirectParams)) {
+            return false;
+        }
+
+
+        //可読性を上げるためモジュール名などを一時引数にする
+        extract($this->_getAllParams());
+
+        //アクションまでは常に存在する
+        //REST形式でリダイレクトするかチェックしていないかもしれないので
+        if (!isset($redirectParams[$controller][$action])) {
+            return false;
+        }
+
+        $queryName = $redirectParams[$controller][$action];
+        $queryParam = $this->_getParam($queryName);
+
+        return $this->_helper->redirector(
+                $action,
+                $controller,
+                $module,
+                array($queryName => $queryParam));
     }
 
 }

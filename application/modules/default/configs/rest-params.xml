@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   コントローラー名
+    アクション名:パラメーター
+
+-->
+
+
+<config>
+    <page>
+        <search value="query" />
+    </page>
+</config>
