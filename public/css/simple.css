@@ -216,6 +216,9 @@ div.entry p.backTop {
     margin-top: 15px;
     text-align: right;
 }
+div.entry table td {
+    vertical-align: top;
+}
 
 /*---------------------------------------------------------------*/
 /*-- entryHead style --------------------------------------------*/
