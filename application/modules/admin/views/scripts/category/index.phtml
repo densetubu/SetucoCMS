@@ -33,6 +33,7 @@
 
 <!-- section START -->
 <div class="section">
+
     <div class="topichAreaL">
         <div class="topichAreaR">
             <div class="topichArea">
@@ -82,7 +83,7 @@
                         <td>
                             <form action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
                                 <p>
-                                    <input type="text" name="name" id="name<?php echo $value['id'] ?>" value="<?php echo $value['name'] ?>"　/>
+                                    <input type="text" name="name" id="name<?php echo $value['id'] ?>" value="<?php echo $value['name'] ?>" />
                                     <input type="hidden" name="id" id="id<?php echo $value['id'] ?>" value="<?php echo $value['id'] ?>" />
                                     <input type="hidden" name="parent_id" id="parent_id<?php echo $value['id'] ?>" value="<?php echo $value['parent_id'] ?>" />
                                     <input type="submit" class="sub" value="保存" />
@@ -122,6 +123,7 @@
     </table>
 
     <?php echo $this->paginator; ?>
+
 </div>
 <!-- section END -->
 

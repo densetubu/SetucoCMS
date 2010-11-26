@@ -24,8 +24,10 @@
         <h2><span>「<?php echo $this->keyword ?>」の検索結果（<?php echo $this->resultCount ?>件）</span></h2>
     </div>
     <table>
-        <colgroup width="28%"></colgroup>
-        <colgroup width="62%"></colgroup>
+        <colgroup>
+            <col width="28%" />
+            <col width="62%" />
+        </colgroup>
         <?php foreach ($this->searchResult as $cnt => $entry): ?>
         <tr>
             <td><a href="<?php echo $this->baseUrl('page/show/id/').$entry['id'] ?>"><?php echo $entry['title'] ?></a></td>
