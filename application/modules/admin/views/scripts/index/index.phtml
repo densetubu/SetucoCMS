@@ -32,17 +32,6 @@
 }
 <?php $this->headStyle()->captureEnd() ?>
 
-<?php $this->headScript()->captureStart() ?>
-function showAmbitionEdit() {
-    dojo.style('ambitionView', {display: 'none'});
-    dojo.style('ambitionEdit', {display: 'inline'});
-}
-function hideAmbitionEdit() {
-    dojo.style('ambitionEdit', {display: 'none'});
-    dojo.style('ambitionView', {display: 'inline'});
-}
-<?php $this->headScript()->captureEnd() ?>
-
 <!-- section"野望" START -->
 <div class="section">
     <form id="<?php echo $this->ambitionForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">

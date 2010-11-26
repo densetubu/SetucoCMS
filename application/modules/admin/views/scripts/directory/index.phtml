@@ -23,21 +23,6 @@
 }
 <?php $this->headStyle()->captureEnd() ?>
 
-<?php $this->headScript()->captureStart() ?>
-dojo.require('dojo.NodeList-traverse');
-
-function openCategory(switcher) {
-    dojo.query(switcher.parentNode).next().style('display', 'block');
-    dojo.query(switcher).children().at(0).attr('src', '<?php echo $this->baseUrl('/images/admin/directory/icn_category_open.gif') ?>');
-    dojo.query(switcher).attr('onclick', 'closeCategory(this)');
-}
-function closeCategory(switcher) {
-    dojo.query(switcher.parentNode).next().style('display', 'none');
-    dojo.query(switcher).children().at(0).attr('src', '<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>');
-    dojo.query(switcher).attr('onclick', 'openCategory(this)');
-}
-<?php $this->headScript()->captureEnd() ?>
-
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -76,7 +61,7 @@ function closeCategory(switcher) {
             </div>
             <?php else: // カテゴリーの中身があるとき ?>
             <div>
-                <p class="folder" onclick="openCategory(this)">
+                <p class="folder" onclick="openCategory(this, '<?php echo $this->baseUrl('/images/admin/directory/icn_category_open.gif') ?>', '<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>')">
                     <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" /><?php echo $category->getLabel() ?>
                 </p>
                 <p>

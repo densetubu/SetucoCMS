@@ -24,24 +24,6 @@
     display: none;
 }
 <?php $this->headStyle()->captureEnd() ?>
-<?php $this->headScript()->captureStart() ?>
-dojo.require('dojo.NodeList-traverse');
-dojo.require('dojo.NodeList-html');
-
-function showPageElementEdit(switcher) {
-    dojo.query(switcher).parent().next().style('display', 'inline');
-    defaultHtml = switcher.innerHTML;
-}
-function hidePageElementEdit(switcher) {
-    dojo.query(switcher).parent().prev().children().at(0).html(defaultHtml);
-    dojo.query(switcher).parent().style('display', 'none');
-}
-function confirmRedirect(url){
-    if (confirm("本当に削除してよろしいですか？")) {
-        location.href = url;
-    }
-}
-<?php $this->headScript()->captureEnd() ?>
 
 <!-- topicPath START -->
 <div id="topicPath">
