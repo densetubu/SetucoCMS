@@ -119,7 +119,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         $lastUpdateDate = new Zend_Date();
         $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
         return array('lastUpdateDate' => $lastUpdateDate,
-            'pastDays' => Setuco_Util_Date::findPastDays($lastUpdateDate, new Zend_Date()));
+            'pastDays' => Setuco_Util_Date::calcPastDays($lastUpdateDate, new Zend_Date()));
     }
 
     /**
@@ -133,7 +133,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         $site = $this->getSiteInfo();
         $openDate = new Zend_Date($site['open_date'], 'YYYY-MM-dd');
         return array('openDate' => $openDate,
-            'pastDays' => Setuco_Util_Date::findPastDays($openDate, new Zend_Date()));
+            'pastDays' => Setuco_Util_Date::calcPastDays($openDate, new Zend_Date()));
     }
 
 }

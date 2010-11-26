@@ -31,7 +31,7 @@ class Setuco_Util_Date
      * @return int 経過日数
      * @author charlesvineyard
      */
-    public static function findPastDays($fromDate, $toDate)
+    public static function calcPastDays(Zend_Date $fromDate, Zend_Date $toDate)
     {
         $fromDate->setTime('00:00:00', 'HH:mm:ss');
         $toDate->setTime('00:00:00', 'HH:mm:ss');
