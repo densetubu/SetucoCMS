@@ -217,6 +217,20 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
                         . 'configs/rest-params.xml');
 
         $redirectParams = $restUrlConfig->toArray();
+
+        //パラメーターは必ず２次元配列で取得するようにする
+        foreach ($redirectParams as $controller => $controllerParams) {
+            foreach ($controllerParams as $action => $actionParams) {
+                foreach ($actionParams as $queryParams) {
+                    //ひとつしかパラメーターがない場合は文字列
+                    if (!is_array($queryParams)) {
+                        $queryParams = array($queryParams);
+                        $redirectParams[$controller][$action]['query'] = $queryParams;
+                    }
+                }
+            }
+        }
+
         return $redirectParams;
     }
 
@@ -239,15 +253,24 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             //可読性を上げるために一時変数を作成する
             $controller = $this->_getParam('controller');
             $action = $this->_getParam('action');
-            if (isset($redirectParams[$controller][$action])) {
-                $query = $redirectParams[$controller][$action];
 
-                if (strpos($_SERVER['QUERY_STRING'], "{$query}=") !== false) {
-                    return true;
+            if (isset($redirectParams[$controller][$action])) {
+
+                
+                if (isset($redirectParams[$controller][$action]['query'])) {
+                    $queries = $redirectParams[$controller][$action]['query'];
+
+                    foreach ($queries as $value) {
+                        $isRedirects[] = (strpos($_SERVER['QUERY_STRING'], "{$value}=") !== false);
+                    }
+
+                    //指定したパラメーターがすべてあった場合のみリダイレクトする
+                    if (!in_array(false, $isRedirects)) {
+                        return true;
+                    }
                 }
             }
         }
-
 
         return false;
     }
@@ -269,7 +292,9 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
 
         //可読性を上げるためモジュール名などを一時引数にする
-        extract($this->_getAllParams());
+        $module = $this->_getParam('module');
+        $controller = $this->_getParam('controller');
+        $action = $this->_getParam('action');
 
         //アクションまでは常に存在する
         //REST形式でリダイレクトするかチェックしていないかもしれないので
@@ -277,14 +302,18 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             return false;
         }
 
-        $queryName = $redirectParams[$controller][$action];
-        $queryParam = $this->_getParam($queryName);
+        //urlに付加するパラメーターのキーバリューを取得する
+        $queryNames = $redirectParams[$controller][$action]['query'];
+
+        foreach ($queryNames as $value) {
+            $queryParams[$value] = $this->_getParam($value);
+        }
 
         return $this->_helper->redirector(
                 $action,
                 $controller,
                 $module,
-                array($queryName => $queryParam));
+                $queryParams);
     }
 
 }

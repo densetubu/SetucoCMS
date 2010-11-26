@@ -2,13 +2,24 @@
 
 <!--
    コントローラー名
-    アクション名:パラメーター
+    アクション名
+     query:パラメーター
 
 -->
 
 
 <config>
     <page>
-        <search value="query" />
+        <search>
+            <query value="query" />
+        </search>
     </page>
+
+    <setuco>
+        <hoge>
+            <query value="suzuki" />
+            <query value="mar" />
+        </hoge>
+     </setuco>
+    
 </config>
