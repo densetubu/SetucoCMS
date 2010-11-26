@@ -73,7 +73,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
              ->setMethod('post')
              ->setAction($this->_helper->url('create'))
              ->addDecorator('FormElements')
-             ->addDecorator('HtmlTag', array('tag' => 'p', 'style' => 'margin-bottom:10px;'))
+             ->addDecorator('HtmlTag', array('tag' => 'p', 'class' => 'default'))
              ->addDecorator('Form');
         $tag = $this->_createTagFormElementText();
         $submit = new Zend_Form_Element_Submit('sub', array(
@@ -95,6 +95,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         return new Zend_Form_Element_Text('tag', array(
             'id'         => 'tag',
+            'class'      => 'defaultInput',
             'value'      => '新規タグ',
             'required'   => true,
             'validators' => array('notEmpty'),
