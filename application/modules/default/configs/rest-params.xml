@@ -9,17 +9,11 @@
 
 
 <config>
+
     <page>
         <search>
             <query value="query" />
-        </search>
-    </page>
-
-    <setuco>
-        <hoge>
-            <query value="suzuki" />
-            <query value="mar" />
-        </hoge>
-     </setuco>
-    
+        </search>    
+     </page>
+     
 </config>
