@@ -134,7 +134,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @return void
      * @author charlesvineyard
-     * @todo logic(OR AND)での検索
      */
     public function searchAction()
     {
@@ -143,7 +142,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('searchForm', $searchForm);
             return $this->_forward('index');
         }
-//        $logic = $searchForm->getValue('logic');
         
         $keyword = $searchForm->getValue('query');
         $targets = $searchForm->getValue('targets');
@@ -155,7 +153,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $targets,
             $refinements
         );
+        
         $pages = $this->_adjustPages($pages);
+        
         $this->_helper->viewRenderer('index');
         $this->view->pages = $pages;
         $this->view->searchForm = $searchForm;
@@ -219,10 +219,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createSearchForm()
     {
-        $logicOptions = array(
-            0 => 'OR',
-            1 => 'AND',
-        );
         $targetOptions = array(
             'title' => 'タイトル',
             'contents' => '本文',
@@ -243,16 +239,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'filters' => array(
                          'StringTrim'
                      )
-                 )
-             )
-             ->addElement(
-                 'Radio',
-                 'logic',
-                 array(
-                     'required' => true,
-                     'multiOptions' => $logicOptions,
-                     'separator' => "</dd>\n<dd>",
-                     'value' => 'OR',    // selected指定
                  )
              )
              ->addElement(
@@ -303,7 +289,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
              );
         $form->setMinimalDecoratorElements(array(
             'keyword',
-            'logic',
             'targets',
             'category_id',
             'account_id',
