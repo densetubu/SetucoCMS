@@ -96,6 +96,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_categoryService = new Admin_Model_Category();
         $this->_accountService = new Admin_Model_Account();
         $this->_tagService = new Admin_Model_Tag();
+        
     }
 
     /**

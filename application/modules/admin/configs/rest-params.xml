@@ -13,6 +13,10 @@
     <page>
          <search>
              <query value="query" />
+             <query value="logic" />
+             <query value="targets"/>
+             <query value="category_id" />
+             <query value="account_id" />
          </search>
      </page>
 
