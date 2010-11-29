@@ -75,32 +75,21 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
              ->addDecorator('FormElements')
              ->addDecorator('HtmlTag', array('tag' => 'p', 'class' => 'default'))
              ->addDecorator('Form');
-        $tag = $this->_createTagFormElementText();
-        $submit = new Zend_Form_Element_Submit('sub', array(
-            'id'    => 'sub',
-            'label' => '追加'
-        ));
-        $form->addElements(array($tag, $submit))
-             ->setMinimalDecoratorElements(array('tag', 'sub'));
-        return $form;
-    }
-
-    /**
-     * タグの新規作成フォームを作成します。
-     *
-     * @return Setuco_Form_Element_Text タグ作成フォーム
-     * @author charlesvineyard
-     */
-    private function _createTagFormElementText()
-    {
-        return new Zend_Form_Element_Text('tag', array(
-            'id'         => 'tag',
+        $tag = new Zend_Form_Element_Text('tag', array(
+            'id'         => 'new_tag',
             'class'      => 'defaultInput',
             'value'      => '新規タグ',
             'required'   => true,
             'validators' => array('notEmpty'),
             'filters'    => array('StringTrim')
         ));
+        $submit = new Zend_Form_Element_Submit('sub', array(
+            'id'    => 'sub_create',
+            'label' => '追加'
+        ));
+        $form->addElements(array($tag, $submit))
+             ->setMinimalDecoratorElements(array('tag', 'sub'));
+        return $form;
     }
 
     /**
@@ -119,8 +108,13 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
              ->setAction($this->_helper->url('update'))
              ->addDecorator('FormElements')
              ->addDecorator('Form');
-        $tag = $this->_createTagFormElementText();
-        $tag->setValue('');    // ビューでセットする
+        $tag = new Zend_Form_Element_Text('tag', array(
+            'id'         => 'tag',
+            'value'      => '',
+            'required'   => true,
+            'validators' => array('notEmpty'),
+            'filters'    => array('StringTrim')
+        ));
         $submit = new Zend_Form_Element_Submit('sub', array(
             'id'    => 'sub',
             'label' => '保存'

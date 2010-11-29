@@ -12,19 +12,32 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
+ * @param      int         $index       インデックス番号
  * @param      Setuco_Form $editTagForm タグ編集フォーム
  * @param      array       $tag         タグ情報の配列
  * @author     charlesvineyard
  */
 ?>
 <?php 
-    $this->editTagForm->getElement('tag')->setValue($this->tag['name']);
-    $this->editTagForm->getElement('id')->setValue($this->tag['id']);
-    $this->editTagForm->getElement('preTag')->setValue($this->tag['name']);
+    $form = clone($this->editTagForm);
+    $form->setAttrib('id', $form->getAttrib('id') . $this->index);
+    $form->getElement('tag')
+         ->setValue($this->tag['name'])
+         ->setAttrib('id', $form->getElement('tag')->getAttrib('id') . $this->index);
+    $form->getElement('id')
+         ->setValue($this->tag['id'])
+         ->setAttrib('id', $form->getElement('id')->getAttrib('id') . $this->index);
+    $form->getElement('preTag')
+         ->setValue($this->tag['name'])
+         ->setAttrib('id', $form->getElement('preTag')->getAttrib('id') . $this->index);
+    $form->getElement('sub')
+         ->setAttrib('id', $form->getElement('sub')->getAttrib('id') . $this->index);
+    $form->getElement('cancel')
+         ->setAttrib('id', $form->getElement('cancel')->getAttrib('id') . $this->index);
 ?>
 <td>
-    <span id="tagView"><?php echo $this->tag['name'] ?></span>
-    <div id="tagEdit"><?php echo $this->editTagForm ?></div>
+    <span class="tagView"><?php echo $this->tag['name'] ?></span>
+    <div class="tagEdit"><?php echo $form ?></div>
 </td>
 <td>
     <a href="javascript:void(0)" onclick="showTagEdit(this)">
