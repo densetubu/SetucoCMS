@@ -48,7 +48,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         //REST形式でリダイレクトするURLだったら、リダイレクトする
         // /page/search/query/test みたいなURLにリダイレクトする
         $redirectParams = $this->_loadRedirectParams();
-        $this->_restRedirectNeeded($redirectParams);
+        $this->_restRedirectIfNeeded($redirectParams);
 
         $this->_initLayout();
 
@@ -102,7 +102,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      * @return mixed  リダイレクトする場合はvoid しない場合はfalse
      * @author suzuki-mar
      */
-    protected function _restRedirectNeeded($redirectParams)
+    protected function _restRedirectIfNeeded($redirectParams)
     {
         //設定ファイルに書いてあるものしか、リダイレクトしない
         //リダイレクトしないモジュールは、nullが渡ってくる
