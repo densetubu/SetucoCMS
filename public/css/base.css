@@ -107,11 +107,11 @@ a:hover img {
 /*------------------------------------------------------------*/
 div#container div#header:after ,
 div#container div#content:after ,
-div.section div.topichArea:after ,
+div.hArea:after ,
 div#mainContent div.section:after ,
 div#topicSection dl:after ,
 dl#designs:after ,
-div#mainContent div.hArea:after ,
+div#mainContent div.hAreaText:after ,
 div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
 div#messageArea:after ,
@@ -282,6 +282,76 @@ ul#gNav li dl dd#active a:hover {
 }
 
 /*------------------------------------------------------------*/
+/*    copyright style                                         */
+/*------------------------------------------------------------*/
+p#copyright {
+    text-align: right;
+    margin: 10px 0;
+}
+
+/*------------------------------------------------------------*/
+/*    section style                                           */
+/*------------------------------------------------------------*/
+div#mainContent div.section {
+    background-color: #fff;
+    border: solid 1px #cfcfcf;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+    zoom: 100%;
+}
+
+/*------------------------------------------------------------*/
+/*    hArea style                                             */
+/*------------------------------------------------------------*/
+div.hAreaL {
+    background: url(../images/admin/share/bg_hArea_l.jpg) no-repeat left top;
+    margin-bottom: 15px;
+    padding-left: 5px;
+    height: 38px;
+}
+div.hAreaR {
+    background: url(../images/admin/share/bg_hArea_r.jpg) no-repeat right top;
+    padding-right: 5px;
+    height: 38px;
+}
+div.hArea {
+    background: url(../images/admin/share/bg_hArea.jpg) repeat-x top;
+    padding: 9px 10px;
+    height: 38px;
+    zoom: 100%;
+}
+div.hArea h3 {
+    float: left;
+    font-size: 110%;
+    font-weight: normal;
+}
+div.hArea p {
+    float: right;
+    margin-top: 3px;
+}
+div.hArea p a {
+    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
+    padding-left: 18px;
+}
+
+/*------------------------------------------------------------*/
+/*    hAreaText style                                             */
+/*------------------------------------------------------------*/
+div#mainContent div.hAreaText {
+    zoom: 100%;
+    border-bottom: solid 1px #5dc0e9;
+    margin: 0 10px 15px;
+    padding: 5px 5px 5px;
+}
+div#mainContent div.hAreaText h3 {
+    float: left;
+    background: url(../images/admin/share/bg_hAreaText.gif) no-repeat left center;
+    font-size: 120%;
+    font-weight: normal;
+    padding-left: 20px;
+}
+
+/*------------------------------------------------------------*/
 /*    topicPath style                                         */
 /*------------------------------------------------------------*/
 div#topicPath {
@@ -302,148 +372,23 @@ div#topicPath p img {
 }
 
 /*------------------------------------------------------------*/
-/*    section style                                           */
+/*    messageArea style                                       */
 /*------------------------------------------------------------*/
-div#mainContent div.section {
-    background-color: #fff;
-    border: solid 1px #cfcfcf;
-    margin-bottom: 10px;
-    padding: 10px 5px;
+div#messageArea {
+    clear: both;
+    background-color: #fff0d6;
+    border: solid 1px #ffd68e;
+    margin: -10px 0 10px;
+    padding: 5px 15px;
     zoom: 100%;
 }
-
-/*------------------------------------------------------------*/
-/*    topicSection style                                      */
-/*------------------------------------------------------------*/
-div#mainContent div#topicSection {
-    background-color: #fff;
-    border: solid 1px #cfcfcf;
-    margin-bottom: 10px;
-    padding: 5px;
-}
-div#topicSection div.topichAreaL {
-    background: url(../images/admin/share/bg_topic_l.jpg) no-repeat left top;
-    margin-bottom: 5px;
-    padding-left: 5px;
-    height: 38px;
-}
-div#topicSection div.topichAreaR {
-    background: url(../images/admin/share/bg_topic_r.jpg) no-repeat right top;
-    padding-right: 5px;
-    height: 38px;
-}
-div#topicSection div.topichArea {
-    background: url(../images/admin/share/bg_topic.jpg) repeat-x top;
-    padding: 10px 5px;
-    height: 38px;
-    zoom: 100%;
-}
-div#topicSection div.topichArea h3 {
+div#messageArea p {
     float: left;
-}
-div#topicSection div.topichArea p {
-    float: right;
-    margin-top: 2px;
-}
-div#topicSection div.topichArea p a {
-    background: url(../images/admin/share/bg_topicLink.gif) no-repeat left center;
-    padding-left: 18px;
-}
-div#topicSection dl dt ,
-div#topicSection dl dd  {
-    padding: 5px 10px;
-}
-
-/*------------------------------------------------------------*/
-/*    hArea style                                             */
-/*------------------------------------------------------------*/
-div#mainContent div.hArea {
-    zoom: 100%;
-    border-bottom: solid 1px #5dc0e9;
-    margin: 0 10px 15px;
-    padding: 5px 5px 5px;
-}
-div#mainContent div.hArea h3 {
-    float: left;
-    background: url(../images/admin/share/bg_hArea.gif) no-repeat left center;
-    font-size: 120%;
-    font-weight: normal;
-    padding-left: 20px;
-}
-div#mainContent div.hArea h3#recentry {
-    background: none;
-    padding-left: 0;
-}
-div.hArea p {
-    float: right;
-    margin-top: 2px;
-}
-div.hArea p a {
-    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
-    padding-left: 18px;
-}
-
-/*------------------------------------------------------------*/
-/*    section topichArea style                                */
-/*------------------------------------------------------------*/
-div.section div.topichAreaL {
-    background: url(../images/admin/share/bg_topicB_l.jpg) no-repeat left top;
-    margin-bottom: 15px;
-    padding-left: 5px;
-    height: 38px;
-}
-div.section div.topichAreaR {
-    background: url(../images/admin/share/bg_topicB_r.jpg) no-repeat right top;
-    padding-right: 5px;
-    height: 38px;
-}
-div.section div.topichArea {
-    background: url(../images/admin/share/bg_topicB.jpg) repeat-x top;
-    padding: 9px 10px;
-    height: 38px;
-    zoom: 100%;
-}
-div.section div.topichArea h3 {
-    float: left;
-    font-size: 110%;
-    font-weight: normal;
-}
-div.section div.topichArea p {
-    float: right;
-    margin-top: 2px;
-}
-div.topichArea p a {
-    background: url(../images/admin/share/bg_hLink.gif) no-repeat left center;
-    padding-left: 18px;
-}
-
-/*------------------------------------------------------------*/
-/*    contentsList style                                      */
-/*------------------------------------------------------------*/
-div#mainContent dl.contentsList {
-    padding: 10px 15px;
-    zoom: 100%;
-}
-div#mainContent dl.contentsList dt ,
-div#mainContent dl.contentsList dd {
-    float: left;
-}
-div#mainContent dl.contentsList dt {
-    margin-right: 5px;
-}
-div#mainContent dl.contentsList dd {
     margin-right: 20px;
 }
-div#mainContent dl.contentsList dt.pageDate {
+div#messageArea p.nonF {
     float: none;
-    margin-bottom: 10px;
-}
-div#mainContent dl.contentsList dd.pageTitle {
-    float: none;
-    background: none;
-    font-weight: bold;
-    margin-bottom: 10px;
-    padding: 0;
+    margin-right: 20px;
 }
 
 /*------------------------------------------------------------*/
@@ -476,43 +421,6 @@ div#pageNav ul li.current span {
     background-color: #dedede;
     border:solid 1px #d0d0d0;
     font-weight: bold;
-}
-
-/*------------------------------------------------------------*/
-/*    designs style                                           */
-/*------------------------------------------------------------*/
-dl#designs {
-    margin-left: 5px;
-    zoom: 100%
-}
-dl#designs dt ,
-dl#designs dd {
-    font-size: 120%;
-}
-dl#designs dt {
-    margin-right: 7px;
-    float:left;
-}
-dl#designs dd {
-    width: 70%;
-    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
-    padding-left: 10px;
-    zoom: 1;
-    margin-left: 2.5em;
-}
-dl#designs dd em {
-    margin-right: 5px;
-}
-dl#designs dd em input {
-    width: 70%;
-}
-
-/*------------------------------------------------------------*/
-/*    copyright style                                         */
-/*------------------------------------------------------------*/
-p#copyright {
-    text-align: right;
-    margin: 10px 0;
 }
 
 /*------------------------------------------------------------*/
@@ -560,23 +468,29 @@ td.thumb a {
 }
 
 /*------------------------------------------------------------*/
-/*    messageArea style                                       */
+/*    dl#inputArea style                                      */
 /*------------------------------------------------------------*/
-div#messageArea {
-    clear: both;
-    background-color: #fff0d6;
-    border: solid 1px #ffd68e;
-    margin: -10px 0 10px;
-    padding: 5px 15px;
-    zoom: 100%;
+dl#inputArea {
+    width: 70%;
+    max-width: 50em;
+    margin-left: 15px;
 }
-div#messageArea p {
-    float: left;
-    margin-right: 20px;
+dl#inputArea dt {
+    margin-top: 20px;
+    margin-bottom: 3px;
 }
-div#messageArea p.nonF {
-    float: none;
-    margin-right: 20px;
+dl#inputArea dt span {
+    color: #dd0000;
+    padding-right: 5px;
+    font-weight: bold;
+}
+dl#inputArea input {
+    font-size: 100%;
+    padding: 4px;
+    width: 100%;
+}
+dl#inputArea input.upSub {
+    width: auto;
 }
 
 /*------------------------------------------------------------*/
@@ -619,149 +533,13 @@ div#mainContent dl.editArea dd textarea {
     width: 100%;
 }
 
-/*------------------------------------------------------------*/
-/*    dl#siteForm style                                       */
-/*------------------------------------------------------------*/
-div#mainContent dl#siteForm dt {
-    height: 4em;
-}
-div#mainContent dl#siteForm dd {
-    height: 4em;
-}
-div#mainContent dl#siteForm dt#site_description_t {
-    height: 6em;
-}
-div#mainContent dl#siteForm dd#site_description_d {
-    height: 6em;
-}
-div#mainContent dl#siteForm dd span {
-    font-size: 80%;
-}
 
 /*------------------------------------------------------------*/
-/*    pageSearch style                                        */
+/*    -- login only style --                                  */
 /*------------------------------------------------------------*/
-div#pageSearch {
-    background-color: #f1faff;
-    margin-bottom:20px;
-    padding: 10px 17px;
-}
-div#pageSearch input {
-    vertical-align: top;
-}
-div#pageSearch dl {
-    zoom:100%;
-}
-div#pageSearch dt ,
-div#pageSearch dd {
-    float: left;
-}
-div#mainContent div#pageSearch dd {
-    background: none;
-    padding: 0 5px;
-}
-div#pageSearch dl.over dd {
-    font-size: 80%;
-}
-div#pageSearch dl.over dd input {
-    margin-bottom: 8px;
-    margin-right: 4px;
-}
-div#pageSearch dl.under {
-    margin-top: 12px;
-}
-div#pageSearch dl.under dd {
-    margin-right: 7px;
-}
-div#pageSearch p input {
-    margin-top:12px;
-    width:5em;
-}
 
 /*------------------------------------------------------------*/
-/*    form.accountEdit style                                  */
-/*------------------------------------------------------------*/
-form.accountEdit {
-    margin-bottom: 30px;
-}
-
-/*------------------------------------------------------------*/
-/*    dl#inputArea style                                      */
-/*------------------------------------------------------------*/
-dl#inputArea {
-    width: 70%;
-    max-width: 50em;
-    margin-left: 15px;
-}
-dl#inputArea dt {
-    margin-top: 20px;
-    margin-bottom: 3px;
-}
-dl#inputArea dt span {
-    color: #dd0000;
-    padding-right: 5px;
-    font-weight: bold;
-}
-dl#inputArea input {
-    font-size: 100%;
-    padding: 4px;
-    width: 100%;
-}
-dl#inputArea input.upSub {
-    width: auto;
-}
-
-/*------------------------------------------------------------*/
-/*    ul#directory style                                      */
-/*------------------------------------------------------------*/
-div.section ul#directory {
-    margin: 0 2px;
-}
-div.section ul#directory ul {
-    margin: 0;
-}
-div.section ul#directory ul li {
-    background: url("../images/admin/directory/bg_childLine.gif") no-repeat left center;
-    margin: 0 0 0 41px;
-    padding: 0 0 0 38px;
-}
-div.section ul#directory ul li.lastChild {
-    background: url("../images/admin/directory/bg_childLine_last.gif") no-repeat left center;
-}
-ul#directory li div {
-    padding: 3px 16px;
-    zoom:100%;
-}
-ul#directory li.page div {
-    padding: 1px 3px;
-}
-ul#directory li p {
-    margin-right: 10px;
-}
-ul#directory li.category p ,
-ul#directory li.page p {
-    float: left;
-}
-ul#directory li.category p {
-    padding-top: 3px;
-}
-ul#directory li p.folder {
-    font-size: 110%;
-    padding-top: 0;
-    padding-right: 3px;
-}
-ul#directory li p.folder a {
-    text-decoration: none;
-}
-ul#directory li p img {
-    padding: 3px 5px 3px 0;
-}
-ul#directory li p.folder img {
-    padding: 3px 8px 3px 0;
-}
-
-/*------------------------------------------------------------*/
-/*    loginBoard container style                              */
+/*    loginBoard style                                        */
 /*------------------------------------------------------------*/
 body#loginBoad {
     background-color: #f7f7f7;
@@ -808,4 +586,242 @@ body#loginBoad p input {
 body#loginBoad p#copyright {
     clear: right;
     text-align: left;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- index only style --                                  */
+/*------------------------------------------------------------*/
+
+/*------------------------------------------------------------*/
+/*    nowData hArea  style                                    */
+/*------------------------------------------------------------*/
+div.nowData div.hAreaL {
+    background: url(../images/admin/index/bg_nowData_hArea_l.jpg) no-repeat left top;
+}
+div.nowData div.hAreaR {
+    background: url(../images/admin/index/bg_nowData_hArea_r.jpg) no-repeat right top;
+}
+div.nowData div.hArea {
+    background: url(../images/admin/index/bg_nowData_hArea.jpg) repeat-x top;
+}
+div.nowData div.hArea h3 {
+    margin-top: 2px;
+}
+div.nowData div.hArea p {
+    float: right;
+    margin-top: 3px;
+}
+div.nowData div.hArea p a {
+    background: url(../images/admin/index/bg_nowData_hLink.gif) no-repeat left center;
+    padding-left: 18px;
+}
+div.nowData dl dt ,
+div.nowData dl dd  {
+    padding: 5px 10px;
+}
+
+/*------------------------------------------------------------*/
+/*    ambitionEdit style                                      */
+/*------------------------------------------------------------*/
+span#ambitionEdit {
+    display: none;
+}
+
+/*------------------------------------------------------------*/
+/*    designs style                                           */
+/*------------------------------------------------------------*/
+dl#designs {
+    margin-left: 5px;
+    zoom: 100%
+}
+dl#designs dt ,
+dl#designs dd {
+    font-size: 120%;
+}
+dl#designs dt {
+    margin-right: 7px;
+    float:left;
+}
+dl#designs dd {
+    width: 70%;
+    background: url(../images/admin/share/bg_dlLine.gif) no-repeat left center;
+    padding-left: 10px;
+    zoom: 1;
+    margin-left: 2.5em;
+}
+dl#designs dd em {
+    margin-right: 5px;
+}
+dl#designs dd em input {
+    width: 70%;
+}
+
+/*------------------------------------------------------------*/
+/*    contentsList style                                      */
+/*------------------------------------------------------------*/
+div#mainContent dl.contentsList {
+    padding: 10px 15px;
+    zoom: 100%;
+}
+div#mainContent dl.contentsList dt ,
+div#mainContent dl.contentsList dd {
+    float: left;
+}
+div#mainContent dl.contentsList dt {
+    margin-right: 5px;
+}
+div#mainContent dl.contentsList dd {
+    margin-right: 20px;
+}
+div#mainContent dl.contentsList dt.pageDate {
+    float: none;
+    margin-bottom: 10px;
+}
+div#mainContent dl.contentsList dd.pageTitle {
+    float: none;
+    background: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- page only style --                                   */
+/*------------------------------------------------------------*/
+
+/*------------------------------------------------------------*/
+/*    pageSearch style                                        */
+/*------------------------------------------------------------*/
+div#pageSearch {
+    background-color: #f1faff;
+    margin-bottom:20px;
+    padding: 10px 17px;
+}
+div#pageSearch input {
+    vertical-align: top;
+}
+div#pageSearch dl {
+    zoom:100%;
+}
+div#pageSearch dt ,
+div#pageSearch dd {
+    float: left;
+}
+div#mainContent div#pageSearch dd {
+    background: none;
+    padding: 0 5px;
+}
+div#pageSearch dl.over dd {
+    font-size: 80%;
+}
+div#pageSearch dl.over dd input {
+    margin-bottom: 8px;
+    margin-right: 4px;
+}
+div#pageSearch dl.under {
+    margin-top: 12px;
+}
+div#pageSearch dl.under dd {
+    margin-right: 7px;
+}
+div#pageSearch p input {
+    margin-top:12px;
+    width:5em;
+}
+p#status_edit {
+    display: none;
+}
+p#category_edit {
+    display: none;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- directory only style --                              */
+/*------------------------------------------------------------*/
+
+/*------------------------------------------------------------*/
+/*    ul#directory style                                      */
+/*------------------------------------------------------------*/
+div.section ul#directory {
+    margin: 0 2px;
+}
+div.section ul#directory ul {
+    margin: 0;
+}
+div.section ul#directory ul li {
+    background: url("../images/admin/directory/bg_childLine.gif") no-repeat left center;
+    margin: 0 0 0 41px;
+    padding: 0 0 0 38px;
+}
+div.section ul#directory ul li.lastChild {
+    background: url("../images/admin/directory/bg_childLine_last.gif") no-repeat left center;
+}
+ul#directory li div {
+    padding: 3px 16px;
+    zoom:100%;
+}
+ul#directory li.page div {
+    padding: 1px 3px;
+}
+ul#directory li p {
+    margin-right: 10px;
+}
+ul#directory li.category p ,
+ul#directory li.page p {
+    float: left;
+}
+ul#directory li.category ul {
+    display: none;
+}
+ul#directory li.category p {
+    padding-top: 3px;
+}
+ul#directory li p.folder {
+    font-size: 110%;
+    padding-top: 0;
+    padding-right: 3px;
+}
+ul#directory li p.folder a {
+    text-decoration: none;
+}
+ul#directory li p img {
+    padding: 3px 5px 3px 0;
+}
+ul#directory li p.folder img {
+    padding: 3px 8px 3px 0;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- tag only style --                                   */
+/*------------------------------------------------------------*/
+div#tagEdit {
+    display: none;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- site only style --                                   */
+/*------------------------------------------------------------*/
+
+/*------------------------------------------------------------*/
+/*    dl#siteForm style                                       */
+/*------------------------------------------------------------*/
+div#mainContent dl#siteForm dt {
+    height: 4em;
+}
+div#mainContent dl#siteForm dd {
+    height: 4em;
+}
+div#mainContent dl#siteForm dt#site_description_t {
+    height: 6em;
+}
+div#mainContent dl#siteForm dd#site_description_d {
+    height: 6em;
+}
+div#mainContent dl#siteForm dd span {
+    font-size: 80%;
 }

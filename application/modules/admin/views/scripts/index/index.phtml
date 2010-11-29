@@ -26,11 +26,6 @@
  * @author     charlesvineyard
  */
 ?>
-<?php $this->headStyle()->captureStart() ?>
-#ambitionEdit {
-    display: none;
-}
-<?php $this->headStyle()->captureEnd() ?>
 
 <!-- section"野望" START -->
 <div class="section">
@@ -58,10 +53,10 @@
 <!-- section"野望" END -->
 
 <!-- section"現在の状況" START -->
-<div id="topicSection">
-    <div class="topichAreaL">
-        <div class="topichAreaR">
-            <div class="topichArea">
+<div class="section nowData">
+    <div class="hAreaL">
+        <div class="hAreaR">
+            <div class="hArea">
                 <h3>
                     <img src="<?php echo $this->baseUrl('/images/admin/index/h_nowData.jpg') ?>" alt="現在の状況" width="112" height="22" />
                 </h3>
@@ -104,14 +99,14 @@
 
 <!-- section"最近作ったページ" START -->
 <div class="section">
-    <div class="topichAreaL">
-        <div class="topichAreaR">
-            <div class="topichArea">
+    <div class="hAreaL">
+        <div class="hAreaR">
+            <div class="hArea">
                 <h3 id="recentry">
                     <img src="<?php echo $this->baseUrl('/images/admin/index/h_recentlyPage.jpg') ?>" alt="最近作ったページ" width="194" height="23" />
                 </h3>
                 <p>
-                    <a href="<?php echo $this->baseUrl('/admin/page') ?>"> ページの一覧（編集・削除）へ</a>
+                    <a href="<?php echo $this->baseUrl('/admin/page') ?>">ページの一覧（編集・削除）へ</a>
                 </p>
             </div>
         </div>
