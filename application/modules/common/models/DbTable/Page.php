@@ -224,9 +224,9 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param array $targetColumns 検索対象のカラムの配列
      * @return int 検索条件に合致した記事の数。
      */
-    public function countPagesByKeyword($keyword, $tagIds, $targetColumns)
+    public function countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements = null)
     {
-        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns);
+        $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements);
         return count($this->fetchAll($select));
     }
     

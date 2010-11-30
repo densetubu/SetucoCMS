@@ -157,7 +157,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         );
         
         $pages = $this->_adjustPages($pages);
-        
+
         $this->_helper->viewRenderer('index');
         $this->view->pages = $pages;
         $this->view->searchForm = $searchForm;
