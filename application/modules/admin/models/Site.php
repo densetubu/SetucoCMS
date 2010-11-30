@@ -62,18 +62,14 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      * サイトの情報を更新する
      *
      * @param array 更新するデータ
-     * @return boolean 更新に成功したか
+     * @return true 更新に成功したか 更新に失敗した場合は例外が発生する
      * @author suzuki-mar
      */
-    public function updateSite($siteInfo)
+    public function updateSite($updateData)
     {
-        $updateData = $siteInfo;
-        
-
-
         //データは1件しかないないので、whereはいらない
         $this->_siteDao->update($updateData, true);
-
+       
         return true;
     }
 

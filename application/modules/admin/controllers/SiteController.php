@@ -51,8 +51,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $siteService = new Admin_Model_Site();
-        $this->view->sites = $siteService->getSiteInfo();
+        $this->view->sites = $this->_siteService->getSiteInfo();
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
@@ -78,10 +77,11 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         //入力したデータをバリデートチェックをする
         if ($validateForm->isValid($this->_getAllParams())) {
 
-           $validateData = $validateForm->getValues();
-           
-            //カテゴリーを編集する
-            if ($this->_siteService->updateSite($validateData, $this->_getParam('id'))) {
+            $validateData = $validateForm->getValues();
+
+            //サイト情報を編集する
+            $isUpdate = $this->_siteService->updateSite($validateData, $this->_getParam('id'));
+            if ($isUpdate) {
                 $this->_helper->flashMessenger('サイト情報を編集しました。');
                 $isSetFlashMessage = true;
             }
@@ -92,9 +92,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
             //フォームのnameと項目の名前の対応表　項目 : メッセージの形式にする。
             $fields = array('name' => 'サイト名', 'url' => 'サイトURL', 'comment' => '説明', 'keyword' => 'キーワード');
-
             foreach ($validateForm->getMessages() as $field => $messages) {
-
                 foreach ($messages as $value) {
                     $message = "{$fields[$field]} : {$value}";
                     $this->_helper->flashMessenger->addMessage($message);
@@ -104,7 +102,6 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $this->_helper->redirector('index');
-        return true;
     }
 
     /**
@@ -134,7 +131,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                 ->addFilter('StringTrim')
                 ->addValidators(array(
                     array('NotEmpty', true),
-                    array('url',true),
+                    array('url', true),
                     //文字列の長さを指定する
                     array('stringLength', true, array(6, 30)),
                 ));
