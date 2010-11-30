@@ -153,7 +153,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_getPageNumber(),
             $this->_getPageLimit(),
             $targets,
-            $refinements
+            $refinements,
+            'create_date',
+            'desc'
         );
         
         $pages = $this->_adjustPages($pages);
