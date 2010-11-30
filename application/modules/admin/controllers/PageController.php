@@ -139,7 +139,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function searchAction()
     {
         $searchForm = $this->_createSearchForm();
-        if (!$searchForm->isValid($_POST)) {
+        if (!$searchForm->isValid($this->_getAllParams())) {
+            d($searchForm->getValues());exit;
             $this->_setParam('searchForm', $searchForm);
             return $this->_forward('index');
         }

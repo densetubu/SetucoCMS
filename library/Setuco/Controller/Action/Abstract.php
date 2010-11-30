@@ -32,8 +32,16 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     /**
      * 一覧ページで、1ページあたり何件のデータを表示するか
      * @var null
+     * @todo PAGE_LIMITの削除
      */
     protected $_pageLimit = null;
+
+    /**
+     * REST形式のURLにリダイレクトするチェックをしたか
+     * 
+     * @var boolean
+     */
+    protected $_isRestRedirect = false;
 
     /**
      * 全てのコントローラ共通の初期処理です。
@@ -48,12 +56,15 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         //REST形式でリダイレクトするURLだったら、リダイレクトする
         // /page/search/query/test みたいなURLにリダイレクトする
         $redirectParams = $this->_loadRedirectParams();
-        $this->_restRedirectIfNeeded($redirectParams);
+        if ($this->_isRestRedirect($redirectParams)) {
+            $this->_restRedirect($redirectParams);
+        }
+
 
         $this->_initLayout();
-
         $this->view->addScriptPath($this->_getModulePath() . 'views/partials');
     }
+
 
     /**
      * REST形式にリダイレクトするパラメーターを取得する
@@ -93,27 +104,25 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return $redirectParams;
     }
 
-
     /**
-     * REST形式のURLにリダイレクトするものだったら、リダイレクトする
-     * 
+     * REST形式にリダイレクトするか
+     * 同じactionにしかリダイレクトしない
      *
-     * @param array $redirectParams リダイレクトするパラメーター配列
-     * @return mixed  リダイレクトする場合はvoid しない場合はfalse
+     * @param array $redirectParams REST形式にリダイレクトするデータ配列
+     * @return boolean リダイレクトするか
      * @author suzuki-mar
      */
-    protected function _restRedirectIfNeeded($redirectParams)
+    protected function _isRestRedirect($redirectParams)
     {
-        //設定ファイルに書いてあるものしか、リダイレクトしない
         //リダイレクトしないモジュールは、nullが渡ってくる
         if (is_null($redirectParams)) {
             return false;
         }
 
+
         //可読性を上げるために一時変数を作成する
-        $module     = $this->_getParam('module');
         $controller = $this->_getParam('controller');
-        $action     = $this->_getParam('action');
+        $action = $this->_getParam('action');
 
         if (!isset($redirectParams[$controller][$action]['query'])) {
             return false;
@@ -121,22 +130,43 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         $queries = $redirectParams[$controller][$action]['query'];
 
-        //複数選択の[]の部分がURLエンコードしている
-        $queryString = urldecode($_SERVER['QUERY_STRING']);
-
-        foreach ($queries as $paramName) {
-            //複数選択するものに対応するため
-            if (is_array($this->_getParam($paramName))) {
-                $paramName .= "[]";
-            }
-
-            $isRedirects[] = (strpos($queryString, "{$paramName}=") !== false);
+        foreach ($queries as $value) {
+            $isRedirects[] = (strpos($_SERVER['QUERY_STRING'], "{$value}=") !== false);
         }
-        
-        //指定したパラメーターが一つでも違っていたらリダイレクトしない
-        if (in_array(false, $isRedirects)) {
+
+        //指定したパラメーターがすべてあった場合のみリダイレクトする
+        if (!in_array(false, $isRedirects)) {
+            $this->_isRestRedirect = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * REST形式のURLにリダイレクトする
+     * 同じactionにしかリダイレクトしない
+     *
+     * @param array $redirectParams リダイレクトするパラメーター配列
+     * @return void redirectするので redirectしないばあいはfalse
+     * @author suzuki-mar
+     */
+    protected function _restRedirect($redirectParams)
+    {
+        //メソッドをコールする前にかならず_isRestRedirectでチェックする必要がある
+        if (!$this->_isRestRedirect) {
+            throw new Setuco_Exception('_isRestRedirectメソッドで、リダイレクトするかをチェックしてから、_restRedirectメソッドを使用してください');
+        }
+
+        //リダイレクトしないモジュールは、nullが渡ってくる
+        if (is_null($redirectParams)) {
             return false;
         }
+
+        //可読性を上げるためモジュール名などを一時変数にする
+        $module     = $this->_getParam('module');
+        $controller = $this->_getParam('controller');
+        $action     = $this->_getParam('action');
 
         //urlに付加するパラメーターのキーバリューを取得する
         $queryNames = $redirectParams[$controller][$action]['query'];
@@ -145,13 +175,13 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             $queryParams[$value] = $this->_getParam($value);
         }
 
-
         return $this->_helper->redirector(
                 $action,
                 $controller,
                 $module,
                 $queryParams);
     }
+
 
     /**
      * レイアウトを設定します。
