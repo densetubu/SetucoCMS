@@ -83,7 +83,7 @@
     </form>
 </td>
 <td>
-    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>');">
+    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>', '<?php echo $this->page['title'] ?>');">
         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
     </a>
 </td>

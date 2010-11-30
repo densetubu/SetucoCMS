@@ -129,11 +129,11 @@ $order = $this->condition['order'];
                     </a>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>', '<?php echo $media['name'] ?>');">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
-            </tr>            
+            </tr>
             <?php endforeach ?>
         </tbody>
     </table>

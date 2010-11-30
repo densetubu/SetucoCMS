@@ -110,9 +110,10 @@
                         <td>
                     <?php
                         $redirectUrl = $this->baseUrl("/admin/category/delete/id/{$value['id']}");
-                        $deleteItem = "{$value['name']}のカテゴリー";
                     ?>
-                            <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $deleteItem ?>");'><img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>' alt='削除' width='27' height='27' /></a>
+                            <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $value['name'] ?>");'>
+                                <img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>' alt='削除' width='27' height='27' />
+                            </a>
                         </td>
 
                 <?php endif; ?>

@@ -7,8 +7,8 @@ dojo.require('dojo.NodeList-html');
 function hideFlashMessage() {
     dojo.style('messageArea', {display: 'none'});  
 }
-function confirmRedirect(url){
-    if (confirm("本当に削除してよろしいですか？")) {
+function confirmDeleteRedirect(url, item){
+    if (confirm(item + "を本当に削除してよろしいですか？")) {
         location.href = url;
     }
 }
@@ -63,11 +63,3 @@ function hideTagEdit(switcher) {
     dojo.query(switcher.parentNode.parentNode).prev().style('display', 'inline');
 }
 
-/********************
- * category/index
- ********************/
-function confirmDeleteRedirect(url, item){
-    if (confirm(item + "を本当に削除してよろしいですか？")) {
-        location.href = url;
-    }
-}
