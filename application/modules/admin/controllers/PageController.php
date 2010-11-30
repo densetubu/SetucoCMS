@@ -455,30 +455,17 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
         }
-        if ($this->_isUpdating()) {
-            $this->_formActionWhenUpdate();
-            return;
-        }
+
         $this->view->form = $this->_getParam('form', $this->_createForm());
     }
-    
+
     /**
-     * 更新フォームを表示するか判断します。
-     * 
-     * @return 更新なら true
-     * @author charlesvineyard
-     */
-    private function _isUpdating() {
-        return $this->_getParam('id') !== null;
-    }
-    
-    /**
-     * 新規作成フォームではなく更新フォームを表示する処理
+     * ページ編集フォームのアクション
      * 
      * @return void
      * @author charlesvineyard
      */
-    private function _formActionWhenUpdate()
+    public function editFormAction()
     {
         $idValidator = new Zend_Validate_Db_RecordExists(array(
             'table' => 'page',
@@ -488,24 +475,27 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$idValidator->isValid($id)) {
             throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
         }
+        
         $page = $this->_pageService->findPage($id);
-        $tagValue = $this->_createCSTagNames($id);
         $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
         $currentPageValues = array(
             'page_title'    => $page['title'],
             'category_id'   => $page['category_id'],
             'page_contents' => $page['contents'],
             'page_outline'  => $page['outline'],
-            'tag'           => $tagValue,
+            'tag'           => $this->_createCSTagNames($id),
             'create_date'   => $createDate->toString(self::FORMAT_DATE_TEXT_BOX),
             'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
             'hidden_id'     => $id,
         );
+        
         $form = $this->_createUpdateForm();
         $form->setDefaults($currentPageValues);
+
+        $this->_helper->viewRenderer('form');
         $this->view->form = $form;
     }
-    
+
     /**
      * ページ更新用フォームを作成します。
      * 
