@@ -802,6 +802,21 @@ div.tagEdit {
     display: none;
 }
 
+/*------------------------------------------------------------*/
+/*    -- media only style --                                   */
+/*------------------------------------------------------------*/
+p#upload_img2 {
+    display: none;
+}
+p#upload_img3 {
+    display: none;
+}
+p#upload_img4 {
+    display: none;
+}
+p#upload_img5 {
+    display: none;
+}
 
 /*------------------------------------------------------------*/
 /*    -- site only style --                                   */

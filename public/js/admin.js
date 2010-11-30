@@ -63,3 +63,15 @@ function hideTagEdit(switcher) {
     dojo.query(switcher.parentNode.parentNode).prev().style('display', 'inline');
 }
 
+/********************
+ * media/index
+ ********************/
+var uploadImgIndex = 1;
+
+function addUploadImgForm(switcher) {
+    dojo.query("#upload_img" + ++uploadImgIndex).style('display', 'block');
+    if (uploadImgIndex == 5) {
+        dojo.query("#upload_img_add").style('display', 'none');
+    }
+}
+
