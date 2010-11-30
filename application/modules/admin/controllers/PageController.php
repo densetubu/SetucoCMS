@@ -170,6 +170,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 $keyword, $targets, $refinements
             )
         );
+        $this->view->isSearched = true;
     }
     
     /**
