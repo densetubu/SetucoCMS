@@ -140,19 +140,19 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $searchForm = $this->_createSearchForm();
         if (!$searchForm->isValid($this->_getAllParams())) {
-            d($searchForm->getValues());exit;
             $this->_setParam('searchForm', $searchForm);
             return $this->_forward('index');
         }
         
         $keyword = $searchForm->getValue('query');
-        $targets = $searchForm->getValue('targets');
+        $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
+        
         $pages = $this->_pageService->searchPages(
             $keyword,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
-            $targets,
+            array($targets),
             $refinements
         );
         
