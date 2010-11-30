@@ -730,10 +730,10 @@ div#pageSearch p input {
     margin-top:12px;
     width:5em;
 }
-p#status_edit {
+p.status_edit {
     display: none;
 }
-p#category_edit {
+p.category_edit {
     display: none;
 }
 

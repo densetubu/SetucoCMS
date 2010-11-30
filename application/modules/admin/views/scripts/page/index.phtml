@@ -100,9 +100,9 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->pages as $page): ?>
+        <?php foreach ($this->pages as $index => $page): ?>
             <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
-                <?php echo $this->partial('page-row.phtml', array('page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
+                <?php echo $this->partial('page-row.phtml', array('index' => $index, 'page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
             </tr>
         <?php endforeach ?>
         </tbody>

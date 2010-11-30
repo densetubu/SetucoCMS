@@ -237,7 +237,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'Text',
                  'query',
                  array(
-                     'id' => 'keyword',
+                     'id' => 'query',
                      'class' => 'defaultInput',
                      'required' => true,
                      'filters' => array(
@@ -292,7 +292,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  )
              );
         $form->setMinimalDecoratorElements(array(
-            'keyword',
+            'query',
             'targets',
             'category_id',
             'account_id',
@@ -334,25 +334,28 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'Select',    // selected 指定はビューでする
                 'category_id',
                 array(
-                    'required' => true,
-                    'onchange' => 'showPageElementEdit(this);',
+                    'id'           => 'category_id',
+                    'required'     => true,
+                    'onchange'     => 'showPageElementEdit(this);',
                     'multiOptions' => $categories,
+                    'decorators'   => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'h_page_id_c',
+                array(
+                    'id'         => 'h_page_id_c',
+                    'required'   => true,
                     'decorators' => array('ViewHelper')
                 )
             )
             ->addElement(
                 'Hidden',
-                'hidden_page_id',
+                'h_page_title_c',
                 array(
-                    'required' => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'hidden_page_title',
-                array(
-                    'required' => true,
+                    'id'         => 'h_page_title_c',
+                    'required'   => true,
                     'decorators' => array('ViewHelper')
                 )
             )
@@ -360,7 +363,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'Submit',
                 'sub_category',
                 array(
-                    'label'   => '変更',
+                    'id'         => 'sub_category',
+                    'label'      => '変更',
                     'decorators' => array('ViewHelper')
                 )
             )
@@ -368,7 +372,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'button',
                 'cancel_category',
                 array(
-                    'id'      => 'cancel',
+                    'id'      => 'cancel_category',
                     'label'   => 'キャンセル',
                     'onclick' => 'hidePageElementEdit(this);',
                     'decorators' => array('ViewHelper')
@@ -391,43 +395,47 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'Select',    // selected 指定はビューでする
                 'status',
                 array(
-                    'required' => true,
-                    'onchange' => 'showPageElementEdit(this);',
+                    'id'           => 'status',
+                    'required'     => true,
+                    'onchange'     => 'showPageElementEdit(this);',
                     'multiOptions' => Setuco_Data_Constant_Page::allStatus(),
+                    'decorators'   => array('ViewHelper')
+                )
+            )
+            ->addElement(
+                'Hidden',
+                'h_page_id_s',
+                array(
+                    'id'         => 'h_page_id_s',
+                    'required'   => true,
                     'decorators' => array('ViewHelper')
                 )
             )
             ->addElement(
                 'Hidden',
-                'hidden_page_id',
+                'h_page_title_s',
                 array(
-                    'required' => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'hidden_page_title',
-                array(
-                    'required' => true,
+                    'id'         => 'h_page_title_s',
+                    'required'   => true,
                     'decorators' => array('ViewHelper')
                 )
             )
             ->addElement(
                 'Submit',
-                'sub_category',
+                'sub_status',
                 array(
-                    'label'   => '変更',
+                    'id'         => 'sub_status',
+                    'label'      => '変更',
                     'decorators' => array('ViewHelper')
                 )
             )
             ->addElement(
                 'button',
-                'cancel_category',
+                'cancel_status',
                 array(
-                    'id'      => 'cancel',
-                    'label'   => 'キャンセル',
-                    'onclick' => 'hidePageElementEdit(this);',
+                    'id'         => 'cancel_status',
+                    'label'      => 'キャンセル',
+                    'onclick'    => 'hidePageElementEdit(this);',
                     'decorators' => array('ViewHelper')
                 )
             );
@@ -824,14 +832,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(
-            $form->getValue('hidden_page_id'),
+            $form->getValue('h_page_id_c'),
             array(
                 'category_id' => 
                     ($form->getValue('category_id') === $this->_uncategorizedValue) ? 
                     null : $form->getValue('category_id')
             )
         );
-        $this->_helper->flashMessenger('「' . $form->getValue('hidden_page_title') . '」のカテゴリーを変更しました。');
+        $this->_helper->flashMessenger('「' . $form->getValue('h_page_title_c') . '」のカテゴリーを変更しました。');
         $this->_helper->redirector('index');
     }
 
@@ -850,12 +858,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(
-            $form->getValue('hidden_page_id'),
+            $form->getValue('h_page_id_s'),
             array(
                 'status' => $form->getValue('status')
             )
         );
-        $this->_helper->flashMessenger('「' . $form->getValue('hidden_page_title') . '」の状態を変更しました。');
+        $this->_helper->flashMessenger('「' . $form->getValue('h_page_title_s') . '」の状態を変更しました。');
         $this->_helper->redirector('index');
     }
 

@@ -18,48 +18,72 @@
  * @author     charlesvineyard
  */
 ?>
-                <td>
-                <?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
-                    <a href="<?php echo $this->baseUrl('/page/id/' . $this->page['id']) ?>" target='_blank'>
-                        <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check.png') ?>" alt='表示' width='27' height='27' />
-                    </a>
-                <?php else: ?>
-                    <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
-                <?php endif ?>
-                </td>
-                <td>
-                    <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $this->page['id']) ?>"><?php echo $this->page['title'] ?></a>
-                </td>
-                <td><?php echo $this->page['create_date'] ?></td>
-                <td><?php echo $this->page['nickname'] ?></td>
-                <td>
-                    <form id="page_category_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->categoryForm->getAction() ?>">
-                        <p>
-                            <?php echo $this->categoryForm->getElement('category_id')->setValue($this->page['category_id']) ?>
-                            <?php echo $this->categoryForm->getElement('hidden_page_id')->setValue($this->page['id']) ?>
-                            <?php echo $this->categoryForm->getElement('hidden_page_title')->setValue($this->page['title']) ?>
-                        </p>
-                        <p id="category_edit">
-                            <?php echo $this->categoryForm->getElement('sub_category') ?>
-                            <?php echo $this->categoryForm->getElement('cancel_category') ?>
-                        </p>
-                    </form>
-                </td>
-                <td>
-                    <form id="page_status_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->statusForm->getAction() ?>">
-                        <p>
-                            <?php echo $this->statusForm->getElement('status')->setValue($this->page['status']) ?>
-                            <?php echo $this->statusForm->getElement('hidden_page_id')->setValue($this->page['id']) ?>
-                            <?php echo $this->statusForm->getElement('hidden_page_title')->setValue($this->page['title']) ?>
-                        </p>
-                        <p id="status_edit">
-                            <?php echo $this->statusForm->getElement('sub_category') ?>
-                            <?php echo $this->statusForm->getElement('cancel_category') ?>
-                        </p>
-                    </form>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                    </a>
-                </td>
+<?php 
+    $categoryForm = clone($this->categoryForm);
+    $categoryForm->getElement('category_id')
+                 ->setAttrib('id', $categoryForm->getElement('category_id')->getAttrib('id') . $this->index);
+    $categoryForm->getElement('h_page_id_c')
+                 ->setAttrib('id', $categoryForm->getElement('h_page_id_c')->getAttrib('id') . $this->index);
+    $categoryForm->getElement('h_page_title_c')
+                 ->setAttrib('id', $categoryForm->getElement('h_page_title_c')->getAttrib('id') . $this->index);
+    $categoryForm->getElement('sub_category')
+                 ->setAttrib('id', $categoryForm->getElement('sub_category')->getAttrib('id') . $this->index);
+    $categoryForm->getElement('cancel_category')
+                 ->setAttrib('id', $categoryForm->getElement('cancel_category')->getAttrib('id') . $this->index);
+    $statusForm = clone($this->statusForm);
+    $statusForm->getElement('status')
+                 ->setAttrib('id', $statusForm->getElement('status')->getAttrib('id') . $this->index);
+    $statusForm->getElement('h_page_id_s')
+                 ->setAttrib('id', $statusForm->getElement('h_page_id_s')->getAttrib('id') . $this->index);
+    $statusForm->getElement('h_page_title_s')
+                 ->setAttrib('id', $statusForm->getElement('h_page_title_s')->getAttrib('id') . $this->index);
+    $statusForm->getElement('sub_status')
+                 ->setAttrib('id', $statusForm->getElement('sub_status')->getAttrib('id') . $this->index);
+    $statusForm->getElement('cancel_status')
+                 ->setAttrib('id', $statusForm->getElement('cancel_status')->getAttrib('id') . $this->index);
+?>
+<td>
+<?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
+    <a href="<?php echo $this->baseUrl('/page/id/' . $this->page['id']) ?>" target='_blank'>
+        <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check.png') ?>" alt='表示' width='27' height='27' />
+    </a>
+<?php else: ?>
+    <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check_no.png') ?>" alt='下書きは表示できません' width='27' height='27' />
+<?php endif ?>
+</td>
+<td>
+    <a href="<?php echo $this->baseUrl('/admin/page/form/id/' . $this->page['id']) ?>"><?php echo $this->page['title'] ?></a>
+</td>
+<td><?php echo $this->page['create_date'] ?></td>
+<td><?php echo $this->page['nickname'] ?></td>
+<td>
+    <form id="page_category_form<?php echo $this->index ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $categoryForm->getAction() ?>">
+        <p>
+            <?php echo $categoryForm->getElement('category_id')->setValue($this->page['category_id']) ?>
+            <?php echo $categoryForm->getElement('h_page_id_c')->setValue($this->page['id']) ?>
+            <?php echo $categoryForm->getElement('h_page_title_c')->setValue($this->page['title']) ?>
+        </p>
+        <p class="category_edit">
+            <?php echo $categoryForm->getElement('sub_category') ?>
+            <?php echo $categoryForm->getElement('cancel_category') ?>
+        </p>
+    </form>
+</td>
+<td>
+    <form id="page_status_form<?php echo $this->index ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $statusForm->getAction() ?>">
+        <p>
+            <?php echo $statusForm->getElement('status')->setValue($this->page['status']) ?>
+            <?php echo $statusForm->getElement('h_page_id_s')->setValue($this->page['id']) ?>
+            <?php echo $statusForm->getElement('h_page_title_s')->setValue($this->page['title']) ?>
+        </p>
+        <p class="status_edit">
+            <?php echo $statusForm->getElement('sub_status') ?>
+            <?php echo $statusForm->getElement('cancel_status') ?>
+        </p>
+    </form>
+</td>
+<td>
+    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>');">
+        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+    </a>
+</td>
