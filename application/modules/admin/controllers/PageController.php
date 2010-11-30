@@ -152,10 +152,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $keyword,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
-            array($targets),
+            $targets,
             $refinements
         );
-        
+
         $pages = $this->_adjustPages($pages);
         
         $this->_helper->viewRenderer('index');
