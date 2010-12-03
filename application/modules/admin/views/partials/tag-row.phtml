@@ -45,7 +45,7 @@
     </a>
 </td>
 <td>
-    <a href="javascript:void(0)" onclick="confirmRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>');">
+    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->tag['name'] ?>');">
         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
     </a>
 </td>

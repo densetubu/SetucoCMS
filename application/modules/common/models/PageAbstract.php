@@ -107,7 +107,7 @@ abstract class Common_Model_PageAbstract
         if (in_array('tag', $targetColumns)) {
             $tagIds = $this->_searchTagIdsByKeyword($keyword);
         }
-        return (int)($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns));
+        return (int)($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements));
     }
 
     /**

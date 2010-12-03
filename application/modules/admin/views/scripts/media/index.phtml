@@ -23,15 +23,6 @@
  * @author      akitsukada
  */
 ?>
-<?php $this->headScript()->captureStart() ?>
-function addElement() {
-    var element = document.createElement('dd');
-    element.innerHTML = '<input type="file" name="upload_img" id="upload_img" size="55" />';
-
-    var objBody = document.getElementById("inputArea");
-    objBody.appendChild(element);
-}
-<?php $this->headScript()->captureEnd() ?>
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -66,8 +57,12 @@ $order = $this->condition['order'];
     <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
-              <p><?php echo $this->uploadForm->getElement('upload_img') ?></p>
-              <p><a href="javascript:void(0)" onclick="addElement()">ファイル選択欄を増やす</a></p><?php // @todo 未対応 ?>
+              <p id="upload_img1"><?php echo $this->uploadForm->getElement('upload_img') ?></p>
+              <p id="upload_img2"><?php echo $this->uploadForm->getElement('upload_img') ?></p>
+              <p id="upload_img3"><?php echo $this->uploadForm->getElement('upload_img') ?></p>
+              <p id="upload_img4"><?php echo $this->uploadForm->getElement('upload_img') ?></p>
+              <p id="upload_img5"><?php echo $this->uploadForm->getElement('upload_img') ?></p>
+              <p><a href="javascript:void(0)" onclick="addUploadImgForm(this)" id="upload_img_add">ファイル選択欄を増やす</a></p>
               <p><span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></p>
               <p><?php echo $this->uploadForm->getElement('up') ?></p>
           <?php else: ?>
@@ -129,11 +124,11 @@ $order = $this->condition['order'];
                     </a>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" onclick="if (confirm('ファイル <?php echo $media['name'] ?> を削除しますか？')) { location.href = '<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>'; }">
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>', '<?php echo $media['name'] ?>');">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
-            </tr>            
+            </tr>
             <?php endforeach ?>
         </tbody>
     </table>

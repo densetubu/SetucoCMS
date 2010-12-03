@@ -7,8 +7,8 @@ dojo.require('dojo.NodeList-html');
 function hideFlashMessage() {
     dojo.style('messageArea', {display: 'none'});  
 }
-function confirmRedirect(url){
-    if (confirm("本当に削除してよろしいですか？")) {
+function confirmDeleteRedirect(url, item){
+    if (confirm(item + "を本当に削除してよろしいですか？")) {
         location.href = url;
     }
 }
@@ -64,10 +64,14 @@ function hideTagEdit(switcher) {
 }
 
 /********************
- * category/index
+ * media/index
  ********************/
-function confirmDeleteRedirect(url, item){
-    if (confirm(item + "を本当に削除してよろしいですか？")) {
-        location.href = url;
+var uploadImgIndex = 1;
+
+function addUploadImgForm(switcher) {
+    dojo.query("#upload_img" + ++uploadImgIndex).style('display', 'block');
+    if (uploadImgIndex == 5) {
+        dojo.query("#upload_img_add").style('display', 'none');
     }
 }
+

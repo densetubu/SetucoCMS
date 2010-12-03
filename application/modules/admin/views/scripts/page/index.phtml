@@ -79,19 +79,25 @@
         <thead>
             <tr>
                 <th scope="col" id="tableFirst">表示</th>
-                <th scope="col">タイトル名<a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/desc') ?>">
+                <th scope="col">タイトル名
+                <?php if (!$this->isSearched): ?>
+                    <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/desc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                     </a>
                     <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/asc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                     </a>
+                <?php endif ?>
                 </th>
-                <th scope="col">制作日<a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/desc') ?>">
+                <th scope="col">制作日
+                <?php if (!$this->isSearched): ?>
+                    <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/desc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                     </a>
                     <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/asc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                     </a>
+                <?php endif ?>
                 </th>
                 <th scope="col">制作者</th>
                 <th scope="col">カテゴリー</th>
@@ -100,9 +106,9 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($this->pages as $page): ?>
+        <?php foreach ($this->pages as $index => $page): ?>
             <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
-                <?php echo $this->partial('page-row.phtml', array('page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
+                <?php echo $this->partial('page-row.phtml', array('index' => $index, 'page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
             </tr>
         <?php endforeach ?>
         </tbody>

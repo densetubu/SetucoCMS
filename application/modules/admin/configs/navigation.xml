@@ -41,6 +41,16 @@
             <type>Setuco_Navigation_Page</type>
             <src>images/admin/gNav/h_menu_page.jpg</src>
             <pages>
+                <page_form_edit>
+                    <id>page_form_edit</id>
+                    <title>ページの編集</title>
+                    <label>編集</label>
+                    <module>admin</module>
+                    <controller>page</controller>
+                    <action>edit</action>
+                    <param>id</param>
+                    <visible>0</visible>
+                </page_form_edit>
                 <page_form>
                     <id>page_form</id>
                     <title>ページの新規作成</title>
