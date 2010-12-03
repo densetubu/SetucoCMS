@@ -93,7 +93,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         $this->view->createdPageCount = $createdPageCount;
-        $this->view->diffGoal = Setuco_Data_Converter_UpdateStatus::convertDiffGoal2String(
+        $this->view->diffGoal = $this->_convertDiffGoal2String(
                 $createdPageCount - $this->_goalService->findGoalPageCountThisMonth());
 
         // 総ページ数
@@ -112,6 +112,29 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $modifiedLastCreatedPages[] = $page;
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
+    }
+    
+    /**
+     * 目標との差分ページ数を表示用の文言に変換します。
+     *
+     * @param  int $diffGoal 目標との差分ページ数
+     * @return string 更新状況の文字列
+     * @author charlesvineyard
+     */
+    private function _convertDiffGoal2String($diffGoal)
+    {
+        if (!is_int($diffGoal)) {
+            throw new UnexpectedValueException('目標との差分ページ数が[' . $diffGoal . ']になっています。');
+        }
+        if (0 === $diffGoal) {
+            return '目標達成！';
+        }
+        if (0 < $diffGoal) {
+            return '目標からプラス' . $diffGoal . 'ページ！';
+        }
+        if (0 > $diffGoal) {
+            return '目標まであと' . ($diffGoal * -1) . 'ページ！';
+        }
     }
 
     /**
