@@ -52,7 +52,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     const FILENAME_LENGTH_MAX = 50;
 
     /**
-     * サムネイルの表示時の幅。ビュー的な要素だがサムネイル生成時にも参照するためここで定義。
+     * サムネイルの表示時の幅。ビュー的な要素だがサムネイル生成時にモデルにも伝えるためここで定義。
      */
     const THUMBNAIL_WIDTH = 65;
 
@@ -64,7 +64,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     /**
      * 絞り込み処理で使うファイル種別「全て」の値
      */
-    const FILEEXT_ALL = 'all';
+    const FILEEXT_ALL_VALUE = 'all';
 
     /**
      * 一覧表示時、１ページに何件のファイルを表示するか
@@ -105,12 +105,12 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $currentPage = $this->_getPageNumber();
 
         // ファイルタイプの絞り込み条件取得(デフォルトでは'all')
-        $type = self::FILEEXT_ALL;
+        $type = self::FILEEXT_ALL_VALUE;
         if ($this->getRequest()->isPost()) { // isPost == trueならばファイル種別絞り込みフォームでsubmitされている
-            $type = array_key_exists($this->_getParam('fileType'), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL;
+            $type = array_key_exists($this->_getParam('fileType'), $this->_fileExt) ? $this->_fileExt[$this->_getParam('fileType')] : self::FILEEXT_ALL_VALUE;
             $currentPage = 1; // 新たに絞り込みされた場合は常に1ページ目表示
         } else {
-            $type = $this->_getParam('type', self::FILEEXT_ALL);     // ソートリンクでの指定
+            $type = $this->_getParam('type', self::FILEEXT_ALL_VALUE);     // ソートリンクでの指定
         }
 
         // ソート指定のカラムとオーダー取得 (デフォルトではファイル名'name'の昇順'asc')
