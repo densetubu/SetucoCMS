@@ -323,7 +323,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
-                         Setuco_Data_Constant_Page::allStatus()),
+                         Setuco_Data_Constant_Page::ALL_STATUSES()),
                      'value' => $this->_uncategorizedValue,    // selected指定
                  )
              )
@@ -441,7 +441,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                     'id'           => 'status',
                     'required'     => true,
                     'onchange'     => 'showPageElementEdit(this);',
-                    'multiOptions' => Setuco_Data_Constant_Page::allStatus(),
+                    'multiOptions' => Setuco_Data_Constant_Page::ALL_STATUSES(),
                     'decorators'   => array('ViewHelper')
                 )
             )

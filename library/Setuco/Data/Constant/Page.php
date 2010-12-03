@@ -56,7 +56,7 @@ class Setuco_Data_Constant_Page
      * @return array 状態のint値と文字列の連想配列
      * @author charlesvineyard
      */
-    public static function allStatus()
+    public static function ALL_STATUSES()
     {
         return array(
             self::STATUS_DRAFT => self::STATUS_DRAFT_STRING,
