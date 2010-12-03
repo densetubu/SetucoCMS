@@ -28,12 +28,17 @@
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
+<?php if ($this->form->getElement('hidden_id') == null): // 新規作成の場合 ?>
     <p>ページの新規作成</p>
+<?php else: // 編集の場合?>
+    <p><?php echo "「{$this->form->getElement('page_title')->getValue()}」" ?>の編集</p>
+<?php endif ?>
 </div>
 <!-- topicpath END -->
 
 <!-- section START -->
 <div class="section">
+<?php if ($this->form->getElement('hidden_id') == null): // 新規作成の場合 ?>
     <div class="hAreaL">
         <div class="hAreaR">
             <div class="hArea">
@@ -41,7 +46,11 @@
             </div>
         </div>
     </div>
-
+<?php else: // 編集の場合?>
+    <div class="hAreaText">
+        <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
+    </div>
+<?php endif ?>
 <?php if ($this->flashMessage): ?>
     <div id="messageArea">
         <p><?php echo $this->flashMessage ?></p>
@@ -106,7 +115,7 @@
             <li><?php echo $this->form->getElement('sub_draft2') ?></li>
             <li><?php echo $this->form->getElement('sub_open2') ?></li>
         </ul>
-        <?php if ($this->form->getElement('hidden_id') != null): ?>
+        <?php if ($this->form->getElement('hidden_id') != null): // 新規作成でなく編集の場合 ?>
         <p><?php echo $this->form->getElement('hidden_id') ?></p>
         <?php endif ?>
     </form>

@@ -107,6 +107,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
+        if ($this->_getParam('id') !== null) {
+            return $this->_editFormOperation();
+        }
         $sortColumn = $this->_getParam('sort', 'title');
         $sortValidator = new Zend_Validate_InArray(array('title', 'create_date'));
         if (!$sortValidator->isValid($sortColumn)) {
@@ -128,6 +131,45 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->statusForm = $this->_createStatusForm();
         $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
+    }
+
+    /**
+     * ページ編集フォームの処理
+     * 
+     * @return void
+     * @author charlesvineyard
+     */
+    protected function _editFormOperation()
+    {
+        $idValidator = new Zend_Validate_Db_RecordExists(array(
+            'table' => 'page',
+            'field' => 'id'
+        ));
+        $id = $this->_getParam('id');
+        if (!$idValidator->isValid($id)) {
+            throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
+        }
+        
+        $page = $this->_pageService->findPage($id);
+        $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
+        $currentPageValues = array(
+            'page_title'    => $page['title'],
+            'category_id'   => $page['category_id'],
+            'page_contents' => $page['contents'],
+            'page_outline'  => $page['outline'],
+            'tag'           => $this->_createCSTagNames($id),
+            'create_date'   => $createDate->toString(self::FORMAT_DATE_TEXT_BOX),
+            'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
+            'hidden_id'     => $id,
+        );
+        
+        $form = $this->_createUpdateForm();
+        $form->setDefaults($currentPageValues);
+
+        $this->view->headTitle($page['title'] . 'の編集',
+            Zend_View_Helper_Placeholder_Container_Abstract::SET);
+        $this->_helper->viewRenderer('form');
+        $this->view->form = $form;
     }
 
     /**
@@ -457,43 +499,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $this->view->form = $this->_getParam('form', $this->_createForm());
-    }
-
-    /**
-     * ページ編集フォームのアクション
-     * 
-     * @return void
-     * @author charlesvineyard
-     */
-    public function editFormAction()
-    {
-        $idValidator = new Zend_Validate_Db_RecordExists(array(
-            'table' => 'page',
-            'field' => 'id'
-        ));
-        $id = $this->_getParam('id');
-        if (!$idValidator->isValid($id)) {
-            throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
-        }
-        
-        $page = $this->_pageService->findPage($id);
-        $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
-        $currentPageValues = array(
-            'page_title'    => $page['title'],
-            'category_id'   => $page['category_id'],
-            'page_contents' => $page['contents'],
-            'page_outline'  => $page['outline'],
-            'tag'           => $this->_createCSTagNames($id),
-            'create_date'   => $createDate->toString(self::FORMAT_DATE_TEXT_BOX),
-            'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
-            'hidden_id'     => $id,
-        );
-        
-        $form = $this->_createUpdateForm();
-        $form->setDefaults($currentPageValues);
-
-        $this->_helper->viewRenderer('form');
-        $this->view->form = $form;
     }
 
     /**
