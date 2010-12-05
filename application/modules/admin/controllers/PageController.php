@@ -53,7 +53,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * @var Admin_Model_Tag
      */
     private $_tagService;
-    
+
     /**
      * 日付テキストボックスのvalue属性のフォーマット
      * (画面に表示されるものではない)
@@ -76,10 +76,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * @var string
      */
     const UNSELECTED_VALUE = 'default';
-    
+
     /**
      * カテゴリーが未分類のvalue属性
-     * 
+     *
      * @var string
      */
     private $_uncategorizedValue = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
@@ -96,7 +96,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_categoryService = new Admin_Model_Category();
         $this->_accountService = new Admin_Model_Account();
         $this->_tagService = new Admin_Model_Tag();
-        
+
     }
 
     /**
@@ -124,7 +124,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
         $pages = $this->_adjustPages($pages);
-        
+
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
@@ -135,7 +135,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * ページ編集フォームの処理
-     * 
+     *
      * @return void
      * @author charlesvineyard
      */
@@ -149,7 +149,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$idValidator->isValid($id)) {
             throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
         }
-        
+
         $page = $this->_pageService->findPage($id);
         $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
         $currentPageValues = array(
@@ -162,11 +162,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
             'hidden_id'     => $id,
         );
-        
+
         $form = $this->_createUpdateForm();
         $form->setDefaults($currentPageValues);
 
-        $this->view->headTitle($page['title'] . 'の編集',
+        $this->view->headTitle('「' . $page['title'] . '」の編集',
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
@@ -185,11 +185,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('searchForm', $searchForm);
             return $this->_forward('index');
         }
-        
+
         $keyword = $searchForm->getValue('query');
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
-        
+
         $pages = $this->_pageService->searchPages(
             $keyword,
             $this->_getPageNumber(),
@@ -214,10 +214,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         );
         $this->view->isSearched = true;
     }
-    
+
     /**
      * 絞り込み条件を作成します。
-     * 
+     *
      * @param Setuco_Form $searchForm 検索フォーム
      * @return array 絞り込み条件のペア
      * @author charlesvineyard
@@ -238,10 +238,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
         return $refinements;
     }
-    
+
     /**
      * ページの内容をビュー用に整形します。
-     * 
+     *
      * @param array $pages ページ情報の配列
      * @return array ページ情報の配列
      * @author charlesvineyard
@@ -260,7 +260,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * 検索フォームを作成します。
-     * 
+     *
      * @return Setuco_Form フォーム
      * @author charlesvineyard
      */
@@ -344,10 +344,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         ));
         return $form;
     }
-    
+
     /**
      * オプションに「指定なし」を追加します。
-     * 
+     *
      * @param array $options オプション
      * @return array 指定なしを追加したオプション
      * @author charlesvineyard
@@ -360,7 +360,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
         return $addedOptions;
     }
-    
+
     /**
      * カテゴリー変更フォームを作成します。
      *
@@ -503,7 +503,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * ページ更新用フォームを作成します。
-     * 
+     *
      * @return Setuco_Form ページ更新用フォーム
      * @author charlesvineyard
      */
@@ -518,7 +518,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * ページIDからカンマ区切りのタグ名を取得します。
-     * 
+     *
      * @param int ページID
      * @return string カンマ区切りのタグ名
      * @author charlesvineyard
@@ -533,7 +533,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $tagValue = rtrim($tagValue, ',');
         return $tagValue;
     }
-    
+
     /**
      * ページ編集フォームを作成します。
      *
@@ -575,7 +575,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'label' => '下書きで保存',
                  )
-             )             
+             )
              ->addElement(
                  'Text',
                  'page_title',
@@ -830,8 +830,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService->updatePage(
             $form->getValue('h_page_id_c'),
             array(
-                'category_id' => 
-                    ($form->getValue('category_id') === $this->_uncategorizedValue) ? 
+                'category_id' =>
+                    ($form->getValue('category_id') === $this->_uncategorizedValue) ?
                     null : $form->getValue('category_id')
             )
         );
