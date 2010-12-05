@@ -78,13 +78,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     const UNSELECTED_VALUE = 'default';
 
     /**
-     * カテゴリーが未分類のvalue属性
-     *
-     * @var string
-     */
-    private $_uncategorizedValue = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
-
-    /**
      * 初期処理
      *
      * @author charlesvineyard
@@ -227,7 +220,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $refinements = array();
         if ($searchForm->getValue('category_id') !== self::UNSELECTED_VALUE) {
             $refinements['category_id'] =
-                ($searchForm->getValue('category_id') === $this->_uncategorizedValue) ?
+                ($searchForm->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
                 null : $searchForm->getValue('category_id');
         }
         if ($searchForm->getValue('account_id') !== self::UNSELECTED_VALUE) {
@@ -252,7 +245,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
             if ($page['category_id'] === null) {
-                $pages[$key]['category_id'] = $this->_uncategorizedValue;
+                $pages[$key]['category_id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
             }
         }
         return $pages;
@@ -273,7 +266,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'tag' => 'タグ',
         );
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('search'))
              ->addElement(
@@ -314,7 +307,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          $this->_accountService->findAllAccountIdAndNicknameSet()),
-                     'value' => $this->_uncategorizedValue,    // selected指定
+                     'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
                  )
              )
              ->addElement(
@@ -324,7 +317,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          Setuco_Data_Constant_Page::ALL_STATUSES()),
-                     'value' => $this->_uncategorizedValue,    // selected指定
+                     'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
                  )
              )
              ->addElement(
@@ -370,7 +363,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createCategoryForm()
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('update-category'))
             ->addElement(
@@ -543,7 +536,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private function _createForm()
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
-        $categories[$this->_uncategorizedValue] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+        $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
@@ -594,7 +587,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'required' => true,
                      'multiOptions' => $categories,
-                     'value' => $this->_uncategorizedValue,    // selected指定
+                     'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
                  )
              )
              ->addElement(
@@ -720,7 +713,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('form');
         }
         $categoryId = $this->_getParam('category_id');
-        if ($categoryId === $this->_uncategorizedValue) {
+        if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
         }
         $pageId = $this->_pageService->registPage(
@@ -795,7 +788,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('form', null, null, array('id', $form->getValue('hidden_id')));
         }
         $categoryId = $this->_getParam('category_id');
-        if ($categoryId === $this->_uncategorizedValue) {
+        if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
         }
         $updatePageInfo = array(
@@ -831,7 +824,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $form->getValue('h_page_id_c'),
             array(
                 'category_id' =>
-                    ($form->getValue('category_id') === $this->_uncategorizedValue) ?
+                    ($form->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
                     null : $form->getValue('category_id')
             )
         );
