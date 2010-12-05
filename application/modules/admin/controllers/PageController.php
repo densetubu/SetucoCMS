@@ -76,6 +76,20 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * @var string
      */
     const UNSELECTED_VALUE = 'default';
+    
+    /**
+     * 標準の並べ替え項目
+     * 
+     * @var string
+     */
+    const DEFAULT_SORT_COLUMN = 'create_date';
+
+    /**
+     * 標準の並べ替え順序
+     * 
+     * @var string
+     */
+    const DEFAULT_ORDER = 'desc';
 
     /**
      * 初期処理
@@ -103,17 +117,15 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if ($this->_getParam('id') !== null) {
             return $this->_editFormOperation();
         }
-        $sortColumn = $this->_getParam('sort', 'title');
+        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
         $sortValidator = new Zend_Validate_InArray(array('title', 'create_date'));
         if (!$sortValidator->isValid($sortColumn)) {
-            // 規定のもの以外はタイトルに
-            $sortColumn = 'title';
+            $sortColumn = self::DEFAULT_SORT_COLUMN;
         }
-        $order = $this->_getParam('order', 'asc');
+        $order = $this->_getParam('order', self::DEFAULT_ORDER);
         $orderValidator = new Zend_Validate_InArray(array('asc', 'desc'));
         if (!$orderValidator->isValid($order)) {
-            // 規定のもの以外はascに
-            $order = 'asc';
+            $order = self::DEFAULT_ORDER;
         }
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
         $pages = $this->_adjustPages($pages);
@@ -189,8 +201,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_getPageLimit(),
             $targets,
             $refinements,
-            'create_date',
-            'desc'
+            self::DEFAULT_SORT_COLUMN,
+            self::DEFAULT_ORDER
         );
 
         $pages = $this->_adjustPages($pages);
