@@ -5,10 +5,10 @@ dojo.require('dojo.NodeList-html');
  * global functions
  ********************/
 function hideFlashMessage() {
-    dojo.style('messageArea', {display: 'none'});  
+    dojo.style('messageArea', {display: 'none'});
 }
 function confirmDeleteRedirect(url, item){
-    if (confirm(item + "を本当に削除してよろしいですか？")) {
+    if (confirm("「" + item + "」を本当に削除してよろしいですか？")) {
         location.href = url;
     }
 }
