@@ -44,7 +44,7 @@
 ?>
 <td>
 <?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
-    <a href="<?php echo $this->baseUrl('/page/id/' . $this->page['id']) ?>" target='_blank'>
+    <a href="<?php echo $this->baseUrl('/page/show/id/' . $this->page['id']) ?>" target='_blank'>
         <img src="<?php echo $this->baseUrl('/images/admin/page/btn_check.png') ?>" alt='表示' width='27' height='27' />
     </a>
 <?php else: ?>
