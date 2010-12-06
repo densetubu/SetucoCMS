@@ -17,6 +17,7 @@
  * @author     Yuu Yamanaka
  */
 ?>
+
 <h1>
     <img src="<?php echo $this->baseUrl('/images/admin/login/loginLogo.gif') ?>" width="268" height="67" alt="せつこCMS" />
 </h1>
@@ -47,10 +48,9 @@
 
 <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->form->getAction() ?>">
     <dl class="straight">
-        <?php echo $this->form->getElement('login_id') ?>
-        <?php echo $this->form->getElement('password') ?>
+        <?php echo $this->form->getElement('login_id') . "\n" ?>
+        <?php echo $this->form->getElement('password') . "\n" ?>
     </dl>
-    <?php echo $this->form->getElement('sub') ?>
+    <?php echo $this->form->getElement('sub') . "\n" ?>
 </form>
-
 

@@ -18,6 +18,7 @@
  * @author     charlesvineyard
  */
 ?>
+
 <div>
     <h1>
         <a href="<?php echo $this->baseUrl('/admin') ?>" title="管理画面のトップに戻ります">
@@ -32,11 +33,12 @@
     </h2>
 </div>
 
-    <ul>
-        <li id="utilLogout">
-            <a href="<?php echo $this->baseUrl('/admin/login/logout') ?>">ログアウト</a>
-        </li>
-        <li id="utilAccount">
-            <span><?php echo $this->nickName ?></span>でログイン中
-        </li>
-    </ul>
+<ul>
+    <li id="utilLogout">
+        <a href="<?php echo $this->baseUrl('/admin/login/logout') ?>">ログアウト</a>
+    </li>
+    <li id="utilAccount">
+        <span><?php echo $this->nickName ?></span>でログイン中
+    </li>
+</ul>
+

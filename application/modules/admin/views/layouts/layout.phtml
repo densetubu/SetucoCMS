@@ -26,15 +26,15 @@ $this->headTitle('SetucoCMS')->setSeparator(':');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 ?>
-<?php echo $this->doctype() ?>
+<?php echo $this->doctype() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
-        <?php echo $this->headMeta() ?>
-        <?php echo $this->headTitle() ?>
-        <?php echo $this->dojo() ?>
-        <?php echo $this->headScript() ?>
-        <?php echo $this->headLink() ?>
-        <?php echo $this->headStyle() ?>
+        <?php echo $this->headMeta() . "\n" ?>
+        <?php echo $this->headTitle() . "\n" ?>
+        <?php echo $this->dojo() . "\n" ?>
+        <?php echo $this->headScript() . "\n" ?>
+        <?php echo $this->headLink() . "\n" ?>
+        <?php echo $this->headStyle() . "\n" ?>
     </head>
     <body class="soria">
 
