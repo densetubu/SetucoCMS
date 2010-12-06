@@ -90,8 +90,9 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     public function getUpdateStatus()
     {
         $thisMonthGoal = $this->_goalService->findGoalPageCountThisMonth();
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
 
-        if ($thisMonthGoal == 0) {
+        if ($createdPageCount >= $thisMonthGoal) {
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
 
@@ -101,7 +102,6 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         // 1ページ更新するための目標日数 float値
         $daysForOnePage = $now->get(Zend_Date::MONTH_DAYS) / $thisMonthGoal;
         $todayGoal = (int) ($today / $daysForOnePage);
-        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
 
         if ($todayGoal == 0) {    //最初の日割り目標日までの間
             if ($today <= self::FIRST_UPDATE_STATUS_MAX_DAYS) {
