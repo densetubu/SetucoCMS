@@ -44,7 +44,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * サイト構造(ディレクトリー)の一覧を表示するのアクションです。
+     * サイト構造(ディレクトリー)の一覧を表示するアクションです。
      *
      * @return void
      * @author charlesvineyard
