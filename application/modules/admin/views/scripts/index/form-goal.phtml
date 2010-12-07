@@ -47,9 +47,9 @@
 
     <form id="<?php echo $this->goalForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
         <dl class="editArea">
-            <?php echo $this->goalForm->getElement('goal') ?>
+            <?php echo $this->goalForm->getElement('goal') . "\n" ?>
         </dl>
-        <?php echo $this->goalForm->getElement('submit') ?>
+        <?php echo $this->goalForm->getElement('submit') . "\n" ?>
     </form>
 </div>
 <!-- section END -->
