@@ -69,7 +69,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     {
         //データは1件しかないないので、whereはいらない
         $this->_siteDao->update($updateData, true);
-       
+
         return true;
     }
 
@@ -81,11 +81,16 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      */
     public function getUpdateStatus()
     {
-        $lastGoalPageCount = $this->_goalService->findGoalPageCountThisMonth();
-        $todayGoal = $this->_goalService->calcTodayGoal($lastGoalPageCount);
+        $thisMonthGoal = $this->_goalService->findGoalPageCountThisMonth();
+        if ($thisMonthGoal === 0) {
+            return Setuco_Data_Constant_UpdateStatus::GOOD;
+        }
+
+        $todayGoal = $this->_goalService->calcTodayGoal($thisMonthGoal);
         if ($todayGoal === 0) {
             return Setuco_Data_Constant_UpdateStatus::FIRST;
         }
+
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;

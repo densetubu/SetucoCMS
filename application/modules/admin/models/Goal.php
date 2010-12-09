@@ -26,7 +26,7 @@ class Admin_Model_Goal
 {
     /**
      * 目標DAO
-     * 
+     *
      * @var Common_Model_DbTable_Ambition
      */
     private $_goalDao;
@@ -54,12 +54,12 @@ class Admin_Model_Goal
             $this->_fillGoalUntilNow($lastGoal);
             $lastGoal = $this->_goalDao->findLastGoal();
         }
-        return $lastGoal['page_count'];
+        return (int) $lastGoal['page_count'];
     }
-    
+
     /**
      * 今月の目標かどうか判断します。
-     * 
+     *
      * @param  array $goal 目標情報
      * @return boolean 今月の目標なら true
      * @author charlesvineyard
@@ -73,10 +73,10 @@ class Admin_Model_Goal
         }
         return true;
     }
-    
+
     /**
      * 目標が設定されていない月から今月までの目標をすべて設定します。
-     * 
+     *
      * @param  array $lastGoal 設定済みの中で最新の目標情報
      * @author charlesvineyard
      */
@@ -92,7 +92,7 @@ class Admin_Model_Goal
             $this->_goalDao->insert($fillingGoal);
         }
     }
-    
+
     /**
      * 当月の更新目標ページ数を更新します。
      *
@@ -108,10 +108,10 @@ class Admin_Model_Goal
         $where = $this->_goalDao->getAdapter()->quoteInto('target_month = ?', $thisMonth);
         $this->_goalDao->update(array('page_count' => $goalPageCount), $where);
     }
-    
+
     /**
      * 今日の時点での目標作成ページ数を求めます。
-     * 
+     *
      * @param  int $lastGoalPageCount 今月の目標作成ページ数
      * @return int 今日の目標作成ページ数
      * @author charlesvineyard
