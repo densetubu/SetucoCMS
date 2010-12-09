@@ -51,7 +51,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
         $this->_accountDao = new Common_Model_DbTable_Account();
     }
 
-    
+
     /**
      * ページ情報を取得する
      * アカウント情報も取得します。
@@ -140,7 +140,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      * @author charlesvineyard
      */
     public function registPage($title, $contents, $outline, $tags,
-            $create_date, $status, $category_id)
+            $createDate, $status, $categoryId)
     {
         $account = $this->_accountDao->findByLoginId(Zend_Auth::getInstance()->getIdentity());
         $page = array(
@@ -198,7 +198,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     public function updatePage($id, $pageInfo)
     {
         $this->_pageTagDao->delete($this->_pageTagDao->getAdapter()->quoteInto('page_id = ?', $id));
-        
+
         $tagIds = $this->_registTagsIfNotExist($pageInfo['tag']);
         foreach ($tagIds as $tagId) {
             $this->_pageTagDao->insert(array(
@@ -207,7 +207,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
             ));
         }
         unset($pageInfo['tag']);
-        
+
         $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_pageDao->update($pageInfo, $where);
     }
