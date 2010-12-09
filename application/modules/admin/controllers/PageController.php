@@ -277,8 +277,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'outline' => '概要',
             'tag' => 'タグ',
         );
+
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+
         $form = new Setuco_Form();
         $form->setAction($this->_helper->url('search'))
              ->addElement(
@@ -287,7 +289,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'id' => 'query',
                      'class' => 'defaultInput',
-                     'required' => true,
                      'filters' => array(
                          'StringTrim'
                      )
@@ -297,17 +298,20 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'MultiCheckbox',
                  'targets',
                  array(
-                     'required' => true,
                      'multiOptions' => $targetOptions,
                      'separator' => "</dd>\n<dd>",
-                     'value' => array('title', 'contents', 'outline', 'tag'),
+                     'value' => array(
+                         'title',
+                         'contents',
+                         'outline',
+                         'tag'
+                     ),    // selected指定
                  )
              )
              ->addElement(
                  'Select',
                  'category_id',
                  array(
-                     'required' => true,
                      'multiOptions' => $this->_addUnselectedOption($categories),
                      'value' => self::UNSELECTED_VALUE,    // selected指定
                  )
@@ -316,7 +320,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'Select',
                  'account_id',
                  array(
-                     'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          $this->_accountService->findAllAccountIdAndNicknameSet()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
@@ -326,7 +329,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  'Select',
                  'status',
                  array(
-                     'required' => true,
                      'multiOptions' => $this->_addUnselectedOption(
                          Setuco_Data_Constant_Page::ALL_STATUSES()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
