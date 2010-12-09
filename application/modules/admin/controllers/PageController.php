@@ -76,17 +76,17 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * @var string
      */
     const UNSELECTED_VALUE = 'default';
-    
+
     /**
      * 標準の並べ替え項目
-     * 
+     *
      * @var string
      */
     const DEFAULT_SORT_COLUMN = 'create_date';
 
     /**
      * 標準の並べ替え順序
-     * 
+     *
      * @var string
      */
     const DEFAULT_ORDER = 'desc';
@@ -749,7 +749,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getInputStatus()
     {
-        if ($this->_getParam('sub_open') !== null) {
+        if ($this->_getParam('sub_open1') !== null) {
+            return Setuco_Data_Constant_Page::STATUS_RELEASE;
+        }
+        if ($this->_getParam('sub_open2') !== null) {
             return Setuco_Data_Constant_Page::STATUS_RELEASE;
         }
         return Setuco_Data_Constant_Page::STATUS_DRAFT;
