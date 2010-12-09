@@ -33,9 +33,9 @@
             </dt>
         <?php if (count($navigation['childrenArr'])): ?>
             <?php foreach ($navigation['childrenArr'] as $child): ?>
-                <dd<?php echo ($child['isActive']) ? ' id="active"' : '' ?>>
-                    <a href="<?php echo $child['href'] ?>"><?php echo $child['label'] ?></a>
-                </dd>
+            <dd<?php echo ($child['isActive']) ? ' id="active"' : '' ?>>
+                <a href="<?php echo $child['href'] ?>"><?php echo $child['label'] ?></a>
+            </dd>
             <?php endforeach ?>
         <?php endif ?>
         </dl>
