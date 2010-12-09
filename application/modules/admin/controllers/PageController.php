@@ -159,7 +159,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
         $currentPageValues = array(
             'page_title'    => $page['title'],
-            'category_id'   => $page['category_id'],
+            'category_id'   => $page['category_id'] === null ? Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $page['category_id'],
             'page_contents' => $page['contents'],
             'page_outline'  => $page['outline'],
             'tag'           => $this->_createCSTagNames($id),
