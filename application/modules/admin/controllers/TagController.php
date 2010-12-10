@@ -159,6 +159,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $stringLength->setMessage('タグ名は%min%文字以上%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
         $noRecordExists = new Zend_Validate_Db_NoRecordExists(
