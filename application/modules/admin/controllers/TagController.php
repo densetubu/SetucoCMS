@@ -80,7 +80,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             'class'      => 'defaultInput',
             'value'      => '新規タグ',
             'required'   => true,
-            'validators' => array('notEmpty'),
+            'validators' => $this->_makeTagValidators(),
             'filters'    => array('StringTrim')
         ));
         $submit = new Zend_Form_Element_Submit('sub', array(
@@ -113,7 +113,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             'id'         => 'tag',
             'value'      => '',
             'required'   => true,
-            'validators' => array('notEmpty'),
+            'validators' => $this->_makeTagValidators(),
             'filters'    => array('StringTrim')
         ));
         $submit = new Zend_Form_Element_Submit('sub', array(
@@ -139,6 +139,41 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
+     * タグ名用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeTagValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('タグ名を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'min' => 2,
+                'max' => 50
+            )
+        );
+        $stringLength->setMessage('タグ名は%min%文字以上%max%文字以下で入力してください。');
+        $validators[] = array($stringLength, true);
+
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+            array(
+                'table' => 'tag',
+                'field' => 'name'
+            )
+        );
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
+        return $validators;
+    }
+
+    /**
      * タグを新規作成するアクションです
      * indexアクションに遷移します
      *
@@ -149,7 +184,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createNewTagForm();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('newTagform', $form);
+            $this->_setParam('newTagForm', $form);
             return $this->_forward('index');
         }
         $this->_tagService->registTag($form->getValue('tag'));
@@ -168,7 +203,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createEditTagForm();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('editTagform', $form);
+            $this->_setParam('editTagForm', $form);
             return $this->_forward('index');
         }
         $this->_tagService->updateTag($form->getValue('id'), $form->getValue('tag'));

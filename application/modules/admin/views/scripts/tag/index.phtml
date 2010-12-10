@@ -19,7 +19,12 @@
  * @author     charlesvineyard
  */
 ?>
-
+<?php
+$errorTagForm = $this->newTagForm;
+if ($this->editTagForm->isErrors()):
+    $errorTagForm = $this->editTagForm;
+endif;
+?>
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -41,6 +46,24 @@
             </div>
         </div>
     </div>
+
+    <?php if ($errorTagForm->isErrors()): ?>
+        <div id="messageArea">
+        <?php foreach ($errorTagForm->getMessages() as $elementName => $messages): ?>
+            <?php if (!is_array($messages)):?>
+            <p><?php echo $messages ?></p>
+            <?php else: ?>
+                <?php foreach ($messages as $message):?>
+            <p><?php echo $message ?></p>
+                <?php endforeach ?>
+            <?php endif ?>
+        <?php endforeach ?>
+            <p>
+                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+            </p>
+        </div>
+    <?php endif ?>
+
     <?php if (count($this->flashMessages)): ?>
         <div id="messageArea">
         <?php foreach ($this->flashMessages as $flashMessage): ?>
