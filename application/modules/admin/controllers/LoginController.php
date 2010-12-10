@@ -106,7 +106,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
              ->setAction($this->_helper->url('auth'))
              ->addDecorator('FormElements')
              ->addDecorator('Form');
-        $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウント名'));
+        $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウントID'));
         $accountId->setRequired(true)
                   ->setValidators($this->_makeLoginIdValidators())
                   ->setFilters(array('StringTrim'))
@@ -138,7 +138,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     }
 
     /**
-     * アカウント名用のバリデーターを作成する。
+     * アカウントID用のバリデーターを作成する。
      *
      * @return array Zend_Validate インターフェースの配列
      * @author charlesvineyard
@@ -148,7 +148,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         $validators[] = array();
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('アカウント名を入力してください。');
+        $notEmpty->setMessage('アカウントIDを入力してください。');
         $validators[] = $notEmpty;
 
         return $validators;
