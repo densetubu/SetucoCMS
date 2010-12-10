@@ -35,7 +35,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         parent::init();
         $this->_setLayoutName('layout-login');
     }
-    
+
     /**
      * ログインフォーム
      *
@@ -62,21 +62,17 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     {
         $form = $this->_createLoginForm();
         if (!$form->isValid($_POST)) {
-            if (!$form->getValue('login_id')) {
-                $form->addErrorMessage('アカウント名を入力してください。');
-            }
-            if (!$form->getValue('password')) {
-                $form->addErrorMessage('パスワードを入力してください。');
-            }
             $this->_setParam('form', $form);
             return $this->_forward('index');
         }
 
         $authModel = new Admin_Model_Auth();
-        if (!$authModel->login($form->getValue('login_id'),
-                    $form->getValue('password'))) {
+        if (!$authModel->login(
+                $form->getValue('login_id'),
+                $form->getValue('password'))
+        ) {
             $this->_setParam('form', $form);
-            $form->addErrorMessage('アカウントIDまたはパスワードが間違っています。');
+            $form->addError('アカウントIDまたはパスワードが間違っています。');
             return $this->_forward('index');
         }
         $this->_helper->redirector('index', 'index');
@@ -112,6 +108,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
              ->addDecorator('Form');
         $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウント名'));
         $accountId->setRequired(true)
+                  ->setValidators($this->_makeLoginIdValidators())
                   ->setFilters(array('StringTrim'))
                   ->clearDecorators()
                   ->setDisableLoadDefaultDecorators(true)
@@ -120,7 +117,8 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
                   ->addDecorator('Label', array('tag' => 'dt'));
         $password = new Zend_Form_Element_Password('password', array('label' => 'パスワード'));
         $password->setRequired(true)
-                 ->clearDecorators()
+                  ->setValidators($this->_makePasswordValidators())
+                  ->clearDecorators()
                  ->setDisableLoadDefaultDecorators(true)
                  ->addDecorator('ViewHelper')
                  ->addDecorator('HtmlTag', array('tag' => 'dd'))
@@ -137,6 +135,40 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
             $submit
         ));
         return $form;
+    }
+
+    /**
+     * アカウント名用のバリデーターを作成する。
+     *
+     * @return array Zend_Validate インターフェースの配列
+     * @author charlesvineyard
+     */
+    private function _makeLoginIdValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('アカウント名を入力してください。');
+        $validators[] = $notEmpty;
+
+        return $validators;
+    }
+
+    /**
+     * パスワード用のバリデーターを作成する。
+     *
+     * @return array Zend_Validate インターフェースの配列
+     * @author charlesvineyard
+     */
+    private function _makePasswordValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('パスワードを入力してください。');
+        $validators[] = $notEmpty;
+
+        return $validators;
     }
 }
 
