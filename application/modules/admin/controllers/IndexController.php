@@ -76,6 +76,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function indexAction()
     {
         // 野望
+        $this->view->ambition = $this->_ambitionService->findAmbition();
         $this->view->ambitionForm = $this->_getParam('ambitionForm',
                 $this->_createAmbitionForm());
 
@@ -88,7 +89,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $this->view->lastUpdateDate = $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd');
             $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
         }
-        
+
 
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
@@ -113,7 +114,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
     }
-    
+
     /**
      * 目標との差分ページ数を表示用の文言に変換します。
      *
@@ -168,24 +169,49 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->setMethod('post')
              ->setAction($this->_helper->url('update-ambition'));
         $form->addElement('text', 'ambition', array(
-            'id'      => 'ambition',
-            'name'    => 'ambition',
-            'value'   => $this->_ambitionService->findAmbition(),
-            'filters' => array('StringTrim')
+            'id'         => 'ambition',
+            'required'   => true,
+            'value'      => $this->_ambitionService->findAmbition(),
+            'filters'    => array('StringTrim'),
+            'validators' => $this->_makeAmbitionValidators()
         ));
         $form->addElement('submit', 'submit', array(
             'id'    => 'sub',
-            'name'  => 'sub',
             'label' => '保存'
         ));
         $form->addElement('button', 'cancel', array(
             'id'      => 'cancel',
-            'name'    => 'cancel',
             'label'   => 'キャンセル',
             'onclick' => 'hideAmbitionEdit()'
         ));
         $form->setMinimalDecoratorElements(array('ambition', 'submit', 'cancel'));
         return $form;
+    }
+
+    /**
+     * 野望用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeAmbitionValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('野望を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 100
+            )
+        );
+        $stringLength->setMessage('野望は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
     }
 
     /**
@@ -226,7 +252,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
              ->addValidator('Between', false, array('min' => 0, 'max' => 999))
              ->setFilters(array('StringTrim'))
              ->setDecorators(array(
-                 'ViewHelper', 
+                 'ViewHelper',
                  array('SuffixString', array('value' => 'ページ')),    // テキストボックスの後ろの文字列
                  array('HtmlTag', array('tag' => 'dd')),
                  array('Label', array('tag' => 'dt'))));
