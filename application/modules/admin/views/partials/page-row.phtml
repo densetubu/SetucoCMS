@@ -61,11 +61,11 @@
         <p>
             <?php echo $categoryForm->getElement('category_id')->setValue($this->page['category_id']) ?>
             <?php echo $categoryForm->getElement('h_page_id_c')->setValue($this->page['id']) ?>
-            <?php echo $categoryForm->getElement('h_page_title_c')->setValue($this->page['title']) ?>
+            <?php echo $categoryForm->getElement('h_page_title_c')->setValue($this->page['title']) ."\n" ?>
         </p>
         <p class="category_edit">
             <?php echo $categoryForm->getElement('sub_category') ?>
-            <?php echo $categoryForm->getElement('cancel_category') ?>
+            <?php echo $categoryForm->getElement('cancel_category') ."\n" ?>
         </p>
     </form>
 </td>
@@ -74,11 +74,11 @@
         <p>
             <?php echo $statusForm->getElement('status')->setValue($this->page['status']) ?>
             <?php echo $statusForm->getElement('h_page_id_s')->setValue($this->page['id']) ?>
-            <?php echo $statusForm->getElement('h_page_title_s')->setValue($this->page['title']) ?>
+            <?php echo $statusForm->getElement('h_page_title_s')->setValue($this->page['title']) ."\n" ?>
         </p>
         <p class="status_edit">
             <?php echo $statusForm->getElement('sub_status') ?>
-            <?php echo $statusForm->getElement('cancel_status') ?>
+            <?php echo $statusForm->getElement('cancel_status') ."\n" ?>
         </p>
     </form>
 </td>

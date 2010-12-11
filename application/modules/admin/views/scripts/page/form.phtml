@@ -72,13 +72,13 @@
                 </label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('page_title') ?>
+                <?php echo $this->form->getElement('page_title') . "\n" ?>
             </dd>
             <dt>
                 <label for="category_id">カテゴリー</label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('category_id') ?>
+                <?php echo $this->form->getElement('category_id') . "\n" ?>
             </dd>
             <dt>
                 <label for="page_contents">
@@ -86,29 +86,29 @@
                 </label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('page_contents') ?>
+                <?php echo $this->form->getElement('page_contents') . "\n" ?>
             </dd>
             <dt>
                 <label for="page_outline">ページの概要</label>
             </dt>
-            <dd><?php echo $this->form->getElement('page_outline') ?></dd>
+            <dd><?php echo $this->form->getElement('page_outline') . "\n" ?></dd>
             <dt>
                 <label for="tag">タグ</label>（複数指定する場合はカンマ「,」で区切ってください）
             </dt>
             <dd>
-                <?php echo $this->form->getElement('tag') ?>
+                <?php echo $this->form->getElement('tag') . "\n" ?>
             </dd>
             <dt>
                 <label for="create_date">作成日</label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('create_date') ?>
+                <?php echo $this->form->getElement('create_date') . "\n" ?>
             </dd>
             <dt>
                 <label for="create_time">作成時刻</label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('create_time') ?>
+                <?php echo $this->form->getElement('create_time') . "\n" ?>
             </dd>
         </dl>
         <ul class="inputStraight defaultOver">
@@ -118,6 +118,8 @@
         <?php if ($this->form->getElement('hidden_id') != null): // 新規作成でなく編集の場合 ?>
         <p><?php echo $this->form->getElement('hidden_id') ?></p>
         <?php endif ?>
+
     </form>
 </div>
 <!-- section END -->
+
