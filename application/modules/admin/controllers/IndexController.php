@@ -109,10 +109,14 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $lastCreatedPages = $this->_pageService->findLastCreatedPages(5);
         $modifiedLastCreatedPages = array();
         foreach ($lastCreatedPages as $page) {
+            if ($page['category_name'] === null) {
+                $page['category_name'] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+            }
             $page['status'] = Setuco_Data_Converter_PageInfo::convertStatus2String($page['status']);
             $modifiedLastCreatedPages[] = $page;
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
+        d($modifiedLastCreatedPages);
     }
 
     /**

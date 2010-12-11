@@ -78,18 +78,23 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      */
     public function findLastCreatedPages($getPageCount, $isJoinCategory = false, $isJoinAccount = false)
     {
-        $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
+        $select = $this->select();
+        $select->from(array('p' => $this->_name));
+
         if ($isJoinCategory) {
-            $select->setIntegrityCheck(false)
-                   ->join('category', 'page.category_id = category.id');
+            $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'))
+                   ->setIntegrityCheck(false);
         }
-        if ($isJoinCategory) {
-            $select->setIntegrityCheck(false)
-                   ->join('account', 'page.account_id = account.id');
+
+        if ($isJoinAccount) {
+            $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id')
+                   ->setIntegrityCheck(false);
         }
+
         $select->where('status = ?', self::STATUS_OPEN)
                ->order('create_date desc')
                ->limit($getPageCount);
+
         return $this->fetchAll($select)->toArray();
     }
 
