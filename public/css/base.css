@@ -87,6 +87,18 @@ dl.straight dd {
     float: left;
     margin-right: 25px;
 }
+/* -- 注意メッセージ -- */
+span.attentionMessage {
+    font-size: 80%;
+    color: #dd0000;
+    padding-left: 5px;
+    font-weight: normal !important;
+}
+noscript span.attentionMessage {
+    font-size: 100%;
+    padding-left: 0;
+    font-weight: bold !important;
+}
 
 /*------------------------------------------------------------*/
 /*    link style                                              */
@@ -454,12 +466,6 @@ div#mainContent div.section dl.editArea dt span {
     font-size: 80%;
     color: #dd0000;
 }
-span.attentionMessage {
-    font-size: 80%;
-    color: #dd0000;
-    padding-left: 5px;
-    font-weight: normal !important;
-}
 td.thumb {
     text-align: center;
 }
@@ -735,6 +741,13 @@ p.status_edit {
 }
 p.category_edit {
     display: none;
+}
+
+/*------------------------------------------------------------*/
+/*    PAGE CONTENT style                                      */
+/*------------------------------------------------------------*/
+#page_contents-Editor {
+    border: solid 1px #cfcfcf;
 }
 
 

@@ -41,6 +41,10 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
         <!-- container START -->
         <div id="container">
 
+<noscript>
+    <p><span class="attentionMessage">現在Javascriptが無効になっています。一部の機能が正しく動作しません。<br />全ての機能を利用するためにはJavascriptを有効にしてください。</span></p>
+</noscript>
+
             <!-- header START -->
             <div id="header">
                 <?php echo $this->render('header.phtml') ?>
