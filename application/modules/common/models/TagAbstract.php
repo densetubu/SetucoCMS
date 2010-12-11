@@ -42,11 +42,11 @@ abstract class Common_Model_TagAbstract
     {
         return $this->_tagDao->find($id)->current()->toArray();
     }
-    
+
     /**
-     * ページIDで指定された記事につけられたタグの情報を返す。
+     * ページIDで指定されたページにつけられたタグの情報を返す。
      *
-     * @param int $pageId タグを取得したい記事のID
+     * @param int $pageId タグを取得したいページのID
      * @return array 取得したタグ情報を格納した配列
      * @author akitsukada
      */

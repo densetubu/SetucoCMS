@@ -13,7 +13,7 @@
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author      suzuki_mar    
+ * @author      suzuki_mar
  */
 
 
@@ -27,7 +27,7 @@
 class IndexController extends Setuco_Controller_Action_DefaultAbstract
 {
     /**
-     * 新着記事表示用に標準で何件取得するか
+     * 新着ページ表示用に標準で何件取得するか
      *
      * @var string
      */
@@ -35,20 +35,20 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
 
     /**
      * ページのサービスクラス
-     * 
+     *
      * @var Default_Model_Page
-     * 
+     *
      */
     private $_pageService = null;
 
-    /** 
+    /**
      * アクションの共通設定
      *
      * @return void
      * @author suzuki_mar
      */
     public function init()
-    {   
+    {
         //モジュール間の共通の設定を実行
         parent::init();
 
@@ -64,11 +64,11 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
      */
     public function indexAction()
     {
-        //新着記事を取得する
+        //新着ページを取得する
         $this->view->newPages = $this->_pageService->findLastUpdatedPages(Setuco_Data_Constant_Module_Default::LIMIT_GET_NEW_PAGE);
     }
 
-   
+
 
 }
 

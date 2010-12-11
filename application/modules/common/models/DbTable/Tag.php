@@ -84,9 +84,9 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 記事のIDを指定して、その記事につけられたタグの情報を取得して返す。
+     * ページのIDを指定して、そのページにつけられたタグの情報を取得して返す。
      *
-     * @param int $pageId タグを取得したい記事のID
+     * @param int $pageId タグを取得したいページのID
      * @return array 取得したタグ情報を格納した配列
      * @author akitsukada
      */

@@ -12,7 +12,7 @@
  * @link
  * @version
  * @since       File available since Release 0.1.0
- * @param       array   $newPages     記事一覧ページに表示させるページデータ       
+ * @param       array   $newPages     ページ一覧ページに表示させるページデータ       
  * @author      suzuki-mar
  */
 ?>
@@ -40,14 +40,14 @@
     </div>
 
     <div class="entryBody">
-        <?php if($this->newPages !== false): //記事が公開されている場合のみ表示する ?>
+        <?php if($this->newPages !== false): //ページが公開されている場合のみ表示する ?>
         <ul>
             <?php foreach ($this->newPages as $value): ?>
             <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
             <?php endforeach; ?>
         </ul>
-        <?php else: //記事が公開されていない場合 ?>
-        <p>記事が公開されていません。</p>
+        <?php else: //ページが公開されていない場合 ?>
+        <p>ページが公開されていません。</p>
         <?php endif; ?>
 
     </div>

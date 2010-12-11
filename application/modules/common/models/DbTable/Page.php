@@ -36,19 +36,19 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
 
     /**
-     * 記事の状態　公開
+     * ページの状態　公開
      */
     const STATUS_OPEN = 1;
 
     /**
-     * 記事の状態　下書き
+     * ページの状態　下書き
      */
     const STATUS_DRAFT = 0;
 
     /**
-     * 新着記事を取得する
+     * 新着ページを取得する
      *
-     * @param int $getPageCount 何件の記事を取得するのか
+     * @param int $getPageCount 何件のページを取得するのか
      * @author suzuki-mar
      */
     public function findLastUpdatePages($getPageCount)
@@ -71,7 +71,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     /**
      * 最近作成(公開)したページを取得する
      *
-     * @param  int     $getPageCount   何件の記事を取得するのか
+     * @param  int     $getPageCount   何件のページを取得するのか
      * @param  boolean $isJoinCategory カテゴリーテーブルを結合するならtrue。デフォルトはしない
      * @param  boolean $isJoinAccount  アカウントテーブルを結合するならtrue。 デフォルトはしない
      * @author charlesvineyard
@@ -119,13 +119,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * カテゴリを指定して記事を取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
+     * カテゴリを指定してページを取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $categoryId 取得したいカテゴリのID
      * @param int $pageNumber ページネータの何ページ目を表示するか
-     * @param int $limig １ページに表示する記事数
+     * @param int $limig １ページに表示するページ数
      * @author akitsukada
-     * @return array 取得した記事データ
+     * @return array 取得したページデータ
      */
     public function findPagesByCategoryId($categoryId, $pageNumber = null, $limit = null)
     {
@@ -137,10 +137,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
         $select->setIntegrityCheck(false);
 
-        //公開している記事のみ取得する
+        //公開しているページのみ取得する
         $select->where('status = ?', self::STATUS_OPEN);
 
-        //指定されたカテゴリの記事のみ取得する
+        //指定されたカテゴリのページのみ取得する
         if (is_null($categoryId)) {
             $select->where('category_id is null');
         } else {
@@ -160,12 +160,12 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * タグIDを指定して記事を取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
+     * タグIDを指定してページを取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $tagId 取得したいタグのID
      * @param int $pageNumber ページネータで何ページ目を表示するか
-     * @param int $limig １ページに表示する記事数
-     * @return array 取得した記事データを格納した配列
+     * @param int $limig １ページに表示するページ数
+     * @return array 取得したページデータを格納した配列
      * @author akitsukada
      */
     public function findPagesByTagId($tagId, $pageNumber = null, $limit = null)
@@ -197,13 +197,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 記事をキーワード&タグIDで検索し、ページネータ用の記事データを取得する。
+     * ページをキーワード&タグIDで検索し、ページネータ用のページデータを取得する。
      *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
      * @param int $pageNumber ページネータで何ページ目を表示するか。
      * @param int $limit ページネータで１ページに何件表示するか。
-     * @return array 取得した記事データを格納した配列。
+     * @return array 取得したページデータを格納した配列。
      * @author akitsukada charlesvineyard
      */
     public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null,
@@ -217,22 +217,22 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 記事をキーワード&タグIDで検索し、該当する記事の合計数を求める。
+     * ページをキーワード&タグIDで検索し、該当するページの合計数を求める。
      *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
      * @param array $targetColumns 検索対象のカラムの配列
-     * @return int 検索条件に合致した記事の数。
+     * @return int 検索条件に合致したページの数。
      */
     public function countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements = null)
     {
         $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements);
         return count($this->fetchAll($select));
     }
-    
+
     /**
      * キーワード検索用のセレクトを作成します。
-     * 
+     *
      * @param string $keyword 検索したいキーワード。
      * @param array $tagIds 検索したいタグのID。
      * @param int $pageNumber ページネータで何ページ目を表示するか。
@@ -320,7 +320,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         return $select;
 
     }
-    
+
     /**
      * 指定した並び順とオフセットでページ一覧を取得します。
      *

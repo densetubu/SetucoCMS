@@ -34,7 +34,7 @@ abstract class Common_Model_PageAbstract
 
     /**
      * PageテーブルのDAO
-     * 
+     *
      * @var Common_Model_DbTable_Page
      */
     protected $_pageDao;
@@ -45,7 +45,7 @@ abstract class Common_Model_PageAbstract
      * @var Common_Model_DbTable_Tag
      */
     protected $_tagDao;
-    
+
     /**
      * ページ情報を取得する
      *
@@ -60,7 +60,7 @@ abstract class Common_Model_PageAbstract
 
 
     /**
-     * 記事のキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
+     * ページのキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
      *
      * @param string $keyword 検索したいテキスト。
      * @param int $currentPage ページネータの何ページ目を表示するか。
@@ -70,13 +70,13 @@ abstract class Common_Model_PageAbstract
      * @todo 取得するカラムを動的にしたい。今は全取得。
      * @todo 引数まとめてクラス化する?
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10, 
+    public function searchPages($keyword, $currentPage = 1, $limit = 10,
             $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         if ($targetColumns == null) {
             $targetColumns = $this->_searchTargetColumns;
         }
-        
+
         return $this->_pageDao->searchPages(
             $keyword,
             $this->_searchTagIdsByKeyword($keyword),
@@ -90,12 +90,12 @@ abstract class Common_Model_PageAbstract
     }
 
     /**
-     * 記事のキーワード検索結果の合計数を求める。
+     * ページのキーワード検索結果の合計数を求める。
      *
      * @param string $keyword 検索キーワード
      * @param array $targetColumns 検索対象の配列 (title|contents|outline|tag)
      * @param array $refinements 絞り込み条件 カテゴリー、アカウント、状態を指定
-     * @return int 該当する記事の合計数
+     * @return int 該当するページの合計数
      * @author akitsukada
      */
     public function countPagesByKeyword($keyword, $targetColumns = null, $refinements = null)

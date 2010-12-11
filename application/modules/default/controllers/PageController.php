@@ -98,7 +98,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
     /**
      * キーワード検索結果を表示するアクション。
-     * 
+     *
      * @return void
      * @author akitsukada
      */
@@ -156,7 +156,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // 正しいID（1以上の整数文字）が指定されたらintにしておく
             $id = (int)$id;
         }
-        
+
         $currentPage = $this->_getPageNumber();
         $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage, self::LIMIT_PAGE_CATEGORY);
 
@@ -168,7 +168,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         $this->view->category = $category;
-        $this->_pageTitle = "「{$category['name']}」カテゴリーの記事";
+        $this->_pageTitle = "「{$category['name']}」カテゴリーのページ";
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
@@ -181,7 +181,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 一覧には、記事本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
+     * @todo 一覧には、ページ本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
      */
     public function tagAction()
     {
@@ -191,15 +191,15 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // 不正なIDが指定されたら閲覧側トップにリダイレクト（暫定仕様）
             $this->_helper->redirector('index', 'index');
         }
-        
+
         $currentPage = $this->_getPageNumber();
         $searchResultCount = $this->_pageService->countPagesByTagId($id);
         $tag = $this->_tagService->findTag($id);
         $keyword = is_null($tag['name']) ? '？？？(該当タグなし)' : $tag['name'];
 
         if ($searchResultCount == 0) {
-                
-            // 検索結果が0件の場合 該当記事なしのビュー
+
+            // 検索結果が0件の場合 該当ページなしのビュー
             $this->_helper->viewRenderer('searchnot');
 
         } else {
@@ -207,7 +207,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // 検索結果が0件の場合 検索結果表示ビュー
             $this->_helper->viewRenderer('search');
             $searchResult = $this->_pageService->findPagesByTagId($id, $currentPage, self::LIMIT_PAGE_TAG);
-            
+
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
                 $date->set($entry['update_date'], Zend_Date::ISO_8601);
@@ -223,12 +223,12 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         $this->view->resultCount = $searchResultCount;
         $this->view->keyword = $keyword;
-        $this->_pageTitle = "「{$keyword}」タグの記事";
+        $this->_pageTitle = "「{$keyword}」タグのページ";
 
     }
 
     /**
-     * IDを指定して記事を閲覧する。
+     * IDを指定してページを閲覧する。
      *
      * @return void
      * @author akitsukada
@@ -242,9 +242,9 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             $this->_helper->redirector('index', 'index');
         }
 
-        // 記事情報の取得
+        // ページ情報の取得
         $page = $this->_pageService->findPage($id);
-        
+
         if (is_null($page)) {
             // idに該当するページなし（通常おこらない不適切なアクセス ex.URL手入力など）
             // @todo 仕様策定と実装

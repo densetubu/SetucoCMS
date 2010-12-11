@@ -1,6 +1,6 @@
 <?php
 /**
- * あるカテゴリに属する記事一覧を表示するページ
+ * あるカテゴリに属するページ一覧を表示するページ
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -12,13 +12,13 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      entries カテゴリに属する記事のデータを収めた配列
+ * @param      entries カテゴリに属するページのデータを収めた配列
  * @param      category カテゴリのデータ
  * @author     akitsukada
  */
 ?>
 <?php if (count($this->entries) > 0): ?>
-    <p><?php echo "カテゴリー「{$this->category['name']}」" ?>の記事一覧</p>
+    <p><?php echo "カテゴリー「{$this->category['name']}」" ?>のページ一覧</p>
     <?php foreach($this->entries as $id => $entry): ?>
     <?php $accountName = is_null($entry['account_name']) ? '誰？' : $entry['account_name'] ?>
     <!-- entry START -->
@@ -41,5 +41,5 @@
     <?php endforeach ?>
     <?php echo $this->paginator //ページャーの表示 ?>
 <?php else: ?>
-    <p>カテゴリー「<?php echo $this->category['name'] ?>」には記事がありません。</p>
+    <p>カテゴリー「<?php echo $this->category['name'] ?>」にはページがありません。</p>
 <?php endif ?>

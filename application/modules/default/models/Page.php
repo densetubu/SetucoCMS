@@ -37,7 +37,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
-     * 最新の編集した記事を取得する
+     * 最新の編集したページを取得する
      *
      * @param int 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
@@ -45,21 +45,21 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function findLastUpdatedPages($limit)
     {
-        //更新順の記事を取得する
+        //更新順のページを取得する
         $result = $this->_pageDao->findLastUpdatePages($limit);
-        
+
         //からならfalseを返す
         if (empty($result)) {
             $result = false;
         }
-        
+
         return $result;
     }
 
     /**
-     * 記事を登録しているか
+     * ページを登録しているか
      *
-     * @return boolean 記事を登録している
+     * @return boolean ページを登録している
      * @author suzuki-mar
      */
     public function isEntryedPage()
@@ -70,11 +70,11 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
-     * カテゴリを指定して記事を取得する（ページネータ対応）
+     * カテゴリを指定してページを取得する（ページネータ対応）
      *
      * @param int $categoryId 取得したいカテゴリのID
      * @author akitsukada
-     * @return array 該当するカテゴリの記事データを格納した配列
+     * @return array 該当するカテゴリのページデータを格納した配列
      * @todo limitのデフォルト修正
      */
     public function findPagesByCategoryId($categoryId, $currentPage, $limit)
@@ -83,10 +83,10 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
-     * 指定したカテゴリに属する記事の数を取得する
+     * 指定したカテゴリに属するページの数を取得する
      *
-     * @param int $categoryId 記事数を取得したいカテゴリのID
-     * @return int 該当する記事の数
+     * @param int $categoryId ページ数を取得したいカテゴリのID
+     * @return int 該当するページの数
      * @author akitsukada
      */
     public function countPagesByCategoryId($categoryId)
@@ -95,10 +95,10 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
-     * タグを指定して記事を取得する
+     * タグを指定してページを取得する
      *
      * @param int $tagId 取得したいタグID
-     * @return array 該当するタグがつけられた記事のデータを格納した配列
+     * @return array 該当するタグがつけられたページのデータを格納した配列
      * @author akitsukada
      * @todo limitのデフォルト修正
      */
