@@ -45,8 +45,7 @@
             <?php foreach ($this->newPages as $value): ?>
             <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
             <?php endforeach; ?>
-        </ul> 
-        
+        </ul>
         <?php else: //記事が公開されていない場合 ?>
         <p>記事が公開されていません。</p>
         <?php endif; ?>

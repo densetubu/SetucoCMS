@@ -28,12 +28,11 @@
         <h3>カテゴリー</h3>
         <ul>
             <?php foreach ($this->categoryLists as $category): ?>
-            
             <li>
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
                 <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
                 <?php else: //使用していない場合はリンクしない?>
-                <span><?php echo $category['name'] ?></span> 
+                <span><?php echo $category['name'] ?></span>
                 <?php endif; ?>
             </li>
             <?php endforeach; ?>
@@ -43,23 +42,22 @@
 
     <!-- navList START -->
     <div class="navList">
-        <h3>タグクラウド</h3> 
+        <h3>タグクラウド</h3>
                          
         <?php if ($this->tagClouds !== false): //タグがなかったら表示しない?>
         <ul id="tagCloud">
-            <?php foreach ($this->tagClouds as $tag): ?>    
+            <?php foreach ($this->tagClouds as $tag): ?>
             <li class="level<?php echo $tag['level'] ?>">
                 <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $tag['name'] ?></a>
-            </li> 
+            </li>
            <?php endforeach;?>
-       </ul> 
-       
+       </ul>
        <?php else: ?>
        <p>タグは登録されていません。</p>
-       <?php endif;?>                     
+       <?php endif;?>
     </div>
-     <!-- navList END -->    
+     <!-- navList END -->
      
  </div>
-<!-- navArea END --> 
+<!-- navArea END -->
 

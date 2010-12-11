@@ -32,7 +32,7 @@
                 <dd><a href="<?php echo $this->baseUrl('page/category/id/' . $this->category['id']) ?>" ><?php echo $this->category['name'] ?></a></dd>
         </dl>
         <div class="entryBody">
-            <?php echo mb_substr($entry['contents'], 0, 50, 'UTF-8') //todo コンテンツを5行のみ表示する（今は適当に50を指定） ?>
+            <?php echo mb_substr($entry['contents'], 0, 50, 'UTF-8') . "\n" //todo コンテンツを5行のみ表示する（今は適当に50を指定） ?>
             <p><a href="<?php  echo $this->baseUrl('page/show/id/' . $entry['id']) ?>">続きを読む</a></p>
         </div>
         <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>

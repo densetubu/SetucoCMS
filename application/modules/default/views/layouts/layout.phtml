@@ -26,7 +26,7 @@ if (empty($this->pageTitle)) {
 }
 
 ?>
-<?php echo $this->doctype() ?>
+<?php echo $this->doctype() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -45,8 +45,7 @@ if (empty($this->pageTitle)) {
 
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('/css/style.css') ?>" media="screen" />
 
-
-        <?php echo $this->headTitle();  ?>
+        <?php echo $this->headTitle() . "\n" ?>
     </head>
     <body>
 
@@ -64,7 +63,7 @@ if (empty($this->pageTitle)) {
 
                 <!-- mainContent START -->
                 <div id="mainContent">
-                    <?php echo $this->layout()->content ?>
+                    <?php echo $this->layout()->content . "\n" ?>
                 </div>
                 <!-- mainContent END -->
 
