@@ -25,25 +25,33 @@
  */
 class Admin_Model_Site extends Common_Model_SiteAbstract
 {
-
     /**
      * ページDAO
      *
      * @var Common_Model_DbTable_Page
      */
     private $_pageDao;
+
     /**
      * ページサービス
      *
      * @var Admin_Model_Page
      */
     private $_pageService;
+
     /**
      * 目標サービス
      *
      * @var Admin_Model_Goal
      */
     private $_goalService;
+
+    /**
+     * 月初めの更新目標の最大日数
+     *
+     * @var int
+     */
+    const FIRST_UPDATE_STATUS_MAX_DAYS = 7;
 
     /**
      * コンストラクター
@@ -82,22 +90,34 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     public function getUpdateStatus()
     {
         $thisMonthGoal = $this->_goalService->findGoalPageCountThisMonth();
-        if ($thisMonthGoal === 0) {
+
+        if ($thisMonthGoal == 0) {
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
 
-        $todayGoal = $this->_goalService->calcTodayGoal($thisMonthGoal);
-        if ($todayGoal === 0) {
-            return Setuco_Data_Constant_UpdateStatus::FIRST;
+        $todayGoal = 0;
+        $now = new Zend_Date();
+        $today = $now->get(Zend_Date::DAY_SHORT);
+        // 1ページ更新するための目標日数 float値
+        $daysForOnePage = $now->get(Zend_Date::MONTH_DAYS) / $thisMonthGoal;
+        $todayGoal = (int) ($today / $daysForOnePage);
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
+
+        if ($todayGoal == 0 && $createdPageCount == 0) {
+            if ($today <= self::FIRST_UPDATE_STATUS_MAX_DAYS) {
+                return Setuco_Data_Constant_UpdateStatus::FIRST;
+            }
+            return Setuco_Data_Constant_UpdateStatus::BAD;
         }
 
-        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;
         }
+
         if ($todayGoal < $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
+
         return Setuco_Data_Constant_UpdateStatus::BAD;
     }
 

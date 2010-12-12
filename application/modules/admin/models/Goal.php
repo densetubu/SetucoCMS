@@ -109,21 +109,4 @@ class Admin_Model_Goal
         $this->_goalDao->update(array('page_count' => $goalPageCount), $where);
     }
 
-    /**
-     * 今日の時点での目標作成ページ数を求めます。
-     *
-     * @param  int $lastGoalPageCount 今月の目標作成ページ数
-     * @return int 今日の目標作成ページ数
-     * @author charlesvineyard
-     */
-    public function calcTodayGoal($lastGoalPageCount)
-    {
-        if ($lastGoalPageCount == 0) {
-            return 0;
-        }
-        $now = new Zend_Date();
-        $daysForOnePage = $now->get(Zend_Date::MONTH_DAYS) / $lastGoalPageCount;       // 1ページ更新するための目標日数 float値
-        $today = $now->get(Zend_Date::DAY_SHORT);
-        return  (int) ($today / $daysForOnePage);
-    }
 }
