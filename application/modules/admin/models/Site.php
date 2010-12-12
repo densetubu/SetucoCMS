@@ -122,25 +122,25 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     }
 
     /**
-     * 最終更新日とその日からの経過日数を取得します。
-     *
-     * 最終更新日はページの公開日時が最新のものです。
+     * 最終更新日(ページの最終公開日)とその日からの経過日数を取得します。
      *
      * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列 登録されていない場合は、false
      * @author charlesvineyard suzuki-mar
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
+        $lastCreatedPage = array_pop($this->_pageDao->findLastCreatedPages(1));
+
         //登録されていない場合は、falseを返す
-        if (empty($newPages)) {
+        if (empty($lastCreatedPage)) {
             return false;
         }
 
-        $lastUpdateDate = new Zend_Date();
-        $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
-        return array('lastUpdateDate' => $lastUpdateDate,
-            'pastDays' => Setuco_Util_Date::calcPastDays($lastUpdateDate, new Zend_Date()));
+        $lastUpdateDate = new Zend_Date($lastCreatedPage['create_date'], 'YYYY-MM-dd');
+        return array(
+            'lastUpdateDate' => $lastUpdateDate,
+            'pastDays'       => Setuco_Util_Date::calcPastDays($lastUpdateDate, new Zend_Date())
+        );
     }
 
     /**
