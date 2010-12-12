@@ -116,7 +116,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $modifiedLastCreatedPages[] = $page;
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
-        d($modifiedLastCreatedPages);
     }
 
     /**

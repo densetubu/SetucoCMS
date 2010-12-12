@@ -87,7 +87,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         }
 
         if ($isJoinAccount) {
-            $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id')
+            $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'))
                    ->setIntegrityCheck(false);
         }
 
