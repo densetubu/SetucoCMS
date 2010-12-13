@@ -103,18 +103,20 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         $todayGoal = (int) ($today / $daysForOnePage);
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
 
-        if ($todayGoal == 0 && $createdPageCount == 0) {
+        if ($todayGoal == 0) {    //最初の日割り目標日までの間
             if ($today <= self::FIRST_UPDATE_STATUS_MAX_DAYS) {
                 return Setuco_Data_Constant_UpdateStatus::FIRST;
             }
-            return Setuco_Data_Constant_UpdateStatus::BAD;
+            if ($createdPageCount == 0) {    //月初めを過ぎて更新なしの場合
+                return Setuco_Data_Constant_UpdateStatus::BAD;
+            }
         }
 
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;
         }
 
-        if ($todayGoal < $createdPageCount) {
+        if ($todayGoal < $createdPageCount) {    // 月目標を越えている場合も入る
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
 
