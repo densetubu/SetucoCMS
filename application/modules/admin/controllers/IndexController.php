@@ -252,8 +252,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $goalValue = $this->_goalService->findGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
-             ->addPrefixPath('Setuco_Filter', 'Setuco/Filter/', 'filter')
-             ->setFilters(array('StringTrim', 'HalfSizeInt'))
+             ->setFilters(array('StringTrim'))
              ->setRequired(true)
              ->addValidators($this->_makeGoalPageCountValidators())
              ->setDecorators(array(
