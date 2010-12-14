@@ -31,14 +31,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * 新規登録用のバリデーションチェックフォーム
-     * 
+     *
      * @var Setuco_Form
      */
     private $_validateCreateForm = null;
 
     /**
      * 編集用のバリデーションチェックフォーム
-     * 
+     *
      * @var Setuco_Form
      */
     private $_validateUpdateForm = null;
@@ -46,7 +46,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * コントローラーの共通設定をする
-     * 全アクションで使用するサービスクラスのインスタンスをオブジェクト変数にする 
+     * 全アクションで使用するサービスクラスのインスタンスをオブジェクト変数にする
      *
      * @reutn true
      * @author suzuki-mar
@@ -129,7 +129,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
             //カテゴリーを新規作成する
             if ($this->_categoryService->registCategory($registData)) {
-                $this->_helper->flashMessenger("{$registData['name']}のカテゴリーを新規作成しました");
+                $this->_helper->flashMessenger("「{$registData['name']}」を作成しました");
                 $isSetFlashMessage = true;
             }
         }
@@ -183,7 +183,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         if (!isset($isSetFlashMessage)) {
             $this->_helper->flashMessenger($this->_getErrorMessage('update'));
         }
-        
+
 
         $this->_redirect('/admin/category/index');
         return true;
@@ -226,7 +226,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * 新規作成用のバリデートルールを作成する
-     * 
+     *
      *
      * @return Zend_Form 新規作成用のフォーム
      * @author suzuki-mar
@@ -246,7 +246,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * 編集用のバリデートオブジェクトを作成する
-     * 
+     *
      *
      * @return Zend_Form 編集用のフォーム
      * @author suzuki-mar
@@ -279,7 +279,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * カテゴリー名のバリデートルールを設定する
-     * 
+     *
      * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
      * @param boolean[option] $isUpdate 編集用のバリデートルールか デフォルトは新規登録
      * @author suzuki-mar
@@ -307,7 +307,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * IDのバリデートルールを設定する
-     * 
+     *
      * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
      * @author suzuki-mar
      */
@@ -325,7 +325,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * parent_idのバリデートルールを設定する
-     * 
+     *
      * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
      * @author suzuki-mar
      */
@@ -343,20 +343,20 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
     /**
      * バリデートエラーメッセージを取得する
-     * 
+     *
      * @param  String[option] $validateType createだと新規作成 updateだと編集　デフォルトは、create
      * @return String バリデートエラーメッセージ
      * @author suzuki-mar
      */
     private function _getErrorMessage($validateType = 'create')
     {
-        
+
         if ($validateType === 'create') {
            $errors = $this->_validateCreateForm->getMessages('cat_name');
         } else {
            $errors = $this->_validateUpdateForm->getMessages('name');
         }
-        
+
             //なんのメッセージが来るかわからないが、エラーメッセージは一つなので
             foreach ($errors as $key => $value) {
               $errorMessage = $value;
