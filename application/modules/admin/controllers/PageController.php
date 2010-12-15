@@ -726,6 +726,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('form', $form);
             return $this->_forward('form');
         }
+
         $categoryId = $this->_getParam('category_id');
         if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
@@ -739,8 +740,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_getInputStatus(),
             $categoryId
         );
+
         $this->_helper->flashMessenger('新規ページを作成しました。');
-        $this->_helper->redirector('form', null, null, array('id' => $pageId));
+        $this->_helper->redirector('index', null, null, array('id' => $pageId));
     }
 
     /**
@@ -763,18 +765,18 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     /**
      * 入力された作成日時を取得します。
      *
-     * @return 作成日時
+     * もし入力されなかったら現在の日時を取得します。
+     *
+     * @return Zend_Date 作成日時
      * @author charlesvineyard
      */
     private function _getInputCreateDate()
     {
         $nowDate = Zend_Date::now();
-        $createDate = $this->_getParam('create_date');
         $createDate = Setuco_Util_String::getDefaultIfEmpty(
-            $createDate, $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
-        $createTime = $this->_getParam('create_time');
+            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
         $createTime = Setuco_Util_String::getDefaultIfEmpty(
-            $createTime, $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
         return new Zend_Date(
             $createDate . $createTime,
             self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX);
@@ -802,15 +804,16 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $form = $this->_createUpdateForm();
         if (!$form->isValid($_POST)) {
             $this->_setParam('form', $form);
-            return $this->_forward('form', null, null, array('id', $form->getValue('hidden_id')));
+            return $this->_forward('index', null, null, array('id', $form->getValue('hidden_id')));
         }
+
         $categoryId = $this->_getParam('category_id');
         if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
         }
         $updatePageInfo = array(
             'title'       => $form->getValue('page_title'),
-            'category_id' => $form->getValue('category_id'),
+            'category_id' => $categoryId,
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
             'tag'         => Setuco_Util_String::splitCsvString($form->getValue('tag')),
@@ -819,8 +822,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         );
         $id = $form->getValue('hidden_id');
         $this->_pageService->updatePage($id, $updatePageInfo);
+
         $this->_helper->flashMessenger('ページを更新しました。');
-        $this->_helper->redirector('form', null, null, array('id' => $id));
+        $this->_helper->redirector('index', null, null, array('id' => $id));
     }
 
     /**
