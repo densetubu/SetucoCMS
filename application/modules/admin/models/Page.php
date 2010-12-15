@@ -208,6 +208,8 @@ class Admin_Model_Page extends Common_Model_PageAbstract
         }
         unset($pageInfo['tag']);
 
+        $pageInfo['update_date'] = new Zend_Date();
+
         $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_pageDao->update($pageInfo, $where);
     }
