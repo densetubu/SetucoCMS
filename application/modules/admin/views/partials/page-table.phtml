@@ -1,0 +1,67 @@
+<?php
+/**
+ * ページの編集・削除画面内のページ情報表示部分
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Partial
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array $page ページ情報の配列
+ * @param      Setuco_Form $categoryForm カテゴリー編集フォーム
+ * @param      Setuco_Form $statusForm   状態編集フォーム
+ * @author     charlesvineyard
+ */
+?>
+<table summary="ページ一覧の表です。タイトルのリンクと編集ボタンから、ページの編集ができます。削除ボタンから削除ができます。" cellpadding="0" cellspacing="0">
+    <colgroup>
+        <col width="7%" />
+        <col width="35%" />
+        <col width="16%" />
+        <col width="10%" />
+        <col width="15%" />
+        <col width="10%" />
+        <col width="7%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th scope="col" id="tableFirst">表示</th>
+            <th scope="col">タイトル名
+            <?php if (!$this->isSearched): ?>
+                <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/desc') ?>">
+                    <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                </a>
+                <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/asc') ?>">
+                    <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                </a>
+            <?php endif ?>
+            </th>
+            <th scope="col">制作日
+            <?php if (!$this->isSearched): ?>
+                <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/desc') ?>">
+                    <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                </a>
+                <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/asc') ?>">
+                    <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                </a>
+            <?php endif ?>
+            </th>
+            <th scope="col">制作者</th>
+            <th scope="col">カテゴリー</th>
+            <th scope="col">状態</th>
+            <th scope="col">削除</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->pages as $index => $page): ?>
+        <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
+            <?php echo $this->partial('page-row.phtml', array('index' => $index, 'page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
+        </tr>
+    <?php endforeach ?>
+    </tbody>
+</table>
