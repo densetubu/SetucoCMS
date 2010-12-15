@@ -90,8 +90,9 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     public function getUpdateStatus()
     {
         $thisMonthGoal = $this->_goalService->findGoalPageCountThisMonth();
+        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
 
-        if ($thisMonthGoal == 0) {
+        if ($createdPageCount >= $thisMonthGoal) {
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
 
@@ -101,20 +102,21 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
         // 1ページ更新するための目標日数 float値
         $daysForOnePage = $now->get(Zend_Date::MONTH_DAYS) / $thisMonthGoal;
         $todayGoal = (int) ($today / $daysForOnePage);
-        $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
 
-        if ($todayGoal == 0 && $createdPageCount == 0) {
+        if ($todayGoal == 0) {    //最初の日割り目標日までの間
             if ($today <= self::FIRST_UPDATE_STATUS_MAX_DAYS) {
                 return Setuco_Data_Constant_UpdateStatus::FIRST;
             }
-            return Setuco_Data_Constant_UpdateStatus::BAD;
+            if ($createdPageCount == 0) {    //月初めを過ぎて更新なしの場合
+                return Setuco_Data_Constant_UpdateStatus::BAD;
+            }
         }
 
         if ($todayGoal == $createdPageCount) {
             return Setuco_Data_Constant_UpdateStatus::NORMAL;
         }
 
-        if ($todayGoal < $createdPageCount) {
+        if ($todayGoal < $createdPageCount) {    // 月目標を越えている場合も入る
             return Setuco_Data_Constant_UpdateStatus::GOOD;
         }
 
@@ -122,25 +124,25 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     }
 
     /**
-     * 最終更新日とその日からの経過日数を取得します。
-     *
-     * 最終更新日はページの公開日時が最新のものです。
+     * 最終更新日(ページの最終公開日)とその日からの経過日数を取得します。
      *
      * @return array 最終更新日(lastUpdateDate Zend_Date)と経過日数(pastDays int)の配列 登録されていない場合は、false
      * @author charlesvineyard suzuki-mar
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $newPages = $this->_pageDao->findLastCreatedPages(1);    // 二次元配列で返ってくる
+        $lastCreatedPage = array_pop($this->_pageDao->findLastCreatedPages(1));
+
         //登録されていない場合は、falseを返す
-        if (empty($newPages)) {
+        if (empty($lastCreatedPage)) {
             return false;
         }
 
-        $lastUpdateDate = new Zend_Date();
-        $lastUpdateDate->setDate($newPages[0]['create_date'], 'YYYY-MM-dd');
-        return array('lastUpdateDate' => $lastUpdateDate,
-            'pastDays' => Setuco_Util_Date::calcPastDays($lastUpdateDate, new Zend_Date()));
+        $lastUpdateDate = new Zend_Date($lastCreatedPage['create_date'], 'YYYY-MM-dd');
+        return array(
+            'lastUpdateDate' => $lastUpdateDate,
+            'pastDays'       => Setuco_Util_Date::calcPastDays($lastUpdateDate, new Zend_Date())
+        );
     }
 
     /**

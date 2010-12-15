@@ -86,10 +86,12 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         // 最終更新日
         $lastUpdateInfo = $this->_siteService->getLastUpdateDateWithPastDays();
         if ($lastUpdateInfo !== false) {
-            $this->view->lastUpdateDate = $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd');
-            $this->view->pastDaysFromLastUpdate = $lastUpdateInfo['pastDays'];
+            $this->view->lastUpdateDateString =
+                $lastUpdateInfo['lastUpdateDate']->toString('YYYY/MM/dd')
+                . '（' . $lastUpdateInfo['pastDays'] . '日経過）';
+        } else {
+            $this->view->lastUpdateDateString = '更新されたページがありません。';
         }
-
 
         // 今月の作成（公開）ページ数
         $createdPageCount = $this->_pageService->countPagesCreatedThisMonth();
@@ -116,7 +118,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $modifiedLastCreatedPages[] = $page;
         }
         $this->view->lastCreatedPages = $modifiedLastCreatedPages;
-        d($modifiedLastCreatedPages);
     }
 
     /**
@@ -152,11 +153,13 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function updateAmbitionAction()
     {
         $form = $this->_createAmbitionForm();
+        $ambition = $form->getValue('ambition');
         if (!$form->isValid($_POST)) {
+            $form->getElement('ambition')->setValue($ambition);
             $this->_setParam('ambitionForm', $form);
             return $this->_forward('index');
         }
-        $this->_ambitionService->updateAmbition($form->getValue('ambition'));
+        $this->_ambitionService->updateAmbition($ambition);
         $this->_helper->redirector('index');
     }
 
@@ -251,10 +254,10 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         $goalValue = $this->_goalService->findGoalPageCountThisMonth();
         $goal->setValue($goalValue)
              ->setAttrib('onblur', 'if(this.value == \'\') { this.value=\'' . $goalValue . '\'; }')
+             ->addPrefixPath('Setuco_Filter', 'Setuco/Filter/', 'filter')
+             ->setFilters(array('StringTrim', 'HalfSizeInt'))
              ->setRequired(true)
-             ->addValidator('Int')
-             ->addValidator('Between', false, array('min' => 0, 'max' => 999))
-             ->setFilters(array('StringTrim'))
+             ->addValidators($this->_makeGoalPageCountValidators())
              ->setDecorators(array(
                  'ViewHelper',
                  array('SuffixString', array('value' => 'ページ')),    // テキストボックスの後ろの文字列
@@ -270,6 +273,36 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
             $submit
         ));
         return $form;
+    }
+
+    /**
+     * 更新目標の一ヶ月の新規作成数のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeGoalPageCountValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('一ヶ月の新規作成数を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $int = new Zend_Validate_Int();
+        $int->setMessage('一ヶ月の新規作成数は数字で入力してください。');
+        $validators[] = array($int, true);
+
+        $between  = new Zend_Validate_Between(
+            array(
+                'min' => 0,
+                'max' => 999,
+            )
+        );
+        $between->setMessage('一ヶ月の新規作成数は%min%以上%max%以下で入力してください。');
+        $validators[] = array($between, true);
+
+        return $validators;
     }
 
     /**

@@ -27,6 +27,9 @@
  */
 ?>
 
+<!-- section"野望" START -->
+<div class="section">
+
 <?php if ($this->ambitionForm->isErrors()): ?>
     <div id="messageArea">
     <?php foreach ($this->ambitionForm->getMessages() as $elementName => $messages): ?>
@@ -44,8 +47,6 @@
     </div>
 <?php endif ?>
 
-<!-- section"野望" START -->
-<div class="section">
     <form id="<?php echo $this->ambitionForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">
         <dl id="designs">
             <dt>
@@ -105,7 +106,7 @@
     </dl>
     <dl class="straight check">
         <dt>最終更新日</dt>
-        <dd><?php echo $this->lastUpdateDate ?>（<?php echo $this->pastDaysFromLastUpdate ?>日経過）</dd>
+        <dd><?php echo $this->lastUpdateDateString ?></dd>
     </dl>
     <dl class="straight">
         <dt>経過日数</dt>

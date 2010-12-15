@@ -154,11 +154,10 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
 
         $stringLength = new Zend_Validate_StringLength(
             array(
-                'min' => 2,
                 'max' => 50
             )
         );
-        $stringLength->setMessage('タグ名は%min%文字以上%max%文字以下で入力してください。');
+        $stringLength->setMessage('タグ名は%max%文字以下で入力してください。');
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
@@ -189,7 +188,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_tagService->registTag($form->getValue('tag'));
-        $this->_helper->flashMessenger('新規タグを作成しました。');
+        $this->_helper->flashMessenger('「' . $form->getValue('tag') . '」を作成しました。');
         $this->_helper->redirector('index');
     }
 
