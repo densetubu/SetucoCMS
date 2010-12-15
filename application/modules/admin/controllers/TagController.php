@@ -188,7 +188,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index');
         }
         $this->_tagService->registTag($form->getValue('tag'));
-        $this->_helper->flashMessenger('新規タグを作成しました。');
+        $this->_helper->flashMessenger('「' . $form->getValue('tag') . '」を作成しました。');
         $this->_helper->redirector('index');
     }
 
