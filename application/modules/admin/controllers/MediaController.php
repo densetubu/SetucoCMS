@@ -32,9 +32,14 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     private $_media = null;
 
     /**
+     * アップロードできる最大ファイル個数
+     */
+    const FILE_COUNT_MAX = 5;
+
+    /**
      * アップロードできるファイルサイズの最大値（Byte単位）
      */
-    const FILE_SIZE_MAX = 500000;
+    const FILE_SIZE_MAX = 512000; // 500KB
 
     /**
      * アップロードできるファイルサイズの最小値（Byte単位）
@@ -131,7 +136,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->medias = $this->_media->findMedias($condition, $currentPage, $this->_getPageLimit());
 
         // アップロードできる最大サイズをviewに教える
-        $this->view->fileSizeMax = self::FILE_SIZE_MAX . 'Byte';
+        $this->view->fileSizeMax = (int) (self::FILE_SIZE_MAX / 1024) . 'KB';
 
         // ディレクトリに問題なければviewにファイルアップロード用フォームを設定
         $dirErrors = array();
@@ -174,58 +179,126 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->redirector('index');
         }
 
-        // バリデートはzend_formで行う
-        $form = $this->_createUploadForm();
-        if (!$form->isValid($this->_getAllParams())) {
-            $msgs = $form->getMessages();
-            foreach ($msgs[$form->getName()] as $msgCode => $msg) {
-                $this->_helper->flashMessenger->addMessage($msg);
-            }
-            $this->_helper->redirector('index');
-        }
-
         // ファイル受信に使うadapter
         $adapter = new Zend_File_Transfer_Adapter_Http();
 
-        // オリジナルファイルの情報を取得
-        $fileInfo = pathinfo($adapter->getFileName());
+        // フォームのファイル制限サイズ
+        $minSizeString = self::FILE_SIZE_MIN . 'Byte';
+        $maxSizeString = (int) (self::FILE_SIZE_MAX / 1024) . 'KB';
+        $fileUploadValidator = new Zend_Validate_File_Upload(array());
+        /*
+          $fileUploadValidator->setMessages(array(
+          Zend_Validate_File_Upload::FORM_SIZE => "アップロードできるファイルサイズは{$maxSizeString}までです。",
+          Zend_Validate_File_Upload::INI_SIZE => "アップロードできるファイルサイズは{$maxSizeString}までです。"
+          ));
+         */
+        $adapter->addValidator($fileUploadValidator, true);
 
-        // 拡張子取得(ファイル名から取得しているのみなので偽装対策が必要 @todo )
-        $extType = $fileInfo['extension'];
+        // ファイル個数設定
+        // 0個でもシステムエラーが出ないようにする
+        $adapter->setOptions(array('ignoreNoFile' => true));
 
-        // 保存時の物理名に使う新しいファイルIDを取得
-        $newId = $this->_media->createNewMediaID();
+        // ファイルタイプ（拡張子）の制限
+        $exts = implode(',', $this->_fileExt);
+        $fileExtensionValidator = new Zend_Validate_File_Extension($exts);
+        /*
+          $fileExtensionValidator->setMessages(array(
+          Zend_Validate_File_Extension::FALSE_EXTENSION
+          => "アップロードできるファイルの種類は {$exts} です。",
+          Zend_Validate_File_Extension::NOT_FOUND
+          => "アップロードできるファイルの種類は {$exts} です。",
+          )); 
+         */
+        $adapter->addValidator($fileExtensionValidator);
 
-        // ファイルの保存先と物理名（id)を指定
-        $adapter->setDestination($this->_getUploadDest());
-        $adapter->addFilter('Rename', array(// 別名を指定
-            'target' => $this->_getUploadDest() . '/' . $newId . '.' . $extType,
-            'overwrite' => true
-        ));
+        // ファイルサイズ（サーバー側判定）
+        $fileSizeValidator = new Zend_Validate_File_Size(array('bytestring' => true));
+        $fileSizeValidator->setMax(self::FILE_SIZE_MAX);
+        $fileSizeValidator->setMin(self::FILE_SIZE_MIN);
+        /* デフォルトメッセージの方がサイズなどわかりやすいのでsetMessagesしない（@todo 将来的にカスタムする） */
+        $adapter->addValidator($fileSizeValidator);
 
-        // ファイルの受信と保存
-        if (!$adapter->receive()) {
-            $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
-            $this->_helper->redirector('index');
+        // file inputを取得し1ファイルずつ処理
+        $fileInfos = $adapter->getFileInfo();
+
+        $uploadCount = 0;
+        $noFileCount = 0;
+        $uploadSuccessMsgs = array();
+        $uploadErrorMsgs = array();
+        foreach ($fileInfos as $inputName => $fileInfo) {
+
+            if (!$adapter->isValid($inputName)) {
+                $msgs = $adapter->getMessages();
+                // @todo エラー処理(今は暫定的にフラッシュメッセージでエラー表示)
+                foreach ($msgs as $msgCode => $msg) {
+                    $uploadErrorMsgs[] = $msg;
+                }
+                continue; // 次のファイル処理を続ける
+            }
+
+            // ファイルが選択されなかったinputは飛ばす
+            if (empty($fileInfo['tmp_name'])) {
+                $noFileCount++;
+                if ($noFileCount >= self::FILE_COUNT_MAX) {
+                    // 一つも選択されていなければエラー表示
+                    // @todo エラー処理
+                    $this->_helper->flashMessenger->addMessage("ファイルが選択されていません。");
+                    $this->_helper->redirector('index');
+                }
+                continue;
+            }
+
+            $filePath = pathinfo($fileInfo['name']);
+            $extType = $filePath['extension'];
+
+            // ファイルの保存先と物理名（id)を指定
+            $newId = $this->_media->createNewMediaID(); // mediaテーブルにtmpレコード挿入
+
+            $adapter->setDestination($this->_getUploadDest());
+            $adapter->addFilter('Rename', array(
+                'target' => $this->_getUploadDest() . "/{$newId}.{$extType}",
+                'overwrite' => true
+            ));
+
+            // ファイルの受信と保存
+            if (!$adapter->receive($inputName)) {
+                $uploadErrorMsgs[] = "ファイル{$filePath['basename']}が正しく送信されませんでした。";
+                // @todo newidをDBから削除
+                continue;
+            }
+            if (!$this->_media->saveThumnailFromImage($adapter->getFileName($inputName))) {
+                $uploadErrorMsgs[] = "ファイル{$filePath['basename']}のサムネイルが生成できませんでした。";
+                // @todo newidをDBから削除
+                // @todo ファイルを削除
+                continue;
+            }
+
+            // サービスにファイルの情報を渡してDB登録させる
+            $dat = array(
+                'id' => $newId,
+                'name' => $filePath['filename'],
+                'type' => $extType,
+                'comment' => date('Y/m/d H:i:s にアップロード')
+            );
+
+            if (!$this->_media->updateMediaInfo($newId, $dat)) {
+                $uploadErrorMsgs[] = "ファイル{$filePath['basename']}がデータベースに保存できませんでした。";
+                // @todo newidをDBから削除
+                // @todo ファイルの削除
+                // @todo サムネイルの削除
+                continue;
+            }
+
+            $uploadSuccessMsgs[] = "ファイル {$filePath['basename']} をアップロードしました。";
         }
-        $this->_media->saveThumnailFromImage($adapter->getFileName());
 
-        // サービスにファイルの情報を渡してDB登録させる
-        $dat = array(
-            'id' => $newId,
-            'name' => $fileInfo['filename'],
-            'type' => $extType,
-            'comment' => date('Y/m/d H:i:s にアップロード')
-        );
-
-        // dbの更新
-        if (!$this->_media->updateMediaInfo($newId, $dat)) {
-            $this->_helper->flashMessenger->addMessage('ファイルが正しく保存できませんでした。');
-            $this->_helper->redirector('index');
+        foreach ($uploadErrorMsgs as $msg) {
+            $this->_helper->flashMessenger->addMessage($msg);
+        }
+        foreach ($uploadSuccessMsgs as $msg) {
+            $this->_helper->flashMessenger->addMessage($msg);
         }
 
-        // 処理正常終了
-        $this->_helper->flashMessenger->addMessage('ファイルをアップロードしました。');
         $this->_helper->redirector('index');
     }
 
@@ -241,7 +314,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // 編集対象のファイルIDを取得（指定されていなかったらmediaトップへ）
         $id = $this->_getParam('id');
-        if (!is_numeric($id)) {
+        $validator = new Zend_Validate_Digits();
+        if (!$validator->isValid($id)) {
             $this->_helper->redirector('index');
         }
 
@@ -389,57 +463,14 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $this->_helper->flashMessenger->addMessage('ファイルを削除しました。');
         $this->_helper->redirector(
-            'index', null, null,
-            array (
-                'page' => $this->_getPageNumber(),
-                'type' => $this->_getParam('type', 'all'),
-                'sort' => $this->_getParam('sort', 'name'),
-                'order' => $this->_getParam('order', 'asc')
-            )
+                'index', null, null,
+                array(
+                    'page' => $this->_getPageNumber(),
+                    'type' => $this->_getParam('type', 'all'),
+                    'sort' => $this->_getParam('sort', 'name'),
+                    'order' => $this->_getParam('order', 'asc')
+                )
         );
-    }
-
-    /**
-     * ファイル新規アップロード用フォームを作成する
-     *
-     * @return Zend_Form ファイル新規アップロード用フォームオブジェクト
-     * @author akitsukada
-     * @todo フォームのハッシュ値の設定
-     * @todo 複数ファイルのアップロード
-     */
-    private function _createUploadForm()
-    {
-
-        // フォームオブジェクト作成
-        $uploadForm = new Zend_Form();
-        $uploadForm->setName('upload_img');
-        $uploadForm->setMethod('post');
-        $uploadForm->setAction('/admin/media/create');
-        $uploadForm->setAttrib('enctype', 'multipart/form-data');
-
-        // ファイル選択パーツ作成と余分な装飾タグの除去
-        $fileSelector = new Zend_Form_Element_File('upload_img');
-        $fileSelector->setLabel(null)
-                ->removeDecorator('HtmlTag')
-                ->setMultiFile(1) // @todo 複数ファイルアップロード
-                ->addDecorator('Label', array('tag' => null));
-
-        // Validatorとエラーメッセージ設定
-        $fileSelector = $this->_setFileValidators($fileSelector, false);
-
-        // submitボタンの作成と余分な装飾タグの除去
-        $uploadFormSubmit = new Zend_Form_Element_Submit(
-                        'up', array('class' => 'upSub', 'Label' => 'アップロード')
-        );
-        $uploadFormSubmit->clearDecorators()
-                ->addDecorator('ViewHelper');
-
-        // 作成したパーツをフォームに追加
-        $uploadForm->addElement($fileSelector);
-        $uploadForm->addElement($uploadFormSubmit);
-
-        // フォームを返す
-        return $uploadForm;
     }
 
     /**
@@ -480,6 +511,51 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $searchForm->addElement($searchFormSubmit);
 
         return $searchForm;
+    }
+
+    /**
+     * ファイル新規アップロード用フォームを作成する
+     *
+     * @return Zend_Form ファイル新規アップロード用フォームオブジェクト
+     * @author akitsukada
+     * @todo フォームのハッシュ値の設定
+     * @todo 複数ファイルのアップロード
+     */
+    private function _createUploadForm()
+    {
+
+        // フォームオブジェクト作成
+        $uploadForm = new Zend_Form();
+        $uploadForm->setName('upload_img');
+        $uploadForm->setMethod('post');
+        $uploadForm->setAction($this->_helper->url('create'));
+        $uploadForm->setAttrib('enctype', 'multipart/form-data');
+
+        // ファイル選択パーツ作成と余分な装飾タグの除去
+        $fileCount = 1;
+        for (; $fileCount <= self::FILE_COUNT_MAX; $fileCount++) {
+            $inputName = 'upload_img' . $fileCount;
+            $fileSelector = new Zend_Form_Element_File($inputName);
+            $fileSelector
+                    ->clearDecorators()
+                    ->addDecorator('file');
+
+            $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
+            $uploadForm->addElement($fileSelector);
+        }
+
+        // submitボタンの作成と余分な装飾タグの除去
+        $uploadFormSubmit = new Zend_Form_Element_Submit(
+                        'up', array('class' => 'upSub', 'Label' => 'アップロード')
+        );
+        $uploadFormSubmit->clearDecorators()
+                ->addDecorator('ViewHelper');
+
+        // 作成したパーツをフォームに追加
+        $uploadForm->addElement($uploadFormSubmit);
+
+        // フォームを返す
+        return $uploadForm;
     }
 
     /**
@@ -551,39 +627,45 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     /**
      * ファイルアップロード／アップデートフォームのFile選択inputにバリデータをセットする
      *
-     * @param Zend_Form_Element_File $fileElement バリデータを設定するファイル選択input
-     * @param boolean $isUpdate 既存ファイルアップデート用フォームならTrue、新規アップロード用フォームならFalse。それによってアップロードできるファイル数が変わる。
+     * @param Zend_File_Transfer_Adapter_Http | Zend $fileUploader バリデータを設定するファイル選択input
      * @return Zend_Form_Element_File バリデータ設定済みのファイル選択input
      * @todo ファイル名長さ仕様確認＆制限実装
      * @todo 拡張子対応外で大きなファイルをアップロードするとContent-lengthエラーになることについて対応
      * @author akitsukada
      */
-    private function _setFileValidators(Zend_Form_Element_File $fileElement, $isUpdate = false)
+    private function _setFileValidators($fileUploader)
     {
 
         // ファイルサイズ（クライアント側判定）
-        $fileElement->setMaxFileSize(self::FILE_SIZE_MAX);
+        $fileUploader->setMaxFileSize(self::FILE_SIZE_MAX);
         $fileUploadValidator = new Zend_Validate_File_Upload();
         $fileUploadValidator->setMessages(array(
             Zend_Validate_File_Upload::FORM_SIZE => 'アップロードできるファイルのサイズは ' . self::FILE_SIZE_MIN . ' Byte以上 ' . self::FILE_SIZE_MAX . ' Byte以下です。',
-            Zend_Validate_File_Upload::INI_SIZE => 'サーバで設定された制限サイズを超えています。'
+            Zend_Validate_File_Upload::INI_SIZE => 'サーバで設定された制限サイズを超えています。',
+            Zend_Validate_File_Upload::NO_FILE => 'ファイルが選択されていません。'
         ));
-        $fileElement->addValidator($fileUploadValidator, true); // HTMLのMAX_FILE_SIZEの時点でNGなら以降の検証を行わない
+        // HTMLのMAX_FILE_SIZEの時点でNGなら以降の検証を行わない
+        $fileUploader->addValidator($fileUploadValidator, true);
         // @todo breakChainOnFailureのtrueが働かない？？（以降の検証も実施してしまう）
-        //　ファイル個数
-        if ($isUpdate) {
-            $minCount = 0;
-            $maxCount = 1;
-        } else {
-            $minCount = 1;
-            $maxCount = 5;
-        }
-        $fileCountValidator = new Zend_Validate_File_Count(array('min' => $minCount, 'max' => $maxCount));
-        $fileCountValidator->setMessages(array(
-            Zend_Validate_File_Count::TOO_FEW => "ファイルが選ばれていません。",
-            Zend_Validate_File_Count::TOO_MANY => "一度にアップロードできるファイルは {$maxCount} 個以内です。ファイルが多すぎます。"
-        ));
-        $fileElement->addValidator($fileCountValidator);
+        //　一つのinputでUpできるファイル個数
+        $minCount = 1;
+        $maxCount = 1;
+
+        /*
+          $fileCountValidator = new Zend_Validate_File_Count(array('min' => $minCount, 'max' => $maxCount));
+          $fileCountValidator->setMessages(array(
+          Zend_Validate_File_Count::TOO_FEW => "ファイルが選ばれていません。",
+          Zend_Validate_File_Count::TOO_MANY => "一度にアップロードできるファイルは {$maxCount} 個以内です。ファイルが多すぎます。"
+          ));
+          $fileUploader->addValidator($fileCountValidator);
+         */ $fileUploader->addValidator(
+                'Count',
+                array('min' => $minCount, 'max' => $maxCount),
+                array('messages', array(
+                        Zend_Validate_File_Count::TOO_FEW => "ファイルが選ばれていません。",
+                        Zend_Validate_File_Count::TOO_MANY => "一度にアップロードできるファイルは {$maxCount} 個以内です。ファイルが多すぎます。"
+                ))
+        );
 
         // ファイルサイズ（サーバー側判定）
         $fileSizeValidator = new Zend_Validate_File_Size(array('bytestring' => true));
@@ -593,7 +675,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             Zend_Validate_File_Size::TOO_BIG => 'アップロードできるファイルのサイズは ' . self::FILE_SIZE_MIN . ' Byte以上 ' . self::FILE_SIZE_MAX . ' Byte以下です。',
             Zend_Validate_File_Size::TOO_SMALL => 'アップロードできるファイルのサイズは ' . self::FILE_SIZE_MIN . ' Byte以上 ' . self::FILE_SIZE_MAX . ' Byte以下です。'
         ));
-        $fileElement->addValidator($fileSizeValidator);
+        $fileUploader->addValidator($fileSizeValidator);
 
         // 受け入れる拡張子 ホワイトリスト式
         $fileExtensionValidator = new Zend_Validate_File_Extension(implode(',', $this->_fileExt));
@@ -601,9 +683,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             Zend_Validate_File_Extension::FALSE_EXTENSION => 'アップロードできるファイルの種類は ' . implode(', ', $this->_fileExt) . ' です。',
             Zend_Validate_File_Extension::NOT_FOUND => 'アップロードできるファイルの種類は ' . implode(', ', $this->_fileExt) . ' です。'
         ));
-        $fileElement->addValidator($fileExtensionValidator);
+        $fileUploader->addValidator($fileExtensionValidator);
 
-        return $fileElement;
+        return $fileUploader;
     }
 
     /**
