@@ -128,7 +128,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $order = self::DEFAULT_ORDER;
         }
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
-        $pages = $this->_adjustPages($pages);
+        $pages = self::adjustPages($pages);
 
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
@@ -205,7 +205,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             self::DEFAULT_ORDER
         );
 
-        $pages = $this->_adjustPages($pages);
+        $pages = self::adjustPages($pages);
 
         $this->_helper->viewRenderer('index');
         $this->view->pages = $pages;
@@ -251,7 +251,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    private function _adjustPages($pages)
+    public static function adjustPages($pages)
     {
         foreach ($pages as $key => $page) {
             $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
@@ -892,6 +892,5 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_helper->flashMessenger('「' . $page['title'] . '」を削除しました。');
         $this->_helper->redirector('index');
     }
-
 }
 
