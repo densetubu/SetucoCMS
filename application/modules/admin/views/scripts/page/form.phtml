@@ -56,9 +56,8 @@
     </div>
 <?php endif ?>
 
-<<<<<<< HEAD
 <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
-=======
+
 <?php if ($this->form->isErrors()): ?>
     <div id="messageArea">
     <?php foreach ($this->form->getMessages() as $elementName => $messages): ?>
@@ -75,18 +74,6 @@
         </p>
     </div>
 <?php endif ?>
-
-<?php if (count($this->flashMessages)): ?>
-    <div id="messageArea">
-    <?php foreach ($this->flashMessages as $flashMessage): ?>
-        <p><?php echo $flashMessage ?></p>
-    <?php endforeach ?>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
->>>>>>> bb97c1be1208b73e9eaa56f64a1a365f91d15712
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <ul class="inputStraight defaultOver">

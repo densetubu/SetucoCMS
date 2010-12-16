@@ -133,12 +133,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
-<<<<<<< HEAD
-        $this->view->statusForm = $this->_createStatusForm();
-=======
+
         $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
-        $this->_showFlashMessages();
->>>>>>> bb97c1be1208b73e9eaa56f64a1a365f91d15712
         $this->setPagerForView($this->_pageService->countPages());
 
         //フラッシュメッセージを設定する

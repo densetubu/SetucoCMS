@@ -47,22 +47,11 @@ $order = $this->condition['order'];
             </div>
         </div>
     </div>
-<<<<<<< HEAD
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
     <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
-=======
-    <?php if (count($this->flashMessage)): ?>
-    <div id='messageArea'>
-        <?php foreach ($this->flashMessage as $message): ?>
-            <p><?php echo $message ?></p>
-        <?php endforeach ?>
-        <p><a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a></p>
-    </div>
-    <?php endif ?>
-    <form id="upload_img" action="<?php echo $this->uploadForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
->>>>>>> bb97c1be1208b73e9eaa56f64a1a365f91d15712
+
         <div class="default">
           <?php if (isset($this->uploadForm)): ?>
               <p id="upload_img1"><?php echo $this->uploadForm->upload_img1 . "\n" ?></p>
