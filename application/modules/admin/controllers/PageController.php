@@ -134,8 +134,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = $this->_createStatusForm();
-        $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
+
+        //フラッシュメッセージを設定する
+        $this->_showFlashMessages();
     }
 
     /**
@@ -506,6 +508,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $this->view->form = $this->_getParam('form', $this->_createForm());
+
+        //フラッシュメッセージを設定する
+        $this->_showFlashMessages();
     }
 
     /**

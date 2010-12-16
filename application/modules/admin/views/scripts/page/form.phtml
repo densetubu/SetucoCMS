@@ -55,14 +55,8 @@
         <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
     </div>
 <?php endif ?>
-<?php if ($this->flashMessage): ?>
-    <div id="messageArea">
-        <p><?php echo $this->flashMessage ?></p>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
+
+<?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <ul class="inputStraight defaultOver">

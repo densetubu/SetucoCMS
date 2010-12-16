@@ -65,16 +65,7 @@ endif;
         </div>
     <?php endif ?>
 
-    <?php if (count($this->flashMessages)): ?>
-        <div id="messageArea">
-        <?php foreach ($this->flashMessages as $flashMessage): ?>
-            <p><?php echo $flashMessage ?></p>
-        <?php endforeach ?>
-            <p>
-                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-            </p>
-        </div>
-    <?php endif ?>
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
     <?php echo $this->newTagForm ?>
 

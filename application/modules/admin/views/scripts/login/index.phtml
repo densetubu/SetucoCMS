@@ -43,14 +43,7 @@
     </div>
 <?php endif ?>
 
-<?php if ($this->flashMessage): ?>
-    <div id="messageArea">
-        <p><?php echo $this->flashMessage ?></p>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
+<?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
 
 <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->form->getAction() ?>">
     <dl class="straight">

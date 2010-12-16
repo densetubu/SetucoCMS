@@ -49,6 +49,9 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
             $this->view->flashMessage = $flashMessages[0];
         }
         $this->view->form = $this->_getParam('form', $this->_createLoginForm());
+
+        // フラッシュメッセージ設定
+        $this->_showFlashMessages();
     }
 
     /**
@@ -90,6 +93,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         Zend_Auth::getInstance()->clearIdentity();
         $this->_helper->flashMessenger('ログアウトしました。');
         $this->_helper->redirector('index');
+
     }
 
     /**

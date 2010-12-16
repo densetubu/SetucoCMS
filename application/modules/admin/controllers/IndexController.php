@@ -234,6 +234,9 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
         if (count($flashMessages)) {
             $this->view->flashMessage = $flashMessages[0];
         }
+
+        // フラッシュメッセージ設定
+        $this->_showFlashMessages();
     }
 
     /**
