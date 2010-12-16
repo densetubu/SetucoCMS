@@ -1,6 +1,6 @@
 <?php
 /**
- * ページの編集・削除画面
+ * カテゴリーに含まれるページ一覧
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -26,19 +26,20 @@
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
-    <p>ページの編集・削除</p>
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin/directory') ?>">サイト構造（カテゴリー・ページの一覧）</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>「<?php echo $this->pages[0]['category_name']?>」カテゴリーに含まれるページ一覧</p>
 </div>
 <!-- topicpath END -->
 
 <!-- section START -->
 <div class="section">
-    <div class="hAreaL">
-        <div class="hAreaR">
-            <div class="hArea">
-                <h3><img src="<?php echo $this->baseUrl('/images/admin/page/h_pageAll.jpg'); ?>" width="135" height="18" alt="ページの編集・削除" /></h3>
-            </div>
-        </div>
+    <div class="hAreaText">
+        <h3 id="textType">「<?php echo $this->pages[0]['category_name']?>」カテゴリーに含まれるページ一覧　（<?php echo $this->pageCount ?>ページ）</h3>
     </div>
+
     <?php if (count($this->flashMessages)): ?>
         <div id="messageArea">
         <?php foreach ($this->flashMessages as $flashMessage): ?>
@@ -49,32 +50,18 @@
             </p>
         </div>
     <?php endif ?>
-    <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->searchForm->getAction() ?>" method="get">
-        <div id="pageSearch">
-            <dl class="over">
-                <dt>
-                    <label for="query">キーワード</label>
-                </dt>
-                <dd><?php echo $this->searchForm->getElement('query') ?></dd>
-                <dd class="clear"><?php echo $this->searchForm->getElement('targets') ?></dd>
-            </dl>
-            <dl class="under">
-                <dt>カテゴリー</dt>
-                <dd><?php echo $this->searchForm->getElement('category_id') ."\n" ?></dd>
-                <dt>制作者</dt>
-                <dd><?php echo $this->searchForm->getElement('account_id') ."\n" ?></dd>
-                <dt>公開状態</dt>
-                <dd><?php echo $this->searchForm->getElement('status') ."\n" ?></dd>
-            </dl>
-            <p><?php echo $this->searchForm->getElement('sub_search') ."\n" ?></p>
-        </div>
-    </form>
+
+    <p style="margin-left:10px; margin-bottom:10px;">
+        <a href="<?php echo $this->baseUrl('/admin/directory') ?>">カテゴリー・ページの一覧に戻る</a>
+    </p>
+
     <?php echo $this->partial('page-table.phtml', array(
             'pages' => $this->pages,
             'categoryForm' => $this->categoryForm,
             'statusForm' => $this->statusForm,
             'isSearched' => $this->isSearched))
     ?>
+
     <?php echo $this->paginator //ページャーの表示 ?>
 </div>
 <!-- section END -->

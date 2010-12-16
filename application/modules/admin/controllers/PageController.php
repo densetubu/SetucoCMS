@@ -133,7 +133,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
-        $this->view->statusForm = $this->_createStatusForm();
+        $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->_showFlashMessages();
         $this->setPagerForView($this->_pageService->countPages());
     }
@@ -175,6 +175,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
+        $this->_showFlashMessages();
     }
 
     /**
@@ -211,7 +212,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pages = $pages;
         $this->view->searchForm = $searchForm;
         $this->view->categoryForm = $this->_createCategoryForm();
-        $this->view->statusForm = $this->_createStatusForm();
+        $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->setPagerForView(
             $this->_pageService->countPagesByKeyword(
                 $keyword, $targets, $refinements
@@ -258,6 +259,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
             if ($page['category_id'] === null) {
                 $pages[$key]['category_id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
+                $pages[$key]['category_name'] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
             }
         }
         return $pages;
@@ -378,117 +380,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
-        $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('update-category'))
-            ->addElement(
-                'Select',    // selected 指定はビューでする
-                'category_id',
-                array(
-                    'id'           => 'category_id',
-                    'required'     => true,
-                    'onchange'     => 'showPageElementEdit(this);',
-                    'multiOptions' => $categories,
-                    'decorators'   => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_id_c',
-                array(
-                    'id'         => 'h_page_id_c',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_title_c',
-                array(
-                    'id'         => 'h_page_title_c',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Submit',
-                'sub_category',
-                array(
-                    'id'         => 'sub_category',
-                    'label'      => '変更',
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'button',
-                'cancel_category',
-                array(
-                    'id'      => 'cancel_category',
-                    'label'   => 'キャンセル',
-                    'onclick' => 'hidePageElementEdit(this);',
-                    'decorators' => array('ViewHelper')
-                )
-            );
-        return $form;
-    }
-
-    /**
-     * 状態変更フォームを作成します。
-     *
-     * @return Setuco_Form フォーム
-     * @author charlesvineyard
-     */
-    private function _createStatusForm()
-    {
-        $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('update-status'))
-            ->addElement(
-                'Select',    // selected 指定はビューでする
-                'status',
-                array(
-                    'id'           => 'status',
-                    'required'     => true,
-                    'onchange'     => 'showPageElementEdit(this);',
-                    'multiOptions' => Setuco_Data_Constant_Page::ALL_STATUSES(),
-                    'decorators'   => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_id_s',
-                array(
-                    'id'         => 'h_page_id_s',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_title_s',
-                array(
-                    'id'         => 'h_page_title_s',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Submit',
-                'sub_status',
-                array(
-                    'id'         => 'sub_status',
-                    'label'      => '変更',
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'button',
-                'cancel_status',
-                array(
-                    'id'         => 'cancel_status',
-                    'label'      => 'キャンセル',
-                    'onclick'    => 'hidePageElementEdit(this);',
-                    'decorators' => array('ViewHelper')
-                )
-            );
+        $form = new Setuco_Form_Page_CategoryUpdate();
+        $form->setCategories($categories);
         return $form;
     }
 
@@ -838,7 +731,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createCategoryForm();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('categoryForm', $form);
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(
@@ -854,7 +746,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * ページのカテゴリーを更新するアクション
+     * ページの状態を更新するアクション
      * indexアクションに遷移します
      *
      * @return void
@@ -862,9 +754,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateStatusAction()
     {
-        $form = $this->_createStatusForm();
+        $form = new Setuco_Form_Page_StatusUpdate();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('statusForm', $form);
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(

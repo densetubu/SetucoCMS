@@ -50,14 +50,16 @@
             </div>
         </div>
     </div>
-<?php else: // 編集の場合?>
+<?php else: // 編集の場合 ?>
     <div class="hAreaText">
         <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
     </div>
 <?php endif ?>
-<?php if ($this->flashMessage): ?>
+<?php if (count($this->flashMessages)): ?>
     <div id="messageArea">
-        <p><?php echo $this->flashMessage ?></p>
+    <?php foreach ($this->flashMessages as $flashMessage): ?>
+        <p><?php echo $flashMessage ?></p>
+    <?php endforeach ?>
         <p>
             <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
         </p>

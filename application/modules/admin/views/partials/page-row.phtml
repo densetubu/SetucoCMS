@@ -13,12 +13,13 @@
  * @version
  * @since      File available since Release 0.1.0
  * @param      array $page ページ情報の配列
+ * @param      int   $index インデックス番号
  * @param      Setuco_Form $categoryForm カテゴリー編集フォーム
  * @param      Setuco_Form $statusForm   状態編集フォーム
  * @author     charlesvineyard
  */
 ?>
-<?php 
+<?php
     $categoryForm = clone($this->categoryForm);
     $categoryForm->getElement('category_id')
                  ->setAttrib('id', $categoryForm->getElement('category_id')->getAttrib('id') . $this->index);
@@ -26,6 +27,8 @@
                  ->setAttrib('id', $categoryForm->getElement('h_page_id_c')->getAttrib('id') . $this->index);
     $categoryForm->getElement('h_page_title_c')
                  ->setAttrib('id', $categoryForm->getElement('h_page_title_c')->getAttrib('id') . $this->index);
+    $categoryForm->getElement('h_pre_category_id_c')
+                 ->setAttrib('id', $categoryForm->getElement('h_pre_category_id_c')->getAttrib('id') . $this->index);
     $categoryForm->getElement('sub_category')
                  ->setAttrib('id', $categoryForm->getElement('sub_category')->getAttrib('id') . $this->index);
     $categoryForm->getElement('cancel_category')
@@ -37,6 +40,8 @@
                  ->setAttrib('id', $statusForm->getElement('h_page_id_s')->getAttrib('id') . $this->index);
     $statusForm->getElement('h_page_title_s')
                  ->setAttrib('id', $statusForm->getElement('h_page_title_s')->getAttrib('id') . $this->index);
+    $statusForm->getElement('h_pre_category_id_s')
+                 ->setAttrib('id', $statusForm->getElement('h_pre_category_id_s')->getAttrib('id') . $this->index);
     $statusForm->getElement('sub_status')
                  ->setAttrib('id', $statusForm->getElement('sub_status')->getAttrib('id') . $this->index);
     $statusForm->getElement('cancel_status')
@@ -61,7 +66,8 @@
         <p>
             <?php echo $categoryForm->getElement('category_id')->setValue($this->page['category_id']) ?>
             <?php echo $categoryForm->getElement('h_page_id_c')->setValue($this->page['id']) ?>
-            <?php echo $categoryForm->getElement('h_page_title_c')->setValue($this->page['title']) ."\n" ?>
+            <?php echo $categoryForm->getElement('h_page_title_c')->setValue($this->page['title']) ?>
+            <?php echo $categoryForm->getElement('h_pre_category_id_c') . "\n" ?>
         </p>
         <p class="category_edit">
             <?php echo $categoryForm->getElement('sub_category') ?>
@@ -74,7 +80,8 @@
         <p>
             <?php echo $statusForm->getElement('status')->setValue($this->page['status']) ?>
             <?php echo $statusForm->getElement('h_page_id_s')->setValue($this->page['id']) ?>
-            <?php echo $statusForm->getElement('h_page_title_s')->setValue($this->page['title']) ."\n" ?>
+            <?php echo $statusForm->getElement('h_page_title_s')->setValue($this->page['title']) ?>
+            <?php echo $statusForm->getElement('h_pre_category_id_s') . "\n" ?>
         </p>
         <p class="status_edit">
             <?php echo $statusForm->getElement('sub_status') ?>

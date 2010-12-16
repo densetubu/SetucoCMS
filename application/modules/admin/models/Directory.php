@@ -78,8 +78,9 @@ class Admin_Model_Directory
         $navCategory = Zend_Navigation_Page::factory(array(
             'label'      => $categoryName,
             'module'     => 'admin',
-            'controller' => 'page',
-            'params'     => array('category-id' => $categoryId)
+            'controller' => 'directory',
+            'params'     => array('category_id' => $categoryId == null ?
+                Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $categoryId)
         ));
         $navCategory->addPages($this->_createNavPages($categoryId));
         return $navCategory;
@@ -88,12 +89,13 @@ class Admin_Model_Directory
     /**
      * カテゴリーに属するページ情報を作成します。
      *
+     * @param  int categoryId カテゴリーID
      * @return array Zend_Navigation_Pageの配列
      * @author charlesvineyard
      */
     private function _createNavPages($categoryId)
     {
-        $pages = $this->_pageDao->findPagesByCategoryId($categoryId);
+        $pages = $this->_pageDao->findPagesByCategoryId($categoryId, null, null, Common_Model_DbTable_Page::STATUS_ALL);
         $navPages = array();
         foreach ($pages as $page) {
             $navPages[] = Zend_Navigation_Page::factory(array(
@@ -101,6 +103,7 @@ class Admin_Model_Directory
                 'module'     => 'admin',
                 'controller' => 'page',
                 'params'     => array('id' => $page['id']),
+                'visible'     => $page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE ? true : false,
                 'type'       => 'Setuco_Navigation_Page_Directory_Page'
                 ));
         }

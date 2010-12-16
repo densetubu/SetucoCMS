@@ -1,7 +1,7 @@
 <?php
 /**
  * ナビゲーションページの拡張クラスです。
- * 
+ *
  * Zend_Navigation_Page_Mvcのプロパティに加えてHrefを２種類取得する機能を持ちます。
  *
  * LICENSE: ライセンスに関する情報
@@ -27,35 +27,50 @@ class Setuco_Navigation_Page_Directory_Page extends Zend_Navigation_Page_Mvc
 {
     /**
      * 編集用のURLを取得します。
-     * 
+     *
      * @return string 編集用のURL
      * @author charlesvineyard
      */
     public function getEditHref()
     {
+        // hrefを構成するための設定
         $module = $this->getModule();
-        $this->setModule('admin');       
+        $this->setModule('admin');
         $action = $this->getAction();
         $this->setAction('form');
+
         $href = $this->getHref();
+
+        // 元に戻す
         $this->setModule($module);
         $this->setAction($action);
+
         return $href;
     }
 
     /**
      * 閲覧用のURLを取得します。
-     * 
-     * @return string 閲覧用のURL
+     * 閲覧不可であればfalseを返します。
+     *
+     * @return mixed 閲覧用のURL or 閲覧不可時は false
      * @author charlesvineyard
      */
     public function getViewHref()
     {
+        if (! $this->_visible) {
+            return false;
+        }
+
+        // hrefを構成するための設定
         $module = $this->getModule();
-        $this->setModule('default');       
+        $this->setModule('default');
+
         $href = $this->getHref();
+
+        // 元に戻す
         $this->setModule($module);
+
         return $href;
     }
-    
+
 }
