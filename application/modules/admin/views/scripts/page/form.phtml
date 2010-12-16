@@ -55,6 +55,24 @@
         <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
     </div>
 <?php endif ?>
+
+<?php if ($this->form->isErrors()): ?>
+    <div id="messageArea">
+    <?php foreach ($this->form->getMessages() as $elementName => $messages): ?>
+        <?php if (!is_array($messages)):?>
+        <p><?php echo $messages ?></p>
+        <?php else: ?>
+            <?php foreach ($messages as $message):?>
+        <p><?php echo $message ?></p>
+            <?php endforeach ?>
+        <?php endif ?>
+    <?php endforeach ?>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
+<?php endif ?>
+
 <?php if (count($this->flashMessages)): ?>
     <div id="messageArea">
     <?php foreach ($this->flashMessages as $flashMessage): ?>

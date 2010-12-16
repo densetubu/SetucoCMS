@@ -207,8 +207,8 @@ class Admin_Model_Page extends Common_Model_PageAbstract
                     'tag_id'  => $tagId
                 ));
             }
-            unset($pageInfo['tag']);
         }
+        unset($pageInfo['tag']);
 
         $pageInfo['update_date'] = new Zend_Date();
 
