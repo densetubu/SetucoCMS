@@ -50,13 +50,43 @@
             </div>
         </div>
     </div>
-<?php else: // 編集の場合?>
+<?php else: // 編集の場合 ?>
     <div class="hAreaText">
         <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
     </div>
 <?php endif ?>
 
+<<<<<<< HEAD
 <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
+=======
+<?php if ($this->form->isErrors()): ?>
+    <div id="messageArea">
+    <?php foreach ($this->form->getMessages() as $elementName => $messages): ?>
+        <?php if (!is_array($messages)):?>
+        <p><?php echo $messages ?></p>
+        <?php else: ?>
+            <?php foreach ($messages as $message):?>
+        <p><?php echo $message ?></p>
+            <?php endforeach ?>
+        <?php endif ?>
+    <?php endforeach ?>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
+<?php endif ?>
+
+<?php if (count($this->flashMessages)): ?>
+    <div id="messageArea">
+    <?php foreach ($this->flashMessages as $flashMessage): ?>
+        <p><?php echo $flashMessage ?></p>
+    <?php endforeach ?>
+        <p>
+            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+        </p>
+    </div>
+<?php endif ?>
+>>>>>>> bb97c1be1208b73e9eaa56f64a1a365f91d15712
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <ul class="inputStraight defaultOver">

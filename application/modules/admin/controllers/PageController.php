@@ -133,7 +133,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pages = $pages;
         $this->view->searchForm = $this->_createSearchForm();
         $this->view->categoryForm = $this->_createCategoryForm();
+<<<<<<< HEAD
         $this->view->statusForm = $this->_createStatusForm();
+=======
+        $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
+        $this->_showFlashMessages();
+>>>>>>> bb97c1be1208b73e9eaa56f64a1a365f91d15712
         $this->setPagerForView($this->_pageService->countPages());
 
         //フラッシュメッセージを設定する
@@ -161,7 +166,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
         $currentPageValues = array(
             'page_title'    => $page['title'],
-            'category_id'   => $page['category_id'] === null ? Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $page['category_id'],
+            'category_id'   => $page['category_id'] === null ?
+                Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $page['category_id'],
             'page_contents' => $page['contents'],
             'page_outline'  => $page['outline'],
             'tag'           => $this->_createCSTagNames($id),
@@ -177,6 +183,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
+        $this->_showFlashMessages();
     }
 
     /**
@@ -213,7 +220,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pages = $pages;
         $this->view->searchForm = $searchForm;
         $this->view->categoryForm = $this->_createCategoryForm();
-        $this->view->statusForm = $this->_createStatusForm();
+        $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->setPagerForView(
             $this->_pageService->countPagesByKeyword(
                 $keyword, $targets, $refinements
@@ -260,6 +267,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
             if ($page['category_id'] === null) {
                 $pages[$key]['category_id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
+                $pages[$key]['category_name'] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
             }
         }
         return $pages;
@@ -380,117 +388,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
-        $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('update-category'))
-            ->addElement(
-                'Select',    // selected 指定はビューでする
-                'category_id',
-                array(
-                    'id'           => 'category_id',
-                    'required'     => true,
-                    'onchange'     => 'showPageElementEdit(this);',
-                    'multiOptions' => $categories,
-                    'decorators'   => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_id_c',
-                array(
-                    'id'         => 'h_page_id_c',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_title_c',
-                array(
-                    'id'         => 'h_page_title_c',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Submit',
-                'sub_category',
-                array(
-                    'id'         => 'sub_category',
-                    'label'      => '変更',
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'button',
-                'cancel_category',
-                array(
-                    'id'      => 'cancel_category',
-                    'label'   => 'キャンセル',
-                    'onclick' => 'hidePageElementEdit(this);',
-                    'decorators' => array('ViewHelper')
-                )
-            );
-        return $form;
-    }
-
-    /**
-     * 状態変更フォームを作成します。
-     *
-     * @return Setuco_Form フォーム
-     * @author charlesvineyard
-     */
-    private function _createStatusForm()
-    {
-        $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('update-status'))
-            ->addElement(
-                'Select',    // selected 指定はビューでする
-                'status',
-                array(
-                    'id'           => 'status',
-                    'required'     => true,
-                    'onchange'     => 'showPageElementEdit(this);',
-                    'multiOptions' => Setuco_Data_Constant_Page::ALL_STATUSES(),
-                    'decorators'   => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_id_s',
-                array(
-                    'id'         => 'h_page_id_s',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Hidden',
-                'h_page_title_s',
-                array(
-                    'id'         => 'h_page_title_s',
-                    'required'   => true,
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'Submit',
-                'sub_status',
-                array(
-                    'id'         => 'sub_status',
-                    'label'      => '変更',
-                    'decorators' => array('ViewHelper')
-                )
-            )
-            ->addElement(
-                'button',
-                'cancel_status',
-                array(
-                    'id'         => 'cancel_status',
-                    'label'      => 'キャンセル',
-                    'onclick'    => 'hidePageElementEdit(this);',
-                    'decorators' => array('ViewHelper')
-                )
-            );
+        $form = new Setuco_Form_Page_CategoryUpdate();
+        $form->setCategories($categories);
         return $form;
     }
 
@@ -559,138 +458,143 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
-             ->setAction($this->_helper->url('create'))
-             ->addElement(
-                 'Submit',
-                 'sub_open1',
-                 array(
-                     'label'   => '公開して保存',
-                 )
-             )
-             ->addElement(
-                 'Submit',
-                 'sub_draft1',
-                 array(
-                     'label' => '下書きで保存',
-                 )
-             )
-             ->addElement(
-                 'Submit',
-                 'sub_open2',
-                 array(
-                     'label'   => '公開して保存',
-                 )
-             )
-             ->addElement(
-                 'Submit',
-                 'sub_draft2',
-                 array(
-                     'label' => '下書きで保存',
-                 )
-             )
-             ->addElement(
-                 'Text',
-                 'page_title',
-                 array(
-                     'id' => 'page_title',
-                     'required' => true,
-                     'filters' => array(
-                         'StringTrim'
-                     ),
-                     'escape' => true,
-                 )
-             )
-             ->addElement(
-                 'Select',
-                 'category_id',
-                 array(
-                     'required' => true,
-                     'multiOptions' => $categories,
-                     'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
-                 )
-             )
-             ->addElement(
-                 'Editor',
-                 'page_contents',
-                 array(
-                     'id' => 'page_contents',
-                     'plugins' => array(
-                        'undo',         // 戻す
-                        'redo',         // やり直し
-                        'cut',          // 切り取り
-                        'copy',         // コピー
-                        'paste',        // ペースト
-                        'selectAll',    // 全て選択
-                        'bold',         // 太字
-                        'subscript',    // 下付き文字
-                        'superscript',  // 上付き文字
-                        'removeFormat', // 形式の除去
-                        'insertOrderedList',    // 番号付きリスト
-                        'insertUnorderedList',  // 黒丸付きリスト
-                        'insertHorizontalRule', // 水平罫線
-                        'createLink',   // リンクの作成
-                        'unlink',       // リンクの除去
-                        'delete',       // 削除
-                        'foreColor',    // テキストの色
-                        'hiliteColor',  // マーカー(背景の色)
-                        'fontSize',     // サイズ
-                        'insertImage',  // イメージの挿入
-                        'fullscreen',   // フルスクリーン
-                        'viewsource',   // HTMLソース表示
-                        'newpage',      // 新規ページ
-                     ),
-                     'required' => true,
-                     'filters' => array(
-                         'StringTrim'
-                     ),
-                     'escape' => true,
-                 )
-             )
-             ->addElement(
-                 'Text',
-                 'page_outline',
-                 array(
-                     'id' => 'page_outline',
-                     'filters' => array(
-                         'StringTrim'
-                     ),
-                     'escape' => true,
-                 )
-             )
-             ->addElement(
-                 'Text',
-                 'tag',
-                 array(
-                     'id' => 'tag',
-                     'filters' => array(
-                         'StringTrim'
-                     ),
-                     'escape' => true,
-                 )
-             )
-             ->addElement(
-                 'DateTextBox',
-                 'create_date',
-                 array(
-                     'id' => 'create_date',
-                     'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
-                     'filters' => array(
-                         'StringTrim'
-                     )
-                 )
-             )
-             ->addElement(
-                 'TimeTextBox',
-                 'create_time',
-                 array(
-                     'id' => 'create_time',
-                     'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
-                     'TimePattern' => 'HH:mm:ss',    // 表示用フォーマット
-                     'filters' => array(
-                         'StringTrim'
-                     )
-                 )
-             );
+             ->setAction($this->_helper->url('create'));
+        $form->addElement(
+            'Submit',
+            'sub_open1',
+            array(
+                'label'   => '公開して保存',
+            )
+        );
+        $form->addElement(
+            'Submit',
+            'sub_draft1',
+            array(
+                'label' => '下書きで保存',
+            )
+        );
+        $form->addElement(
+            'Submit',
+            'sub_open2',
+            array(
+                'label'   => '公開して保存',
+            )
+        );
+        $form->addElement(
+            'Submit',
+            'sub_draft2',
+            array(
+                'label' => '下書きで保存',
+            )
+        );
+        $form->addElement(
+            'Text',
+            'page_title',
+            array(
+                'id' => 'page_title',
+                'required' => true,
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'escape' => true,
+                'validators' => $this->_makePageTitleValidators(),
+            )
+        );
+        $form->addElement(
+            'Select',
+            'category_id',
+            array(
+                'required' => true,
+                'multiOptions' => $categories,
+                'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
+            )
+        );
+        $form->addElement(
+            'Editor',
+            'page_contents',
+            array(
+                'id' => 'page_contents',
+                'plugins' => array(
+                   'undo',         // 戻す
+                   'redo',         // やり直し
+                   'cut',          // 切り取り
+                   'copy',         // コピー
+                   'paste',        // ペースト
+                   'selectAll',    // 全て選択
+                   'bold',         // 太字
+                   'subscript',    // 下付き文字
+                   'superscript',  // 上付き文字
+                   'removeFormat', // 形式の除去
+                   'insertOrderedList',    // 番号付きリスト
+                   'insertUnorderedList',  // 黒丸付きリスト
+                   'insertHorizontalRule', // 水平罫線
+                   'createLink',   // リンクの作成
+                   'unlink',       // リンクの除去
+                   'delete',       // 削除
+                   'foreColor',    // テキストの色
+                   'hiliteColor',  // マーカー(背景の色)
+                   'fontSize',     // サイズ
+                   'insertImage',  // イメージの挿入
+                   'fullscreen',   // フルスクリーン
+                   'viewsource',   // HTMLソース表示
+                   'newpage',      // 新規ページ
+                ),
+                'required' => true,
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'escape' => true,
+                'validators' => $this->_makePageContentsValidators(),
+            )
+        );
+        $form->addElement(
+            'Text',
+            'page_outline',
+            array(
+                'id' => 'page_outline',
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'escape' => true,
+                'validators' => $this->_makePageOutlineValidators(),
+            )
+        );
+        $form->addElement(
+            'Text',
+            'tag',
+            array(
+                'id' => 'tag',
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'escape' => true,
+            )
+        );
+        $form->addElement(
+            'DateTextBox',
+            'create_date',
+            array(
+                'id' => 'create_date',
+                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'validators' => $this->_makeCreateDateValidators(),
+            )
+        );
+        $form->addElement(
+            'TimeTextBox',
+            'create_time',
+            array(
+                'id' => 'create_time',
+                'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
+                'TimePattern' => 'HH:mm:ss',    // 表示用フォーマット
+                'filters' => array(
+                    'StringTrim'
+                ),
+                'validators' => $this->_makeCreateTimeValidators(),
+            )
+        );
         $form->setMinimalDecoratorElements(array(
             'sub_open1',
             'sub_draft1',
@@ -718,6 +622,150 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
+     * ページタイトル用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makePageTitleValidators()
+    {
+        $name = 'ページタイトル';
+        $validators = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage($name . 'を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 100
+            )
+        );
+        $stringLength->setMessage($name . 'は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
+    }
+
+    /**
+     * コンテンツ用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makePageContentsValidators()
+    {
+        $name = 'コンテンツ';
+        $validators = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage($name . 'を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 1000000
+            )
+        );
+        $stringLength->setMessage($name . 'は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
+    }
+
+    /**
+     * ページの概要用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makePageOutlineValidators()
+    {
+        $name = 'ページの概要';
+        $validators = array();
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 300
+            )
+        );
+        $stringLength->setMessage($name . 'は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
+    }
+
+    /**
+     * タグ用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeTagValidators()
+    {
+        $name = 'タグ';
+        $validators = array();
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 50
+            )
+        );
+        $stringLength->setMessage($name . 'は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
+    }
+
+    /**
+     * 作成日用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeCreateDateValidators()
+    {
+        $name = '作成日';
+        $validators = array();
+
+        $date = new Zend_Validate_Date(
+            array(
+                'format' => self::FORMAT_DATE_TEXT_BOX
+            )
+        );
+        $date->setMessage($name . 'の形式が正しくありません。');
+        $validators[] = array($date, true);
+
+        return $validators;
+    }
+
+    /**
+     * 作成時刻用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeCreateTimeValidators()
+    {
+        $name = '作成時刻';
+        $validators = array();
+
+        $date = new Zend_Validate_Date(
+            array(
+                'format' => self::FORMAT_TIME_TEXT_BOX
+            )
+        );
+        $date->setMessage($name . 'の形式が正しくありません。');
+        $validators[] = array($date, true);
+
+        return $validators;
+    }
+
+    /**
      * ページを新規作成する
      * indexアクションに遷移します
      *
@@ -727,27 +775,74 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function createAction()
     {
         $form = $this->_createForm();
-        if (!$form->isValid($_POST)) {
+        $post = $_POST;
+
+        $nowDate = Zend_Date::now();
+        $post['create_date'] = Setuco_Util_String::getDefaultIfEmpty(
+            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
+        $post['create_time'] = Setuco_Util_String::getDefaultIfEmpty(
+            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+
+        if (! $this->_isValidPageForm($form, $post)) {
             $this->_setParam('form', $form);
             return $this->_forward('form');
         }
 
-        $categoryId = $this->_getParam('category_id');
+        $categoryId = $form->getValue('category_id');
         if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
         }
         $pageId = $this->_pageService->registPage(
-            $this->_getParam('page_title'),
-            $this->_getParam('page_contents'),
-            $this->_getParam('page_outline'),
-            Setuco_Util_String::splitCsvString($this->_getParam('tag')),
-            $this->_getInputCreateDate(),
+            $form->getValue('page_title'),
+            $form->getValue('page_contents'),
+            $form->getValue('page_outline'),
+            Setuco_Util_String::splitCsvString($form->getValue('tag')),
+            new Zend_Date(
+                $post['create_date'] . $post['create_time'],
+                self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
+            ),
             $this->_getInputStatus(),
             $categoryId
         );
 
         $this->_helper->flashMessenger('新規ページを作成しました。');
         $this->_helper->redirector('index', null, null, array('id' => $pageId));
+    }
+
+    /**
+     * ページ作成フォームが有効かどうかを判断します。
+     * フォームには検証する値やもしあればエラー情報が格納されます。
+     *
+     * @param  Setuco_Form $form    フォーム
+     * @param  array       $values  検証する値
+     * @return bool        有効なら true
+     * @author charlesvineyard
+     */
+    private function _isValidPageForm($form, $values)
+    {
+        // 既設のバリデーターでチェック
+        $form->isValid($values);
+
+        // 作成日時の未来日付チェック
+        $createDateTime = new Zend_Date($values['create_date'] . $values['create_time'],
+            self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX);
+        if ($createDateTime->compare(Zend_Date::now()) > 0) {
+            $form->getElement('create_date')->addError('未来の日時は指定できません。');
+            $form->markAsError();
+        }
+
+        // タグ名を1つずつチェック
+        $tags = Setuco_Util_String::splitCsvString($values['tag']);
+        $form->getElement('tag')->setValidators($this->_makeTagValidators());
+        if ($tags !== null) {
+            foreach ($tags as $tag) {
+                if (!$form->getElement('tag')->isValid($tag)) {
+                    break;
+                }
+            }
+        }
+
+        return ! $form->isErrors();
     }
 
     /**
@@ -765,26 +860,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return Setuco_Data_Constant_Page::STATUS_RELEASE;
         }
         return Setuco_Data_Constant_Page::STATUS_DRAFT;
-    }
-
-    /**
-     * 入力された作成日時を取得します。
-     *
-     * もし入力されなかったら現在の日時を取得します。
-     *
-     * @return Zend_Date 作成日時
-     * @author charlesvineyard
-     */
-    private function _getInputCreateDate()
-    {
-        $nowDate = Zend_Date::now();
-        $createDate = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
-        $createTime = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
-        return new Zend_Date(
-            $createDate . $createTime,
-            self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX);
     }
 
     /**
@@ -807,12 +882,20 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function updateAction()
     {
         $form = $this->_createUpdateForm();
-        if (!$form->isValid($_POST)) {
+        $post = $_POST;
+
+        $nowDate = Zend_Date::now();
+        $post['create_date'] = Setuco_Util_String::getDefaultIfEmpty(
+            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
+        $post['create_time'] = Setuco_Util_String::getDefaultIfEmpty(
+            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+
+        if (! $this->_isValidPageForm($form, $post)) {
             $this->_setParam('form', $form);
-            return $this->_forward('index', null, null, array('id', $form->getValue('hidden_id')));
+            return $this->_forward('form');
         }
 
-        $categoryId = $this->_getParam('category_id');
+        $categoryId = $form->getValue('category_id');
         if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             $categoryId = null;
         }
@@ -822,7 +905,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
             'tag'         => Setuco_Util_String::splitCsvString($form->getValue('tag')),
-            'create_date' => $this->_getInputCreateDate(),
+            'create_date' => new Zend_Date(
+                $post['create_date'] . $post['create_time'],
+                self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
+            ),
             'status'      => $this->_getInputStatus(),
         );
         $id = $form->getValue('hidden_id');
@@ -843,7 +929,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createCategoryForm();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('categoryForm', $form);
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(
@@ -859,7 +944,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * ページのカテゴリーを更新するアクション
+     * ページの状態を更新するアクション
      * indexアクションに遷移します
      *
      * @return void
@@ -867,9 +952,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateStatusAction()
     {
-        $form = $this->_createStatusForm();
+        $form = new Setuco_Form_Page_StatusUpdate();
         if (!$form->isValid($_POST)) {
-            $this->_setParam('statusForm', $form);
             return $this->_forward('index');
         }
         $this->_pageService->updatePage(

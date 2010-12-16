@@ -144,7 +144,6 @@ class Admin_Model_Media
      */
     public function saveThumnailFromImage($imagePath)
     {
-
         // アップロードされた画像のオブジェクトを保持
         $originalImage = null;
 
@@ -196,7 +195,7 @@ class Admin_Model_Media
             imagecolortransparent($thumbImage, $transIndex);
         }
 
-        // 算出したサイズに李サンプリングコピー
+        // 算出したサイズにリサンプリングコピー
         imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
         // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
         // サムネイルを保存
@@ -206,6 +205,8 @@ class Admin_Model_Media
         // 画像オブジェクト破棄
         imagedestroy($originalImage);
         imagedestroy($thumbImage);
+
+        return true;
     }
 
     /**
@@ -237,7 +238,7 @@ class Admin_Model_Media
      * 受け取ったファイルの情報で、Media表の指定されたIDのレコードを更新する
      *
      * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
-     * @return boolean 更新に成功したらtrue、失敗したらfalse
+     * @return int 更新した行数（IDを指定しているので0か1になる）
      * @author akitsukada
      */
     public function updateMediaInfo($id, $mediaInfo)
@@ -245,11 +246,7 @@ class Admin_Model_Media
         // DBにデータを登録
         //アップデートする条件のwhere句を生成する
         $where = $this->_mediadao->getAdapter()->quoteInto("id = ?", (int)$id); 
-        if ($this->_mediadao->update($mediaInfo, $where) == 1) { // 更新した行数として必ず1か0が返ってくる
-            return true;
-        } else {
-            return false;
-        }
+        return $this->_mediadao->update($mediaInfo, $where);
     }
 
     /**

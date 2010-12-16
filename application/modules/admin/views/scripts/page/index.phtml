@@ -12,7 +12,10 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param
+ * @param      Setuco_Form searchForm   検索フォーム
+ * @param      Setuco_Form categoryForm カテゴリーフォーム
+ * @param      Setuco_Form statusForm   状態フォーム
+ * @param      bool        isSearched   検索結果ページかどうか
  * @author     charlesvineyard
  */
 ?>
@@ -59,7 +62,12 @@
             <p><?php echo $this->searchForm->getElement('sub_search') ."\n" ?></p>
         </div>
     </form>
-    <?php echo $this->partial('page-table.phtml', array('pages' => $this->pages, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
+    <?php echo $this->partial('page-table.phtml', array(
+            'pages' => $this->pages,
+            'categoryForm' => $this->categoryForm,
+            'statusForm' => $this->statusForm,
+            'isSearched' => $this->isSearched))
+    ?>
     <?php echo $this->paginator //ページャーの表示 ?>
 </div>
 <!-- section END -->

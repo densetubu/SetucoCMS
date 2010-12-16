@@ -199,12 +199,14 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     {
         $this->_pageTagDao->delete($this->_pageTagDao->getAdapter()->quoteInto('page_id = ?', $id));
 
-        $tagIds = $this->_registTagsIfNotExist($pageInfo['tag']);
-        foreach ($tagIds as $tagId) {
-            $this->_pageTagDao->insert(array(
-                'page_id' => $id,
-                'tag_id'  => $tagId
-            ));
+        if (!empty($pageInfo['tag'])) {
+            $tagIds = $this->_registTagsIfNotExist($pageInfo['tag']);
+            foreach ($tagIds as $tagId) {
+                $this->_pageTagDao->insert(array(
+                    'page_id' => $id,
+                    'tag_id'  => $tagId
+                ));
+            }
         }
         unset($pageInfo['tag']);
 

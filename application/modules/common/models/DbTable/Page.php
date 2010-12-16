@@ -46,6 +46,11 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     const STATUS_DRAFT = 0;
 
     /**
+     * ページの状態　全ての状態
+     */
+    const STATUS_ALL = -1;
+
+    /**
      * 新着ページを取得する
      *
      * @param int $getPageCount 何件のページを取得するのか
@@ -131,8 +136,9 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @param int $limig １ページに表示するページ数
      * @author akitsukada
      * @return array 取得したページデータ
+     * @todo $statusの初期値をnull(ALL)にしたい
      */
-    public function findPagesByCategoryId($categoryId, $pageNumber = null, $limit = null)
+    public function findPagesByCategoryId($categoryId, $pageNumber = null, $limit = null, $status = self::STATUS_OPEN)
     {
         $select = $this->select();
 
@@ -142,8 +148,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
         $select->setIntegrityCheck(false);
 
-        //公開しているページのみ取得する
-        $select->where('status = ?', self::STATUS_OPEN);
+        // 指定された状態のページのみ取得する
+        if ($status != self::STATUS_ALL) {
+            $select->where('status = ?', $status);
+        }
 
         //指定されたカテゴリのページのみ取得する
         if (is_null($categoryId)) {

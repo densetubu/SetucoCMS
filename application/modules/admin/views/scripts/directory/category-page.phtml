@@ -1,0 +1,67 @@
+<?php
+/**
+ * カテゴリーに含まれるページ一覧
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Page
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      Setuco_Form searchForm   検索フォーム
+ * @param      Setuco_Form categoryForm カテゴリーフォーム
+ * @param      Setuco_Form statusForm   状態フォーム
+ * @param      bool        isSearched   検索結果ページかどうか
+ * @author     charlesvineyard
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin/directory') ?>">サイト構造（カテゴリー・ページの一覧）</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>「<?php echo $this->pages[0]['category_name']?>」カテゴリーに含まれるページ一覧</p>
+</div>
+<!-- topicpath END -->
+
+<!-- section START -->
+<div class="section">
+    <div class="hAreaText">
+        <h3 id="textType">「<?php echo $this->pages[0]['category_name']?>」カテゴリーに含まれるページ一覧　（<?php echo $this->pageCount ?>ページ）</h3>
+    </div>
+
+    <?php if (count($this->flashMessages)): ?>
+        <div id="messageArea">
+        <?php foreach ($this->flashMessages as $flashMessage): ?>
+            <p><?php echo $flashMessage ?></p>
+        <?php endforeach ?>
+            <p>
+                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
+            </p>
+        </div>
+    <?php endif ?>
+
+    <p style="margin-left:10px; margin-bottom:10px;">
+        <a href="<?php echo $this->baseUrl('/admin/directory') ?>">カテゴリー・ページの一覧に戻る</a>
+    </p>
+
+    <?php echo $this->partial('page-table.phtml', array(
+            'pages' => $this->pages,
+            'categoryForm' => $this->categoryForm,
+            'statusForm' => $this->statusForm,
+            'isSearched' => $this->isSearched))
+    ?>
+
+    <?php echo $this->paginator //ページャーの表示 ?>
+</div>
+<!-- section END -->

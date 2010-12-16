@@ -249,12 +249,14 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
             // idに該当するページなし（通常おこらない不適切なアクセス ex.URL手入力など）
             // @todo 仕様策定と実装
         }
-
         // カテゴリー情報の取得
         $categoryId = $page['category_id'];
-        $category = $this->_categoryService->findCategory($categoryId);
-        if (is_null($category['name'])) {
-            $category['name'] = '未分類';
+        if (is_null($categoryId)) {
+            $category['id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
+            $category['name'] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
+            $category['parent_id'] = Setuco_Data_Constant_Category::NO_PARENT_ID;
+        } else {
+            $category = $this->_categoryService->findCategory($categoryId);
         }
 
         // 日時情報のフォーマット編集
