@@ -40,18 +40,9 @@
         <h3 id="textType">「<?php echo $this->pages[0]['category_name']?>」カテゴリーに含まれるページ一覧　（<?php echo $this->pageCount ?>ページ）</h3>
     </div>
 
-    <?php if (count($this->flashMessages)): ?>
-        <div id="messageArea">
-        <?php foreach ($this->flashMessages as $flashMessage): ?>
-            <p><?php echo $flashMessage ?></p>
-        <?php endforeach ?>
-            <p>
-                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-            </p>
-        </div>
-    <?php endif ?>
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
-    <p style="margin-left:10px; margin-bottom:10px;">
+    <p class="default">
         <a href="<?php echo $this->baseUrl('/admin/directory') ?>">カテゴリー・ページの一覧に戻る</a>
     </p>
 

@@ -161,7 +161,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->setPagerForView($this->_media->countMedias($condition['type']));
 
         // フラッシュメッセージ設定
-        $this->_setFlashMessages();
+        $this->_showFlashMessages();
     }
 
     /**
@@ -207,7 +207,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
           => "アップロードできるファイルの種類は {$exts} です。",
           Zend_Validate_File_Extension::NOT_FOUND
           => "アップロードできるファイルの種類は {$exts} です。",
-          )); 
+          ));
          */
         $adapter->addValidator($fileExtensionValidator);
 
@@ -332,7 +332,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->fileSizeMax = self::FILE_SIZE_MAX . ' Byte';
 
         // フラッシュメッセージ設定
-        $this->_setFlashMessages();
+        $this->_showFlashMessages();
     }
 
     /**
@@ -789,22 +789,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             return false;
         }
         return true;
-    }
-
-    /**
-     * フラッシュメッセージをビューに設定する
-     *
-     * @return void
-     * @author akitsukada
-     *
-     */
-    private function _setFlashMessages()
-    {
-        // フラッシュメッセージ用の設定
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages;
-        }
     }
 
 }

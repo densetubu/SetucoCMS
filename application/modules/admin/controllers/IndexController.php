@@ -230,10 +230,6 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function formGoalAction()
     {
         $this->view->goalForm = $this->_getParam('form', $this->_createGoalForm());
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages[0];
-        }
 
         // フラッシュメッセージ設定
         $this->_showFlashMessages();

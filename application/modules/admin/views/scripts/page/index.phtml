@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->searchForm->getAction() ?>" method="get">
         <div id="pageSearch">

@@ -44,10 +44,6 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages[0];
-        }
         $this->view->form = $this->_getParam('form', $this->_createLoginForm());
 
         // フラッシュメッセージ設定

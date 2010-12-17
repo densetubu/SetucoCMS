@@ -73,6 +73,8 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
             return $this->_showCategoryPagesOperation();
         }
         $this->view->directory = $this->_directoryService->createDirectoryInfo();
+
+        // フラッシュメッセージ設定
         $this->_showFlashMessages();
     }
 

@@ -88,14 +88,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
             }
         }
 
-        //フラッシュメッセージがある場合のみ設定する
+        // フラッシュメッセージ設定
         $this->_showFlashMessages();
-        /*
-        if ($this->_helper->flashMessenger->hasMessages()) {
-            $flashMessages = $this->_helper->flashMessenger->getMessages();
-            $this->view->flashMessage = $flashMessages[0];
-        }
-         */
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
         $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());

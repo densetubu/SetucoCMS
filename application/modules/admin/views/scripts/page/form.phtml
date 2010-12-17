@@ -56,7 +56,7 @@
     </div>
 <?php endif ?>
 
-<?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
+<?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
 <?php if ($this->form->isErrors()): ?>
     <div id="messageArea">

@@ -397,11 +397,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formAction()
     {
-        $flashMessages = $this->_helper->flashMessenger->getMessages();
-        if (count($flashMessages)) {
-            $this->view->flashMessage = $flashMessages[0];
-        }
-
         $this->view->form = $this->_getParam('form', $this->_createForm());
 
         //フラッシュメッセージを設定する

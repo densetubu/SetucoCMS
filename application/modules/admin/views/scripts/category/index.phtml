@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)); ?>
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <form action="<?php echo $this->baseUrl('/admin/category/create'); ?>" method="post">
         <p class="default">
