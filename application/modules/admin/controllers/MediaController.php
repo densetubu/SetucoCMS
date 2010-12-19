@@ -224,9 +224,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 continue;
             }
 
+            $newFileName = $adapter->getFileName($inputName);
+
             // 有効な画像か
             if (Setuco_Util_Media::isImageExtension($extType)) {
-                if (!$this->_media->isValidImageData($adapter->getFileName())) {
+                if (!$this->_media->isValidImageData($newFileName)) {
                     $uploadErrorMsgs[] = "{$filePath['basename']}は不正な画像データです。";
                     $this->_removeFileById($newId);
                     continue;
@@ -235,7 +237,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // サムネイルの生成と保存
             if (Setuco_Util_Media::isImageExtension($extType)) {
-                if (!$this->_media->saveThumbnailFromImage($adapter->getFileName($inputName))) {
+                if (!$this->_media->saveThumbnailFromImage($newFileName)) {
                     $uploadErrorMsgs[] = "ファイル{$filePath['basename']}のサムネイルが生成できませんでした。";
                     $this->_media->deleteMediaById($newId);
                     $this->_removeFileById($newId);
@@ -260,7 +262,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             $uploadSuccessMsgs[] = "ファイル {$filePath['basename']} をアップロードしました。";
         }
-
+        
         foreach ($uploadErrorMsgs as $msg) {
             $this->_helper->flashMessenger->addMessage($msg);
         }

@@ -311,22 +311,7 @@ class Admin_Model_Media
 
     public function isValidImageData($imagePath)
     {
-        // 画像のパスからイメージオブジェクト取得
-        $imageInfo = pathinfo($imagePath);
-        $ext = $imageInfo['extension'];
-        switch ($ext) {
-            case 'jpg' :
-                return imagecreatefromjpeg($imagePath);
-                break;
-            case 'gif' :
-                return imagecreatefromgif($imagePath);
-                break;
-            case 'png' :
-                return imagecreatefrompng($imagePath);
-                break;
-            default :
-                return false;  // 拡張子が対応画像(jpg, gif, png)でなければfalse
-        }
+        return getimagesize($imagePath);
     }
 
 }
