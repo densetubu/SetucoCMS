@@ -24,10 +24,6 @@
  */
 class Admin_Model_Media
 {
-    /**
-     * サムネイル保存ディレクトリのbaseUrl用パス。
-     */
-    const THUMB_DIR_PATH_FROM_PUBLIC = '/media/thumbnail/';
 
     /**
      * PDFファイル用アイコンファイルのパス
@@ -44,37 +40,42 @@ class Admin_Model_Media
      * 
      * @var Common_Model_DbTable_Media
      */
-    private $_mediadao = null;
-
+    private $_mediaDao = null;
+    /**
+     * ファイル保存ディレクトリの物理絶対パス
+     * @var string
+     */
+    private $_uploadDirFQPath = '';
     /**
      * サムネイル保存ディレクトリの物理絶対パス
      * @var string
      */
-    private $_thumbnailDirectoryFQPath = '';
-
+    private $_thumbDirFQPath = '';
     /**
      * サムネイルの表示幅、標準値
      * @var int
      */
-    private $_thumbnailWidth = null;
+    private $_thumbWidth = null;
 
     /**
      * コンストラクター。DAOのインスタンスを初期化する
      *
-     * @param string $thumbnailDirectoryFQPath サムネイル保存ディレクトリの物理絶対パス
-     * @param int $thumbnailWidth サムネイルの標準表示幅
+     * @param string $thumbDirFQPath サムネイル保存ディレクトリの物理絶対パス
+     * @param int $thumbWidth サムネイルの標準表示幅
      * @return void
      * @author akitsukada
      */
-    public function __construct($thumbnailDirectoryFQPath, $thumbnailWidth)
+    public function __construct($uploadDirFQPath, $thumbDirFQPath, $thumbWidth)
     {
-        $this->_mediadao = new Common_Model_DbTable_Media();
-        $this->_thumbnailDirectoryFQPath = $thumbnailDirectoryFQPath;
-        $this->_thumbnailWidth = $thumbnailWidth;
+        $this->_mediaDao = new Common_Model_DbTable_Media();
+        $this->_uploadDirFQPath = $uploadDirFQPath;
+        $this->_thumbDirFQPath = $thumbDirFQPath;
+        $this->_thumbWidth = $thumbWidth;
     }
 
     /**
-     * Media表から、絞込み条件とページネーターのカレントページにしたがって$limit件（オフセット$currentPage-1）のデータを取得する
+     * Media表から、絞込み条件とページネーターのカレントページにしたがって
+     * $limit件（オフセット=$currentPage-1）のデータを取得する
      *
      * @param    array $condition    「'type'：ファイル種別,'sort'：ソートキー項目,'order'：ソート順」の連想配列
      * @param    int   $pageNumber   ページネーター用の、現在表示したいページ番号
@@ -82,58 +83,79 @@ class Admin_Model_Media
      * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($condition, $pageNumber, $limit)
+    public function findMedias($sortColumn, $order, $fileType, $limit, $pageNumber)
     {
 
-        $select = $this->_mediadao->select()
-                        ->order("{$condition['sort']} {$condition['order']}")
-                        ->limitPage($pageNumber, $limit);
+        $medias = $this->_mediaDao->loadMedias($sortColumn, $order, $fileType, $limit, $pageNumber);
 
-        if ($condition['type'] !== 'all') {
-            // 拡張子絞り込み指定されていた場合のみWhere句を設定
-            $select->where('type = ?', $condition['type']);
-        } else {
-            $select->where('type != ?', 'new');
+        foreach ($medias as $cnt => $media) {
+            $media = $this->_addThumbPathInfo($media);
+            $medias[$cnt] = $media;
         }
-
-        $medias = $this->_mediadao->executeSelect($select)->toArray();
-        return $this->_addThumbnailPathInfo($medias); // サムネイルのパス情報を追加した配列をreturn
+        return $medias; // サムネイルのパス情報を追加した配列をreturn
     }
 
     /**
      * データベースから取得したMediaデータの、ファイル種別に応じてサムネイルのパス情報を付加する
      * 
-     * @param array $medias DBからfetchAllしてきたデータ
+     * @param array $media DBから取得したファイル情報１件分
      * @return array|false サムネイル情報付加済みの配列。途中で処理に失敗したらその時点でfalseを返す。
      * @author akitsukada
      */
-    private function _addThumbnailPathInfo(array $medias)
+    private function _addThumbPathInfo(array $media)
     {
-        $thumbUrl = '';
-        foreach ($medias as $cnt => $media) {
-            switch ($media['type']) {
-                case 'pdf' :
-                    $thumbUrl = self::ICON_PATH_PDF;
-                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth;
-                    break;
-                case 'txt' :
-                    $thumbUrl = self::ICON_PATH_TXT;
-                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth;
-                    break;
-                case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
-                case 'gif' :
-                case 'png' :
-                    $thumbUrl = self::THUMB_DIR_PATH_FROM_PUBLIC . $media['id'] . '.gif';
-                    $thumbImage = imagecreatefromgif($this->_thumbnailDirectoryFQPath . '/' . $media['id'] . '.gif');
-                    $thumbWidth = imagesx($thumbImage);
-                    $medias[$cnt]['thumbWidth'] = $this->_thumbnailWidth > $thumbWidth ? $thumbWidth : $this->_thumbnailWidth;
-                    break;
-                default :
-                    return false;
-            }
-            $medias[$cnt]['thumbUrl'] = $thumbUrl;
+        $media['alt'] = '';
+        $media['uploadUrl'] = '';
+        $media['notFound'] = array();
+
+        $fileName = "{$media['id']}.{$media['type']}";
+        $filePath = "{$this->_uploadDirFQPath}/{$fileName}";
+        $fileExists = file_exists($filePath);
+
+        if ($fileExists) {
+            $media['uploadUrl'] = Setuco_Data_Constant_Media::UPLOAD_DIR_PATH_FROM_BASE . $fileName;
+        } else {
+            $media['notFound'][] = "ファイル{$fileName}が見つかりません。";
         }
-        return $medias;
+
+        $media['alt'] = $media['comment'];
+        $thumbUrl = '';
+        switch ($media['type']) {
+            case 'pdf' :
+                $thumbUrl = self::ICON_PATH_PDF;
+                $media['thumbWidth'] = $this->_thumbWidth;
+                break;
+            case 'txt' :
+                $thumbUrl = self::ICON_PATH_TXT;
+                $media['thumbWidth'] = $this->_thumbWidth;
+                break;
+            case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
+            case 'gif' :
+            case 'png' :
+
+                $thumbName = "{$media['id']}.gif";
+                $thumbPath = "{$this->_thumbDirFQPath}/{$thumbName}";
+                $thumbExists = file_exists($thumbPath);
+                if ($thumbExists) {
+                    $thumbUrl = Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE . $media['id'] . '.gif';
+                    $thumbImage = imagecreatefromgif($this->_thumbDirFQPath . '/' . $media['id'] . '.gif');
+                    $thumbWidth = imagesx($thumbImage);
+                    $media['thumbWidth'] =
+                            $this->_thumbWidth > $thumbWidth ? $thumbWidth : $this->_thumbWidth;
+                } else {
+                    $thumbUrl = '';
+                    $media['thumbWidth'] = $this->_thumbWidth;
+                    $media['alt'] = "サムネイル {$thumbName} が見つかりません。";
+                    $media['notFound'][] = $media['alt'];
+                }
+                break;
+
+            default :
+                return false;
+        }
+
+        $media['thumbUrl'] = $thumbUrl;
+        return $media;
     }
 
     /**
@@ -142,7 +164,7 @@ class Admin_Model_Media
      * @param string $imagePath ファイルシステム上に保存された（アップロードされた）画像ファイルの絶対パス
      * @return boolean サムネイル生成、保存に成功したらtrue,失敗ならfalse
      */
-    public function saveThumnailFromImage($imagePath)
+    public function saveThumbnailFromImage($imagePath)
     {
         // アップロードされた画像のオブジェクトを保持
         $originalImage = null;
@@ -173,7 +195,7 @@ class Admin_Model_Media
         $originalHeight = imagesy($originalImage);
 
         // 比率計算＆サムネイルサイズ設定
-        $thumbWidth = $this->_thumbnailWidth;
+        $thumbWidth = $this->_thumbWidth;
         $rate = $thumbWidth / $originalWidth;
         $thumbHeight = $originalHeight * $rate;
 
@@ -196,10 +218,11 @@ class Admin_Model_Media
         }
 
         // 算出したサイズにリサンプリングコピー
-        imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
-        // imagecopyresized($thumbImage, $originalImage, 0, 0, 0, 0, $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);　// リサイズだけで処理すると多少粗いサムネイルになる
+        imagecopyresampled($thumbImage, $originalImage, 0, 0, 0, 0,
+                $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
+
         // サムネイルを保存
-        $thumbPath = $this->_thumbnailDirectoryFQPath . '/' . $imageInfo['filename'] . '.gif';
+        $thumbPath = $this->_thumbDirFQPath . '/' . $imageInfo['filename'] . '.gif';
         imagegif($thumbImage, $thumbPath . '');
 
         // 画像オブジェクト破棄
@@ -219,7 +242,7 @@ class Admin_Model_Media
      */
     public function deleteMediaById($id)
     {
-        return $this->_mediadao->deleteById($id);
+        return $this->_mediaDao->deleteById((int)$id);
     }
 
     /**
@@ -231,7 +254,7 @@ class Admin_Model_Media
      */
     public function countMedias($ext = null)
     {
-        return $this->_mediadao->count($ext);
+        return $this->_mediaDao->count($ext);
     }
 
     /**
@@ -245,8 +268,8 @@ class Admin_Model_Media
     {
         // DBにデータを登録
         //アップデートする条件のwhere句を生成する
-        $where = $this->_mediadao->getAdapter()->quoteInto("id = ?", (int)$id); 
-        return $this->_mediadao->update($mediaInfo, $where);
+        $where = $this->_mediaDao->getAdapter()->quoteInto("id = ?", (int) $id);
+        return $this->_mediaDao->update($mediaInfo, $where);
     }
 
     /**
@@ -259,9 +282,9 @@ class Admin_Model_Media
     public function findMediaById($id)
     {
 
-        $medias = $this->_mediadao->find($id)->toArray();
-        $medias = $this->_addThumbnailPathInfo($medias);
-        return $medias[0];
+        $media = $this->_mediaDao->find($id)->current()->toArray();
+        $media = $this->_addThumbPathInfo($media);
+        return $media;
     }
 
     /**
@@ -275,15 +298,35 @@ class Admin_Model_Media
 
         // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
         $newRec = array(
-            'name' => 'tmpName',
-            'type' => 'new',
+            'name' => Setuco_Data_Constant_Media::TEMP_FILE_NAME,
+            'type' => Setuco_Data_Constant_Media::TEMP_FILE_EXTENSION,
             'create_date' => date("Y-m-d H:i:s", time()),
             'update_date' => date("Y-m-d H:i:s", time()),
         );
 
-        $result = $this->_mediadao->insert($newRec);
+        $result = $this->_mediaDao->insert($newRec);
 
         return $result;
+    }
+
+    public function isValidImageData($imagePath)
+    {
+        // 画像のパスからイメージオブジェクト取得
+        $imageInfo = pathinfo($imagePath);
+        $ext = $imageInfo['extension'];
+        switch ($ext) {
+            case 'jpg' :
+                return imagecreatefromjpeg($imagePath);
+                break;
+            case 'gif' :
+                return imagecreatefromgif($imagePath);
+                break;
+            case 'png' :
+                return imagecreatefrompng($imagePath);
+                break;
+            default :
+                return false;  // 拡張子が対応画像(jpg, gif, png)でなければfalse
+        }
     }
 
 }

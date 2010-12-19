@@ -19,7 +19,6 @@
  * @author     akitsukada
  */
 ?>
-
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -39,13 +38,14 @@
     <div class="hAreaText">
         <h3 id="textType"><?php echo "「{$this->mediaData['name']}」({$this->mediaData['id']}.{$this->mediaData['type']})" ?>の編集</h3>
     </div>
-
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <form action="<?php echo $this->updateForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <dl id="inputArea">
             <dt>
-                <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>"><img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" /></a>
+                <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
+                <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" />
+                </a>
             </dt>
             <dt>ファイル名</dt>
             <dd><?php echo $this->updateForm->getElement('name') ?></dd>
@@ -53,8 +53,6 @@
             <dd><?php echo $this->updateForm->getElement('comment') ?></dd>
             <dt>ファイル<span class="attentionMessage">※アップロードできるのは、1ファイル <?php echo $this->fileSizeMax ?> までです。</span></dt>
             <dd><?php echo $this->updateForm->getElement('upload_img') ?></dd>
-            <dd><span class="attentionMessage">**MB</span></dd><?php // @todo ファイルサイズの取得？ ?>
-
             <dd><?php echo $this->updateForm->getElement('up') ?></dd>
         </dl>
     </form>

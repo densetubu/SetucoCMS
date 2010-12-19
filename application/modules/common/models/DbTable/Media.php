@@ -71,15 +71,27 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
     }
     
     /**
-     * 渡されたSelectオブジェクトを実行し結果を返す
+     * 指定された条件でページネート、ソートされた検索結果を配列で返す
      * 
      * @param Zend_Db_Table_Select $select 実行したいSelectオブジェクト
      * @return Selectオブジェクトの実行(fetchAll)結果
      * @author akitsukada
      */
-    public function executeSelect(Zend_Db_Table_Select $select) 
+    public function loadMedias($sortColumn, $order, $fileType, $limit, $pageNumber)
     {
-        return $this->fetchAll($select);
+
+        $select = $this->select()
+                        ->order("{$sortColumn} {$order}")
+                        ->limitPage($pageNumber, $limit);
+
+        if ($fileType !== 'all') {
+            // 拡張子絞り込み指定されていた場合のみWhere句を設定
+            $select->where('type = ?', $fileType);
+        } else {
+            $select->where('type != ?', Setuco_Data_Constant_Media::TEMP_FILE_EXTENSION);
+        }
+        
+        return $this->fetchAll($select)->toArray();
     }
     
 }
