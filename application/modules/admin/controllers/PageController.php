@@ -131,13 +131,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $pages = self::adjustPages($pages);
 
         $this->view->pages = $pages;
-        $this->view->searchForm = $this->_createSearchForm();
+        $this->view->searchForm = $this->_getParam('searchForm', $this->_createSearchForm());
         $this->view->categoryForm = $this->_createCategoryForm();
-
         $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->setPagerForView($this->_pageService->countPages());
-
-        //フラッシュメッセージを設定する
         $this->_showFlashMessages();
     }
 
@@ -191,11 +188,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function searchAction()
     {
         $searchForm = $this->_createSearchForm();
-        if (!$searchForm->isValid($this->_getAllParams())) {
+        if (!$this->_isValidSearchForm($searchForm, $this->_getAllParams())) {
             $this->_setParam('searchForm', $searchForm);
             return $this->_forward('index');
         }
-
         $keyword = $searchForm->getValue('query');
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
@@ -223,6 +219,64 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $this->view->isSearched = true;
+    }
+
+    /**
+     * ページ検索フォームが有効かどうかを判断します。
+     * フォームには検証する値やもしあればエラー情報が格納されます。
+     *
+     * @param  Setuco_Form $form    フォーム
+     * @param  array       $values  検証する値
+     * @return bool        有効なら true
+     * @author charlesvineyard
+     */
+    private function _isValidSearchForm($form, $values)
+    {
+        // 既設のバリデーターでチェック
+        $form->isValid($values);
+
+        // キーワードが入力されたときだけ検索対象をチェックする
+        if ($values['query'] != null) {
+            $targets = $form->getElement('targets');
+            $targets->setRequired(true);
+            $targets->setValidators($this->_makeSearchTargetsValidators());
+            if (!$targets->isValid(isset($values['targets']) ? $values['targets'] : null)) {
+                $form->markAsError();
+            }
+        }
+        // キーワードが入力されないときは絞り込みを指定してるかチェックする
+        else {
+            if (!$this->_isSelectedRefinements($values)) {
+                $form->addError('キーワードを入力するか、カテゴリー・制作者・公開状態のどれかを指定してください。');
+            }
+        }
+        return !$form->isErrors();
+    }
+
+    /**
+     * 絞り込みが選択されたかどうか判断します。
+     *
+     * @param  array $values    入力パラメータ
+     * @return bool  選択されたら true
+     * @author charlesvineyard
+     */
+    private function _isSelectedRefinements($values) {
+        if ($values['category_id'] != null
+            && $values['category_id'] !== self::UNSELECTED_VALUE
+        ) {
+            return true;
+        }
+        if ($values['account_id'] != null
+            && $values['category_id'] !== self::UNSELECTED_VALUE
+        ) {
+            return true;
+        }
+        if ($values['status'] != null
+            && $values['category_id'] !== self::UNSELECTED_VALUE
+        ) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -297,7 +351,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'class' => 'defaultInput',
                      'filters' => array(
                          'StringTrim'
-                     )
+                     ),
+                     'validators' => $this->_makeSearchQueryValidators()
                  )
              )
              ->addElement(
@@ -356,6 +411,48 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'sub_search',
         ));
         return $form;
+    }
+
+    /**
+     * ページ検索キーワード用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeSearchQueryValidators()
+    {
+        $name = 'キーワード';
+        $validators = array();
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 50
+            )
+        );
+        $stringLength->setMessage($name . 'は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
+    }
+
+
+    /**
+     * 検索対象用のバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author charlesvineyard
+     */
+    private function _makeSearchTargetsValidators()
+    {
+        $name = '検索対象';
+        $validators = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage($name . 'を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        return $validators;
     }
 
     /**
@@ -828,12 +925,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if ($tags !== null) {
             foreach ($tags as $tag) {
                 if (!$form->getElement('tag')->isValid($tag)) {
+                    $form->markAsError();
                     break;
                 }
             }
         }
+        $form->getElement('tag')->setValue($values['tag']);
 
-        return ! $form->isErrors();
+        return !$form->isErrors();
     }
 
     /**
