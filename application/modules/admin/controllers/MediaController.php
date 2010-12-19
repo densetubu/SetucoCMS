@@ -262,7 +262,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             $uploadSuccessMsgs[] = "ファイル {$filePath['basename']} をアップロードしました。";
         }
-        
+
         foreach ($uploadErrorMsgs as $msg) {
             $this->_helper->flashMessenger->addMessage($msg);
         }
@@ -388,13 +388,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     $this->_recoverFromBackUpFile($id, $extType);
                     $this->_redirect($redirectUrl);
                 }
-            }
 
-            // サムネイルを保存
-            if (!$this->_media->saveThumbnailFromImage($adapter->getFileName())) {
-                $this->_helper->flashMessenger->addMessage('サムネイルが保存できませんでした。');
-                $this->_recoverFromBackUpFile($id, $extType);
-                $this->_redirect($redirectUrl);
+                // サムネイルを保存
+                if (!$this->_media->saveThumbnailFromImage($adapter->getFileName())) {
+                    $this->_helper->flashMessenger->addMessage('サムネイルが保存できませんでした。');
+                    $this->_recoverFromBackUpFile($id, $extType);
+                    $this->_redirect($redirectUrl);
+                }
             }
 
             // 保存するファイル情報、拡張子を取得しておく
@@ -477,7 +477,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $fileTypeSelector->clearDecorators()
                 ->setLabel('ファイルの種類')
                 ->setValue(array_search($fileType,
-                        Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
+                                Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
                 ->addDecorator('ViewHelper')
                 ->addDecorator('Label', array('tag' => null))
                 ->addMultiOption(
@@ -768,13 +768,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->_removeFileById($id);
         $fileName = $this->_getUploadDest() . "/{$id}.{$extension}";
         if (file_exists($fileName . '.bak')) {
-            if (rename($fileName . '.bak', $fileName)) {
+            if (!rename($fileName . '.bak', $fileName)) {
                 return false;
             }
         }
         $thumbName = $this->_getThumbDest() . "/{$id}.gif";
         if (file_exists($thumbName . '.bak')) {
-            if (rename($thumbName . '.bak', $thumbName)) {
+            if (!rename($thumbName . '.bak', $thumbName)) {
                 return false;
             }
         }
