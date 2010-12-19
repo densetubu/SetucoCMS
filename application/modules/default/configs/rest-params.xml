@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-   コントローラー名
-    アクション名
-     query:パラメーター
-
+定義の仕方
+<config>
+    <コントローラー名>
+        <アクション名>
+            <query value="パラメーター名">      リダイレクト時に使うパラメータ
+                <required value="true/false" />  必須ならtrue。入力なしでもいいならfalse。
 -->
 
 
 <config>
-
     <page>
-         <search>
-             <query value="query" />
-         </search>
-     </page>
-
+        <search>
+            <query value="query">
+                <required value="true" />
+            </query>
+        </search>
+    </page>
 </config>

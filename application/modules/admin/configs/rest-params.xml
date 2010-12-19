@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-   コントローラー名
-    アクション名
-     query:パラメーター
-
+<config>
+  <コントローラー名>
+    <アクション名>
+      <query value="パラメーター名">      リダイレクト時に使うパラメータ
+        <required value="true/false">  必須ならtrue。入力なしでもいいならfalse。
 -->
 
 
 <config>
-
     <page>
-         <search>
-             <query value="query" />
-             <query value="targets" />
-             <query value="category_id" />
-             <query value="account_id" />
-             <query value="status" />
-         </search>
-     </page>
-
+        <search>
+            <query value="query">
+                <required value="true" />
+            </query>
+            <query value="targets">
+                <required value="false" />
+            </query>
+            <query value="category_id">
+                <required value="true" />
+            </query>
+            <query value="account_id">
+                <required value="true" />
+            </query>
+            <query value="status">
+                <required value="true" />
+            </query>
+        </search>
+    </page>
 </config>

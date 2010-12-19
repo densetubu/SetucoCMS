@@ -74,29 +74,28 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         $restUrlConfig = new Zend_Config_Xml($this->_getModulePath()
                         . 'configs/rest-params.xml');
-
         $redirectParams = $restUrlConfig->toArray();
 
-        //パラメーターは必ず２次元配列で取得するようにする
+        // queryの属性の個数
+        $queryParamCount = 2;
+
+        //ひとつしか query がない場合、階層がずれるので調整する
         foreach ($redirectParams as $controller => $controllerParams) {
             foreach ($controllerParams as $action => $actionParams) {
-                foreach ($actionParams as $queryParams) {
-                    //ひとつしかパラメーターがない場合は文字列
-                    if (!is_array($queryParams)) {
-                        $queryParams = array($queryParams);
-                        $redirectParams[$controller][$action]['query'] = $queryParams;
+                foreach ($actionParams as $query => $params) {
+                    if (count($params) == $queryParamCount) {
+                        $redirectParams[$controller][$action][$query] = array($params);
                     }
                 }
             }
         }
-
         return $redirectParams;
     }
 
 
     /**
      * REST形式のURLにリダイレクトするものだったら、リダイレクトする
-     * 
+     *
      *
      * @param array $redirectParams リダイレクトするパラメーター配列
      * @return mixed  リダイレクトする場合はvoid しない場合はfalse
@@ -110,6 +109,13 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             return false;
         }
 
+        //複数選択の[]の部分がURLエンコードしている
+        $queryString = urldecode($_SERVER['QUERY_STRING']);
+
+        if ($queryString == null) {
+            false;
+        }
+
         //可読性を上げるために一時変数を作成する
         $module     = $this->_getParam('module');
         $controller = $this->_getParam('controller');
@@ -118,33 +124,28 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         if (!isset($redirectParams[$controller][$action]['query'])) {
             return false;
         }
-
         $queries = $redirectParams[$controller][$action]['query'];
 
-        //複数選択の[]の部分がURLエンコードしている
-        $queryString = urldecode($_SERVER['QUERY_STRING']);
-
-        foreach ($queries as $paramName) {
+        $requiredParamNames = array();
+        foreach ($queries as $index => $query) {
             //複数選択するものに対応するため
-            if (is_array($this->_getParam($paramName))) {
-                $paramName .= "[]";
+            if (is_array($this->_getParam($query['value']))) {
+                $query['value'] .= "[]";
             }
 
-            $isRedirects[] = (strpos($queryString, "{$paramName}=") !== false);
-        }
-        
-        //指定したパラメーターが一つでも違っていたらリダイレクトしない
-        if (in_array(false, $isRedirects)) {
-            return false;
+            //必須クエリが queryString に入ってなかったらリダイレクトしない
+            if ($query['required'] === 'true') {
+                if (strpos($queryString, "{$query['value']}=") === false) {
+                    return false;
+                }
+            }
         }
 
         //urlに付加するパラメーターのキーバリューを取得する
-        $queryNames = $redirectParams[$controller][$action]['query'];
-
-        foreach ($queryNames as $value) {
-            $queryParams[$value] = $this->_getParam($value);
+        $queryParams = array();
+        foreach ($queries as $query) {
+            $queryParams[$query['value']] = $this->_getParam($query['value']);
         }
-
 
         return $this->_helper->redirector(
                 $action,
