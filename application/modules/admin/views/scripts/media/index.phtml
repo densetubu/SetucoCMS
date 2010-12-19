@@ -33,11 +33,6 @@
 </div>
 <!-- topicpath END -->
 
-<?php
-$type = $this->condition['type'];
-$sort = $this->condition['sort'];
-$order = $this->condition['order'];
-?>
 <!-- section START -->
 <div class="section">
     <div class="hAreaL">
@@ -89,16 +84,16 @@ $order = $this->condition['order'];
             <tr>
                 <th scope="col" id="tableFirst">表示</th>
                 <th scope="col">ファイル
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">更新日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/update_date/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/update_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/update_date/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">アップロード日
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
-                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $type . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/create_date/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
+                    <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/create_date/order/asc'; ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
                 <th scope="col">編集</th>
                 <th scope="col">削除</th>
@@ -108,9 +103,13 @@ $order = $this->condition['order'];
             <?php foreach ($this->medias as $cnt => $media): ?>
             <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
-                    <a href="<?php echo $this->baseUrl("/media/upload/{$media['id']}.{$media['type']}") ?>">
-                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['comment'] ?>" />
+                    <?php if (!empty($media['uploadUrl'])): ?>
+                    <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
+                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
                     </a>
+                    <?php else: ?>
+                    <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
+                    <?php endif ?>
                 </td>
                 <td><?php echo "{$media['name']} [{$media['type']}]" ?></td>
                 <td><?php echo $media['update_date'] ?></td>
@@ -121,7 +120,7 @@ $order = $this->condition['order'];
                     </a>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$type}/sort/{$sort}/order/{$order}") ?>', '<?php echo $media['name'] ?>');">
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$this->fileType}/sort/{$this->sortColumn}/order/{$this->order}") ?>', '<?php echo $media['name'] ?>');">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>
