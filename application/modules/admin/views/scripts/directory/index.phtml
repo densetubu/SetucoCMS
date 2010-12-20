@@ -50,7 +50,7 @@
             <?php if ($pageCount === 0): // カテゴリーの中身が空のとき ?>
             <div>
                 <p class="folder">
-                    <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" /><?php echo $category->getLabel() ?>
+                    <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_noChild.gif') ?>" width="36" height="19" alt="カテゴリー" /><?php echo $this->escape($category->getLabel()) ?>
                 </p>
                 <p>
                     <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_page.gif') ?>" width="11" height="12" alt="このカテゴリーに含まれるページ" /><?php echo $pageCount ?>
@@ -59,7 +59,7 @@
             <?php else: // カテゴリーの中身があるとき ?>
             <div>
                 <p class="folder" onclick="openCategory(this, '<?php echo $this->baseUrl('/images/admin/directory/icn_category_open.gif') ?>', '<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>')">
-                    <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" /><?php echo $category->getLabel() . "\n" ?>
+                    <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_category_close.gif') ?>" width="36" height="19" alt="カテゴリーを開く" /><?php echo $this->escape($category->getLabel()) . "\n" ?>
                 </p>
                 <p>
                     <a href="<?php echo $category->getHref() ?>">
@@ -78,7 +78,7 @@
                     <?php if ($page->getVisible()): // ページ公開中の場合?>
                         <p>
                             <a href="<?php echo $page->getViewHref() ?>" target="_blank">
-                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check.gif') ?>" width="18" height="15" alt="ページを確認" /><?php echo $page->getLabel() . "\n" ?>
+                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check.gif') ?>" width="18" height="15" alt="ページを確認" /><?php echo $this->escape($page->getLabel()) . "\n" ?>
                             </a>
                         </p>
                         <p>
@@ -88,7 +88,7 @@
                         </p>
                     <?php else: // ページ下書きの場合?>
                         <p>
-                            <?php echo $page->getLabel() . "\n" ?>
+                            <?php echo $this->escape($page->getLabel()) . "\n" ?>
                         </p>
                         <p>
                             <a href="<?php echo $page->getEditHref() ?>">
