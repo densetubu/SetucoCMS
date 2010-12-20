@@ -36,13 +36,16 @@ class Setuco_Navigation_Page_Directory_Page extends Zend_Navigation_Page_Mvc
         // hrefを構成するための設定
         $module = $this->getModule();
         $this->setModule('admin');
+        $controller = $this->getModule();
+        $this->setController('page');
         $action = $this->getAction();
-        $this->setAction('form');
+        $this->setAction('index');
 
         $href = $this->getHref();
 
         // 元に戻す
         $this->setModule($module);
+        $this->setController($controller);
         $this->setAction($action);
 
         return $href;
@@ -64,11 +67,17 @@ class Setuco_Navigation_Page_Directory_Page extends Zend_Navigation_Page_Mvc
         // hrefを構成するための設定
         $module = $this->getModule();
         $this->setModule('default');
+        $controller = $this->getModule();
+        $this->setController('page');
+        $action = $this->getAction();
+        $this->setAction('show');
 
         $href = $this->getHref();
 
         // 元に戻す
         $this->setModule($module);
+        $this->setController($controller);
+        $this->setAction($action);
 
         return $href;
     }
