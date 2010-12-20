@@ -73,9 +73,6 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
             return $this->_showCategoryPagesOperation();
         }
         $this->view->directory = $this->_directoryService->createDirectoryInfo();
-
-        // フラッシュメッセージ設定
-        $this->_showFlashMessages();
     }
 
     /**
@@ -86,12 +83,15 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      */
     protected function _showCategoryPagesOperation()
     {
-        $categoryInfo = array('category_id' =>
-            $this->_getParam('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE ?
-                null : $this->_getParam('category_id'));
-
-        if (! $this->_checkCategoryIdParam($categoryInfo['category_id'])) {
-            throw new Zend_Uri_Exception('このURLは不正です。'); // TODO 暫定仕様
+        $categoryId = $this->_getParam('category_id');
+        $categoryIdValidator = new Zend_Validate_Db_RecordExists(array(
+            'table' => 'category',
+            'field' => 'id'
+        ));
+        if ($categoryId !== Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
+            if (!$categoryIdValidator->isValid($categoryId)) {
+                throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
+            }
         }
 
         // TODO 検索のメソッド変える
@@ -100,24 +100,34 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
             $this->_getPageNumber(),
             $this->_getPageLimit(),
             array(),
-            $categoryInfo,
+            array('category_id' =>
+                ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
+                ? null : $categoryId
+            ),
             'title',
             'asc'
         );
         $pages = Admin_PageController::adjustPages($pages);
 
         $pageCount = $this->_pageService->countPagesByKeyword(
-                null, array(), $categoryInfo);
+                null, array(), array('category_id' =>
+                ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
+                ? null : $categoryId));
+
+        $categoryName = ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
+            ? Setuco_Data_Constant_Category::UNCATEGORIZED_STRING
+            : $this->_categoryService->findNameById($categoryId);
 
         $this->_helper->viewRenderer('category-page');
         $this->view->pages = $pages;
-        $this->view->categoryForm = $this->_createCategoryForm($categoryInfo['category_id']);
-        $this->view->statusForm = $this->_createStatusForm($categoryInfo['category_id']);
+        $this->view->categoryForm = $this->_createCategoryForm($categoryId);
+        $this->view->statusForm = $this->_createStatusForm($categoryId);
         $this->setPagerForView($pageCount);
         $this->view->isSearched = true;
         $this->view->pageCount = $pageCount;
-        $this->view->headTitle('「' . $pages[0]['category_name'] . '」カテゴリーに含まれるページ一覧',
+        $this->view->headTitle('「' . $categoryName . '」カテゴリーに含まれるページ一覧',
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
+        $this->view->categoryName = $categoryName;
         $this->_showFlashMessages();
     }
 
@@ -128,15 +138,13 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form_Page_CategoryUpdate フォーム
      * @author charlesvineyard
      */
-    private function _createCategoryForm($preCategoryId = null)
+    private function _createCategoryForm($preCategoryId)
     {
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
         $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
         $form = new Setuco_Form_Page_CategoryUpdate();
         $form->setCategories($categories);
-        if ($preCategoryId !== null) {
-            $form->getElement('h_pre_category_id_c')->setValue($preCategoryId);
-        }
+        $form->getElement('h_pre_category_id_c')->setValue($preCategoryId);
         return $form;
     }
 
@@ -147,27 +155,11 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form_Page_StatusUpdate フォーム
      * @author charlesvineyard
      */
-    private function _createStatusForm($preCategoryId = null)
+    private function _createStatusForm($preCategoryId)
     {
         $form = new Setuco_Form_Page_StatusUpdate();
-        if ($preCategoryId !== null) {
-            $form->getElement('h_pre_category_id_s')->setValue($preCategoryId);
-        }
+        $form->getElement('h_pre_category_id_s')->setValue($preCategoryId);
         return $form;
-    }
-
-    /**
-     * カテゴリーIDのパラメーターが有効かを判断します。
-     *
-     * @param  int  categoryId カテゴリーID
-     * @return bool 有効なら true
-     * @author charlesvineyard
-     */
-    protected function _checkCategoryIdParam($categoryId) {
-        // TODO 検索のメソッド変える
-        $pageCount = $this->_pageService->countPagesByKeyword(
-                null, array(), array('category_id' => $categoryId));
-        return $pageCount > 0;
     }
 
     /**
@@ -179,30 +171,23 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateCategoryAction()
     {
+        d('updateCategory');
         $form = new Setuco_Form_Page_CategoryUpdate();
         if (!$form->isValid($_POST)) {
             return $this->_forward('index', null, null, array(
                 'category_id' => $this->_getParam('h_pre_category_id_c', null)
             ));
         }
-
-        $categoryInfo = array('category_id' =>
-            ($form->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
-                null : $form->getValue('category_id')
+        $this->_pageService->updatePage(
+            $form->getValue('h_page_id_c'),
+            array(
+                'category_id' =>
+                    ($form->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
+                    null : $form->getValue('category_id')
+            )
         );
-        $this->_pageService->updatePage($form->getValue('h_page_id_c'), $categoryInfo);
 
         $this->_helper->flashMessenger('「' . $form->getValue('h_page_title_c') . '」のカテゴリーを変更しました。');
-
-        $preCategoryInfo = array('category_id' =>
-            ($form->getValue('h_pre_category_id_c') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
-                null : $form->getValue('h_pre_category_id_c')
-        );
-
-        // カテゴリーに含まれるページが無くなったら、index にリダイレクト
-        if (0 == $this->_pageService->countPagesByKeyword(null, array(), $preCategoryInfo)) {
-            return $this->_helper->redirector('index');
-        }
         $this->_helper->redirector('index', null, null, array(
             'category_id' => $form->getValue('h_pre_category_id_c')
         ));
