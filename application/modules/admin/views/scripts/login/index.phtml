@@ -26,23 +26,7 @@
     <img src="<?php echo $this->baseUrl('/images/admin/login/catch.gif') ?>" width="301" height="14" alt="電設部の電設部による電設部のための唯一のCMS" />
 </p>
 
-<?php if ($this->form->isErrors()): ?>
-    <div id="messageArea">
-    <?php foreach ($this->form->getMessages() as $elementName => $messages): ?>
-        <?php if (!is_array($messages)):?>
-        <p><?php echo $messages ?></p>
-        <?php else: ?>
-            <?php foreach ($messages as $message):?>
-        <p><?php echo $message ?></p>
-            <?php endforeach ?>
-        <?php endif ?>
-    <?php endforeach ?>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
-
+<?php echo $this->partial('error-message.phtml', array('errorForm' => $this->form)) ?>
 <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
 <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->form->getAction() ?>">
