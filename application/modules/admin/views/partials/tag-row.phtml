@@ -18,7 +18,7 @@
  * @author     charlesvineyard
  */
 ?>
-<?php 
+<?php
     $form = clone($this->editTagForm);
     $form->setAttrib('id', $form->getAttrib('id') . $this->index);
     $form->getElement('tag')
@@ -36,7 +36,7 @@
          ->setAttrib('id', $form->getElement('cancel')->getAttrib('id') . $this->index);
 ?>
 <td>
-    <span class="tagView"><?php echo $this->tag['name'] ?></span>
+    <span class="tagView"><?php echo $this->escape($this->tag['name']) ?></span>
     <div class="tagEdit"><?php echo $form ?></div>
 </td>
 <td>
@@ -45,7 +45,7 @@
     </a>
 </td>
 <td>
-    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->tag['name'] ?>');">
+    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
     </a>
 </td>

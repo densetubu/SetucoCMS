@@ -19,13 +19,6 @@
  * @author     charlesvineyard
  */
 ?>
-<?php
-$errorTagForm = $this->newTagForm;
-if ($this->editTagForm->isErrors()):
-    $errorTagForm = $this->editTagForm;
-endif;
-?>
-
 <!-- topicPath START -->
 <div id="topicPath">
     <p>
@@ -48,27 +41,12 @@ endif;
         </div>
     </div>
 
-    <?php if ($errorTagForm->isErrors()): ?>
-        <div id="messageArea">
-        <?php foreach ($errorTagForm->getMessages() as $elementName => $messages): ?>
-            <?php if (!is_array($messages)):?>
-            <p><?php echo $messages ?></p>
-            <?php else: ?>
-                <?php foreach ($messages as $message):?>
-            <p><?php echo $message ?></p>
-                <?php endforeach ?>
-            <?php endif ?>
-        <?php endforeach ?>
-            <p>
-                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-            </p>
-        </div>
-    <?php endif ?>
+    <?php echo $this->partial('error-message.phtml',
+        array('errorForm' => $this->editTagForm->isErrors() ? $this->editTagForm : $this->newTagForm)) ?>
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <?php echo $this->newTagForm ?>
-
 
     <table summary="タグ一覧の表です。タグの追加・編集・削除ができます。" cellpadding="0" cellspacing="0">
         <colgroup>
