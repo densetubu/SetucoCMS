@@ -41,9 +41,8 @@
         </div>
     </div>
 
-    <?php echo $this->partial('error-message.phtml',
-        array('errorForm' => $this->editTagForm->isErrors() ? $this->editTagForm : $this->newTagForm)) ?>
-
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->newTagForm)) ?>
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->editTagForm)) ?>
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <?php echo $this->newTagForm ?>
