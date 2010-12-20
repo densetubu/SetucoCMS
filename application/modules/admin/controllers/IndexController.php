@@ -153,13 +153,13 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
     public function updateAmbitionAction()
     {
         $form = $this->_createAmbitionForm();
-        $ambition = $form->getValue('ambition');
+        $preAmbition = $form->getValue('ambition');
         if (!$form->isValid($_POST)) {
-            $form->getElement('ambition')->setValue($ambition);
+            $form->getElement('ambition')->setValue($preAmbition);
             $this->_setParam('ambitionForm', $form);
             return $this->_forward('index');
         }
-        $this->_ambitionService->updateAmbition($ambition);
+        $this->_ambitionService->updateAmbition($form->getValue('ambition'));
         $this->_helper->redirector('index');
     }
 
