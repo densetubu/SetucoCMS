@@ -39,23 +39,7 @@
         </div>
     </div>
 
-    <?php if ($this->goalForm->isErrors()): ?>
-        <div id="messageArea">
-        <?php foreach ($this->goalForm->getMessages() as $elementName => $messages): ?>
-            <?php if (!is_array($messages)):?>
-            <p><?php echo $messages ?></p>
-            <?php else: ?>
-                <?php foreach ($messages as $message):?>
-            <p><?php echo $message ?></p>
-                <?php endforeach ?>
-            <?php endif ?>
-        <?php endforeach ?>
-            <p>
-                <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-            </p>
-        </div>
-    <?php endif ?>
-
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->goalForm)) ?>
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
     <form id="<?php echo $this->goalForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->goalForm->getMethod() ?>" action="<?php echo $this->goalForm->getAction() ?>">
