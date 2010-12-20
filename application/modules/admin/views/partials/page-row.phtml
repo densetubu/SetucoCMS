@@ -57,10 +57,10 @@
 <?php endif ?>
 </td>
 <td>
-    <a href="<?php echo $this->baseUrl('/admin/page/index/id/' . $this->page['id']) ?>"><?php echo $this->page['title'] ?></a>
+    <a href="<?php echo $this->baseUrl('/admin/page/index/id/' . $this->page['id']) ?>"><?php echo $this->escape($this->page['title']) ?></a>
 </td>
 <td><?php echo $this->page['create_date'] ?></td>
-<td><?php echo $this->page['nickname'] ?></td>
+<td><?php echo $this->escape($this->page['nickname']) ?></td>
 <td>
     <form id="page_category_form<?php echo $this->index ?>" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $categoryForm->getAction() ?>">
         <p>
@@ -90,7 +90,7 @@
     </form>
 </td>
 <td>
-    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>', '<?php echo $this->page['title'] ?>');">
+    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/page/delete/id/{$this->page['id']}") ?>', '<?php echo $this->escape($this->page['title']) ?>');">
         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
     </a>
 </td>

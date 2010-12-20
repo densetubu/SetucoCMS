@@ -35,7 +35,7 @@
         <a href="<?php echo $this->baseUrl('/admin/page') ?>">ページの編集・削除</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
-    <p><?php echo "「{$this->form->getElement('page_title')->getValue()}」" ?>の編集</p>
+    <p><?php echo "「{$this->escape($this->form->getValue('page_title'))}」" ?>の編集</p>
 <?php endif ?>
 </div>
 <!-- topicpath END -->
@@ -52,28 +52,13 @@
     </div>
 <?php else: // 編集の場合 ?>
     <div class="hAreaText">
-        <h3 id="textType"><?php echo "「{$this->form->getElement('page_title')->getValue()}」の編集" ?></h3>
+        <h3 id="textType"><?php echo "「{$this->escape($this->form->getValue('page_title'))}」の編集" ?></h3>
     </div>
 <?php endif ?>
 
 <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
 
-<?php if ($this->form->isErrors()): ?>
-    <div id="messageArea">
-    <?php foreach ($this->form->getMessages() as $elementName => $messages): ?>
-        <?php if (!is_array($messages)):?>
-        <p><?php echo $messages ?></p>
-        <?php else: ?>
-            <?php foreach ($messages as $message):?>
-        <p><?php echo $message ?></p>
-            <?php endforeach ?>
-        <?php endif ?>
-    <?php endforeach ?>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
+<?php echo $this->partial('error-message.phtml', array('errorForm' => $this->form))?>
 
     <form action="<?php echo $this->form->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
         <ul class="inputStraight defaultOver">

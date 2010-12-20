@@ -584,7 +584,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                'escape' => true,
                 'validators' => $this->_makePageTitleValidators(),
             )
         );
@@ -631,7 +630,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                'escape' => true,
                 'validators' => $this->_makePageContentsValidators(),
             )
         );
@@ -643,7 +641,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                'escape' => true,
                 'validators' => $this->_makePageOutlineValidators(),
             )
         );
@@ -655,7 +652,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                'escape' => true,
             )
         );
         $form->addElement(
