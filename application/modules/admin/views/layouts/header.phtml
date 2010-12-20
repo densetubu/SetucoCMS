@@ -10,7 +10,7 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @version    
+ * @version
  * @since      File available since Release 0.1.0
  * @param      string $siteName  サイト名
  * @param      string $siteUrl   サイトURL
@@ -26,8 +26,8 @@
         </a>
     </h1>
     <h2>
-        <a href="<?php echo $this->siteUrl ?>" title="サイトのトップページを表示します" target="_blank">
-            <span><?php echo $this->siteName ?></span>
+        <a href="<?php echo $this->escape($this->siteUrl) ?>" title="サイトのトップページを表示します" target="_blank">
+            <span><?php echo $this->escape($this->siteName) ?></span>
             <img src="<?php echo $this->baseUrl('/images/admin/header/btn_watchSite.jpg') ?>" alt="サイトを確認する" width="108" height="29" />
         </a>
     </h2>
@@ -38,7 +38,7 @@
         <a href="<?php echo $this->baseUrl('/admin/login/logout') ?>">ログアウト</a>
     </li>
     <li id="utilAccount">
-        <span><?php echo $this->nickName ?></span>でログイン中
+        <span><?php echo $this->escape($this->nickName) ?></span>でログイン中
     </li>
 </ul>
 

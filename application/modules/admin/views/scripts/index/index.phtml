@@ -30,23 +30,7 @@
 <!-- section"野望" START -->
 <div class="section">
 
-<?php if ($this->ambitionForm->isErrors()): ?>
-    <div id="messageArea">
-    <?php foreach ($this->ambitionForm->getMessages() as $elementName => $messages): ?>
-        <?php if (!is_array($messages)):?>
-        <p><?php echo $messages ?></p>
-        <?php else: ?>
-            <?php foreach ($messages as $message):?>
-        <p><?php echo $message ?></p>
-            <?php endforeach ?>
-        <?php endif ?>
-    <?php endforeach ?>
-        <p>
-            <a href="javascript:void(0)" onclick="hideFlashMessage()">OK</a>
-        </p>
-    </div>
-<?php endif ?>
-
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->ambitionForm)) ?>
     <form id="<?php echo $this->ambitionForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->ambitionForm->getMethod() ?>" action="<?php echo $this->ambitionForm->getAction() ?>">
         <dl id="designs">
             <dt>
@@ -54,7 +38,7 @@
             </dt>
             <dd>
                 <span id="ambitionView">
-                    <em>「<?php echo $this->ambition ?>」</em>
+                    <em>「<?php echo $this->escape($this->ambition) ?>」</em>
                     <a href="javascript:void(0)" onclick="showAmbitionEdit()">
                         <img src="<?php echo $this->baseUrl('/images/admin/index/btn_ambition_edit.gif') ?>" alt="野望を変更する" width="21" height="21" />
                     </a>
@@ -133,12 +117,12 @@
         <dl class="contentsList<?php echo $this->cycle(array('', ' check'))->next() ?>">
             <dt class="pageDate"><?php echo $page['create_date'] ?></dt>
             <dd class="pageTitle">
-                <a href="<?php echo $this->baseUrl('/admin/page/index/id/' . $page['id']) ?>"><?php echo $page['title'] ?></a>
+                <a href="<?php echo $this->baseUrl('/admin/page/index/id/' . $page['id']) ?>"><?php echo $this->escape($page['title']) ?></a>
             </dd>
             <dt>カテゴリー</dt>
-            <dd><?php echo ($page['category_name'])?></dd>
+            <dd><?php echo ($this->escape($page['category_name']))?></dd>
             <dt>制作者</dt>
-            <dd><?php echo ($page['nickname'])?></dd>
+            <dd><?php echo ($this->escape($page['nickname']))?></dd>
             <dt>公開状態</dt>
             <dd><?php echo ($page['status'])?></dd>
         </dl>
