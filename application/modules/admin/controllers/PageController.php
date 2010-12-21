@@ -267,12 +267,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return true;
         }
         if ($values['account_id'] != null
-            && $values['category_id'] !== self::UNSELECTED_VALUE
+            && $values['account_id'] !== self::UNSELECTED_VALUE
         ) {
             return true;
         }
         if ($values['status'] != null
-            && $values['category_id'] !== self::UNSELECTED_VALUE
+            && $values['status'] !== self::UNSELECTED_VALUE
         ) {
             return true;
         }
