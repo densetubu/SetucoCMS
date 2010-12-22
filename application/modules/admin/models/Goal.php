@@ -49,10 +49,13 @@ class Admin_Model_Goal
      */
     public function findGoalPageCountThisMonth()
     {
-        $lastGoal = $this->_goalDao->findLastGoal();
+        $lastGoal = $this->_goalDao->loadLastGoal();
+        if ($lastGoal === null) {
+            throw new Setuco_Exception('目標が設定されていません。');
+        }
         if(! $this->_isGoalOfThisMonth($lastGoal)) {
             $this->_fillGoalUntilNow($lastGoal);
-            $lastGoal = $this->_goalDao->findLastGoal();
+            $lastGoal = $this->_goalDao->loadLastGoal();
         }
         return (int) $lastGoal['page_count'];
     }
