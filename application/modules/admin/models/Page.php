@@ -142,7 +142,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     public function registPage($title, $contents, $outline, $tags,
             $createDate, $status, $categoryId)
     {
-        $account = $this->_accountDao->findByLoginId(Zend_Auth::getInstance()->getIdentity());
+        $account = $this->_accountDao->loadAccountByLoginId(Zend_Auth::getInstance()->getIdentity());
         $page = array(
             'title'       => $title,
             'contents'    => $contents,

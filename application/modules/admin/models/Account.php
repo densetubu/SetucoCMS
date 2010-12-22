@@ -31,7 +31,7 @@ class Admin_Model_Account
      * @var Common_Model_DbTable_Account
      */
     private $_accountDao;
-    
+
     /**
      * コンストラクター
      *
@@ -41,7 +41,7 @@ class Admin_Model_Account
     {
         $this->_accountDao = new Common_Model_DbTable_Account();
     }
-    
+
     /**
      * アカウント情報をロードします。
      *
@@ -50,7 +50,7 @@ class Admin_Model_Account
      */
     public function findAccountByLoginId($loginId)
     {
-        return $this->_accountDao->findByLoginId($loginId);
+        return $this->_accountDao->loadAccountByLoginId($loginId);
     }
 
     /**
@@ -61,7 +61,7 @@ class Admin_Model_Account
      */
     public function findAllAccountIdAndNicknameSet()
     {
-        $result = $this->_accountDao->findAccounts(array('id', 'nickname'), 'nickname');
+        $result = $this->_accountDao->loadAllAccounts(array('id', 'nickname'), 'nickname');
         $idNameSet = array();
         foreach ($result as $row) {
             $idNameSet[$row['id']] = $row['nickname'];

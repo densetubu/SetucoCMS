@@ -43,15 +43,19 @@ class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
      * @return array アカウント情報
      * @author charlesvineyard
      */
-    public function findByLoginId($loginId)
+    public function loadAccountByLoginId($loginId)
     {
         $select = $this->select()->where('login_id = ?', $loginId);
-        return $this->fetchAll($select)->current()->toArray();
+        $rowset = $this->fetchAll($select);
+        if ($rowset->count() == 0) {
+            return null;
+        }
+        return $rowset->current()->toArray();
     }
-    
+
 
     /**
-     * 指定したカラム・ソートでアカウント一覧を取得します。
+     * 指定したカラム・ソートで全てのアカウント一覧を取得します。
      *
      * @param string|array $selectColumns 取得するカラム
      * @param string $sortColumn 並べ替えるカラム名
@@ -59,12 +63,16 @@ class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
      * @return array アカウント情報の一覧
      * @author charlesvineyard
      */
-    public function findAccounts($selectColumns, $sortColumn, $order = 'asc')
+    public function loadAllAccounts($selectColumns, $sortColumn, $order = 'ASC')
     {
         $select = $this->select()
                 ->from($this->_name, $selectColumns)
-                ->order("$sortColumn $order");
-        return $this->fetchAll($select)->toArray();
-    }    
-    
+                ->order("{$sortColumn} {$order}");
+        $rowset = $this->fetchAll($select);
+        if ($rowset->count() == 0) {
+            return array();
+        }
+        return $rowset->toArray();
+    }
+
 }
