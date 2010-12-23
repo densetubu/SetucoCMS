@@ -41,7 +41,7 @@
 
     <div class="entryBody">
         <?php if($this->newPages !== false): //ページが公開されている場合のみ表示する ?>
-        <ul>
+        <ul class="tipics">
             <?php foreach ($this->newPages as $value): ?>
             <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $value['title'] ?></a></li>
             <?php endforeach; ?>

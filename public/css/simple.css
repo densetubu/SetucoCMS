@@ -100,38 +100,6 @@ div#header_inner div#discript p {
 }
 
 /*---------------------------------------------------------------*/
-/*-- utility style（RSS） ---------------------------------------*/
-/*---------------------------------------------------------------*/
-div#header_inner div#utility {
-    zoom: 100%;
-}
-div#header_inner div#utility:after {
-    content: ".";
-    display: block;
-    visibility: hidden;
-    height: 0.1px;
-    font-size: 0.1em;
-    line-height: 0;
-    clear: right;
-}
-div#header_inner ul {
-    float: right;
-    margin-top: 24px;
-}
-div#header_inner ul li {
-    float: left;
-    margin-left: 10px;
-    display: inline;
-}
-div#header_inner ul li#RSS {
-    background: url(../images/front/simple/bg_RSS.gif) no-repeat left center;
-}
-div#header_inner ul li#RSS a {
-    padding-left: 20px;
-    display: block;
-}
-
-/*---------------------------------------------------------------*/
 /*-- SEARCH style（検索） ----------------------------------------*/
 /*---------------------------------------------------------------*/
 div#header_inner form {
@@ -225,8 +193,8 @@ div.entry table td {
 /*---------------------------------------------------------------*/
 div.entryHead {
     border-bottom: solid 1px #3399cc;
-    zoom: 100%;
     margin-bottom: 20px;
+    zoom: 100%;
 }
 div.entryHead:after {
     content: ".";
@@ -262,6 +230,15 @@ dl.category {
     float: right;
     margin: 0 0 10px;
 }
+dl.category:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: both;
+}
 dl.category dt {
     float: left;
     padding-left: 20px;
@@ -290,13 +267,12 @@ div.entryBody p {
     margin-bottom: 10px;
     max-width: 40em;
 }
-div.entryBody ul li {
-    margin-bottom: 10px;
+div.entryBody li {
+    margin-bottom: 5px;
+    list-style-position: inside;
 }
 div.entryBody ul.list li {
-    margin-bottom: 5px;
     list-style-type: disc;
-    list-style-position: inside;
     margin-left: 3px;
 }
 
@@ -449,14 +425,12 @@ ul#tagCloud:after {
     line-height: 0;
     clear: left;
 }
-div#navArea div.navList ul#tagCloud li ,
-div#mainContent div.entry ul#tagCloud li {
+div#navArea div.navList ul#tagCloud li {
     margin-right: 5px;
     margin-bottom: 3px;
     display: inline;
 }
-div#navArea div.navList ul#tagCloud li a ,
-div#mainContent div.entry ul#tagCloud li a {
+div#navArea div.navList ul#tagCloud li a {
     margin-bottom: 0;
     padding-left: 0;
     background: none;
