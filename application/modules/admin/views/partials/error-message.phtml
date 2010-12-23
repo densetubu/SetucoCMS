@@ -20,10 +20,10 @@
 <div id="messageArea">
 <?php foreach ($this->errorForm->getMessages() as $messages): ?>
     <?php if (!is_array($messages)):?>
-    <p><?php echo $this->escape($messages) ?></p>
+    <p class="clear"><?php echo $this->escape($messages) ?></p>
     <?php else: ?>
         <?php foreach ($messages as $message):?>
-    <p><?php echo $this->escape($message) ?></p>
+    <p class="clear"><?php echo $this->escape($message) ?></p>
         <?php endforeach ?>
     <?php endif ?>
 <?php endforeach ?>
