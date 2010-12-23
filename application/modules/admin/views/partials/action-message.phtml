@@ -18,7 +18,7 @@
 ?>
 
 <?php if (count($this->flashMessages)): ?>
-    <div id="messageArea">
+    <div class="messageArea">
     <?php foreach ($this->flashMessages as $flashMessage): ?>
         <p class="clear"><?php echo $this->escape($flashMessage) ?></p>
     <?php endforeach ?>

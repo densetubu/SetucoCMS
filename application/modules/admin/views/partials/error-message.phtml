@@ -17,7 +17,7 @@
  */
 ?>
 <?php if ($this->errorForm->isErrors()): ?>
-<div id="messageArea">
+<div class="messageArea error">
 <?php foreach ($this->errorForm->getMessages() as $messages): ?>
     <?php if (!is_array($messages)):?>
     <p class="clear"><?php echo $this->escape($messages) ?></p>
