@@ -22,6 +22,7 @@
  */
 class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 {
+
     /**
      * テーブル名
      *
@@ -88,17 +89,17 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 
         if ($isJoinCategory) {
             $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'))
-                   ->setIntegrityCheck(false);
+                    ->setIntegrityCheck(false);
         }
 
         if ($isJoinAccount) {
             $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'))
-                   ->setIntegrityCheck(false);
+                    ->setIntegrityCheck(false);
         }
 
         $select->where('status = ?', self::STATUS_OPEN)
-               ->order('create_date desc')
-               ->limit($getPageCount);
+                ->order('create_date desc')
+                ->limit($getPageCount);
 
         return $this->fetchAll($select)->toArray();
     }
@@ -116,13 +117,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     public function countPages($status = null, $createDateStart = null, $createDateEnd = null)
     {
         $select = $this->select();
-        if (! is_null($status)) {
+        if (!is_null($status)) {
             $select->where('status = ?', $status);
         }
-        if (! is_null($createDateStart)) {
+        if (!is_null($createDateStart)) {
             $select->where('create_date >= ?', $createDateStart);
         }
-        if (! is_null($createDateEnd)) {
+        if (!is_null($createDateEnd)) {
             $select->where('create_date < ?', $createDateEnd);
         }
         return $this->fetchAll($select)->count();
@@ -157,7 +158,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         if (is_null($categoryId)) {
             $select->where('category_id is null');
         } else {
-            $select->where('category_id = ?', (int)$categoryId);
+            $select->where('category_id = ?', (int) $categoryId);
         }
 
         //編集日時の降順にソートする
@@ -169,7 +170,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         }
 
         return $this->fetchAll($select)->toArray();
-
     }
 
     /**
@@ -186,7 +186,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select = $this->select();
 
         $select->from(array(
-            'p'  => $this->_name
+            'p' => $this->_name
         ));
 
 
@@ -206,7 +206,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         }
 
         return $this->fetchAll($select);
-
     }
 
     /**
@@ -219,14 +218,12 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array 取得したページデータを格納した配列。
      * @author akitsukada charlesvineyard
      */
-    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null,
-            $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements, $sortColumn, $order);
 
         $select->limitPage($pageNumber, $limit);
         return $this->fetchAll($select)->toArray();
-
     }
 
     /**
@@ -255,13 +252,12 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return Zend_Db_Table_Select
      * @author akitsukada charlesvineyard
      */
-    private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null,
-            $sortColumn = 'update_date', $order = 'DESC')
+    private function _createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->select();
         $select->from(
-            array('p' => $this->_name),
-            array('*')
+                array('p' => $this->_name),
+                array('*')
         );
 
         // ORDER BY
@@ -270,7 +266,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         // JOIN
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
-        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array('tag_name' => 't.name'));
+        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array(/*'tag_name' => 't.name'*/)); // タグ情報はここではつけない
         $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
         $select->setIntegrityCheck(false);
 
@@ -293,8 +289,14 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
             }
-            $orwhere .= 'p.contents LIKE :keyword';
+            $orwhere .=
+                    "(p.contents LIKE :keyword AND
+                        (p.contents NOT REGEXP :exp1 OR
+                         p.contents REGEXP :exp2)
+                     )";
             $bind[':keyword'] = "%{$keyword}%";
+            $bind[':exp1'] = "<[^>]*{$keyword}[^<]*>";
+            $bind[':exp2'] = ">[^<]*{$keyword}+";
         }
         if (in_array('outline', $targetColumns)) {
             if ($orwhere !== '') {
@@ -331,7 +333,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         array_unique($bind);
         $select->bind($bind);
         return $select;
-
     }
 
     /**
@@ -350,12 +351,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
         if ($isJoinAccount) {
             $select->setIntegrityCheck(false)
-                   ->join(array('a' => 'account'),
-                      'page.account_id = a.id',
-                       array('account_id' => 'a.id', 'a.nickname'));
+                    ->join(array('a' => 'account'),
+                            'page.account_id = a.id',
+                            array('account_id' => 'a.id', 'a.nickname'));
         }
 
         $select->limitPage($pageNumber, $limit)->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
+
 }

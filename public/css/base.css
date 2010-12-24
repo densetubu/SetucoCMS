@@ -126,7 +126,7 @@ dl#designs:after ,
 div#mainContent div.hAreaText:after ,
 div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
-div#messageArea:after ,
+div.messageArea:after ,
 dl.editArea:after ,
 div#pageNav ul:after ,
 .inputStraight:after,
@@ -386,7 +386,7 @@ div#topicPath p img {
 /*------------------------------------------------------------*/
 /*    messageArea style                                       */
 /*------------------------------------------------------------*/
-div#messageArea {
+div.messageArea {
     clear: both;
     background-color: #fff0d6;
     border: solid 1px #ffd68e;
@@ -394,13 +394,18 @@ div#messageArea {
     padding: 5px 15px;
     zoom: 100%;
 }
-div#messageArea p {
+div.messageArea p {
     float: left;
     margin-right: 20px;
 }
-div#messageArea p.nonF {
+div.messageArea p.nonF {
     float: none;
     margin-right: 20px;
+}
+/* -- error -- */
+div.error {
+    background-color: #ffe7de;
+    border: solid 1px #ff8988;
 }
 
 /*------------------------------------------------------------*/
@@ -561,7 +566,7 @@ body#loginBoad div#container {
 * html body#loginBoad div#container {
     width: 270px;
 }
-body#loginBoad div#messageArea {
+body#loginBoad div.messageArea {
     margin-bottom: 30px;
 }
 body#loginBoad h1 {

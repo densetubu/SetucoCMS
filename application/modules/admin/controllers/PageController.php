@@ -449,7 +449,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $validators = array();
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage($name . 'を入力してください。');
+        $notEmpty->setMessage($name . 'を選択してください。');
         $validators[] = array($notEmpty, true);
 
         return $validators;
