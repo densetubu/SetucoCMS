@@ -475,7 +475,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ->setValue(array_search($fileType,
                                 Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
                 ->addDecorator('ViewHelper')
-                ->addDecorator('Label', array('tag' => null))
+                ->addDecorator('Label', array())
                 ->addMultiOption(
                         Setuco_Data_Constant_Media::FILEEXT_ALL_INDEX,
                         Setuco_Data_Constant_Media::FILEEXT_ALL_STRING)
@@ -517,7 +517,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル選択パーツ作成と余分な装飾タグの除去
         $fileCount = 1;
         for (; $fileCount <= self::FILE_COUNT_MAX; $fileCount++) {
-            $inputName = 'upload_img' . $fileCount;
+            $inputName = 'upload_img_' . $fileCount;
             $fileSelector = new Zend_Form_Element_File($inputName);
             $fileSelector
                     ->clearDecorators()
