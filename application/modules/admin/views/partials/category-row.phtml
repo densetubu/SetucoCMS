@@ -1,0 +1,49 @@
+<?php
+/**
+ * カテゴリーの編集・削除画面内のタグ表示部分
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Partial
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array       $category         カテゴリー情報の配列
+ * @param      int         $page             現在表示しているページの番号 何ページ目を参照しているのか
+ * @param      int         $editId           編集するカテゴリーのID
+ * @author     suzuki-mar
+ */
+?>
+
+<td>
+    <form class="tagEdit" action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
+        <p>
+            <input type="text" name="name" id="name<?php echo $this->category['id'] ?>" value="<?php echo $this->category['name'] ?>" />
+            <input type="hidden" name="id" id="id<?php echo $this->category['id'] ?>" value="<?php echo $this->category['id'] ?>" />
+            <input type="hidden" name="parent_id" id="parent_id<?php echo $this->category['id'] ?>" value="<?php echo $this->category['parent_id'] ?>" />
+            <input type="button" name="canselButton" onclick="hideCategoryEdit(this)" value="キャンセル">
+            <input type="submit" class="sub" value="保存" />
+        </p>
+    </form>
+    <span class="tagInfo"><?php echo $this->category['name'] ?></span>
+</td>
+
+
+<td class="editButton">
+    <a href="javascript:void(0)" onclick="showCategoryEdit(this)">
+        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
+    </a>
+</td>
+
+<?php $redirectUrl = $this->baseUrl("/admin/category/delete/id/{$this->category['id']}") ?>
+<td>
+    <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $this->category['name'] ?>");'>
+        <img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>' alt='削除' width='27' height='27' />
+    </a>
+</td>
+
+

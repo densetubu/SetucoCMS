@@ -176,8 +176,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         //アップデートする条件のwhere句を生成する
         $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
-        $this->_categoryDao->update($updateData, $where);
-
+        $updateResult = $this->_categoryDao->update($updateData, $where);
         return true;
     }
 

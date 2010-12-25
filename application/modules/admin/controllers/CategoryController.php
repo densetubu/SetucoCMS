@@ -48,7 +48,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * コントローラーの共通設定をする
      * 全アクションで使用するサービスクラスのインスタンスをオブジェクト変数にする
      *
-     * @reutn true
+     * @return void
      * @author suzuki-mar
      */
     public function init() {
@@ -57,14 +57,11 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
         //全アクションで使用するサービスクラスのインスタンを生成する
         $this->_categoryService = new Admin_Model_Category();
-
+        
         //新規作成用のバリデートフォーム
         $this->_validateCreateForm = $this->_validateCreate();
-
         //編集用のバリデートフォーム
         $this->_validateUpdateForm = $this->_validateUpdate();
-
-        return true;
     }
 
     /**
@@ -72,22 +69,11 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * カテゴリーの一覧表示のアクションです
      * 現在は、スタブからデータを取得している
      *
-     * @return true
+     * @return void
      * @author charlesvineyard suzuki-mar saniker10
      * @todo Flashメッセージの取得
      */
     public function indexAction() {
-
-        //idがあったら、編集モードとする
-        $isEdit = $this->_hasParam('id');
-
-        //編集するカテゴリーが存在したらそのidを渡す
-        if ($isEdit) {
-            if ($this->_categoryService->isExistsId($this->_getParam('id'))) {
-                $this->view->editId = $this->_getParam('id');
-            }
-        }
-
         // フラッシュメッセージ設定
         $this->_showFlashMessages();
 
@@ -95,15 +81,13 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
         $max = $this->_categoryService->countCategories();
         $this->setPagerForView($max);
-
-        return true;
     }
 
     /**
      * カテゴリーを新規作成するアクションです
      * indexアクションに遷移します
      *
-     * @return true
+     * @return void
      * @author charlesvineyard suzuki-mar
      */
     public function createAction()
@@ -134,15 +118,13 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         }
 
         $this->_redirect('/admin/category/index');
-
-        return true;
     }
 
     /**
      * カテゴリーを更新処理するアクションです
      * indexアクションに遷移します
      *
-     * @return true
+     * @return void
      * @author charlesvineyard suzuki_mar
      */
     public function updateAction() {
@@ -158,8 +140,10 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
            $oldName = $this->_categoryService->findNameById($validateData['id']);
 
+           $isUpdated = $this->_categoryService->updateCategory($validateData['id'], $updateData);
+           
             //カテゴリーを編集する
-            if ($this->_categoryService->updateCategory($validateData['id'], $updateData)) {
+            if ($isUpdated) {
 
                 //カテゴリー名が同じ場合は,違うメッセージを表示する
                 if ($oldName === $updateData['name']) {
@@ -180,13 +164,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
 
         $this->_redirect('/admin/category/index');
-        return true;
     }
 
     /**
      * カテゴリーを削除するアクションです
      *
-     * @return true
+     * @return void
      * @author charlesvineyard suzuki-mar
      */
     public function deleteAction() {
@@ -214,8 +197,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         }
 
         $this->_redirect('/admin/category/index');
-
-        return true;
     }
 
     /**
