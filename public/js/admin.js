@@ -5,7 +5,9 @@ dojo.require('dojo.NodeList-html');
  * global functions
  ********************/
 function hideFlashMessage() {
-    dojo.style('messageArea', {display: 'none'});
+    dojo.style('messageArea', {
+        display: 'none'
+    });
 }
 function confirmDeleteRedirect(url, item){
     if (confirm("「" + item + "」を本当に削除してよろしいですか？")) {
@@ -17,12 +19,20 @@ function confirmDeleteRedirect(url, item){
  * index/index
  ********************/
 function showAmbitionEdit() {
-    dojo.style('ambitionView', {display: 'none'});
-    dojo.style('ambitionEdit', {display: 'inline'});
+    dojo.style('ambitionView', {
+        display: 'none'
+    });
+    dojo.style('ambitionEdit', {
+        display: 'inline'
+    });
 }
 function hideAmbitionEdit() {
-    dojo.style('ambitionEdit', {display: 'none'});
-    dojo.style('ambitionView', {display: 'inline'});
+    dojo.style('ambitionEdit', {
+        display: 'none'
+    });
+    dojo.style('ambitionView', {
+        display: 'inline'
+    });
 }
 
 /********************
@@ -51,12 +61,25 @@ function hidePageElementEdit(switcher) {
     dojo.query(switcher).parent().style('display', 'none');
 }
 
+/*********************
+ * category/index
+ *********************/
+function showCategoryEdit(switcher) {
+    dojo.query(switcher.parentNode).prev().children().style('display', 'block');
+    dojo.query(switcher.parentNode).prev().children().next().style('display', 'none');
+}
+
+function hideCategoryEdit(switcher) {
+  dojo.query(switcher.parentNode).parent().parent().children().style('display', 'none');
+  dojo.query(switcher.parentNode).parent().parent().children().next().style('display', 'inline');
+}
+
 /********************
  * tag/index
  ********************/
 function showTagEdit(switcher) {
     dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
-    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'block');
+    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'inline');
 }
 function hideTagEdit(switcher) {
     dojo.query(switcher.parentNode.parentNode).style('display', 'none');

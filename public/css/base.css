@@ -858,3 +858,10 @@ div#mainContent dl#siteForm dd#site_description_d {
 div#mainContent dl#siteForm dd span {
     font-size: 80%;
 }
+
+/*------------------------------------------------------------*/
+/*    -- category only style --                                   */
+/*------------------------------------------------------------*/
+form.tagEdit {
+    display: none;
+}
