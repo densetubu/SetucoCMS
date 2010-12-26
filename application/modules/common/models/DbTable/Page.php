@@ -266,7 +266,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         // JOIN
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
-        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array(/*'tag_name' => 't.name'*/)); // タグ情報はここではつけない
+        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array(/* 'tag_name' => 't.name' */)); // タグ情報はここではつけない
         $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
         $select->setIntegrityCheck(false);
 
@@ -289,14 +289,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
             }
-            $orwhere .=
-                    "(p.contents LIKE :keyword AND
-                        (p.contents NOT REGEXP :exp1 OR
-                         p.contents REGEXP :exp2)
-                     )";
+            $orwhere .= " (";
+            $orwhere .= " p.contents LIKE :keyword ";
             $bind[':keyword'] = "%{$keyword}%";
-            $bind[':exp1'] = "<[^>]*{$keyword}[^<]*>";
-            $bind[':exp2'] = ">[^<]*{$keyword}+";
+            if ($keyword !== '' && !is_null($keyword)) {
+                $orwhere .= " AND (p.contents NOT REGEXP :exp1 OR p.contents REGEXP :exp2) ";
+                $bind[':exp1'] = "<[^>]*{$keyword}[^<]*>";
+                $bind[':exp2'] = ">[^<]*{$keyword}+";
+            }
+            $orwhere .= ")";
         }
         if (in_array('outline', $targetColumns)) {
             if ($orwhere !== '') {
