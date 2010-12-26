@@ -32,6 +32,19 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     private $_media = null;
 
     /**
+     * 複数ファイルアップロード用inputのidとnameになる文字列の共通部分。末尾に連番を振る。
+     * @var string
+     */
+    private $_fileInputID_base = 'upload_img_';
+
+    /**
+     * 複数ファイルアップロード用inputのidとname。$_fileInputID_baseに連番を振ったもの。
+     * 連番は1〜FILE_COUNT_MAXまでで、init()で設定される。
+     * @var array
+     */
+    private $_fileInputIDs = array();
+
+    /**
      * アップロードできる最大ファイル個数
      */
     const FILE_COUNT_MAX = 5;
@@ -75,6 +88,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
+        for ($inputID = 1; $inputID <= self::FILE_COUNT_MAX; $inputID++) {
+            $this->_fileInputIDs[] = $this->_fileInputID_base . (string)$inputID;
+        }
         $this->_media = new Admin_Model_Media(
                         $this->_getUploadDest(),
                         $this->_getThumbDest(),
@@ -171,26 +187,23 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->redirector('index');
         }
 
-        // ファイル受信に使うadapter
-        $adapter = $this->_createFileTransferAdapter();
+        $form = $this->_createUploadForm();
 
-        // file inputを取得し1ファイルずつ処理
-        $fileInfos = $adapter->getFileInfo();
-        if (empty($fileInfos)) {
-            $this->_helper->flashMessenger->addMessage("ファイルのアップロードに失敗しました。");
+        $files = array();
+        $fileInfos = array();
+        foreach ($this->_fileInputIDs as $inputName) {
+            $file = $form->getElement($inputName);
+            $files[$inputName] = $file;
+            $fileInfos[$inputName] = array_pop($file->getFileInfo());
         }
-
+        
         $noFileCount = 0;
         $uploadSuccessMsgs = array();
         $uploadErrorMsgs = array();
         foreach ($fileInfos as $inputName => $fileInfo) {
 
-            if (!$adapter->isValid($inputName)) {
-                $msgs = $adapter->getMessages();
+            if (!$files[$inputName]->isValid($inputName)) {
                 // @todo エラー処理(今は暫定的にフラッシュメッセージでエラー表示)
-                foreach ($msgs as $msgCode => $msg) {
-                    $uploadErrorMsgs[] = $msg;
-                }
                 continue; // 次のファイル処理を続ける
             }
 
@@ -211,20 +224,20 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             // ファイルの保存先と物理名（id)を指定
             $newId = $this->_media->createNewMediaID(); // mediaテーブルにtmpレコード挿入
 
-            $adapter->setDestination($this->_getUploadDest());
-            $adapter->addFilter('Rename', array(
+            #$files[$inputName]->setDestination($this->_getUploadDest());
+            $files[$inputName]->addFilter('Rename', array(
                 'target' => $this->_getUploadDest() . "/{$newId}.{$extType}",
                 'overwrite' => true
             ));
 
             // ファイルの受信と保存
-            if (!$adapter->receive($inputName)) {
+            if (!$files[$inputName]->receive($inputName)) {
                 $uploadErrorMsgs[] = "ファイル{$filePath['basename']}が正しく送信されませんでした。";
                 $this->_media->deleteMediaById($newId);
                 continue;
             }
-
-            $newFileName = $adapter->getFileName($inputName);
+            
+            $newFileName = $files[$inputName]->getFileName($inputName);
 
             // 拡張子が画像でファイル内容が有効ならサムネイル生成
             if (Setuco_Util_Media::isImageExtension($extType)) {
@@ -291,9 +304,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $this->_helper->flashMessenger->addMessage($msg);
             }
         }
+        
         $this->view->mediaData = $mediaData;
-        $this->view->updateForm = $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment']);
         $this->view->fileSizeMax = (int) (self::FILE_SIZE_MAX / 1024) . 'KB';
+        $this->view->updateForm = $this->_getParam(
+                        'updateForm',
+                        $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment'])
+        );
 
         $this->view->headTitle("「{$mediaData['name']}」({$mediaData['id']}.{$mediaData['type']})の編集",
                 Zend_View_Helper_Placeholder_Container_Abstract::SET);
@@ -304,6 +321,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * ファイル更新処理のアクション。DBのレコードとファイルシステム上の実ファイル両方を更新する。
+     * formアクションに遷移する。
      *
      * @return void
      * @author akitsukada
@@ -325,21 +343,21 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->redirector('index');
         }
 
-        $adapter = $this->_createFileTransferAdapter();
+        $redirectUrl = '/admin/media/form/id/' . $id;
+
         $form = $this->_createUpdateForm($id);
         $post = $this->getRequest()->getPost();
 
-        // formアクションへのリダイレクトURL
-        $redirectUrl = '/admin/media/form/id/' . $id;
-
         // Postのバリデーション
-        if (!$adapter->isValid()) {
-            $msgs = $adapter->getMessages();
-            foreach ($msgs as $msgCode => $msg) {
-                $this->_helper->flashMessenger->addMessage($msg);
-            }
-            $this->_redirect($redirectUrl);
+        if (!$form->isValid($post)) {
+            $this->_setParam('updateForm', $form);
+            return $this->_forward(
+                    'form', null, null,
+                    array('id' => $id)
+            );
         }
+
+        $file = $form->getElement('upload_img');
 
         // サービスにDBをUpdateさせるためのファイルの情報
         $fileInfo = array(
@@ -351,10 +369,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $isFileUploaded = false;
 
         // ファイル関連はファイルが選択された場合のみ処理
-        if ($adapter->getFileName()) {
+        if ($file->getFileName()) {
 
             // 新しくアップロードされたオリジナルファイルの情報を取得
-            $newFileInfo = pathinfo($adapter->getFileName());
+            $newFileInfo = pathinfo($file->getFileName());
             $extType = $newFileInfo['extension'];
             $isFileUploaded = true;
 
@@ -365,28 +383,30 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             }
 
             // ファイルの保存先と保存名を指定
-            $adapter->addFilter('Rename', array(// 別名を指定
+            $file->addFilter('Rename', array(// 別名を指定
                 'target' => $this->_getUploadDest() . "/{$id}.{$extType}",
                 'overwrite' => true
             ));
-
+                
             // ファイルの受信と保存
-            if (!$adapter->receive()) {
+            if (!$file->receive()) {
                 $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
                 $this->_recoverFromBackUpFile($id, $extType);
                 $this->_redirect($redirectUrl);
             }
 
+            $newFileName = $file->getFileName();
+            
             // 画像なら有効な画像データかどうか確認
             if (Setuco_Util_Media::isImageExtension($extType)) {
-                if (!$this->_media->isValidImageData($adapter->getFileName())) {
+                if (!$this->_media->isValidImageData($newFileName)) {
                     $this->_helper->flashMessenger->addMessage("{$newFileInfo['basename']}は不正な画像データです。");
                     $this->_recoverFromBackUpFile($id, $extType);
                     $this->_redirect($redirectUrl);
                 }
 
                 // サムネイルを保存
-                if (!$this->_media->saveThumbnailFromImage($adapter->getFileName())) {
+                if (!$this->_media->saveThumbnailFromImage($newFileName)) {
                     $this->_helper->flashMessenger->addMessage('サムネイルが保存できませんでした。');
                     $this->_recoverFromBackUpFile($id, $extType);
                     $this->_redirect($redirectUrl);
@@ -570,6 +590,19 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ->addDecorator('ViewHelper')
                 ->addDecorator('Label', array('tag' => null));
 
+        $fileNameValidators = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('ファイル名を入力してください。', Zend_Validate_NotEmpty::IS_EMPTY);
+        $fileNameValidators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(array('max' => self::FILENAME_LENGTH_MAX));
+        $stringLength->setEncoding('UTF-8');
+        $stringLength->setMessage(
+                "ファイル名は%max%文字以下で入力してください。", Zend_Validate_StringLength::TOO_LONG);
+        $fileNameValidators[] = array($stringLength, true);
+        $txtFileName->addValidators($fileNameValidators);
+
         // ファイルの説明テキストボックス
         $txtFileComment = new Zend_Form_Element_Text('comment');
         $txtFileComment->clearDecorators()
@@ -604,42 +637,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         return $updateForm;
     }
 
-    /**
-     * ファイル受信用のAdapterを生成して返す
-     *
-     * @return Zend_File_Transfer_Adapter_Http
-     * @author akitsukada
-     */
-    private function _createFileTransferAdapter()
-    {
-        // ファイル受信に使うadapter
-        $adapter = new Zend_File_Transfer_Adapter_Http();
-
-        // フォームのファイル制限サイズ
-        $minSizeString = self::FILE_SIZE_MIN . 'Byte';
-        $maxSizeString = (int) (self::FILE_SIZE_MAX / 1024) . 'KB';
-        $fileUploadValidator = new Zend_Validate_File_Upload(array());
-        $adapter->addValidator($fileUploadValidator, true);
-
-        // ファイル個数設定
-        // 0個でもシステムエラーが出ないようにする
-        $adapter->setOptions(array('ignoreNoFile' => true));
-        $fileMaxCountValidator = new Zend_Validate_File_Count(array('min' => 0, 'max' => 5));
-
-        // ファイルタイプ（拡張子）の制限
-        $exts = implode(',', Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
-        $fileExtensionValidator = new Zend_Validate_File_Extension($exts);
-        $adapter->addValidator($fileExtensionValidator);
-
-        // ファイルサイズ（サーバー側判定）
-        $fileSizeValidator = new Zend_Validate_File_Size(array('bytestring' => true));
-        $fileSizeValidator->setMax(self::FILE_SIZE_MAX);
-        $fileSizeValidator->setMin(self::FILE_SIZE_MIN);
-        /* デフォルトメッセージの方がサイズなどわかりやすいのでsetMessagesしない（@todo 将来的にカスタムする） */
-        $adapter->addValidator($fileSizeValidator);
-
-        return $adapter;
-    }
 
     /**
      * アップロードされた、指定IDのファイル（ファイル本体とサムネイル両方）をファイルシステム上から削除する。
@@ -796,7 +793,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _getThumbDest()
     {
-        return APPLICATION_PATH . '/../public/media/thumbnail';
+        return APPLICATION_PATH . "/../public/media/thumbnail";
     }
 
     /**
