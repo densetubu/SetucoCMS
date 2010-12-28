@@ -219,6 +219,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $this->view->isSearched = true;
+
+        $this->view->headTitle("ページの編集・削除");
     }
 
     /**
