@@ -95,15 +95,12 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         // TODO 検索のメソッド変える
-        $pages = $this->_pageService->searchPages(
+        $pages = $this->_pageService->findPagesByCategoryId(
+            ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
+            ? null : $categoryId,
             null,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
-            array(),
-            array('category_id' =>
-                ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
-                ? null : $categoryId
-            ),
             'title',
             'asc'
         );

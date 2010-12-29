@@ -130,9 +130,9 @@ abstract class Common_Model_PageAbstract
      * @author akitsukada
      * @return array 該当するカテゴリのページデータを格納した配列
      */
-    public function findPagesByCategoryId($categoryId, $status = null, $currentPage = null, $limit = null)
+    public function findPagesByCategoryId($categoryId, $status = null, $currentPage = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
     {
-        return $this->_pageDao->findPagesByCategoryId($categoryId, $status, $currentPage, $limit);
+        return $this->_pageDao->findPagesByCategoryId($categoryId, $status, $currentPage, $limit, $sortColumn, $order);
     }
 
     /**

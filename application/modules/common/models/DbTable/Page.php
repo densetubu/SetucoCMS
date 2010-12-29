@@ -134,14 +134,15 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @author akitsukada
      * @return array 取得したページデータ
      */
-    public function findPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null)
+    public function findPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->select();
 
         $select->from(array('p' => $this->_name));
 
         //投稿者名取得のためJOIN
-        $select->joinLeft(array('a' => 'account'), 'a.id = p.account_id', array('account_name' => 'a.nickname'));
+
+        $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
         $select->setIntegrityCheck(false);
 
         // 指定された状態のページのみ取得する
@@ -156,8 +157,8 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             $select->where('category_id = ?', (int) $categoryId);
         }
 
-        //編集日時の降順にソートする
-        $select->order('update_date DESC');
+        // ソート指定
+        $select->order("{$sortColumn} {$order}");
 
         if (!is_null($pageNumber) && !is_null($limit)) {
             //ページネータの設定（何ページ目を表示するか、何件ずつ表示するか）

@@ -20,7 +20,7 @@
 <?php if (count($this->entries) > 0): ?>
     <p><?php echo "カテゴリー「{$this->category['name']}」" ?>のページ一覧</p>
     <?php foreach($this->entries as $id => $entry): ?>
-    <?php $accountName = is_null($entry['account_name']) ? '誰？' : $entry['account_name'] ?>
+    <?php $accountName = is_null($entry['nickname']) ? '誰？' : $entry['nickname'] ?>
     <!-- entry START -->
     <div class="entry">
         <div class="entryHead">
