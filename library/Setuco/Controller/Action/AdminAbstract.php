@@ -112,7 +112,9 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      */
     public function postDispatch()
     {
-        $this->view->headTitle($this->_pageTitle === null ? $this->_chooseHeadTitle() : $this->_pageTitle);
+        $this->view->headTitle(($this->_pageTitle === null)
+            ? $this->_chooseHeadTitle() : $this->_pageTitle,
+            Zend_View_Helper_Placeholder_Container_Abstract::SET);
     }
 
     /**

@@ -169,10 +169,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'hidden_id'     => $id,
         );
 
-        $form = $this->_createUpdateForm();
-        $form->setDefaults($currentPageValues);
+        $form = $this->_getParam('form', $this->_createUpdateForm()->setDefaults($currentPageValues));
 
         $this->_pageTitle = "「{$page['title']}」の編集";
+        $this->view->pageTitle = "「{$page['title']}」の編集";
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
         $this->_showFlashMessages();
@@ -980,7 +980,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
         if (! $this->_isValidPageForm($form, $post)) {
             $this->_setParam('form', $form);
-            return $this->_forward('form');
+            return $this->_forward('index', null, null, array('id' => $form->getValue('hidden_id')));
         }
 
         $categoryId = $form->getValue('category_id');
