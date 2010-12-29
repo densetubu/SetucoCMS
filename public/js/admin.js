@@ -4,10 +4,8 @@ dojo.require('dojo.NodeList-html');
 /********************
  * global functions
  ********************/
-function hideFlashMessage() {
-    dojo.style('messageArea', {
-        display: 'none'
-    });
+function hideMessageArea() {
+    dojo.query('.messageArea').style('display', 'none');
 }
 function confirmDeleteRedirect(url, item){
     if (confirm("「" + item + "」を本当に削除してよろしいですか？")) {
