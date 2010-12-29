@@ -880,7 +880,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $form->getValue('page_title'),
             $form->getValue('page_contents'),
             $form->getValue('page_outline'),
-            Setuco_Util_String::splitCsvString($form->getValue('tag')),
+            array_unique(Setuco_Util_String::splitCsvString($form->getValue('tag'))),
             new Zend_Date(
                 $post['create_date'] . $post['create_time'],
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
@@ -990,7 +990,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'category_id' => $categoryId,
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
-            'tag'         => Setuco_Util_String::splitCsvString($form->getValue('tag')),
+            'tag'         => array_unique(Setuco_Util_String::splitCsvString($form->getValue('tag'))),
             'create_date' => new Zend_Date(
                 $post['create_date'] . $post['create_time'],
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
