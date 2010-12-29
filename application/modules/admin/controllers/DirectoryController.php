@@ -94,7 +94,6 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
             }
         }
 
-        // TODO 検索のメソッド変える
         $pages = $this->_pageService->findPagesByCategoryId(
             ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
             ? null : $categoryId,
@@ -106,10 +105,9 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         );
         $pages = Admin_PageController::adjustPages($pages);
 
-        $pageCount = $this->_pageService->countPagesByKeyword(
-                null, array(), array('category_id' =>
-                ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
-                ? null : $categoryId));
+        $pageCount = $this->_pageService->countPagesByCategoryId(
+            ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
+            ? null : $categoryId);
 
         $categoryName = ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
             ? Setuco_Data_Constant_Category::UNCATEGORIZED_STRING
