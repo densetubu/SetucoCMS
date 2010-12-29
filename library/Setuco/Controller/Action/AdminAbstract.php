@@ -24,6 +24,14 @@
 abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_Action_Abstract
 {
     /**
+     * ページのタイトル
+     * 設定ファイルからとれないときだけ指定。
+     *
+     * @var string
+     */
+    protected $_pageTitle;
+
+    /**
      * ナビゲーション
      *
      * @var Zend_Navigation
@@ -97,14 +105,14 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     }
 
     /**
-     * アクションメソッドが呼ばれるの直前の処理です。
+     * アクションメソッドが呼ばれた後の処理です。
      *
      * @return void
      * @author charlesvineyard
      */
-    public function preDispatch()
+    public function postDispatch()
     {
-        $this->view->headTitle($this->_chooseHeadTitle());
+        $this->view->headTitle($this->_pageTitle === null ? $this->_chooseHeadTitle() : $this->_pageTitle);
     }
 
     /**
@@ -115,6 +123,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      */
     protected function _chooseHeadTitle()
     {
+
         $currentNavController = $this->_navigation->findByController(
         $this->getRequest()->getControllerName());
         if(! $currentNavController) {

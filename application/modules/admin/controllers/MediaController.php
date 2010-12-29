@@ -196,7 +196,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $files[$inputName] = $file;
             $fileInfos[$inputName] = array_pop($file->getFileInfo());
         }
-        
+
         $noFileCount = 0;
         $uploadSuccessMsgs = array();
         $uploadErrorMsgs = array();
@@ -236,7 +236,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $this->_media->deleteMediaById($newId);
                 continue;
             }
-            
+
             $newFileName = $files[$inputName]->getFileName($inputName);
 
             // 拡張子が画像でファイル内容が有効ならサムネイル生成
@@ -304,7 +304,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $this->_helper->flashMessenger->addMessage($msg);
             }
         }
-        
+
         $this->view->mediaData = $mediaData;
         $this->view->fileSizeMax = (int) (self::FILE_SIZE_MAX / 1024) . 'KB';
         $this->view->updateForm = $this->_getParam(
@@ -312,8 +312,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                         $this->_createUpdateForm($id, $mediaData['name'], $mediaData['comment'])
         );
 
-        $this->view->headTitle("「{$mediaData['name']}」({$mediaData['id']}.{$mediaData['type']})の編集",
-                Zend_View_Helper_Placeholder_Container_Abstract::SET);
+        $this->_pageTitle = "「{$mediaData['name']}」({$mediaData['id']}.{$mediaData['type']})の編集";
 
         // フラッシュメッセージ設定
         $this->_showFlashMessages();
@@ -387,7 +386,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 'target' => $this->_getUploadDest() . "/{$id}.{$extType}",
                 'overwrite' => true
             ));
-                
+
             // ファイルの受信と保存
             if (!$file->receive()) {
                 $this->_helper->flashMessenger->addMessage('ファイルが正しく送信されませんでした。');
@@ -396,7 +395,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             }
 
             $newFileName = $file->getFileName();
-            
+
             // 画像なら有効な画像データかどうか確認
             if (Setuco_Util_Media::isImageExtension($extType)) {
                 if (!$this->_media->isValidImageData($newFileName)) {

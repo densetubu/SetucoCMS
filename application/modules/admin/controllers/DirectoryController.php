@@ -125,9 +125,8 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         $this->setPagerForView($pageCount);
         $this->view->isSearched = true;
         $this->view->pageCount = $pageCount;
-        $this->view->headTitle('「' . $categoryName . '」カテゴリーに含まれるページ一覧',
-            Zend_View_Helper_Placeholder_Container_Abstract::SET);
         $this->view->categoryName = $categoryName;
+        $this->_pageTitle = "「{$categoryName}」カテゴリーに含まれるページ一覧";
         $this->_showFlashMessages();
     }
 

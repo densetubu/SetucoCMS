@@ -172,8 +172,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $form = $this->_createUpdateForm();
         $form->setDefaults($currentPageValues);
 
-        $this->view->headTitle('「' . $page['title'] . '」の編集',
-            Zend_View_Helper_Placeholder_Container_Abstract::SET);
+        $this->_pageTitle = "「{$page['title']}」の編集";
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
         $this->_showFlashMessages();
@@ -219,8 +218,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $this->view->isSearched = true;
-
-        $this->view->headTitle("ページの編集・削除");
+        $this->_pageTitle = "ページの編集・削除";
     }
 
     /**
