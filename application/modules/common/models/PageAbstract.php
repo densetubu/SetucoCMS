@@ -121,5 +121,31 @@ abstract class Common_Model_PageAbstract
     {
         return $this->_tagDao->findTagIdsByTagName($keyword);
     }
+
+
+    /**
+     * カテゴリを指定してページを取得する（ページネータ対応）
+     *
+     * @param int $categoryId 取得したいカテゴリのID
+     * @author akitsukada
+     * @return array 該当するカテゴリのページデータを格納した配列
+     * @todo limitのデフォルト修正
+     */
+    public function findPagesByCategoryId($categoryId, $currentPage, $limit)
+    {
+        return $this->_pageDao->findPagesByCategoryId($categoryId, $currentPage, $limit);
+    }
+
+    /**
+     * 指定したカテゴリに属するページの数を取得する
+     *
+     * @param int $categoryId ページ数を取得したいカテゴリのID
+     * @return int 該当するページの数
+     * @author akitsukada
+     */
+    public function countPagesByCategoryId($categoryId)
+    {
+        return count($this->_pageDao->findPagesByCategoryId($categoryId));
+    }
 }
 
