@@ -45,7 +45,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
     /**
      * 親が無いカテゴリーの仮想親ID
-     * 
+     *
      * @var int
      */
     const PARENT_ROOT_ID = -1;
@@ -72,7 +72,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
     /**
      * 初期設定をする　外部結合をする設定
-     * 
+     *
      * @return Zend_Db_Select 外部結合ようの初期設定をしたSELECTオブジェクト
      */
     protected function _initializeJoinSelect()
@@ -96,7 +96,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      */
     protected function _joinPage($select)
     {
-        
+
 
         //テーブルを結合する 使用されていないものも取得する
         $select->joinLeft(array('p' => 'page'), 'c.id = p.category_id', array('title'));
@@ -150,7 +150,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         //公開状態のものしか取得しない
         $select->where('status = ?', Setuco_Data_Constant_Page::STATUS_RELEASE);
-        
+
         $searchResult = $this->fetchAll($select);
         $result = $searchResult->toArray();
 
@@ -179,7 +179,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         if (empty($result)) {
             return false;
         }
-        
+
         return $result;
     }
 
@@ -214,11 +214,11 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array カテゴリー情報の一覧
      * @author charlesvineyard
      */
-    public function findCategories($selectColumns, $sortColumn, $order = 'asc')
+    public function findCategories($selectColumns, $sortColumn, $order = 'ASC')
     {
         $select = $this->_initializeSelect()
                 ->from($this->_name, $selectColumns)
-                ->order("$sortColumn $order");
+                ->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 
@@ -229,9 +229,11 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array カテゴリー情報の一覧
      * @author charlesvineyard
      */
-    public function findCategoriesByParentId($parentId)
+    public function findCategoriesByParentId($parentId, $sortColumn, $order = 'ASC')
     {
-        $select = $this->_initializeSelect()->where('parent_id = ?', $parentId);
+        $select = $this->_initializeSelect()
+            ->where('parent_id = ?', $parentId)
+            ->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 
@@ -293,7 +295,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         return $result;
     }
-    
+
 
     /**
      * プライマリキーを取得する
