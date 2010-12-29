@@ -23,7 +23,7 @@ class Setuco_Form extends Zend_Form
 {
     /**
      * 最小限のデコレータのみ使うフォーム要素を指定する
-     * 
+     *
      * @param mixed $elements 要素名か要素名の配列
      * @return void
      * @author Yuu Yamanaka
@@ -35,7 +35,7 @@ class Setuco_Form extends Zend_Form
 
     /**
      * デコレータを指定のフォーム要素から削除します。
-     * 
+     *
      * @param mixed $decorators デコレータ名かデコレータ名の配列
      * @param mixed $elements 要素名か要素名の配列
      * @return void
@@ -50,10 +50,10 @@ class Setuco_Form extends Zend_Form
         }
         return $this;
     }
-    
+
     /**
      * 当インスタンスのdojoを有効にする
-     * 
+     *
      * @return 当インスタンス
      * @author Yuu Yamanaka
      */
@@ -62,5 +62,23 @@ class Setuco_Form extends Zend_Form
         return $this;
     }
 
+    /**
+     * 全てのID属性に末尾文字列を付加します。
+     * Form自体のID属性が未指定の場合は"setuco_form"を代用します。
+     *
+     * @param string $suffix 付加する文字列
+     * @return Setuco_Form 当インスタンス
+     * @author charlesvineyard
+     */
+    public function addAllIdSuffix($suffix) {
+        $formId = is_null($this->getId()) ? 'setuco_form' : $this->getId();
+        $this->setAttrib('id', $formId . $suffix);
+
+        foreach ($this->getElements() as $element) {
+            $element->setAttrib('id', $element->getId() . $suffix);
+        }
+
+        return $this;
+    }
 
 }
