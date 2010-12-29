@@ -546,7 +546,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $nowDate = Zend_Date::now();
         $form = new Setuco_Form();
         $form->enableDojo()
-             ->setAction($this->_helper->url('create'));
+             ->setAction($this->_helper->url('create'))
+             ->addElementPrefixPath('Setuco_Filter', 'Setuco/Filter/', 'filter');
         $form->addElement(
             'Submit',
             'sub_open1',
@@ -628,7 +629,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 ),
                 'required' => true,
                 'filters' => array(
-                    'StringTrim'
+                    'StringTrim',
+                    'SplitFirstBrTag'
                 ),
                 'validators' => $this->_makePageContentsValidators(),
             )
