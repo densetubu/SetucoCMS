@@ -20,20 +20,7 @@
 ?>
 <?php
     $form = clone($this->editTagForm);
-    $form->setAttrib('id', $form->getAttrib('id') . $this->index);
-    $form->getElement('tag')
-         ->setValue($this->tag['name'])
-         ->setAttrib('id', $form->getElement('tag')->getAttrib('id') . $this->index);
-    $form->getElement('id')
-         ->setValue($this->tag['id'])
-         ->setAttrib('id', $form->getElement('id')->getAttrib('id') . $this->index);
-    $form->getElement('preTag')
-         ->setValue($this->tag['name'])
-         ->setAttrib('id', $form->getElement('preTag')->getAttrib('id') . $this->index);
-    $form->getElement('sub')
-         ->setAttrib('id', $form->getElement('sub')->getAttrib('id') . $this->index);
-    $form->getElement('cancel')
-         ->setAttrib('id', $form->getElement('cancel')->getAttrib('id') . $this->index);
+    $form->addAllIdSuffix($this->index);
 ?>
 <td>
     <span class="tagView"><?php echo $this->escape($this->tag['name']) ?></span>

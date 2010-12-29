@@ -21,31 +21,9 @@
 ?>
 <?php
     $categoryForm = clone($this->categoryForm);
-    $categoryForm->getElement('category_id')
-                 ->setAttrib('id', $categoryForm->getElement('category_id')->getAttrib('id') . $this->index);
-    $categoryForm->getElement('h_page_id_c')
-                 ->setAttrib('id', $categoryForm->getElement('h_page_id_c')->getAttrib('id') . $this->index);
-    $categoryForm->getElement('h_page_title_c')
-                 ->setAttrib('id', $categoryForm->getElement('h_page_title_c')->getAttrib('id') . $this->index);
-    $categoryForm->getElement('h_pre_category_id_c')
-                 ->setAttrib('id', $categoryForm->getElement('h_pre_category_id_c')->getAttrib('id') . $this->index);
-    $categoryForm->getElement('sub_category')
-                 ->setAttrib('id', $categoryForm->getElement('sub_category')->getAttrib('id') . $this->index);
-    $categoryForm->getElement('cancel_category')
-                 ->setAttrib('id', $categoryForm->getElement('cancel_category')->getAttrib('id') . $this->index);
+    $categoryForm->addAllIdSuffix($this->index);
     $statusForm = clone($this->statusForm);
-    $statusForm->getElement('status')
-                 ->setAttrib('id', $statusForm->getElement('status')->getAttrib('id') . $this->index);
-    $statusForm->getElement('h_page_id_s')
-                 ->setAttrib('id', $statusForm->getElement('h_page_id_s')->getAttrib('id') . $this->index);
-    $statusForm->getElement('h_page_title_s')
-                 ->setAttrib('id', $statusForm->getElement('h_page_title_s')->getAttrib('id') . $this->index);
-    $statusForm->getElement('h_pre_category_id_s')
-                 ->setAttrib('id', $statusForm->getElement('h_pre_category_id_s')->getAttrib('id') . $this->index);
-    $statusForm->getElement('sub_status')
-                 ->setAttrib('id', $statusForm->getElement('sub_status')->getAttrib('id') . $this->index);
-    $statusForm->getElement('cancel_status')
-                 ->setAttrib('id', $statusForm->getElement('cancel_status')->getAttrib('id') . $this->index);
+    $statusForm->addAllIdSuffix($this->index);
 ?>
 <td>
 <?php if ($this->page['status'] == Setuco_Data_Constant_Page::STATUS_RELEASE): ?>
