@@ -129,11 +129,10 @@ abstract class Common_Model_PageAbstract
      * @param int $categoryId 取得したいカテゴリのID
      * @author akitsukada
      * @return array 該当するカテゴリのページデータを格納した配列
-     * @todo limitのデフォルト修正
      */
-    public function findPagesByCategoryId($categoryId, $currentPage, $limit)
+    public function findPagesByCategoryId($categoryId, $status = null, $currentPage = null, $limit = null)
     {
-        return $this->_pageDao->findPagesByCategoryId($categoryId, $currentPage, $limit);
+        return $this->_pageDao->findPagesByCategoryId($categoryId, $status, $currentPage, $limit);
     }
 
     /**
@@ -143,9 +142,9 @@ abstract class Common_Model_PageAbstract
      * @return int 該当するページの数
      * @author akitsukada
      */
-    public function countPagesByCategoryId($categoryId)
+    public function countPagesByCategoryId($categoryId, $status = null)
     {
-        return count($this->_pageDao->findPagesByCategoryId($categoryId));
+        return count($this->_pageDao->findPagesByCategoryId($categoryId, $status));
     }
 }
 

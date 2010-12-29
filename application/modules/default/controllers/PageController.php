@@ -158,7 +158,8 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         $currentPage = $this->_getPageNumber();
-        $this->view->entries = $this->_pageService->findPagesByCategoryId($id, $currentPage, self::LIMIT_PAGE_CATEGORY);
+        $this->view->entries = $this->_pageService->findPagesByCategoryId(
+            $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
 
         $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
@@ -172,7 +173,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_pageService->countPagesByCategoryId($id), self::LIMIT_PAGE_CATEGORY);
+        $this->setPagerForView($this->_pageService->countPagesByCategoryId($id, Setuco_Data_Constant_Page::STATUS_RELEASE), self::LIMIT_PAGE_CATEGORY);
 
     }
 

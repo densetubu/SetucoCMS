@@ -47,11 +47,6 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     const STATUS_DRAFT = 0;
 
     /**
-     * ページの状態　全ての状態
-     */
-    const STATUS_ALL = -1;
-
-    /**
      * 新着ページを取得する
      *
      * @param int $getPageCount 何件のページを取得するのか
@@ -133,13 +128,13 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * カテゴリを指定してページを取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
      * @param int $categoryId 取得したいカテゴリのID
+     * @param int $status ページの状態。デフォルトは全て。
      * @param int $pageNumber ページネータの何ページ目を表示するか
      * @param int $limig １ページに表示するページ数
      * @author akitsukada
      * @return array 取得したページデータ
-     * @todo $statusの初期値をnull(ALL)にしたい
      */
-    public function findPagesByCategoryId($categoryId, $pageNumber = null, $limit = null, $status = self::STATUS_OPEN)
+    public function findPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -150,7 +145,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->setIntegrityCheck(false);
 
         // 指定された状態のページのみ取得する
-        if ($status != self::STATUS_ALL) {
+        if (!is_null($status)) {
             $select->where('status = ?', $status);
         }
 

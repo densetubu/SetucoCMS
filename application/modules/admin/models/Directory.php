@@ -95,7 +95,7 @@ class Admin_Model_Directory
      */
     private function _createNavPages($categoryId)
     {
-        $pages = $this->_pageDao->findPagesByCategoryId($categoryId, null, null, Common_Model_DbTable_Page::STATUS_ALL);
+        $pages = $this->_pageDao->findPagesByCategoryId($categoryId);
         $navPages = array();
         foreach ($pages as $page) {
             $navPages[] = Zend_Navigation_Page::factory(array(
