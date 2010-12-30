@@ -811,6 +811,12 @@ ul#directory li p img {
 ul#directory li p.folder img {
     padding: 3px 8px 3px 0;
 }
+ul#directory li ul li.page p {
+    margin-right: 8px;
+}
+ul#directory li ul li.page p img {
+    padding: 0 0 2px 3px;
+}
 
 
 /*------------------------------------------------------------*/

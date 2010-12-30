@@ -76,21 +76,21 @@
                     <?php if ($page->getVisible()): // ページ公開中の場合?>
                         <p>
                             <a href="<?php echo $page->getViewHref() ?>" target="_blank">
-                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check.gif') ?>" width="18" height="15" alt="ページを確認" /><?php echo $this->escape($page->getLabel()) . "\n" ?>
+                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check.gif') ?>" width="18" height="15" alt="ページを確認" />
                             </a>
                         </p>
                         <p>
                             <a href="<?php echo $page->getEditHref() ?>">
-                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_edit.gif') ?>" width="17" height="17" alt="編集" />
+                                <?php echo $this->escape($page->getLabel()) ?><img src="<?php echo $this->baseUrl('/images/admin/directory/icn_edit.gif') ?>" width="17" height="17" alt="編集" />
                             </a>
                         </p>
                     <?php else: // ページ下書きの場合?>
                         <p>
-                            <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check_no.gif') ?>" width="18" height="15" alt="下書きは表示できません" /><?php echo $this->escape($page->getLabel()) . "\n" ?>
+                            <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_check_no.gif') ?>" width="18" height="15" alt="下書きは表示できません" />
                         </p>
                         <p>
                             <a href="<?php echo $page->getEditHref() ?>">
-                                <img src="<?php echo $this->baseUrl('/images/admin/directory/icn_edit.gif') ?>" width="17" height="17" alt="編集" />
+                                <?php echo $this->escape($page->getLabel()) ?><img src="<?php echo $this->baseUrl('/images/admin/directory/icn_edit.gif') ?>" width="17" height="17" alt="編集" />
                             </a>
                         </p>
                     <?php endif ?>
