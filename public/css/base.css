@@ -165,7 +165,7 @@ div#header div {
 }
 div#header h1 {
     line-height: 0;
-    margin-bottom: 20px;
+    margin-bottom: 13px;
 }
 div#header h1 a {
     display: block;
@@ -559,22 +559,19 @@ body#loginBoad div#container {
     background-color: #fff;
     border: solid 1px #cfcfcf;
     margin-top: 20px;
-    padding: 20px 20px 10px;
-    width: 310px;
+    padding: 35px 30px 15px;
+    width: 300px;
     min-width: 0;
 }
 * html body#loginBoad div#container {
-    width: 270px;
+    width: 260px;
 }
 body#loginBoad div.messageArea {
     margin-bottom: 30px;
 }
 body#loginBoad h1 {
-    margin-bottom: 15px;
-    margin-left: 10px;
-}
-body#loginBoad p#catch {
-    margin-bottom: 45px;
+    text-align: center;
+    margin-bottom: 35px;
 }
 body#loginBoad dt {
     margin-bottom: 10px;
@@ -587,12 +584,12 @@ body#loginBoad dd {
 }
 body#loginBoad dd input {
     margin-bottom: 15px;
-    width: 210px;
+    width: 200px;
 }
 body#loginBoad p input {
     float: right;
-    margin-bottom: 40px;
-    width: 80px;
+    margin-bottom: 30px;
+    padding: 2px 20px;
 }
 body#loginBoad p#copyright {
     clear: right;
