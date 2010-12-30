@@ -95,8 +95,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $pages = $this->_pageService->findPagesByCategoryId(
-            ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
-            ? null : $categoryId,
+            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($categoryId),
             null,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
@@ -106,8 +105,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         $pages = Admin_PageController::adjustPages($pages);
 
         $pageCount = $this->_pageService->countPagesByCategoryId(
-            ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
-            ? null : $categoryId);
+            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($categoryId));
 
         $categoryName = ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE)
             ? Setuco_Data_Constant_Category::UNCATEGORIZED_STRING
@@ -165,7 +163,6 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateCategoryAction()
     {
-        d('updateCategory');
         $form = new Setuco_Form_Page_CategoryUpdate();
         if (!$form->isValid($_POST)) {
             return $this->_forward('index', null, null, array(
@@ -175,9 +172,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService->updatePage(
             $form->getValue('h_page_id_c'),
             array(
-                'category_id' =>
-                    ($form->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
-                    null : $form->getValue('category_id')
+                'category_id' => Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id'))
             )
         );
 

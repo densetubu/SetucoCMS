@@ -159,8 +159,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
         $currentPageValues = array(
             'page_title'    => $page['title'],
-            'category_id'   => $page['category_id'] === null ?
-                Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $page['category_id'],
+            'category_id'   => Setuco_Data_Converter_CategoryInfo::convertCategoryId4View($page['category_id']),
             'page_contents' => $page['contents'],
             'page_outline'  => $page['outline'],
             'tag'           => $this->_createCSTagNames($id),
@@ -291,8 +290,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $refinements = array();
         if ($searchForm->getValue('category_id') !== self::UNSELECTED_VALUE) {
             $refinements['category_id'] =
-                ($searchForm->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
-                null : $searchForm->getValue('category_id');
+                Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($searchForm->getValue('category_id'));
         }
         if ($searchForm->getValue('account_id') !== self::UNSELECTED_VALUE) {
             $refinements['account_id'] = $searchForm->getValue('account_id');
@@ -315,10 +313,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         foreach ($pages as $key => $page) {
             $createDate = new Zend_Date($page['create_date'], Zend_Date::ISO_8601);
             $pages[$key]['create_date'] = $createDate->toString('YYYY/MM/dd');
-            if ($page['category_id'] === null) {
-                $pages[$key]['category_id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
-                $pages[$key]['category_name'] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
-            }
+            $pages[$key]['category_id'] = Setuco_Data_Converter_CategoryInfo::convertCategoryId4View($pages[$key]['category_id']);
         }
         return $pages;
     }
@@ -874,10 +869,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('form');
         }
 
-        $categoryId = $form->getValue('category_id');
-        if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
-            $categoryId = null;
-        }
         $pageId = $this->_pageService->registPage(
             $form->getValue('page_title'),
             $form->getValue('page_contents'),
@@ -888,7 +879,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
             ),
             $this->_getInputStatus(),
-            $categoryId
+            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($categoryId)
         );
 
         $this->_helper->flashMessenger('新規ページを作成しました。');
@@ -983,13 +974,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('index', null, null, array('id' => $form->getValue('hidden_id')));
         }
 
-        $categoryId = $form->getValue('category_id');
-        if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
-            $categoryId = null;
-        }
         $updatePageInfo = array(
             'title'       => $form->getValue('page_title'),
-            'category_id' => $categoryId,
+            'category_id' => Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id')),
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
             'tag'         => array_unique(Setuco_Util_String::splitCsvString($form->getValue('tag'))),
@@ -1022,9 +1009,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService->updatePage(
             $form->getValue('h_page_id_c'),
             array(
-                'category_id' =>
-                    ($form->getValue('category_id') === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) ?
-                    null : $form->getValue('category_id')
+                'category_id' => Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id'))
             )
         );
         $this->_helper->flashMessenger('「' . $form->getValue('h_page_title_c') . '」のカテゴリーを変更しました。');
