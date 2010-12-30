@@ -33,9 +33,9 @@ class Setuco_Data_Converter_PageInfo
     {
         switch($int) {
             case Setuco_Data_Constant_Page::STATUS_DRAFT:
-                return '下書き';
+                return Setuco_Data_Constant_Page::STATUS_DRAFT_STRING;
             case Setuco_Data_Constant_Page::STATUS_RELEASE:
-                return '公開';
+                return Setuco_Data_Constant_Page::STATUS_RELEASE_STRING;
         }
     }
 }
