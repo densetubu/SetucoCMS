@@ -29,7 +29,7 @@ class Setuco_Data_Converter_CategoryInfo
      * @return mixed カテゴリーIDの表示用の値
      * @author charlesvineyard
      */
-    public static function convertCategoryID4View($categoryId)
+    public static function convertCategoryId4View($categoryId)
     {
         // 未分類
         if ($categoryId === null) {
@@ -63,7 +63,7 @@ class Setuco_Data_Converter_CategoryInfo
      * @return int $categoryId カテゴリーID
      * @author charlesvineyard
      */
-    public static function convertCategoryID4Data($categoryId)
+    public static function convertCategoryId4Data($categoryId)
     {
         // 未分類
         if ($categoryId === Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
