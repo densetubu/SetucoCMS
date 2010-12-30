@@ -79,8 +79,9 @@ class Admin_Model_Directory
             'label'      => $categoryName,
             'module'     => 'admin',
             'controller' => 'directory',
-            'params'     => array('category_id' => $categoryId == null ?
-                Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE : $categoryId)
+            'params'     => array(
+                'category_id' => Setuco_Data_Converter_CategoryInfo::convertCategoryId4View($categoryId)
+            )
         ));
         $navCategory->addPages($this->_createNavPages($categoryId));
         return $navCategory;
