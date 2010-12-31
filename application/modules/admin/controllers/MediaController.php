@@ -194,6 +194,16 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $form = $this->_createUploadForm();
 
+        if (empty($_POST)) {
+            // iniサイズを超えた場合など、不正なPOSTが行われた場合
+            $form->isValid($_POST);
+            $form->setErrorMessages(array("アップロード中にサーバーエラーが発生しました。"));
+            $this->_setParam('uploadForm', $form);
+            return $this->_forward(
+                    'index'
+            );
+        }
+
         $files = array();
         $fileInfos = array();
         foreach ($this->_fileInputIDs as $inputName) {
@@ -231,9 +241,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $filePath = pathinfo($fileInfo['name']);
             $extType = $filePath['extension'];
 
-            // ファイルの保存先と物理名（id)を指定
+            // ファイルの保存先と物理名（id.拡張子)を指定
             $newId = $this->_media->createNewMediaID(); // mediaテーブルにtmpレコード挿入
-            #$files[$inputName]->setDestination($this->_getUploadDest());
             $files[$inputName]->addFilter('Rename', array(
                 'target' => $this->_getUploadDest() . "/{$newId}.{$extType}",
                 'overwrite' => true
@@ -356,10 +365,21 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->redirector('index');
         }
 
-        $redirectUrl = '/admin/media/form/id/' . $id;
-
         $form = $this->_createUpdateForm($id);
         $post = $this->getRequest()->getPost();
+
+        if (empty($_POST)) {
+            // iniサイズを超えた場合など、不正なPOSTが行われた場合
+            $form->isValid($_POST);
+            $form->setErrorMessages(array("アップロード中にサーバーエラーが発生しました。"));
+            $this->_setParam('updateForm', $form);
+            return $this->_forward(
+                    'form', null, null,
+                    array('id' => $id)
+            );
+        }
+
+        $redirectUrl = '/admin/media/form/id/' . $id;
 
         // Postのバリデーション
 
@@ -562,9 +582,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $searchFormSubmit->clearDecorators()
                 ->addDecorator('ViewHelper');
         $searchForm->addElement($searchFormSubmit);
-        
+
         $hiddenIsNarrowDown = new Zend_Form_Element_Hidden('isNarrowDown', array(
-            'id' => 'isNarrowDown', 'value' => TRUE));
+                    'id' => 'isNarrowDown', 'value' => TRUE));
         $hiddenIsNarrowDown->clearDecorators()->addDecorator('ViewHelper');
         $searchForm->addElement($hiddenIsNarrowDown);
 
@@ -598,7 +618,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     ->clearDecorators()
                     ->addDecorator('file');
             $fileSelector->setValidators($this->_makeFileValidators());
-            $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
+            // $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
             $uploadForm->addElement($fileSelector);
         }
 
@@ -668,7 +688,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ->addDecorator('file')
                 ->addDecorator('Label', array('tag' => null))
                 ->addDecorator('HtmlTag', null);
-        $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
+        //$fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
         $fileSelector->setValidators($this->_makeFileValidators());
 
         // submitボタンの作成と余分な装飾タグの除去
@@ -739,8 +759,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ));
         $minSizeString = self::FILE_SIZE_MIN . 'Byte';
         $maxSizeString = (self::FILE_SIZE_MAX / 1024) . 'kB';
-        $sizeErrorString = "アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。"
-                . "ファイル「%value%」のサイズは %size% です。";
+        $sizeErrorString = "サイズエラー「%value%」アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。"
+                . "選択されたファイルのサイズは %size% です。";
         $fileSizeValidator->setMessages(array(
             Zend_Validate_File_Size::TOO_BIG => $sizeErrorString,
             zend_validate_file_size::TOO_SMALL => $sizeErrorString
@@ -748,9 +768,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $validators[] = array($fileSizeValidator, true);
 
         $fileUploadValidator = new Zend_Validate_File_Upload();
-        $fileUploadValidator->setMessage("アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+        $fileUploadValidator->setMessage(
+                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::INI_SIZE);
-        $fileUploadValidator->setMessage("アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+        $fileUploadValidator->setMessage(
+                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::FORM_SIZE);
         $validators[] = array($fileUploadValidator, true);
 
