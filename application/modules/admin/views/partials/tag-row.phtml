@@ -22,6 +22,7 @@
     $form = clone($this->editTagForm);
     $form->addAllIdSuffix($this->index);
 ?>
+
 <td>
     <span class="tagView"><?php echo $this->escape($this->tag['name']) ?></span>
     <div class="tagEdit"><?php echo $form ?></div>

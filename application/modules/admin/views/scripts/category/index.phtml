@@ -70,13 +70,15 @@
         <tbody>
             <?php foreach ($this->categories as $key => $category): ?>
                 <?php if ($key % 2 === 0): //配列のループが偶数か ?>
+
                     <tr>
                 <?php else: ?>
+
                     <tr class='check'>
                 <?php endif; ?>
 
                 <?php echo $this->partial('category-row.phtml', array('category' => $category, 'page' => $this->page, 'sort' => $this->sort, 'editId' => $this->editId)) ?>
-                
+
                     </tr>
             <?php endforeach; ?>
         </tbody>
