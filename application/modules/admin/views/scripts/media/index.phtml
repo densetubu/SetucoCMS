@@ -45,6 +45,7 @@
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->uploadForm)) ?>
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->searchForm)) ?>
 
     <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
 
@@ -68,6 +69,7 @@
     </form>
     <form id="searchForm" action="<?php echo $this->searchForm->getAction() ?>" method="post">
         <div class="default">
+            <?php echo $this->searchForm->getElement('isNarrowDown') . "\n" ?>
             <p><?php echo $this->searchForm->getElement('fileType') . "\n" ?></p>
             <p><?php echo $this->searchForm->getElement('search') . "\n" ?></p>
         </div>

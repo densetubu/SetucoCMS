@@ -196,7 +196,7 @@ class Admin_Model_Media
         // gifかpngの場合は背景の透過処理
         if ($ext == 'gif' || $ext == 'png') {
             $transIndex = imagecolortransparent($originalImage);
-            $transColor = imagecolorsforindex($originalImage, $transIndex);
+            $transColor = @imagecolorsforindex($originalImage, $transIndex);
             $transIndex = imagecolorallocate($thumbImage, $transColor['red'], $transColor['green'], $transColor['blue']);
             imagefill($thumbImage, 0, 0, $transIndex);
             imagecolortransparent($thumbImage, $transIndex);

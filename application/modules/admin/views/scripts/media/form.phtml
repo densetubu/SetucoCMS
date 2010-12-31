@@ -42,9 +42,9 @@
     <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->updateForm)) ?>
 
     <form action="<?php echo $this->updateForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
-        <?php echo $this->updateForm->getElement('preExtension') ?>
         <dl id="inputArea">
             <dt>
+                <?php echo $this->updateForm->getElement('preExtension') ?>
                 <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
                     <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" />
                 </a>

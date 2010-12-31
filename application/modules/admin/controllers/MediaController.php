@@ -116,15 +116,23 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $fileType = Setuco_Data_Constant_Media::FILEEXT_ALL_VALUE;
 
-        if ($this->getRequest()->isPost()) { // 絞り込みフォーム経由でIndexに来た
+        $searchForm = $this->_createSearchForm();
+        if ($this->_getParam('isNarrowDown')) {
+            // 絞り込みフォーム経由でIndexに来た
             $extensions = Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS();
             $fileType = array_key_exists($this->_getParam('fileType'), $extensions) ?
                     $extensions[$this->_getParam('fileType')] :
                     Setuco_Data_Constant_Media::FILEEXT_ALL_VALUE;
             $currentPage = 1; // 新たに絞り込みされた場合は常に1ページ目表示
+            $searchForm->isValid($_POST);
         } else {
-            $fileType = $this->_getParam('type', Setuco_Data_Constant_Media::FILEEXT_ALL_VALUE);     // ソートリンクでの指定
+            $fileType = $this->_getParam('type', Setuco_Data_Constant_Media::FILEEXT_ALL_VALUE);
         }
+
+        // viewにファイル絞込み・ソート用フォームの作成
+        $searchForm->setDefault('fileType', array_search($fileType,
+                        Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()));
+        $this->view->searchForm = $searchForm;
 
         // ソート指定のカラムとオーダー取得 (デフォルトではファイル名'name'の昇順'asc')
         $sortColumn = $this->_getParam('sort', 'name');
@@ -139,13 +147,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $medias = $this->_media->findMedias(
                         $sortColumn, $order, $fileType, $this->_getPageLimit(), $currentPage);
         $this->view->medias = $medias;
-
-        foreach ($medias as $cnt => $media) {
-            // ファイル、サムネイルがファイルシステム上に見つからないときメッセージを表示
-            foreach ($media['notFound'] as $msg) {
-                $this->_helper->flashMessenger->addMessage($msg);
-            }
-        }
 
         // アップロードできる最大サイズをviewに教える
         $this->view->fileSizeMax = (int) (self::FILE_SIZE_MAX / 1024) . 'kB';
@@ -164,14 +165,15 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $this->view->dirErrors = $dirErrors;
         }
 
-        // viewにファイル絞込み・ソート用フォームの作成
-        $this->view->searchForm = $this->_createSearchForm($fileType);
-
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
         $this->setPagerForView($this->_media->countMedias($fileType));
 
-        // フラッシュメッセージ設定
+        // フラッシュメッセージ設定 (flashMessengerを使うとforward前に設定したメッセージが表示されないので直接viewに設定
+        $flashMsgs = $this->_getParam('flashMsgs');
+        if (count($flashMsgs) > 0) {
+            $this->view->flashMessages = $flashMsgs;
+        }
         $this->_showFlashMessages();
     }
 
@@ -191,16 +193,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $form = $this->_createUploadForm();
-        /*
-        $post = $this->getRequest()->getPost();
-        if (!$form->isValid($post)) {
-            $form->markAsError();
-            $this->_setParam('uploadForm', $form);
-            return $this->_forward(
-                    'index'
-            );
-        }
-        */
+
         $files = array();
         $fileInfos = array();
         foreach ($this->_fileInputIDs as $inputName) {
@@ -216,7 +209,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // 個々のファイルをバリデート
             if (!$files[$inputName]->isValid($inputName)) {
-                $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」がアップロードできませんでした。";
+                $uploadErrorMsgs[] = array_pop($files[$inputName]->getMessages());
                 continue; // 次のファイル処理を続ける
             }
 
@@ -248,7 +241,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // ファイルの受信と保存
             if (!$files[$inputName]->receive($inputName)) {
-                $uploadErrorMsgs[] = "ファイル{$filePath['basename']}が正しく送信されませんでした。";
+                $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」が正しく送信されませんでした。";
                 $this->_media->deleteMediaById($newId);
                 continue;
             }
@@ -258,12 +251,12 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             // 拡張子が画像でファイル内容が有効ならサムネイル生成
             if (Setuco_Util_Media::isImageExtension($extType)) {
                 if (!$this->_media->isValidImageData($newFileName)) {
-                    $uploadErrorMsgs[] = "{$filePath['basename']}は不正な画像データです。";
+                    $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」は不正な画像データです。";
                     $this->_removeFileById($newId);
                     continue;
                 }
                 if (!$this->_media->saveThumbnailFromImage($newFileName)) {
-                    $uploadErrorMsgs[] = "ファイル{$filePath['basename']}のサムネイルが生成できませんでした。";
+                    $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」のサムネイルが生成できませんでした。";
                     $this->_media->deleteMediaById($newId);
                     $this->_removeFileById($newId);
                     continue;
@@ -279,22 +272,29 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             );
 
             if (!$this->_media->updateMediaInfo($newId, $dat)) {
-                $uploadErrorMsgs[] = "ファイル{$filePath['basename']}がデータベースに保存できませんでした。";
+                $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」がデータベースに保存できませんでした。";
                 $this->_media->deleteMediaById($newId);
                 $this->_removeFileById($newId);
                 continue;
             }
 
-            $uploadSuccessMsgs[] = "ファイル {$filePath['basename']} をアップロードしました。";
+            $uploadSuccessMsgs[] = "ファイル「{$fileInfo['name']}」 をアップロードしました。";
         }
 
-        foreach ($uploadErrorMsgs as $msg) {
-            $this->_helper->flashMessenger->addMessage($msg);
+        if (count($uploadErrorMsgs) > 0) {
+            $form->setErrorMessages($uploadErrorMsgs);
+            $form->markAsError();
+            $this->_setParam('flashMsgs', $uploadSuccessMsgs);
+            $this->_setParam('uploadForm', $form);
+            return $this->_forward(
+                    'index'
+            );
+        } else {
+            foreach ($uploadSuccessMsgs as $msg) {
+                $this->_helper->flashMessenger->addMessage($msg);
+            }
+            $this->_helper->redirector('index');
         }
-        foreach ($uploadSuccessMsgs as $msg) {
-            $this->_helper->flashMessenger->addMessage($msg);
-        }
-        $this->_helper->redirector('index');
     }
 
     /**
@@ -523,12 +523,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     /**
      * ファイルの絞込み・ソート用フォームを作成する
      *
-     * @param  string $fileType 絞り込みたいファイル種別
      * @return Zend_Form ファイルの絞込み・ソート用フォームオブジェクト
      * @todo フォームのハッシュ値の設定
      * @author akitsukada
      */
-    private function _createSearchForm($fileType = 'all')
+    private function _createSearchForm()
     {
         // 絞り込みフォームのオブジェクト
         $searchForm = new Zend_Form();
@@ -539,8 +538,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $fileTypeSelector = new Zend_Form_Element_Select('fileType');
         $fileTypeSelector->clearDecorators()
                 ->setLabel('ファイルの種類')
-                ->setValue(array_search($fileType,
-                                Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
+                /*
+                  ->setValue(array_search($fileType,
+                  Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
+                 *
+                 */
                 ->addDecorator('ViewHelper')
                 ->addDecorator('Label', array())
                 ->addMultiOption(
@@ -548,17 +550,23 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                         Setuco_Data_Constant_Media::FILEEXT_ALL_STRING)
                 ->addMultiOptions(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
 
+        $fileTypeRangeValidator = new Zend_Validate_Between(0, count(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()));
+        $fileTypeRangeValidator->setMessage("ファイルの種類を選択してください。");
+        $fileTypeSelector->addValidator($fileTypeRangeValidator);
         $searchForm->addElement($fileTypeSelector);
 
         // 絞込みボタン
-        $searchFormSubmit = new Zend_Form_Element_Submit(
-                        'search',
+        $searchFormSubmit = new Zend_Form_Element_Submit('search',
                         array('class' => 'upSub', 'Label' => '絞込み')
         );
         $searchFormSubmit->clearDecorators()
                 ->addDecorator('ViewHelper');
-
         $searchForm->addElement($searchFormSubmit);
+        
+        $hiddenIsNarrowDown = new Zend_Form_Element_Hidden('isNarrowDown', array(
+            'id' => 'isNarrowDown', 'value' => TRUE));
+        $hiddenIsNarrowDown->clearDecorators()->addDecorator('ViewHelper');
+        $searchForm->addElement($hiddenIsNarrowDown);
 
         return $searchForm;
     }
@@ -656,6 +664,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     'size' => 55
                 ));
         $fileSelector->setLabel(null)
+                ->clearDecorators()
+                ->addDecorator('file')
                 ->addDecorator('Label', array('tag' => null))
                 ->addDecorator('HtmlTag', null);
         $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
@@ -738,9 +748,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $validators[] = array($fileSizeValidator, true);
 
         $fileUploadValidator = new Zend_Validate_File_Upload();
-//        $fileUploadValidator->setMessage("サーバで設定された上限サイズを超えています", Zend_Validate_File_Upload::INI_SIZE);
-//        $fileUploadValidator->setMessage("サーバで設定された上限サイズを超えています", Zend_Validate_File_Upload::FORM_SIZE);
-        $fileUploadValidator->setMessage("hogehogehoge");
+        $fileUploadValidator->setMessage("アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                Zend_Validate_File_Upload::INI_SIZE);
+        $fileUploadValidator->setMessage("アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                Zend_Validate_File_Upload::FORM_SIZE);
         $validators[] = array($fileUploadValidator, true);
 
         $fileExtValidator = new Zend_Validate_File_Extension(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
