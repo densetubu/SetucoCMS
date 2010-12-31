@@ -40,14 +40,13 @@
     </div>
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->updateForm)) ?>
-    <?php // echo $this->partial('error-message.phtml', array('errorForm' => $this->adapter)) ?>
-
 
     <form action="<?php echo $this->updateForm->getAction() ?>" method="post" enctype="MULTIPART/FORM-DATA">
+        <?php echo $this->updateForm->getElement('preExtension') ?>
         <dl id="inputArea">
             <dt>
                 <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
-                <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" />
+                    <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" />
                 </a>
             </dt>
             <dt>ファイル名</dt>

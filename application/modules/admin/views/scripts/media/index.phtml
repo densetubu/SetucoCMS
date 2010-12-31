@@ -44,6 +44,7 @@
     </div>
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->uploadForm)) ?>
 
     <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
 
