@@ -33,6 +33,7 @@
             <th scope="col" id="tableFirst">表示</th>
             <th scope="col">タイトル名
             <?php if (!$this->isSearched): ?>
+
                 <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/title/order/desc') ?>">
                     <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                 </a>
@@ -40,9 +41,11 @@
                     <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                 </a>
             <?php endif ?>
+
             </th>
             <th scope="col">制作日
             <?php if (!$this->isSearched): ?>
+
                 <a href="<?php echo $this->baseUrl('/admin/page/index/page/1/sort/create_date/order/desc') ?>">
                     <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                 </a>
@@ -50,6 +53,7 @@
                     <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                 </a>
             <?php endif ?>
+
             </th>
             <th scope="col">制作者</th>
             <th scope="col">カテゴリー</th>

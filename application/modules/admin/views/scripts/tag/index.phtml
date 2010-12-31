@@ -70,8 +70,9 @@
         </thead>
         <tbody>
             <?php foreach($this->tags as $index => $tag): ?>
+
             <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
-                <?php echo $this->partial('tag-row.phtml', array('index' => $index, 'tag' => $tag, 'editTagForm' => $this->editTagForm)) ?>
+                <?php echo $this->partial('tag-row.phtml', array('index' => $index, 'tag' => $tag, 'editTagForm' => $this->editTagForm)) . "\n" ?>
             </tr>
             <?php endforeach ?>
         </tbody>
