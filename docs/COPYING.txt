@@ -1,0 +1,9 @@
+Copyright and License notice about SetucoCMS
+============================================
+
+Most of the files included in SetucoCMS package are licensed under
+the "GNU PUBLIC LICENSE VERSION 2.0".
+see /docs/GPLv2.txt
+
+Copyright 2010 SetucoCMS Project
+http://sourceforge.jp/projects/setucocms
