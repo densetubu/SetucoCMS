@@ -108,13 +108,13 @@
                 <td class="thumb">
                     <?php if (!empty($media['uploadUrl'])): ?>
                     <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
-                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
+                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
                     </a>
                     <?php else: ?>
                     <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
                     <?php endif ?>
                 </td>
-                <td><?php echo "{$media['name']} [{$media['type']}]" ?></td>
+                <td><?php echo $this->escape("{$media['name']} [{$media['type']}]"); ?></td>
                 <td><?php echo $media['update_date'] ?></td>
                 <td><?php echo $media['create_date'] ?></td>
                 <td>
@@ -123,7 +123,7 @@
                     </a>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$this->fileType}/sort/{$this->sortColumn}/order/{$this->order}") ?>', '<?php echo $media['name'] ?>');">
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/media/delete/id/{$media['id']}/page/{$this->currentPage}/type/{$this->fileType}/sort/{$this->sortColumn}/order/{$this->order}") ?>', '<?php echo $this->escape($media['name']) ?>');">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
                     </a>
                 </td>

@@ -558,11 +558,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $fileTypeSelector = new Zend_Form_Element_Select('fileType');
         $fileTypeSelector->clearDecorators()
                 ->setLabel('ファイルの種類')
-                /*
-                  ->setValue(array_search($fileType,
-                  Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()))
-                 *
-                 */
                 ->addDecorator('ViewHelper')
                 ->addDecorator('Label', array())
                 ->addMultiOption(
@@ -603,7 +598,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     {
 
         // フォームオブジェクト作成
-        $uploadForm = new Zend_Form();
+        $uploadForm = new Setuco_Form();
         $uploadForm->setName('upload_img');
         $uploadForm->setMethod('post');
         $uploadForm->setAction($this->_helper->url('create'));
@@ -649,7 +644,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     {
 
         // 編集用フォームの作成
-        $updateForm = new Zend_Form();
+        $updateForm = new Setuco_Form();
         $updateForm->setName('upload_img');
         $updateForm->setMethod('post');
         $updateForm->setAction($this->_helper->url('update/id/' . $id));

@@ -29,14 +29,14 @@
         <a href="<?php echo $this->baseUrl('/admin/media') ?>">ファイルの追加・編集・削除</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
-    <p><?php echo "「{$this->mediaData['name']}」({$this->mediaData['id']}.{$this->mediaData['type']})" ?>の編集</p>
+    <p><?php echo $this->escape("「{$this->mediaData['name']}」({$this->mediaData['id']}.{$this->mediaData['type']})") ?>の編集</p>
 </div>
 <!-- topicpath END -->
 
 <!-- section START -->
 <div class="section">
     <div class="hAreaText">
-        <h3 id="textType"><?php echo "「{$this->mediaData['name']}」({$this->mediaData['id']}.{$this->mediaData['type']})" ?>の編集</h3>
+        <h3 id="textType"><?php echo $this->escape("「{$this->mediaData['name']}」({$this->mediaData['id']}.{$this->mediaData['type']})") ?>の編集</h3>
     </div>
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->updateForm)) ?>
@@ -46,7 +46,7 @@
             <dt>
                 <?php echo $this->updateForm->getElement('preExtension') ?>
                 <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
-                    <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->mediaData['comment'] ?>" />
+                    <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->escape($this->mediaData['comment']) ?>" />
                 </a>
             </dt>
             <dt>ファイル名</dt>
