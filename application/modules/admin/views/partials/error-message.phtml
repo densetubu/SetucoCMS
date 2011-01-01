@@ -17,7 +17,7 @@
  */
 ?>
 <?php if ($this->errorForm->isErrors()): ?>
-<div class="messageArea error">
+<div class="errorMessageArea">
 <?php foreach ($this->errorForm->getMessages() as $messages): ?>
     <?php if (!is_array($messages)):?>
     <p class="clear"><?php echo $this->escape($messages) ?></p>
@@ -28,7 +28,7 @@
     <?php endif ?>
 <?php endforeach ?>
     <p>
-        <a href="javascript:void(0)" onclick="hideMessageArea()">OK</a>
+        <a href="javascript:void(0)" onclick="hideErrorMessageArea()">OK</a>
     </p>
 </div>
 <?php endif ?>

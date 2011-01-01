@@ -7,6 +7,9 @@ dojo.require('dojo.NodeList-html');
 function hideMessageArea() {
     dojo.query('.messageArea').style('display', 'none');
 }
+function hideErrorMessageArea() {
+    dojo.query('.errorMessageArea').style('display', 'none');
+}
 function confirmDeleteRedirect(url, item){
     if (confirm("「" + item + "」を本当に削除してよろしいですか？")) {
         location.href = url;

@@ -127,6 +127,7 @@ div#mainContent div.hAreaText:after ,
 div#mainContent dl.contentsList:after ,
 div#topicPath:after ,
 div.messageArea:after ,
+div.errorMessageArea:after ,
 dl.editArea:after ,
 div#pageNav ul:after ,
 .inputStraight:after,
@@ -386,26 +387,25 @@ div#topicPath p img {
 /*------------------------------------------------------------*/
 /*    messageArea style                                       */
 /*------------------------------------------------------------*/
-div.messageArea {
+div.messageArea,
+div.errorMessageArea {
     clear: both;
-    background-color: #fff0d6;
-    border: solid 1px #ffd68e;
     margin: 0 0 10px;
     padding: 5px 15px;
     zoom: 100%;
 }
-div.messageArea p {
-    float: left;
-    margin-right: 20px;
+div.messageArea {
+    background-color: #fff0d6;
+    border: solid 1px #ffd68e;
 }
-div.messageArea p.nonF {
-    float: none;
-    margin-right: 20px;
-}
-/* -- error -- */
-div.error {
+div.errorMessageArea {
     background-color: #ffe7de;
     border: solid 1px #ff8988;
+}
+div.messageArea p ,
+div.errorMessageArea p {
+    float: left;
+    margin-right: 20px;
 }
 
 /*------------------------------------------------------------*/
