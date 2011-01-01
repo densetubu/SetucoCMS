@@ -759,7 +759,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ));
         $minSizeString = self::FILE_SIZE_MIN . 'Byte';
         $maxSizeString = (self::FILE_SIZE_MAX / 1024) . 'kB';
-        $sizeErrorString = "サイズエラー「%value%」アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。"
+        $sizeErrorString = "サイズエラー「%value%」　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。"
                 . "選択されたファイルのサイズは %size% です。";
         $fileSizeValidator->setMessages(array(
             Zend_Validate_File_Size::TOO_BIG => $sizeErrorString,
@@ -777,7 +777,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $validators[] = array($fileUploadValidator, true);
 
         $fileExtValidator = new Zend_Validate_File_Extension(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
-        $fileExtValidator->setMessage("拡張子エラー「%value%」アップロードできるファイルの種類は jpg, gif, png, pdf, txt です。");
+        $fileExtValidator->setMessage("拡張子エラー「%value%」　アップロードできるファイルの種類は jpg, gif, png, pdf, txt です。");
         $validators[] = array($fileExtValidator, true);
 
         return $validators;
