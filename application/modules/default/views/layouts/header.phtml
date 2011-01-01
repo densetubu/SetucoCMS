@@ -21,8 +21,8 @@
     <div id="header_inner"> 
 
         <div id="discript"> 
-            <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1"><?php echo $this->siteInfos['name'] ?></a></h1> 
-            <p><?php echo $this->siteInfos['comment'] ?></p> 
+            <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1"><?php echo $this->escape($this->siteInfos['name']) ?></a></h1>
+            <p><?php echo $this->escape($this->siteInfos['comment']) ?></p>
         </div> 
 
         <form action="<?php echo $this->baseUrl('/page/search/') ?>" method="get">

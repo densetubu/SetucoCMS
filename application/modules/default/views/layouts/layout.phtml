@@ -20,9 +20,9 @@
 
 //ページタイトルがある場合とない場合でページタイトルの形式を変更する
 if (empty($this->pageTitle)) {
-	$this->headTitle($this->siteInfos['name']);
+	$this->headTitle($this->escape($this->siteInfos['name']));
 } else {
-    $this->headTitle($this->pageTitle)->setSeparator(' | ')->headTitle($this->siteInfos['name']);
+    $this->headTitle($this->pageTitle)->setSeparator(' | ')->headTitle($this->escape($this->siteInfos['name']));
 }
 
 ?>
@@ -34,14 +34,14 @@ if (empty($this->pageTitle)) {
         <meta http-equiv="content-script-type" content="text/javascript" />
 
         <meta name="author" content="" />
-        <meta name="copyright" content="<?php echo $this->siteInfos['name'] ?>" />
+        <meta name="copyright" content="<?php echo $this->escape($this->siteInfos['name']) ?>" />
         <meta name="generator" content="SetucoCMS <?php echo APPLICATION_VERSION ?>" />
         <meta http-equiv="imagetoolbar" content="no" />
 
-        <meta name="description" content="<?php echo $this->siteInfos['comment'] ?>" />
-        <meta name="keywords" content="<?php echo $this->siteInfos['keyword'] ?>" />
+        <meta name="description" content="<?php echo $this->escape($this->siteInfos['comment']) ?>" />
+        <meta name="keywords" content="<?php echo $this->escape($this->siteInfos['keyword']) ?>" />
 
-        <link rel="start" href="<?php echo $this->siteInfos['url'] ?>" title="このサイトのトップページ" />
+        <link rel="start" href="<?php echo $this->escape($this->siteInfos['url']) ?>" title="このサイトのトップページ" />
 
         <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('/css/style.css') ?>" media="screen" />
 

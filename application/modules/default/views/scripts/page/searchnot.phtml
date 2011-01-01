@@ -20,10 +20,10 @@
 <!-- entry START -->
 <div class="entry">
     <div class="entryHead">
-        <h2><span>「<?php echo $this->keyword ?>」の検索結果（<?php echo $this->resultCount ?>件）</span></h2>
+        <h2><span>「<?php echo $this->escape($this->keyword) ?>」の検索結果（<?php echo $this->resultCount ?>件）</span></h2>
     </div>
     <div class="entryBody">
-        <p>「<?php echo $this->keyword ?>」に一致するページはありませんでした。<br />以下のことを確認して再度検索してみてください。</p>
+        <p>「<?php echo $this->escape($this->keyword) ?>」に一致するページはありませんでした。<br />以下のことを確認して再度検索してみてください。</p>
         <ul class="list">
             <li>キーワードに誤字・脱字はありませんか？</li>
             <li>キーワードは長すぎませんか？</li>

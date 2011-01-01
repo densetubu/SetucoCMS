@@ -30,9 +30,9 @@
             <?php foreach ($this->categoryLists as $category): ?>
             <li>
                 <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
-                <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $category['name'] ?></a>
+                <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $this->escape($category['name']) ?></a>
                 <?php else: //使用していない場合はリンクしない?>
-                <span><?php echo $category['name'] ?></span>
+                <span><?php echo $this->escape($category['name']) ?></span>
                 <?php endif; ?>
             </li>
             <?php endforeach; ?>
@@ -48,7 +48,7 @@
         <ul id="tagCloud">
             <?php foreach ($this->tagClouds as $tag): ?>
             <li class="level<?php echo $tag['level'] ?>">
-                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $tag['name'] ?></a>
+                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $this->escape($tag['name']) ?></a>
             </li>
            <?php endforeach;?>
        </ul>

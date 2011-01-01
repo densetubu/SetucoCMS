@@ -18,18 +18,18 @@
  */
 ?>
 <?php if (count($this->entries) > 0): ?>
-    <p><?php echo "カテゴリー「{$this->category['name']}」" ?>のページ一覧</p>
+    <p><?php echo "カテゴリー「{$this->escape($this->category['name'])}」" ?>のページ一覧</p>
     <?php foreach($this->entries as $id => $entry): ?>
     <?php $accountName = is_null($entry['nickname']) ? '誰？' : $entry['nickname'] ?>
     <!-- entry START -->
     <div class="entry">
         <div class="entryHead">
-            <h2><a href="<?php echo $this->baseUrl('page/show/id/' . $entry['id']) ?>"><?php echo $entry['title'] ?></a></h2>
+            <h2><a href="<?php echo $this->baseUrl('page/show/id/' . $entry['id']) ?>"><?php echo $this->escape($entry['title']) ?></a></h2>
             <p><?php echo date('Y年m月d日', strtotime($entry['update_date'])) ?></p>
         </div>
         <dl class="category">
             <dt>カテゴリー：</dt>
-                <dd><a href="<?php echo $this->baseUrl('page/category/id/' . $this->category['id']) ?>" ><?php echo $this->category['name'] ?></a></dd>
+                <dd><a href="<?php echo $this->baseUrl('page/category/id/' . $this->category['id']) ?>" ><?php echo $this->escape($this->category['name']) ?></a></dd>
         </dl>
         <div class="entryBody">
             <?php echo mb_substr($entry['contents'], 0, 50, 'UTF-8') . "\n" //todo コンテンツを5行のみ表示する（今は適当に50を指定） ?>
