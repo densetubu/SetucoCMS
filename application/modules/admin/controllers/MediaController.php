@@ -219,7 +219,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // 個々のファイルをバリデート
             if (!$files[$inputName]->isValid($inputName)) {
-                $uploadErrorMsgs[] = array_pop($files[$inputName]->getMessages());
+                $msgs = $files[$inputName]->getMessages();
+                foreach ($msgs as $msg) {
+                    $uploadErrorMsgs[] = $msg;
+                }
                 continue; // 次のファイル処理を続ける
             }
 
@@ -332,8 +335,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                         $this->_createUpdateForm($id)
         );
         $updateForm->setDefaults(array(
-            'name' => $mediaData['name'],
-            'comment' => $mediaData['comment'],
+            'name' => $this->_getParam('inputName', $mediaData['name']),
+            'comment' => $this->_getParam('inputComment', $mediaData['comment']),
             'preExtension' => $mediaData['type']
         ));
         $this->view->updateForm = $updateForm;
@@ -379,11 +382,14 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             );
         }
 
-        $redirectUrl = '/admin/media/form/id/' . $id;
+        // 入力されたファイル名と説明　バリデーションエラー時にフォームにセットする。
+        $inputName = $post['name'];
+        $inputComment = $post['comment'];
 
         // Postのバリデーション
-
         if (!$form->isValid($post)) {
+            $this->_setParam('inputName', $inputName);
+            $this->_setParam('inputComment', $inputComment);
             $this->_setParam('updateForm', $form);
             return $this->_forward(
                     'form', null, null,
@@ -415,6 +421,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             if (!$this->_backupFileById($id, $preExtType)) {
                 $form->markAsError();
                 $form->setErrorMessages(array("既存のファイル{$id}.{$extType}が削除できません。"));
+                $this->_setParam('inputName', $inputName);
+                $this->_setParam('inputComment', $inputComment);
                 $this->_setParam('updateForm', $form);
                 return $this->_forward(
                         'form', null, null,
@@ -427,6 +435,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $form->markAsError();
                 $this->_recoverFromBackUpFile($id, $preExtType);
                 $form->setErrorMessages(array("既存のファイル{$id}.{$extType}が削除できません。"));
+                $this->_setParam('inputName', $inputName);
+                $this->_setParam('inputComment', $inputComment);
                 $this->_setParam('updateForm', $form);
                 return $this->_forward(
                         'form', null, null,
@@ -445,6 +455,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 $this->_recoverFromBackUpFile($id, $preExtType);
                 $form->markAsError();
                 $form->setErrorMessages(array('ファイルが正しく送信されませんでした。'));
+                $this->_setParam('inputName', $inputName);
+                $this->_setParam('inputComment', $inputComment);
                 $this->_setParam('updateForm', $form);
                 return $this->_forward(
                         'form', null, null,
@@ -460,6 +472,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     $this->_recoverFromBackUpFile($id, $preExtType);
                     $form->markAsError();
                     $form->setErrorMessages(array("{$newFileInfo['basename']}は不正な画像データです。"));
+                    $this->_setParam('inputName', $inputName);
+                    $this->_setParam('inputComment', $inputComment);
                     $this->_setParam('updateForm', $form);
                     return $this->_forward(
                             'form', null, null,
@@ -472,6 +486,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     $this->_recoverFromBackUpFile($id, $preExtType);
                     $form->markAsError();
                     $form->setErrorMessages(array('サムネイルが保存できませんでした。'));
+                    $this->_setParam('inputName', $inputName);
+                    $this->_setParam('inputComment', $inputComment);
                     $this->_setParam('updateForm', $form);
                     return $this->_forward(
                             'form', null, null,
@@ -484,13 +500,22 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $fileInfo['type'] = $extType;
         }
 
+        $redirectUrl = '/admin/media/form/id/' . $id;
+
         // DBの更新
         if (!$this->_media->updateMediaInfo($id, $fileInfo)) {
-            $this->_helper->flashMessenger->addMessage('ファイルが正しく更新できませんでした。');
+            $form->markAsError();
+            $form->setErrorMessages(array('ファイルが正しく更新できませんでした。'));
+            $this->_setParam('inputName', $inputName);
+            $this->_setParam('inputComment', $inputComment);
+            $this->_setParam('updateForm', $form);
             if ($isFileUploaded) {
                 $this->_recoverFromBackUpFile($id, $preExtType);
             }
-            $this->_redirect($redirectUrl);
+            return $this->_forward(
+                    'form', null, null,
+                    array('id' => $id)
+            );
         }
 
         // 処理正常終了
@@ -613,7 +638,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                     ->clearDecorators()
                     ->addDecorator('file');
             $fileSelector->setValidators($this->_makeFileValidators());
-            // $fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
             $uploadForm->addElement($fileSelector);
         }
 
@@ -683,7 +707,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 ->addDecorator('file')
                 ->addDecorator('Label', array('tag' => null))
                 ->addDecorator('HtmlTag', null);
-        //$fileSelector->setMaxFileSize(self::FILE_SIZE_MAX);
         $fileSelector->setValidators($this->_makeFileValidators());
 
         // submitボタンの作成と余分な装飾タグの除去
@@ -748,19 +771,24 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $validators = array();
 
+        $fileExtValidator = new Zend_Validate_File_Extension(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
+        $fileExtValidator->setMessage("拡張子エラー「%value%」　アップロードできるファイルの種類は "
+                . implode(", ", Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS()) . " です。");
+        $validators[] = $fileExtValidator;
+
         $fileSizeValidator = new Zend_Validate_File_Size(array(
                     'min' => self::FILE_SIZE_MIN,
                     'max' => self::FILE_SIZE_MAX
                 ));
         $minSizeString = self::FILE_SIZE_MIN . 'Byte';
         $maxSizeString = (self::FILE_SIZE_MAX / 1024) . 'kB';
-        $sizeErrorString = "サイズエラー「%value%」　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。"
-                . "選択されたファイルのサイズは %size% です。";
+        $sizeErrorString =
+                "サイズエラー「%value%（%size%）」　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。";
         $fileSizeValidator->setMessages(array(
             Zend_Validate_File_Size::TOO_BIG => $sizeErrorString,
             zend_validate_file_size::TOO_SMALL => $sizeErrorString
         ));
-        $validators[] = array($fileSizeValidator, true);
+        $validators[] = $fileSizeValidator;
 
         $fileUploadValidator = new Zend_Validate_File_Upload();
         $fileUploadValidator->setMessage(
@@ -769,11 +797,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $fileUploadValidator->setMessage(
                 "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::FORM_SIZE);
-        $validators[] = array($fileUploadValidator, true);
-
-        $fileExtValidator = new Zend_Validate_File_Extension(Setuco_Data_Constant_Media::VALID_FILE_EXTENSIONS());
-        $fileExtValidator->setMessage("拡張子エラー「%value%」　アップロードできるファイルの種類は jpg, gif, png, pdf, txt です。");
-        $validators[] = array($fileExtValidator, true);
+        $validators[] = $fileUploadValidator;
 
         return $validators;
     }
