@@ -22,6 +22,17 @@ class Setuco_Filter_FullWidthStringTrim extends Zend_Filter_StringTrim
 {
 
     /**
+     * StringTrimのtrim対象文字に半角／全角スペースを指定する
+     *
+     * @param  string|array|Zend_Config $charList
+     * @return void
+     */
+    public function __construct($charList = ' 　')
+    {
+        parent::__construct($charList);
+    }
+
+    /**
      * StringTrimの_unicodeTrimメソッド、全角スペース対応版
      *
      * @param string $value
