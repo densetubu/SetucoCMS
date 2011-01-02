@@ -345,7 +345,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'id' => 'query',
                      'class' => 'defaultInput',
                      'filters' => array(
-                         new Zend_Filter_StringTrim(" |　")
+                         new Setuco_Filter_FullWidthStringTrim(' ' . '　')
                      ),
                      'validators' => $this->_makeSearchQueryValidators()
                  )
