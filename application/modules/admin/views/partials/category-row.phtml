@@ -25,8 +25,8 @@
             <input type="text" name="name" id="name<?php  echo $this->escape($this->category['id']) ?>" value="" />
             <input type="hidden" name="id" id="id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['id']) ?>" />
             <input type="hidden" name="parent_id" id="parent_id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['parent_id']) ?>" />
-            <input type="button" name="canselButton" onclick="hideCategoryEdit(this)" value="キャンセル">
             <input type="submit" class="sub" value="保存" />
+            <input type="button" name="canselButton" onclick="hideCategoryEdit(this)" value="キャンセル" />
         </p>
     </form>
     <span class="tagInfo"><?php echo $this->escape($this->category['name']) ?></span>
