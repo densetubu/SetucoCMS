@@ -382,14 +382,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             );
         }
 
-        // 入力されたファイル名と説明　バリデーションエラー時にフォームにセットする。
-        $inputName = $post['name'];
-        $inputComment = $post['comment'];
-
         // Postのバリデーション
-        if (!$form->isValid($post)) {
-            $this->_setParam('inputName', $inputName);
-            $this->_setParam('inputComment', $inputComment);
+        if (!$form->isValid($this->_getAllParams())) {
+            $this->_setParam('inputName', $form->getElement('name')->getValue());
+            $this->_setParam('inputComment', $form->getElement('comment')->getValue());
             $this->_setParam('updateForm', $form);
             return $this->_forward(
                     'form', null, null,
@@ -397,12 +393,15 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             );
         }
 
+        $inputName = $form->getElement('name')->getValue();
+        $inputComment = $form->getElement('comment')->getValue();
+
         $file = $form->getElement('upload_img');
 
         // サービスにDBをUpdateさせるためのファイルの情報
         $fileInfo = array(
-            'name' => $post['name'],
-            'comment' => $post['comment'],
+            'name' => $inputName,
+            'comment' => $inputComment,
             'update_date' => date('Y/m/d H:i:s')
         );
 
@@ -678,7 +677,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $txtFileName = new Zend_Form_Element_Text('name', array(
                     'id' => 'name',
                     'required' => TRUE,
-                    'filters' => array('StringTrim')
+                    'filters' => array(new Setuco_Filter_FullWidthStringTrim())
                 ));
         $txtFileName->clearDecorators()
                 ->addDecorator('ViewHelper')
