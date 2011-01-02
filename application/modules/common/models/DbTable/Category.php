@@ -1,4 +1,5 @@
 <?php
+
 /**
  * categoryテーブルのDbTable(DAO)クラスです。
  *
@@ -22,20 +23,19 @@
  */
 class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 {
+
     /**
      * テーブル名
      *
      * @var String
      */
     protected $_name = 'category';
-
     /**
      * プライマリーキーのカラム名
      *
      * @var String
      */
     protected $_primary = 'id';
-
     /**
      * テーブルのalias名
      *
@@ -58,15 +58,15 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     /**
      * 共通の初期設定をしたSELECTオブジェクト
      *
-     * @param boolean[option] 外部結合するか　デフォルトはfalse
      * @return Zend_Db_Select 共通の初期設定をしたSELECTオブジェクト
      * @author suzuki-mar
      */
-    protected function _initializeSelect($isJoinTable = false)
+    protected function _initializeSelect()
     {
         //初期設定をしているカテゴリーのSELECT文を取得する
         $select = $this->select();
-        $select->where('id != ?', self::PARENT_ROOT_ID);
+        $this->_addParentIdWhere($select, '!=');
+        
         return $select;
     }
 
@@ -77,76 +77,49 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      */
     protected function _initializeJoinSelect()
     {
-
         $select = $this->select();
-        $select->where('c.id != ?', self::PARENT_ROOT_ID);
-        $select->from(array('c' => $this->_name), array('*'));
+        $this->_addParentIdWhere($select, '!=', $this->_alias);
+        $select->from(array($this->_alias => $this->_name), array('*'));
 
         return $select;
     }
 
-
     /**
-     * 外部テーブルと結合したものを取得する
-     * groupなどの必要な設定もしている
-     *
-     * @param Zend_Db_Select $select 結合するSELECTオブジェクト
-     * @return Zend_Db_Select 外部テーブルと結合したSELECTオブジェクト
-     * @author suzuki-mar
-     */
-    protected function _joinPage($select)
-    {
-
-
-        //テーブルを結合する 使用されていないものも取得する
-        $select->joinLeft(array('p' => 'page'), 'c.id = p.category_id', array('title'));
-        //結合するときはfalseにしないといけない
-        $select->setIntegrityCheck(false);
-
-        //categoryでグループ化
-        $select->group('c.id');
-
-
-        return $select;
-
-    }
-
-    /**
+     * 共通のwhere句の設定をする
      * 未分類のカテゴリーを取得するwhere句をセットする　オプションで取得しないにもできる
      * 未分類のカテゴリーの処理が変わる可能性があるので
      *
      * @param Zend_Select $select where句をセットするSelectオブジェクト
-     * @param boolean isDeselect 未分類のカテゴリーを取得しないのか デフォルトはtrue
+     * @param string $operator where句の演算子
+     * @param stirng[option] $aliasName エリアスに設定した名前 外部結合しない場合は引数を設定しない
      * @return Zend_Db_Select 未分類のカテゴリーに関するwhereを設定してSelectオブジェクト
      * @author suzuki-mar
      */
-    protected function _defaultWhere(Zend_Db_Select $select, $isDeselect = true)
+    protected function _addParentIdWhere(Zend_Db_Select &$select, $operator, $alias = null)
     {
-        //デフォルトを取得する
-        if ($isDeselect) {
-            $operator = '=';
+        //外部結合しない場合はエリアスの設定をしない
+        if (is_null($alias)) {
+            $columnName = 'id';
         } else {
-            $operator = '!=';
+            $columnName = "{$alias}.id";
         }
 
-        $select->where("c.id {$operator} -1");
-        return $select;
+        $select->where("{$columnName} {$operator} ?", self::PARENT_ROOT_ID);
     }
 
-
     /**
-     * 使用されているカテゴリーを取得する
+     * 使用しているカテゴリーを取得する
      *
      * @return array 使用されているカテゴリー一覧
      * @author suzuki-mar
      */
-    public function findUseCategories()
+    public function findUsedCategories()
     {
         //初期設定をしているカテゴリーのSELECT文を取得する 外部結合する設定
         $select = $this->_initializeJoinSelect();
 
         //pageテーブルと結合する
-        $select = $this->_joinPage($select);
+        $this->_joinPage($select);
 
         //公開状態のものしか取得しない
         $select->where('status = ?', Setuco_Data_Constant_Page::STATUS_RELEASE);
@@ -161,6 +134,27 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         return $result;
     }
+
+
+    /**
+     * 外部テーブルと結合したものを取得する
+     * groupなどの必要な設定もしている
+     *
+     * @param Zend_Db_Select $select 結合するSELECTオブジェクト
+     * @return void
+     * @author suzuki-mar
+     */
+    protected function _joinPage(Zend_Db_Select &$select)
+    {
+        //テーブルを結合する 使用されていないものも取得する
+        $select->joinLeft(array('p' => 'page'), "{$this->_alias}.id = p.category_id", array('title'));
+        //結合するときはfalseにしないといけない
+        $select->setIntegrityCheck(false);
+
+        //categoryでグループ化
+        $select->group("{$this->_alias}.id");
+    }
+
 
     /**
      * すべてのカテゴリーを取得する
@@ -217,8 +211,8 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     public function findCategories($selectColumns, $sortColumn, $order = 'ASC')
     {
         $select = $this->_initializeSelect()
-                ->from($this->_name, $selectColumns)
-                ->order("{$sortColumn} {$order}");
+                        ->from($this->_name, $selectColumns)
+                        ->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 
@@ -232,8 +226,8 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     public function findCategoriesByParentId($parentId, $sortColumn, $order = 'ASC')
     {
         $select = $this->_initializeSelect()
-            ->where('parent_id = ?', $parentId)
-            ->order("{$sortColumn} {$order}");
+                        ->where('parent_id = ?', $parentId)
+                        ->order("{$sortColumn} {$order}");
         return $this->fetchAll($select)->toArray();
     }
 
@@ -249,7 +243,6 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         $result = $this->fetchCount($select);
         return $result;
     }
-
 
     /**
      * データの取得件数をカウントする
@@ -288,14 +281,13 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         //取得に成功した場合のみ取得したデータを戻り値にする
         if ($searchResult) {
-        	$result = $searchResult->toArray();
+            $result = $searchResult->toArray();
         } else {
             $result = false;
         }
 
         return $result;
     }
-
 
     /**
      * プライマリキーを取得する
@@ -309,7 +301,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         //一回getPrimaryを使用したら、配列になってしまう ZendFrameworkの仕様?
         if (is_array($primary) && count($primary) === 1) {
-           //配列はひとつしかない
+            //配列はひとつしかない
             $primary = array_values($primary);
             $result = $primary[0];
         } else {
@@ -318,7 +310,6 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
 
         return $result;
     }
-
 
 }
 

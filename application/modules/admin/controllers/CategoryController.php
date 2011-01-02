@@ -21,7 +21,8 @@
  * @subpackage  Controller
  * @author      charlesvineyard suzuki-mar saniker10
  */
-class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
+class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
+{
 
     /**
      * 全アクションで使用するサービスクラス
@@ -43,6 +44,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      */
     private $_validateUpdateForm = null;
 
+    /**
+     * 削除用のフォーム (エラーメッセージ）を入れるだけ
+     *
+     * @var Setuco_Form
+     */
+    private $_validateDeleteForm = null;
 
     /**
      * コントローラーの共通設定をする
@@ -51,17 +58,21 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * @return void
      * @author suzuki-mar
      */
-    public function init() {
+    public function init()
+    {
         //親クラスの設定を引き継ぐ
         parent::init();
 
         //全アクションで使用するサービスクラスのインスタンを生成する
         $this->_categoryService = new Admin_Model_Category();
-        
+
         //新規作成用のバリデートフォーム
-        $this->_validateCreateForm = $this->_validateCreate();
+        $this->_validateCreateForm = $this->_createNewValidateForm();
         //編集用のバリデートフォーム
-        $this->_validateUpdateForm = $this->_validateUpdate();
+        $this->_validateUpdateForm = $this->_createUpdateValidateForm();
+
+        //削除用のフォーム（エラーメッセージを入れるだけ)
+        $this->_validateDeleteForm = new Setuco_Form();
     }
 
     /**
@@ -73,7 +84,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * @author charlesvineyard suzuki-mar saniker10
      * @todo Flashメッセージの取得
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         // フラッシュメッセージ設定
         $this->_showFlashMessages();
 
@@ -81,6 +93,15 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
         $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
         $max = $this->_categoryService->countCategories();
         $this->setPagerForView($max);
+
+        //バリデートに失敗したエラーフォームがあればセットする
+        if ($this->_hasParam('errorForm')) {
+            $this->view->errorForm = $this->_getParam('errorForm');
+        }
+
+        $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', $this->_getParam('inputCreateCategoryName', '新規カテゴリー'));
+        
+        
     }
 
     /**
@@ -97,24 +118,25 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
             $this->_redirect('/admin/category/index');
         }
 
-        //新規登録のバリデートオブジェクトを取得する
-        $validateForm = $this->_validateCreate();
-
         //入力したデータをバリデートチェックをする
         if ($this->_validateCreateForm->isValid($this->_getAllParams())) {
             $inputData = $this->_validateCreateForm->getValues();
             $registData['name'] = $inputData['cat_name'];
 
+            $isCreateSuccess = $this->_categoryService->registCategory($registData);
+
             //カテゴリーを新規作成する
-            if ($this->_categoryService->registCategory($registData)) {
+            if ($isCreateSuccess) {
                 $this->_helper->flashMessenger("「{$registData['name']}」を作成しました");
-                $isSetFlashMessage = true;
+            } else {
+                $errorMessages = $this->_setExceptionErrorMessages('create');
             }
         }
 
-        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger($this->_getErrorMessage());
+        if (!(isset($isCreateSuccess) && $isCreateSuccess === true)) {
+            $this->_setParam('errorForm', $this->_validateCreateForm);
+            $this->_setParam('inputCreateCategoryName', $this->_getParam('cat_name'));
+            return $this->_forward('index');
         }
 
         $this->_redirect('/admin/category/index');
@@ -127,39 +149,39 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * @return void
      * @author charlesvineyard suzuki_mar
      */
-    public function updateAction() {
-        //フォームから値を送信されなかったら、indexに遷移する
+    public function updateAction()
+    {
+        //フォームから値を送信されなかったら、indexに遷移する 直接アクセスの禁止
         if (!$this->_request->isPost()) {
             $this->_redirect('/admin/category/index');
         }
 
         //入力したデータをバリデートチェックをする
         if ($this->_validateUpdateForm->isValid($this->_getAllParams())) {
-            $validateData  = $this->_validateUpdateForm->getValues();
-            $updateData['name'] = $validateData['name'];
+            $validateData = $this->_validateUpdateForm->getValues();
 
-           $oldName = $this->_categoryService->findNameById($validateData['id']);
+            $oldName = $this->_categoryService->findNameById($validateData['id']);
 
-           $isUpdated = $this->_categoryService->updateCategory($validateData['id'], $updateData);
-           
-            //カテゴリーを編集する
-            if ($isUpdated) {
+            $isUpdateSuccess = $this->_categoryService->updateCategory($validateData['id'], $validateData);
+            if ($isUpdateSuccess) {
 
                 //カテゴリー名が同じ場合は,違うメッセージを表示する
-                if ($oldName === $updateData['name']) {
-                    $actionMessage = "{$updateData['name']}のカテゴリーを編集しました。";
+                if ($oldName === $validateData['name']) {
+                    $actionMessage = "「{$validateData['name']}」のカテゴリーを編集しました。";
                 } else {
-                    $actionMessage = "{$oldName}から{$updateData['name']}にカテゴリー名を編集しました。";
+                    $actionMessage = "「{$oldName}」から「{$validateData['name']}」にカテゴリー名を編集しました。";
                 }
-
                 $this->_helper->flashMessenger($actionMessage);
-                $isSetFlashMessage = true;
+            } else {
+                //DBの実行に失敗した場合はエラーメッセージがないので、例外エラーメッセージを設定する
+                $this->_setExceptionErrorMessages('update');
             }
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger($this->_getErrorMessage('update'));
+        if (!(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
+            $this->_setParam('errorForm', $this->_validateUpdateForm);
+            return $this->_forward('index');
         }
 
 
@@ -172,7 +194,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * @return void
      * @author charlesvineyard suzuki-mar
      */
-    public function deleteAction() {
+    public function deleteAction()
+    {
         //フォームからidが送信されなかったら、indexに遷移する
         if (!$this->_hasParam('id')) {
             $this->_redirect('/admin/category/index');
@@ -184,16 +207,18 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
 
             $categoryName = $this->_categoryService->findNameById($this->_getParam('id'));
 
+            $isDeleteSuccess = $this->_categoryService->deleteCategory($this->_getParam('id'));
             //カテゴリーを削除する
-            if ($this->_categoryService->deleteCategory($this->_getParam('id'))) {
-                $this->_helper->flashMessenger("カテゴリー{$categoryName}の削除に成功しました");
-                $isSetFlashMessage = true;
+            if ($isDeleteSuccess) {
+                $this->_helper->flashMessenger("「{$categoryName}」の削除に成功しました");
             }
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!isset($isSetFlashMessage)) {
-            $this->_helper->flashMessenger('カテゴリーの削除に失敗しました');
+        if ( !(isset($isDeleteSuccess) && $isDeleteSuccess === true) ) {
+            $this->_setExceptionErrorMessages('delete');
+            $this->_setParam('errorForm', $this->_validateDeleteForm);
+            return $this->_forward('index');
         }
 
         $this->_redirect('/admin/category/index');
@@ -203,18 +228,15 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * 新規作成用のバリデートルールを作成する
      *
      *
-     * @return Zend_Form 新規作成用のフォーム
+     * @return Setuco_Form 新規作成用のフォーム
      * @author suzuki-mar
      */
-    private function _validateCreate() {
-        //カテゴリー名を入力するinputタグを生成
+    private function _createNewValidateForm()
+    {
+        
         $form = new Setuco_Form();
 
-        //inputタグだけのクラスを生成する
-        $inputItem = $form->createElement('text', 'cat_name');
-        //バリデートルールを設定する
-        $inputItem = $this->_setValidateRuleOfName($inputItem);
-        $form->addElement($inputItem);
+        $this->_addNameFormElement($form, 'create');
 
         return $form;
     }
@@ -223,130 +245,163 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract {
      * 編集用のバリデートオブジェクトを作成する
      *
      *
-     * @return Zend_Form 編集用のフォーム
+     * @return Setuco_Form 編集用のフォーム
      * @author suzuki-mar
      */
-    private function _validateUpdate() {
+    private function _createUpdateValidateForm()
+    {
         //フォームクラスの生成
         $form = new Setuco_Form();
 
-
-        //カテゴリー名を入力するinputタグを生成
-        $inputItem = $form->createElement('text', 'name');
-        //バリデートルールを設定する
-        $inputItem = $this->_setValidateRuleOfName($inputItem, true);
-
-        $form->addElement($inputItem);
-
-        //idをセットするhiddenタグを生成
-        $idItem = $form->createElement('hidden', 'id');
-        //バリデートルールを設定する
-        $idItem = $this->_setValidateRuleOfId($idItem);
-        $form->addElement($idItem);
-
-        //idをセットするhiddenタグを生成
-        $parentIdItem = $form->createElement('hidden', 'parent_id');
-        $parentIdItem = $this->_setValidateRuleOfParentId($parentIdItem);
-        $form->addElement($parentIdItem);
+        $this->_addNameFormElement($form, 'update');
+        $this->_addIdFormElement($form);
+        $this->_addParentIdElement($form);
 
         return $form;
     }
 
-    /**
-     * カテゴリー名のバリデートルールを設定する
-     *
-     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
-     * @param boolean[option] $isUpdate 編集用のバリデートルールか デフォルトは新規登録
-     * @author suzuki-mar
-     */
-    private function _setValidateRuleOfName(Zend_Form_Element $element, $isUpdate = false) {
-        //編集と新規登録では、ルールを変更する
-        if ($isUpdate) {
-            $noRecordExistsOption = array('table' => 'category', 'field' => 'name', 'exclude' => array('field' => 'id', 'value' => $this->_getParam('id')));
-        } else {
-            $noRecordExistsOption = array('table' => 'category', 'field' => 'name');
-        }
-
-        $element->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    //文字列の長さを指定する
-                    array('stringLength', true, array(1, 100)),
-                    //同じカテゴリーは登録できないようにする
-                    array('Db_NoRecordExists', true, $noRecordExistsOption
-                        )));
-
-        return $element;
-    }
 
     /**
-     * IDのバリデートルールを設定する
+     * カテゴリー名のフォームエレメントクラスのインスタンスをフォームクラスに設定する
      *
-     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
+     * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
+     * @param string $validateType バリデートルールのタイプ create updateのみ指定できる
+     * @return void
      * @author suzuki-mar
+     * @todo 多段になったらバリデートルールを修正する必要がある
      */
-    private function _setValidateRuleOfId(Zend_Form_Element $element) {
-        $element->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    array('stringLength', false, array(1, 100)),
-                    array('Int')
-                ));
-
-        return $element;
-    }
-
-    /**
-     * parent_idのバリデートルールを設定する
-     *
-     * @param Zend_Form_Element $element バリデートルールを設定するElementインスタンス
-     * @author suzuki-mar
-     */
-    private function _setValidateRuleOfParentId(Zend_Form_Element $element) {
-        $element->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    array('stringLength', false, array(1, 100)),
-                    array('Int')
-                ));
-
-        return $element;
-    }
-
-    /**
-     * バリデートエラーメッセージを取得する
-     *
-     * @param  String[option] $validateType createだと新規作成 updateだと編集　デフォルトは、create
-     * @return String バリデートエラーメッセージ
-     * @author suzuki-mar
-     */
-    private function _getErrorMessage($validateType = 'create')
+    private function _addNameFormElement(Setuco_Form &$form, $validateType)
     {
-
+        //バリデートタイプで、nameを変更する
         if ($validateType === 'create') {
-           $errors = $this->_validateCreateForm->getMessages('cat_name');
+            $elementName = 'cat_name';
         } else {
-           $errors = $this->_validateUpdateForm->getMessages('name');
+            $elementName = 'name';
         }
 
-            //なんのメッセージが来るかわからないが、エラーメッセージは一つなので
-            foreach ($errors as $key => $value) {
-              $errorMessage = $value;
-              //文字を入力しなかった場合
-              if ($key === 'isEmpty') {
-                  $errorMessage = 'カテゴリー名を入力してください。';
-              }
-            }
+        $element = $form->createElement('text', $elementName);
+        $this->_addCommonFormElementOptions($element);
 
-            //不正なエラー IDを文字列にするとか
-            if (!isset($errorMessage)) {
-                $errorMessage = 'カテゴリーの新規作成に失敗しました';
-            }
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('カテゴリー名を入力してください。');
+        $validators[] = array($notEmpty, true);
 
-       return $errorMessage;
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 100
+            )
+        );
+        $stringLength->setMessage('カテゴリー名は%max%文字以下で入力してください。');
+        $validators[] = array($stringLength, true);
+
+        $noRecordExistsOption = array('table' => 'category', 'field' => 'name');
+
+        //同じカテゴリーIDの場合のみ、同じカテゴリー名にできる 親IDを変更するときなど
+        if ($validateType === 'update') {
+            $noRecordExistsOption['exclude'] = array('field' => 'id', 'value' => $this->_getParam('id'));
+        }
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
+        $element->addValidators($validators);
+
+        $form->addElement($element);
     }
+
+
+    /**
+     * カテゴリーIDのフォームエレメントクラスのインスタンスをフォームクラスに追加する
+     *
+     * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
+     * @return Zend_Form_Element カテゴリーIDのフォームエレメントクラス
+     * @author suzuki-mar
+     */
+    private function _addIdFormElement(Setuco_Form &$form)
+    {
+        //idをセットするhiddenタグを生成
+        $element = $form->createElement('hidden', 'id');
+        $this->_addCommonFormElementOptions($element);
+
+        $element->addValidators(array(
+                    array('NotEmpty', true),
+                    array('Int')
+                ));
+
+        $form->addElement($element);
+
+        return $element;
+    }
+
+    /**
+     * カテゴリーの親IDのフォームエレメントクラスのインスタンスをフォームクラスに追加する
+     *
+     * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
+     * @return Zend_Form_Element カテゴリーの親IDのフォームエレメントクラス
+     * @author suzuki-mar
+     */
+    private function _addParentIdElement(Setuco_Form &$form)
+    {
+        $element = $form->createElement('hidden', 'parent_id');
+        $this->_addCommonFormElementOptions($element);
+
+        $element->addValidators(array(
+                    array('NotEmpty', true),
+                    array('Int')
+                ));
+
+        $form->addElement($element);
+        
+        return $element;
+    }
+
+
+    /**
+     * フォームエレメントの共通設定をする
+     * requiredなどの設定をする
+     *
+     * @param Zend_Form_Element $element　共通の設定をするフォームエレメントクラス
+     * @return void
+     */
+    private function _addCommonFormElementOptions(&$element)
+    {
+        $element->setRequired()
+                ->addFilter('StringTrim');        
+    }
+
+    /**
+     * フォームにバリデートエラーメッセージをセットする
+     * Formクラスのチェックでバリデートエラーとなる場合は、すでにメッセージが設定されているので
+     * なにもしない
+     *
+     * @param  string $validateType createだと新規作成 updateだと編集　deleteだと削除
+     * @return void
+     * @author suzuki-mar
+     */
+    private function _setExceptionErrorMessages($validateType)
+    {
+        if ($validateType === 'create') {
+            $validateForm = $this->_validateCreateForm;
+        } elseif($validateType === 'update') {
+            $validateForm = $this->_validateUpdateForm;
+        } else {
+            $validateForm = $this->_validateDeleteForm;
+        }
+
+        //例外的なエラー　SQL(DBに登録する)に失敗した場合など　本来は実行されない
+        if (!$validateForm->isErrors()) {
+            if ($validateType === 'create') {
+                $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました';
+            } elseif($validateType === 'update') {
+                $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました';
+            } else {
+                $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました';
+            }
+
+            $validateForm->setErrorMessages($errorMessages);
+            $validateForm->markAsError();
+        }
+    }
+
 }
 
