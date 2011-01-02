@@ -210,7 +210,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $isDeleteSuccess = $this->_categoryService->deleteCategory($this->_getParam('id'));
             //カテゴリーを削除する
             if ($isDeleteSuccess) {
-                $this->_helper->flashMessenger("カテゴリー名「{$categoryName}」の削除に成功しました");
+                $this->_helper->flashMessenger("「{$categoryName}」の削除に成功しました");
             }
         }
 
@@ -268,6 +268,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * @param string $validateType バリデートルールのタイプ create updateのみ指定できる
      * @return void
      * @author suzuki-mar
+     * @todo 多段になったらバリデートルールを修正する必要がある
      */
     private function _addNameFormElement(Setuco_Form &$form, $validateType)
     {

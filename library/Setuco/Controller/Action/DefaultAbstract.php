@@ -96,7 +96,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         $modelCategory = new Default_Model_Category();
 
         //カテゴリー一覧をviewにセットする
-        $categories = $modelCategory->getCategoryLists();
+        $categories = $modelCategory->findCategoryLists();
 
 
         //すでに登録されていたら、未分類のカテゴリーを追加する

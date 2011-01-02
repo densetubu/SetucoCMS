@@ -42,7 +42,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
      * @return array カテゴリー情報 取得できなかったらfalse
      * @author suzuki-mar
      */
-    public function getCategoryLists()
+    public function findCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
         $categories = $this->_categoryDao->findAllCategories();
