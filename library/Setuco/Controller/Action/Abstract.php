@@ -167,6 +167,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $layout->setLayout('layout');
     }
 
+
     /**
      * レイアウト名を設定します。
      *

@@ -53,7 +53,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
 
 
         //使用されているカテゴリーを取得する
-        $useCategories = $this->_categoryDao->findUseCategories();
+        $useCategories = $this->_categoryDao->findUsedCategories();
 
         //使用されているカテゴリーのIDの配列を取得する
         foreach ($useCategories as $value) {

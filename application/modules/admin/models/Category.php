@@ -143,7 +143,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
      *
      * @param array $registData 新規登録するカテゴリーのデータ
-     * @return boolean 登録できたか
+     * @return boolean 登録できたか　SQLが正常に実行できたら、成功とする
      * @author suzuki-mar
      */
     public function registCategory($registData)
@@ -163,7 +163,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      *
      * @param int   $id  アップデートするデータのID
      * @param array $categoryInfo 入力したデータ: バリデートチェックした入力データ
-     * @return boolean 編集できたか
+     * @return boolean 編集できたか SQLが正常に実行できたら、成功とする
      * @author suzuki-mar
      */
     public function updateCategory($id, $updateData)
@@ -176,7 +176,8 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         //アップデートする条件のwhere句を生成する
         $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
 
-        $updateResult = $this->_categoryDao->update($updateData, $where);
+        $this->_categoryDao->update($updateData, $where);
+
         return true;
     }
 
@@ -186,7 +187,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * コントローラーから、削除するidを取得する
      *
      * @param  int   $deleteId  削除するデータのID
-     * @return boolean 削除できたか
+     * @return boolean 削除できたか SQLが正常に実行できたら成功とする
      * @author suzuki-mar
      */
     public function deleteCategory($id)
@@ -195,7 +196,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         $primary = $this->_categoryDao->getPrimary();
 
         //文字列の可能性があるので、数値にキャストする
-        $id = (int) $id;
+        $id = (int)$id;
         //アップデートする条件のwhere句を生成する
         $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
         $this->_categoryDao->delete($where);
