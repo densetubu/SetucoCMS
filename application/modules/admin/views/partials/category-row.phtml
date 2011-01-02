@@ -39,7 +39,7 @@
 
 <?php $redirectUrl = $this->baseUrl("/admin/category/delete/id/{$this->category['id']}") ?>
 <td>
-    <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $this->category['name'] ?>");'>
+    <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $this->escape($this->category['name']) ?>");'>
         <img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>' alt='削除' width='27' height='27' />
     </a>
 </td>
