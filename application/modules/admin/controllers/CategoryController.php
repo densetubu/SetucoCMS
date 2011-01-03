@@ -122,7 +122,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
             //カテゴリーを新規作成する
             if ($isCreateSuccess) {
-                $this->_helper->flashMessenger("「{$registData['name']}」を作成しました");
+                $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
             } else {
                 $errorMessages = $this->_setExceptionErrorMessages('create');
             }
@@ -159,7 +159,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
             $isUpdateSuccess = $this->_categoryService->updateCategory($validateData['id'], $validateData);
             if ($isUpdateSuccess) {
-                $actionMessage = "「{$oldName}」から「{$validateData['name']}」にカテゴリー名を編集しました。";
+                $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
 
                 $this->_helper->flashMessenger($actionMessage);
             } else {
@@ -200,7 +200,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $isDeleteSuccess = $this->_categoryService->deleteCategory($this->_getParam('id'));
             //カテゴリーを削除する
             if ($isDeleteSuccess) {
-                $this->_helper->flashMessenger("「{$categoryName}」の削除に成功しました");
+                $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
             }
         }
 
@@ -378,17 +378,16 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         //例外的なエラー　SQL(DBに登録する)に失敗した場合など　本来は実行されない
         if (!$validateForm->isErrors()) {
             if ($validateType === 'create') {
-                $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました';
-            } elseif ($validateType === 'update') {
-                $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました';
+                $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました。';
+            } elseif($validateType === 'update') {
+                $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました。';
             } else {
-                $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました';
+                $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました。';
             }
 
             $validateForm->setErrorMessages($errorMessages);
             $validateForm->markAsError();
         }
     }
-
 }
 

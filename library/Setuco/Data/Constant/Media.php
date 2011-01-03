@@ -23,17 +23,6 @@
 class Setuco_Data_Constant_Media
 {
     /**
-     * ファイルの新規登録中に作成する一時ファイルの名前
-     * (物理ファイル名でなくmediaテーブルのname属性の値)
-     */
-    const TEMP_FILE_NAME = 'tmpName';
-
-    /**
-     * ファイルの新規登録中に作成する一時ファイルの拡張子
-     */
-    const TEMP_FILE_EXTENSION = 'new';
-
-    /**
      * ファイル保存ディレクトリのbaseUrl用パス。
      */
     const UPLOAD_DIR_PATH_FROM_BASE = '/media/upload/';
@@ -59,18 +48,12 @@ class Setuco_Data_Constant_Media
     const FILEEXT_ALL_STRING = '--指定なし--';
 
     /**
-     * SetucoCMSで対応するファイル種類（拡張子）を得る
-     *
-     * @return array SetucoCMSで対応する拡張子の配列
-     * @author akitsukada
+     * サムネイルの標準表示幅
      */
-    public static function VALID_FILE_EXTENSIONS()
-    {
-        return array('jpg', 'gif', 'png', 'pdf', 'txt');
-    }
+    const THUMB_WIDTH = 65;
 
     /**
-     * SetucoCMSで対応するファイル種類（拡張子）うち、画像の拡張子のみを得る
+     * SetucoCMSで対応するファイル種類（拡張子）のうち、画像の拡張子のみを得る
      *
      * @return array SetucoCMSで対応する画像の拡張子の配列
      * @author akitsukada
@@ -79,5 +62,39 @@ class Setuco_Data_Constant_Media
     {
         return array('jpg', 'gif', 'png');
     }
+
+    /**
+     * SetucoCMSで対応するファイル種類（拡張子）を得る
+     *
+     * @return array SetucoCMSで対応する拡張子の配列
+     * @author akitsukada
+     */
+    public static function VALID_FILE_EXTENSIONS()
+    {
+        return array_merge(self::IMAGE_FILE_EXTENSIONS(), array('pdf', 'ext'));
+    }
+
+    /**
+     * ファイルのアップロード先ディレクトリのフルパスを得る
+     *
+     * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
+     * @author akitsukada
+     */
+    public static function MEDIA_UPLOAD_DIR_FULLPATH()
+    {
+        return APPLICATION_PATH . '/../public/media/upload';
+    }
+
+    /**
+     * サムネイルの格納先ディレクトリのフルパスを得る
+     *
+     * @return string サムネイルの格納先ディレクトリ名
+     * @author akitsukada
+     */
+    public static function MEDIA_THUMB_DIR_FULLPATH()
+    {
+        return APPLICATION_PATH . "/../public/media/thumbnail";
+    }
+
 
 }

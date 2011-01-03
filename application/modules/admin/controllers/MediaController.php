@@ -73,11 +73,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     const FILECOMMENT_LENGTH_MAX = 300;
 
     /**
-     * サムネイルの表示時の幅。
-     */
-    const THUMBNAIL_WIDTH = 65;
-
-    /**
      * 一覧表示時、１ページに何件のファイルを表示するか
      */
     const PAGE_LIMIT = 10;
@@ -94,11 +89,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         for ($inputID = 1; $inputID <= self::FILE_COUNT_MAX; $inputID++) {
             $this->_fileInputIDs[] = $this->_fileInputID_base . (string) $inputID;
         }
-        $this->_media = new Admin_Model_Media(
-                        $this->_getUploadDest(),
-                        $this->_getThumbDest(),
-                        self::THUMBNAIL_WIDTH
-        );
+        $this->_media = new Admin_Model_Media();
         $this->_setPageLimit(self::PAGE_LIMIT);
     }
 
@@ -143,9 +134,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->view->sortColumn = $sortColumn;
         $this->view->order = $order;
 
-        // viewにファイルデータを渡す
+        // ファイル情報の取得とファイルの存在確認
         $medias = $this->_media->findMedias(
-                        $sortColumn, $order, $fileType, $this->_getPageLimit(), $currentPage);
+                        $sortColumn, $order, $this->_getPageLimit(), $currentPage, $fileType);
         $this->view->medias = $medias;
 
         // アップロードできる最大サイズをviewに教える
@@ -153,17 +144,16 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // ディレクトリに問題なければviewにファイルアップロード用フォームを設定
         $dirErrors = array();
-        if (!$this->_isWritableUploadDest()) {
-            $dirErrors[] = $this->_getUploadDest() . '　が存在しないか、書き込みできません。';
+        if (!Setuco_Util_Media::isWritableUploadDir()) {
+            $dirErrors[] = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (!$this->_isWritableThumbnailDest()) {
-            $dirErrors[] = $this->_getThumbDest() . '　が存在しないか、書き込みできません。';
+        if (!Setuco_Util_Media::isWritableThumbDir()) {
+            $dirErrors[] = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (count($dirErrors) == 0) {
-            $this->view->uploadForm = $this->_getParam('uploadForm', $this->_createUploadForm());
-        } else {
+        if (count($dirErrors) > 0) {
             $this->view->dirErrors = $dirErrors;
         }
+        $this->view->uploadForm = $this->_getParam('uploadForm', $this->_createUploadForm());
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
@@ -245,9 +235,9 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             $extType = $filePath['extension'];
 
             // ファイルの保存先と物理名（id.拡張子)を指定
-            $newId = $this->_media->createNewMediaID(); // mediaテーブルにtmpレコード挿入
+            $newId = $this->_media->createNewMediaID();
             $files[$inputName]->addFilter('Rename', array(
-                'target' => $this->_getUploadDest() . "/{$newId}.{$extType}",
+                'target' => Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$newId}.{$extType}",
                 'overwrite' => true
             ));
 
@@ -371,9 +361,11 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $form = $this->_createUpdateForm($id);
         $post = $this->getRequest()->getPost();
 
+        // Postのバリデーション
+        $form->isValid($this->_getAllParams());
+
         if (empty($_POST)) {
             // iniサイズを超えた場合など、不正なPOSTが行われた場合
-            $form->isValid($_POST);
             $form->setErrorMessages(array("アップロード中にサーバーエラーが発生しました。"));
             $this->_setParam('updateForm', $form);
             return $this->_forward(
@@ -382,27 +374,19 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             );
         }
 
-        // 入力されたファイル名と説明　バリデーションエラー時にフォームにセットする。
-        $inputName = $post['name'];
-        $inputComment = $post['comment'];
+        $inputName = $form->getElement('name')->getValue();
+        $inputComment = $form->getElement('comment')->getValue();
 
-        // Postのバリデーション
-        if (!$form->isValid($post)) {
-            $this->_setParam('inputName', $inputName);
-            $this->_setParam('inputComment', $inputComment);
-            $this->_setParam('updateForm', $form);
-            return $this->_forward(
-                    'form', null, null,
-                    array('id' => $id)
-            );
+        if ($form->isErrors()) {
+            return $this->_updateFailed($id, $inputName, $inputComment, $form);
         }
 
         $file = $form->getElement('upload_img');
 
         // サービスにDBをUpdateさせるためのファイルの情報
         $fileInfo = array(
-            'name' => $post['name'],
-            'comment' => $post['comment'],
+            'name' => $inputName,
+            'comment' => $inputComment,
             'update_date' => date('Y/m/d H:i:s')
         );
 
@@ -419,48 +403,33 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // 既存の同IDファイルを退避
             if (!$this->_backupFileById($id, $preExtType)) {
-                $form->markAsError();
-                $form->setErrorMessages(array("既存のファイル{$id}.{$extType}が削除できません。"));
-                $this->_setParam('inputName', $inputName);
-                $this->_setParam('inputComment', $inputComment);
-                $this->_setParam('updateForm', $form);
-                return $this->_forward(
-                        'form', null, null,
-                        array('id' => $id)
+                return $this->_updateFailed(
+                        $id, $inputName, $inputComment, $form,
+                        "既存のファイル{$id}.{$extType}が削除できません。"
                 );
             }
 
             // 既存の同IDファイルを削除
             if (!$this->_removeFileById($id)) {
-                $form->markAsError();
                 $this->_recoverFromBackUpFile($id, $preExtType);
-                $form->setErrorMessages(array("既存のファイル{$id}.{$extType}が削除できません。"));
-                $this->_setParam('inputName', $inputName);
-                $this->_setParam('inputComment', $inputComment);
-                $this->_setParam('updateForm', $form);
-                return $this->_forward(
-                        'form', null, null,
-                        array('id' => $id)
+                return $this->_updateFailed(
+                        $id, $inputName, $inputComment, $form,
+                        "既存のファイル{$id}.{$extType}が削除できません。"
                 );
             }
 
             // ファイルの保存先と保存名を指定
             $file->addFilter('Rename', array(// 別名を指定
-                'target' => $this->_getUploadDest() . "/{$id}.{$extType}",
+                'target' => Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$id}.{$extType}",
                 'overwrite' => true
             ));
 
             // ファイルの受信と保存
             if (!$file->receive()) {
                 $this->_recoverFromBackUpFile($id, $preExtType);
-                $form->markAsError();
-                $form->setErrorMessages(array('ファイルが正しく送信されませんでした。'));
-                $this->_setParam('inputName', $inputName);
-                $this->_setParam('inputComment', $inputComment);
-                $this->_setParam('updateForm', $form);
-                return $this->_forward(
-                        'form', null, null,
-                        array('id' => $id)
+                return $this->_updateFailed(
+                        $id, $inputName, $inputComment, $form,
+                        'ファイルが正しく送信されませんでした。'
                 );
             }
 
@@ -470,28 +439,18 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             if (Setuco_Util_Media::isImageExtension($extType)) {
                 if (!$this->_media->isValidImageData($newFileName)) {
                     $this->_recoverFromBackUpFile($id, $preExtType);
-                    $form->markAsError();
-                    $form->setErrorMessages(array("{$newFileInfo['basename']}は不正な画像データです。"));
-                    $this->_setParam('inputName', $inputName);
-                    $this->_setParam('inputComment', $inputComment);
-                    $this->_setParam('updateForm', $form);
-                    return $this->_forward(
-                            'form', null, null,
-                            array('id' => $id)
+                    return $this->_updateFailed(
+                            $id, $inputName, $inputComment, $form,
+                            "{$newFileInfo['basename']}は不正な画像データです。"
                     );
                 }
 
                 // サムネイルを保存
                 if (!$this->_media->saveThumbnailFromImage($newFileName)) {
                     $this->_recoverFromBackUpFile($id, $preExtType);
-                    $form->markAsError();
-                    $form->setErrorMessages(array('サムネイルが保存できませんでした。'));
-                    $this->_setParam('inputName', $inputName);
-                    $this->_setParam('inputComment', $inputComment);
-                    $this->_setParam('updateForm', $form);
-                    return $this->_forward(
-                            'form', null, null,
-                            array('id' => $id)
+                    return $this->_updateFailed(
+                            $id, $inputName, $inputComment, $form,
+                            'サムネイルが保存できませんでした。'
                     );
                 }
             }
@@ -504,17 +463,12 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // DBの更新
         if (!$this->_media->updateMediaInfo($id, $fileInfo)) {
-            $form->markAsError();
-            $form->setErrorMessages(array('ファイルが正しく更新できませんでした。'));
-            $this->_setParam('inputName', $inputName);
-            $this->_setParam('inputComment', $inputComment);
-            $this->_setParam('updateForm', $form);
             if ($isFileUploaded) {
                 $this->_recoverFromBackUpFile($id, $preExtType);
             }
-            return $this->_forward(
-                    'form', null, null,
-                    array('id' => $id)
+            return $this->_updateFailed(
+                    $id, $inputName, $inputComment, $form,
+                    'ファイルが正しく更新できませんでした。'
             );
         }
 
@@ -522,8 +476,33 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         if ($isFileUploaded) {
             $this->_removeBackupFile($id, $preExtType);
         }
+
         $this->_helper->flashMessenger->addMessage('ファイル情報を更新しました。');
         $this->_redirect($redirectUrl);
+    }
+
+    /**
+     * 更新処理中にエラーが起きたとき、$formにエラー情報をセットしてformActionにforwardする
+     *
+     * @param  int $id
+     * @param  string $inputName
+     * @param  string $inputComment
+     * @param  Zend_Form $form
+     * @return void
+     */
+    private function _updateFailed($id, $inputName, $inputComment, Zend_Form $form, $errorMessage = null)
+    {
+        $this->_setParam('inputName', $inputName);
+        $this->_setParam('inputComment', $inputComment);
+        $this->_setParam('updateForm', $form);
+        $form->markAsError();
+        if ($errorMessage !== null) {
+            $form->setErrorMessages(array($errorMessage));
+        }
+        $this->_forward(
+                'form', null, null,
+                array('id' => $id)
+        );
     }
 
     /**
@@ -678,7 +657,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $txtFileName = new Zend_Form_Element_Text('name', array(
                     'id' => 'name',
                     'required' => TRUE,
-                    'filters' => array('StringTrim')
+                    'filters' => array(new Setuco_Filter_FullWidthStringTrim())
                 ));
         $txtFileName->clearDecorators()
                 ->addDecorator('ViewHelper')
@@ -689,7 +668,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $txtFileComment = new Zend_Form_Element_Text('comment', array(
                     'id' => 'comment',
                     'required' => FALSE,
-                    'filters' => array('StringTrim')
+                    'filters' => array(new Setuco_Filter_FullWidthStringTrim())
                 ));
         $txtFileComment->clearDecorators()
                 ->addDecorator('ViewHelper')
@@ -792,10 +771,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $fileUploadValidator = new Zend_Validate_File_Upload();
         $fileUploadValidator->setMessage(
-                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                "サーバーエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::INI_SIZE);
         $fileUploadValidator->setMessage(
-                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                "サーバーエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::FORM_SIZE);
         $validators[] = $fileUploadValidator;
 
@@ -816,7 +795,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     private function _removeFileById($id)
     {
         // ファイルの削除
-        $uploadDir = $this->_getUploadDest();
+        $uploadDir = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH();
         if (($uploadDirHandle = opendir($uploadDir)) !== false) {
             while (($file = readdir($uploadDirHandle)) !== false) {
                 if (($file != "." && $file != "..")) {
@@ -832,7 +811,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         }
 
         // サムネイルの削除
-        $thumbDir = $this->_getThumbDest();
+        $thumbDir = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH();
         if (($thumbDirHandle = opendir($thumbDir)) !== false) {
             while (($thumb = readdir($thumbDirHandle)) !== false) {
                 if (($thumb != "." && $thumb != "..")) {
@@ -867,14 +846,14 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
             return false;
         }
         // ファイル名に.bakを付ける
-        $fileName = $this->_getUploadDest() . "/{$id}.{$preExtension}";
+        $fileName = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$id}.{$preExtension}";
         if (file_exists($fileName)) {
             if (!rename($fileName, $fileName . '.bak')) {
                 return false;
             }
         }
         // サムネイルも
-        $thumbName = $this->_getThumbDest() . "/{$id}.gif";
+        $thumbName = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . "/{$id}.gif";
         if (file_exists($thumbName)) {
             if (!rename($thumbName, $thumbName . '.bak')) {
                 return false;
@@ -894,13 +873,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _removeBackupFile($id, $extension)
     {
-        $fileName = $this->_getUploadDest() . "/{$id}.{$extension}";
+        $fileName = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$id}.{$extension}";
         if (file_exists($fileName . '.bak')) {
             if (!unlink($fileName . '.bak')) {
                 return false;
             }
         }
-        $thumbName = $this->_getThumbDest() . "/{$id}.gif";
+        $thumbName = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . "/{$id}.gif";
         if (file_exists($thumbName . '.bak')) {
             if (!unlink($thumbName . '.bak')) {
                 return false;
@@ -922,75 +901,17 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     private function _recoverFromBackUpFile($id, $extension)
     {
         $this->_removeFileById($id);
-        $fileName = $this->_getUploadDest() . "/{$id}.{$extension}";
+        $fileName = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$id}.{$extension}";
         if (file_exists($fileName . '.bak')) {
             if (!rename($fileName . '.bak', $fileName)) {
                 return false;
             }
         }
-        $thumbName = $this->_getThumbDest() . "/{$id}.gif";
+        $thumbName = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . "/{$id}.gif";
         if (file_exists($thumbName . '.bak')) {
             if (!rename($thumbName . '.bak', $thumbName)) {
                 return false;
             }
-        }
-        return true;
-    }
-
-    /**
-     * ファイルのアップロード先ディレクトリのフルパスを得る
-     *
-     * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
-     * @author akitsukada
-     */
-    private function _getUploadDest()
-    {
-        return APPLICATION_PATH . '/../public/media/upload';
-    }
-
-    /**
-     * サムネイルのアップロード先ディレクトリのフルパスを得る
-     *
-     * @return string サムネイルのアップロード先ディレクトリ名
-     * @author akitsukada
-     */
-    private function _getThumbDest()
-    {
-        return APPLICATION_PATH . "/../public/media/thumbnail";
-    }
-
-    /**
-     * ファイルのアップロード先ディレクトリが書き込み可能であるかを判定する
-     *
-     * @return boolean ファイルのアップロード先ディレクトリが書き込み可能か
-     * @author akitsukada
-     */
-    private function _isWritableUploadDest()
-    {
-        $dir = $this->_getUploadDest();
-        if (!is_dir($dir)) {
-            return false;
-        }
-        if (!is_writable($dir)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * サムネイルのアップロード先ディレクトリが書き込み可能であるかを判定する
-     *
-     * @return boolean サムネイルのアップロード先ディレクトリが書き込み可能か
-     * @author akitsukada
-     */
-    private function _isWritableThumbnailDest()
-    {
-        $dir = $this->_getThumbDest();
-        if (!is_dir($dir)) {
-            return false;
-        }
-        if (!is_writable($dir)) {
-            return false;
         }
         return true;
     }

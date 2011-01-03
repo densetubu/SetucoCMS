@@ -20,7 +20,6 @@
 <?php if (count($this->entries) > 0): ?>
     <p><?php echo "カテゴリー「{$this->escape($this->category['name'])}」" ?>のページ一覧</p>
     <?php foreach($this->entries as $id => $entry): ?>
-    <?php $accountName = is_null($entry['nickname']) ? '誰？' : $entry['nickname'] ?>
     <!-- entry START -->
     <div class="entry">
         <div class="entryHead">
@@ -41,5 +40,5 @@
     <?php endforeach ?>
     <?php echo $this->paginator //ページャーの表示 ?>
 <?php else: ?>
-    <p>カテゴリー「<?php echo $this->category['name'] ?>」にはページがありません。</p>
+    <p>カテゴリー「<?php echo $this->escape($this->category['name']) ?>」にはページがありません。</p>
 <?php endif ?>

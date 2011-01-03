@@ -25,6 +25,17 @@
 class Admin_Model_Media
 {
     /**
+     * ファイルの新規登録中に作成する一時ファイルの名前
+     * (物理ファイル名でなくmediaテーブルのname属性の値)
+     */
+    const TEMP_FILE_NAME = 'tmpName';
+
+    /**
+     * ファイルの新規登録中に作成する一時ファイルの拡張子
+     */
+    const TEMP_FILE_EXTENSION = 'new';
+    
+    /**
      * PDFファイル用アイコンファイルのパス
      */
     const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
@@ -34,42 +45,23 @@ class Admin_Model_Media
      */
     const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
 
+
     /**
      * メディア表のDAO
      * 
      * @var Common_Model_DbTable_Media
      */
     private $_mediaDao = null;
-    /**
-     * ファイル保存ディレクトリの物理絶対パス
-     * @var string
-     */
-    private $_uploadDirFQPath = '';
-    /**
-     * サムネイル保存ディレクトリの物理絶対パス
-     * @var string
-     */
-    private $_thumbDirFQPath = '';
-    /**
-     * サムネイルの表示幅、標準値
-     * @var int
-     */
-    private $_thumbWidth = null;
 
     /**
      * コンストラクター。DAOのインスタンスを初期化する
      *
-     * @param string $thumbDirFQPath サムネイル保存ディレクトリの物理絶対パス
-     * @param int $thumbWidth サムネイルの標準表示幅
      * @return void
      * @author akitsukada
      */
-    public function __construct($uploadDirFQPath, $thumbDirFQPath, $thumbWidth)
+    public function __construct()
     {
         $this->_mediaDao = new Common_Model_DbTable_Media();
-        $this->_uploadDirFQPath = $uploadDirFQPath;
-        $this->_thumbDirFQPath = $thumbDirFQPath;
-        $this->_thumbWidth = $thumbWidth;
     }
 
     /**
@@ -82,11 +74,12 @@ class Admin_Model_Media
      * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($sortColumn, $order, $fileType, $limit, $pageNumber)
+    public function findMedias($sortColumn, $order, $limit, $pageNumber, $fileExt)
     {
 
-        $medias = $this->_mediaDao->loadMedias($sortColumn, $order, $fileType, $limit, $pageNumber);
-
+        $medias = $this->_mediaDao->loadMedias(
+                $sortColumn, $order, $limit, $pageNumber,
+                $fileExt, self::TEMP_FILE_EXTENSION);
         foreach ($medias as $cnt => $media) {
             $media = $this->_addThumbPathInfo($media);
             $medias[$cnt] = $media;
@@ -103,43 +96,60 @@ class Admin_Model_Media
      */
     private function _addThumbPathInfo(array $media)
     {
-        $media['alt'] = '';
-        $media['uploadUrl'] = '';
-        $media['notFound'] = array();
 
         $fileName = "{$media['id']}.{$media['type']}";
-        $filePath = "{$this->_uploadDirFQPath}/{$fileName}";
+        $filePath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$fileName}";
         $fileExists = file_exists($filePath);
 
         $media['uploadUrl'] = Setuco_Data_Constant_Media::UPLOAD_DIR_PATH_FROM_BASE . $fileName;
-
+        $media = $this->_fixMediaPathInfo($media);
         $media['alt'] = $media['comment'];
-        $thumbUrl = '';
+
+        $media['thumbUrl'] = '';
+        $media['thumbWidth'] = 0;
+
         switch ($media['type']) {
             case 'pdf' :
                 $media['thumbUrl'] = self::ICON_PATH_PDF;
-                $media['thumbWidth'] = $this->_thumbWidth;
+                $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
                 break;
             case 'txt' :
                 $media['thumbUrl'] = self::ICON_PATH_TXT;
-                $media['thumbWidth'] = $this->_thumbWidth;
+                $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
                 break;
             case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
             case 'gif' :
             case 'png' :
-                // @todo サムネイルファイルが見つからないときの対応
-                $thumbName = "{$media['id']}.gif";
-                $thumbPath = "{$this->_thumbDirFQPath}/{$thumbName}";
-                $thumbImage = imagecreatefromgif($this->_thumbDirFQPath . '/' . $media['id'] . '.gif');
-                $thumbWidth = imagesx($thumbImage);
+                if ($media['thumbExists']) {
+                    $thumbName = "{$media['id']}.gif";
+                    $thumbPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $thumbName;
+                    $thumbImage = imagecreatefromgif($thumbPath);
+                    $thumbWidth = imagesx($thumbImage);
+                    $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH > $thumbWidth ?
+                            $thumbWidth : Setuco_Data_Constant_Media::THUMB_WIDTH;
+                }
                 $media['thumbUrl'] = Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE . $media['id'] . '.gif';
-                $media['thumbWidth'] =
-                        $this->_thumbWidth > $thumbWidth ? $thumbWidth : $this->_thumbWidth;
                 break;
             default :
                 return false;
         }
+        return $media;
+    }
 
+    private function _fixMediaPathInfo($media)
+    {
+        $pathinfo = pathinfo($media['uploadUrl']);
+        $thumbFullPath = '';
+        if (Setuco_Util_Media::isImageExtension($pathinfo['extension'])) {
+            $thumbFullPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $pathinfo['filename'] . '.gif';
+        } elseif ($pathinfo['extension'] === 'pdf') {
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_PDF;
+        } elseif ($pathinfo['extension'] === 'txt') {
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_TXT;
+        }
+        $mediaFullPath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$pathinfo['basename']}";
+        $media['mediaExists'] = file_exists($mediaFullPath);
+        $media['thumbExists'] = file_exists($thumbFullPath);
         return $media;
     }
 
@@ -180,7 +190,7 @@ class Admin_Model_Media
         $originalHeight = imagesy($originalImage);
 
         // 比率計算＆サムネイルサイズ設定
-        $thumbWidth = $this->_thumbWidth;
+        $thumbWidth = Setuco_Data_Constant_Media::THUMB_WIDTH;
         $rate = $thumbWidth / $originalWidth;
         $thumbHeight = $originalHeight * $rate;
 
@@ -207,7 +217,7 @@ class Admin_Model_Media
                 $thumbWidth, $thumbHeight, $originalWidth, $originalHeight);
 
         // サムネイルを保存
-        $thumbPath = $this->_thumbDirFQPath . '/' . $imageInfo['filename'] . '.gif';
+        $thumbPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $imageInfo['filename'] . '.gif';
         imagegif($thumbImage, $thumbPath . '');
 
         // 画像オブジェクト破棄
@@ -282,8 +292,8 @@ class Admin_Model_Media
 
         // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
         $newRec = array(
-            'name' => Setuco_Data_Constant_Media::TEMP_FILE_NAME,
-            'type' => Setuco_Data_Constant_Media::TEMP_FILE_EXTENSION,
+            'name' => self::TEMP_FILE_NAME,
+            'type' => self::TEMP_FILE_EXTENSION,
             'create_date' => date("Y-m-d H:i:s", time()),
             'update_date' => date("Y-m-d H:i:s", time()),
         );
@@ -293,9 +303,15 @@ class Admin_Model_Media
         return $result;
     }
 
+    /**
+     * フルパスで指定されたファイルが画像として有効かどうかを調べる
+     *
+     * @param string $imagePath サムネイルの元になる画像ファイルのフルパス
+     * @return boolean 有効な画像ファイルであればtrue、無効なファイルならfalseを返す。
+     */
     public function isValidImageData($imagePath)
     {
-        return getimagesize($imagePath);
+        return (boolean) getimagesize($imagePath);
     }
 
 }
