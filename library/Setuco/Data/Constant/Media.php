@@ -34,6 +34,16 @@ class Setuco_Data_Constant_Media
     const TEMP_FILE_EXTENSION = 'new';
 
     /**
+     * PDFファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
+
+    /**
+     * TXTファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
+
+    /**
      * ファイル保存ディレクトリのbaseUrl用パス。
      */
     const UPLOAD_DIR_PATH_FROM_BASE = '/media/upload/';
@@ -52,6 +62,11 @@ class Setuco_Data_Constant_Media
      * 絞り込み処理で使うファイル種別「全て」のSelectBoxでの値
      */
     const FILEEXT_ALL_VALUE = 'all';
+
+    /**
+     * サムネイルの標準表示幅
+     */
+    const THUMB_WIDTH = 65;
 
     /**
      * 絞り込み処理で使うファイル種別「全て」のSelectBoxでの表示文字列
@@ -79,5 +94,28 @@ class Setuco_Data_Constant_Media
     {
         return array('jpg', 'gif', 'png');
     }
+
+    /**
+     * ファイルのアップロード先ディレクトリのフルパスを得る
+     *
+     * @return string ファイル(サムネイルではない)のアップロード先ディレクトリ名
+     * @author akitsukada
+     */
+    public static function MEDIA_UPLOAD_DIR_FULLPATH()
+    {
+        return APPLICATION_PATH . '/../public/media/upload';
+    }
+
+    /**
+     * サムネイルのアップロード先ディレクトリのフルパスを得る
+     *
+     * @return string サムネイルのアップロード先ディレクトリ名
+     * @author akitsukada
+     */
+    public static function MEDIA_THUMB_DIR_FULLPATH()
+    {
+        return APPLICATION_PATH . "/../public/media/thumbnail";
+    }
+
 
 }

@@ -41,4 +41,42 @@ class Setuco_Util_Media
     {
         return in_array($extension, Setuco_Data_Constant_Media::IMAGE_FILE_EXTENSIONS(), TRUE);
     }
+
+
+    /**
+     * ファイルのアップロード先ディレクトリが書き込み可能であるかを判定する
+     *
+     * @return boolean ファイルのアップロード先ディレクトリが書き込み可能か
+     * @author akitsukada
+     */
+    public static function isWritableUploadDir()
+    {
+        $dir = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH();
+        if (!is_dir($dir)) {
+            return false;
+        }
+        if (!is_writable($dir)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * サムネイルのアップロード先ディレクトリが書き込み可能であるかを判定する
+     *
+     * @return boolean サムネイルのアップロード先ディレクトリが書き込み可能か
+     * @author akitsukada
+     */
+    public static function isWritableThumbDir()
+    {
+        $dir = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH();
+        if (!is_dir($dir)) {
+            return false;
+        }
+        if (!is_writable($dir)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -106,7 +106,7 @@
             <?php foreach ($this->medias as $cnt => $media): ?>
             <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
-                    <?php if (!empty($media['uploadUrl'])): ?>
+                    <?php if ($media['mediaExists']): ?>
                     <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
                     </a>
@@ -114,7 +114,13 @@
                     <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
                     <?php endif ?>
                 </td>
-                <td><?php echo $this->escape("{$media['name']} [{$media['type']}]"); ?></td>
+                <td>
+                    <?php echo $this->escape("{$media['name']} [{$media['type']}]") . "\n"; ?>
+                    <?php if (!$media['mediaExists']): ?>
+                    <br />
+                    ※ファイルが見つかりません。
+                    <?php endif ?>
+                </td>
                 <td><?php echo $media['update_date'] ?></td>
                 <td><?php echo $media['create_date'] ?></td>
                 <td>
