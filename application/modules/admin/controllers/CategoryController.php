@@ -29,21 +29,18 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * @var Admin_Model_Category
      */
     private $_categoryService = null;
-
     /**
      * 新規登録用のバリデーションチェックフォーム
      *
      * @var Setuco_Form
      */
     private $_validateCreateForm = null;
-
     /**
      * 編集用のバリデーションチェックフォーム
      *
      * @var Setuco_Form
      */
     private $_validateUpdateForm = null;
-
     /**
      * 削除用のフォーム (エラーメッセージ）を入れるだけ
      *
@@ -100,8 +97,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', $this->_getParam('inputCreateCategoryName', '新規カテゴリー'));
-        
-        
     }
 
     /**
@@ -164,13 +159,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
             $isUpdateSuccess = $this->_categoryService->updateCategory($validateData['id'], $validateData);
             if ($isUpdateSuccess) {
+                $actionMessage = "「{$oldName}」から「{$validateData['name']}」にカテゴリー名を編集しました。";
 
-                //カテゴリー名が同じ場合は,違うメッセージを表示する
-                if ($oldName === $validateData['name']) {
-                    $actionMessage = "「{$validateData['name']}」のカテゴリーを編集しました。";
-                } else {
-                    $actionMessage = "「{$oldName}」から「{$validateData['name']}」にカテゴリー名を編集しました。";
-                }
                 $this->_helper->flashMessenger($actionMessage);
             } else {
                 //DBの実行に失敗した場合はエラーメッセージがないので、例外エラーメッセージを設定する
@@ -215,7 +205,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if ( !(isset($isDeleteSuccess) && $isDeleteSuccess === true) ) {
+        if (!(isset($isDeleteSuccess) && $isDeleteSuccess === true)) {
             $this->_setExceptionErrorMessages('delete');
             $this->_setParam('errorForm', $this->_validateDeleteForm);
             return $this->_forward('index');
@@ -233,7 +223,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createNewValidateForm()
     {
-        
+
         $form = new Setuco_Form();
 
         $this->_addNameFormElement($form, 'create');
@@ -259,7 +249,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         return $form;
     }
-
 
     /**
      * カテゴリー名のフォームエレメントクラスのインスタンスをフォームクラスに設定する
@@ -287,9 +276,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $validators[] = array($notEmpty, true);
 
         $stringLength = new Zend_Validate_StringLength(
-            array(
-                'max' => 100
-            )
+                        array(
+                            'max' => 100
+                        )
         );
         $stringLength->setMessage('カテゴリー名は%max%文字以下で入力してください。');
         $validators[] = array($stringLength, true);
@@ -309,7 +298,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $form->addElement($element);
     }
 
-
     /**
      * カテゴリーIDのフォームエレメントクラスのインスタンスをフォームクラスに追加する
      *
@@ -324,9 +312,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->_addCommonFormElementOptions($element);
 
         $element->addValidators(array(
-                    array('NotEmpty', true),
-                    array('Int')
-                ));
+            array('NotEmpty', true),
+            array('Int')
+        ));
 
         $form->addElement($element);
 
@@ -346,15 +334,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->_addCommonFormElementOptions($element);
 
         $element->addValidators(array(
-                    array('NotEmpty', true),
-                    array('Int')
-                ));
+            array('NotEmpty', true),
+            array('Int')
+        ));
 
         $form->addElement($element);
-        
+
         return $element;
     }
-
 
     /**
      * フォームエレメントの共通設定をする
@@ -366,7 +353,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     private function _addCommonFormElementOptions(&$element)
     {
         $element->setRequired()
-                ->addFilter('StringTrim');        
+                ->addFilter('StringTrim');
     }
 
     /**
@@ -382,7 +369,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         if ($validateType === 'create') {
             $validateForm = $this->_validateCreateForm;
-        } elseif($validateType === 'update') {
+        } elseif ($validateType === 'update') {
             $validateForm = $this->_validateUpdateForm;
         } else {
             $validateForm = $this->_validateDeleteForm;
@@ -392,7 +379,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if (!$validateForm->isErrors()) {
             if ($validateType === 'create') {
                 $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました';
-            } elseif($validateType === 'update') {
+            } elseif ($validateType === 'update') {
                 $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました';
             } else {
                 $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました';

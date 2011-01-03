@@ -34,6 +34,13 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     private $_siteService;
 
     /**
+     * 編集のバリデートフォーム
+     *
+     * @var Setuco_Form
+     */
+    private $_validateUpdateForm;
+
+    /**
      * クラス変数の設定をする
      * @author suzuki-mar
      */
@@ -41,6 +48,8 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     {
         parent::init();
         $this->_siteService = new Admin_Model_Site();
+
+        $this->_validateUpdateForm = $this->_updateForm();
     }
 
     /**
@@ -51,7 +60,12 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $this->view->sites = $this->_siteService->getSiteInfo();
+        $this->view->sites = $this->_getParam('inputValues', $this->_siteService->getSiteInfo());
+
+        //バリデートに失敗したエラーフォームがあればセットする
+        if ($this->_hasParam('errorForm')) {
+            $this->view->errorForm = $this->_getParam('errorForm');
+        }
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
@@ -71,34 +85,23 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
             $this->_helper->redirector('index');
         }
 
-        //バリデートするFormオブジェクトを取得する
-        $validateForm = $this->_updateForm();
-
         //入力したデータをバリデートチェックをする
-        if ($validateForm->isValid($this->_getAllParams())) {
+        if ($this->_validateUpdateForm->isValid($this->_getAllParams())) {
 
-            $validateData = $validateForm->getValues();
+            $validateData = $this->_validateUpdateForm->getValues();
 
             //サイト情報を編集する
-            $isUpdate = $this->_siteService->updateSite($validateData, $this->_getParam('id'));
-            if ($isUpdate) {
+            $isUpdateSuccess = $this->_siteService->updateSite($validateData, $this->_getParam('id'));
+            if ($isUpdateSuccess) {
                 $this->_helper->flashMessenger('サイト情報を編集しました。');
-                $isSetFlashMessage = true;
             }
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!isset($isSetFlashMessage)) {
-
-            //フォームのnameと項目の名前の対応表　項目 : メッセージの形式にする。
-            $fields = array('name' => 'サイト名', 'url' => 'サイトURL', 'comment' => '説明', 'keyword' => 'キーワード');
-            foreach ($validateForm->getMessages() as $field => $messages) {
-                foreach ($messages as $value) {
-                    $message = "{$fields[$field]} : {$value}";
-                    $this->_helper->flashMessenger->addMessage($message);
-                }
-            }
-            unset($value);
+        if ( !(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
+            $this->_setParam('inputValues', $_POST);
+            $this->_setParam('errorForm', $this->_validateUpdateForm);
+            return $this->_forward('index');
         }
 
         $this->_helper->redirector('index');

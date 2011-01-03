@@ -13,7 +13,8 @@
  * @version
  * @since      File available since Release 0.1.0
  * @param      array            $sites   サイト情報データ
- * @param      array[option]    $flashMessages
+ * @param      array[option]    $flashMessages アクションの実行結果
+ * @param      Setuco_Form      $errorForm エラーメッセージを表示するフォームクラス
  * @author     suzuki-mar
  */
 ?>
@@ -39,23 +40,29 @@
         </div>
 
         <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+        <?php if (isset($this->errorForm)) {
+                echo $this->partial('error-message.phtml', array('errorForm' => $this->errorForm));
+        }  ?>
+
+
+
 
         <form action="/admin/site/update" method="post"> 
 
             <dl id="siteForm" class="editArea"> 
 
                 <dt><label for="name">サイト名</label></dt> 
-                <dd><input type="text" id="name" name="name" value="<?php echo $this->sites['name'];?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['name'];?>'; }" /><br /><span>サイト上に表示される名前です。</span></dd> 
+                <dd><input type="text" id="name" name="name" value="<?php echo $this->escape($this->sites['name']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['name'];?>'; }" /><br /><span>サイト上に表示される名前です。</span></dd>
 
                 <dt><label for="url">サイトURL<br /><span>（リンク切れに注意）</span></label></dt> 
-                <dd><input type="text" id="url" name="url" value="<?php echo $this->sites['url'];?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['url'];?>'; }" /><br /><span>サイトを表示するURLです。</span></dd> 
+                <dd><input type="text" id="url" name="url" value="<?php echo $this->escape($this->sites['url']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['url'];?>'; }" /><br /><span>サイトを表示するURLです。</span></dd>
 
                 <dt id="site_description_t"><label for="comment">説明</label></dt>
-                <dd id="site_description_d"><textarea rows="2" cols="" id="comment" name="comment"><?php echo $this->sites['comment'];?></textarea><br /><span>サイトの説明です。サイトの概要を入力してください。</span></dd>
+                <dd id="site_description_d"><textarea rows="2" cols="" id="comment" name="comment"><?php echo $this->escape($this->sites['comment']) ?></textarea><br /><span>サイトの説明です。サイトの概要を入力してください。</span></dd>
 <!--<dd><input type="text" id="comment" name="comment" value='' /></dd>--> 
 
                 <dt><label for="keyword">キーワード<br /><span>（カンマ[&nbsp;,&nbsp;]で区切る）</span></label></dt> 
-                <dd><input type="text" id="keyword" name="keyword" value="<?php echo $this->sites['keyword'];?>" /><br /><span>サイトのキーワードです。サイトに関連する単語を入力してください。</span></dd> 
+                <dd><input type="text" id="keyword" name="keyword" value="<?php echo $this->escape($this->sites['keyword']) ?>" /><br /><span>サイトのキーワードです。サイトに関連する単語を入力してください。</span></dd>
 
             </dl> 
 

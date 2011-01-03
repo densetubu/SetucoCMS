@@ -20,19 +20,23 @@
 ?>
 
 <td>
-    <form class="tagEdit" action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
-        <p>
-            <input type="text" name="name" id="name<?php  echo $this->escape($this->category['id']) ?>" value="" />
-            <input type="hidden" name="id" id="id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['id']) ?>" />
-            <input type="hidden" name="parent_id" id="parent_id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['parent_id']) ?>" />
-            <input type="button" name="canselButton" onclick="hideCategoryEdit(this)" value="キャンセル">
-            <input type="submit" class="sub" value="保存" />
-        </p>
-    </form>
     <span class="tagInfo"><?php echo $this->escape($this->category['name']) ?></span>
+
+    <div>
+        <form class="tagEdit" action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
+            <p>
+                <input type="text" name="name" id="name<?php  echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['name']) ?>" />
+                <input type="hidden" name="id" id="id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['id']) ?>" />
+                <input type="hidden" name="parent_id" id="parent_id<?php echo $this->escape($this->category['id']) ?>" value="<?php echo $this->escape($this->category['parent_id']) ?>" />
+                <input type="button" name="canselButton" onclick="hideRowEdit(this)" value="キャンセル">
+                <input type="submit" class="sub" value="保存" />
+            </p>
+        </form>
+    </div>
 </td>
+
 <td class="editButton">
-    <a href="javascript:void(0)" onclick="showCategoryEdit(this)">
+    <a href="javascript:void(0)" onclick="showRowEdit(this)">
         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
     </a>
 </td>
