@@ -102,10 +102,10 @@ class Admin_Model_Media
                     $thumbPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $thumbName;
                     $thumbImage = imagecreatefromgif($thumbPath);
                     $thumbWidth = imagesx($thumbImage);
-                    $media['thumbUrl'] = Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE . $media['id'] . '.gif';
                     $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH > $thumbWidth ?
                             $thumbWidth : Setuco_Data_Constant_Media::THUMB_WIDTH;
                 }
+                $media['thumbUrl'] = Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE . $media['id'] . '.gif';
                 break;
             default :
                 return false;

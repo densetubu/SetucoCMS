@@ -42,15 +42,15 @@
             </div>
         </div>
     </div>
-
-    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
-    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->uploadForm)) ?>
-    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->searchForm)) ?>
-
+    <?php 
+        echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages));
+        echo $this->partial('error-message.phtml', array('errorForm' => $this->uploadForm));
+        echo $this->partial('error-message.phtml', array('errorForm' => $this->searchForm));
+    ?>
     <form id="upload_img" action="<?php echo $this->baseUrl('/admin/media/create') ?>" method="post" enctype="MULTIPART/FORM-DATA">
 
         <div class="default">
-          <?php if (isset($this->uploadForm)): ?>
+          <?php if (!isset($this->dirErrors)): ?>
               <p id="upload_img1"><?php echo $this->uploadForm->upload_img_1 . "\n" ?></p>
               <p id="upload_img2"><?php echo $this->uploadForm->upload_img_2 . "\n" ?></p>
               <p id="upload_img3"><?php echo $this->uploadForm->upload_img_3 . "\n" ?></p>
@@ -74,7 +74,7 @@
             <p><?php echo $this->searchForm->getElement('search') . "\n" ?></p>
         </div>
     </form>
-    <table summary="ファイル一覧の表です。編集ボタンから、ファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
+    <table summary="ファイル一覧の表です。編集ボタンからファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
             <col width="18%" />
             <col width="22%" />
@@ -104,7 +104,7 @@
         </thead>
         <tbody>
             <?php foreach ($this->medias as $cnt => $media): ?>
-            <tr <?php echo $cnt % 2 == 0 ? '' : 'class="check"' ?>>
+            <tr <?php echo $cnt % 2 === 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
                     <?php if ($media['mediaExists']): ?>
                     <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
@@ -113,12 +113,16 @@
                     <?php else: ?>
                     <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
                     <?php endif ?>
+                    <?php if (!$media['thumbExists']): ?>
+                    <br />
+                    <span class="attentionMessage">※[<?php echo $media['thumbUrl'] ?>]が見つかりません。</span>
+                    <?php endif ?>
                 </td>
                 <td>
                     <?php echo $this->escape("{$media['name']} [{$media['type']}]") . "\n"; ?>
                     <?php if (!$media['mediaExists']): ?>
                     <br />
-                    ※ファイルが見つかりません。
+                    <span class="attentionMessage">※[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                     <?php endif ?>
                 </td>
                 <td><?php echo $media['update_date'] ?></td>

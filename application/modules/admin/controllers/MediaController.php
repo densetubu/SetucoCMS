@@ -150,11 +150,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         if (!Setuco_Util_Media::isWritableThumbDir()) {
             $dirErrors[] = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (count($dirErrors) == 0) {
-            $this->view->uploadForm = $this->_getParam('uploadForm', $this->_createUploadForm());
-        } else {
+        if (count($dirErrors) > 0) {
             $this->view->dirErrors = $dirErrors;
         }
+        $this->view->uploadForm = $this->_getParam('uploadForm', $this->_createUploadForm());
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
