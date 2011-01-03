@@ -136,7 +136,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // ファイル情報の取得とファイルの存在確認
         $medias = $this->_media->findMedias(
-                        $sortColumn, $order, $fileType, $this->_getPageLimit(), $currentPage);
+                        $sortColumn, $order, $this->_getPageLimit(), $currentPage, $fileType);
         $this->view->medias = $medias;
 
         // アップロードできる最大サイズをviewに教える

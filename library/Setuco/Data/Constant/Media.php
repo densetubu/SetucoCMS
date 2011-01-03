@@ -23,27 +23,6 @@
 class Setuco_Data_Constant_Media
 {
     /**
-     * ファイルの新規登録中に作成する一時ファイルの名前
-     * (物理ファイル名でなくmediaテーブルのname属性の値)
-     */
-    const TEMP_FILE_NAME = 'tmpName';
-
-    /**
-     * ファイルの新規登録中に作成する一時ファイルの拡張子
-     */
-    const TEMP_FILE_EXTENSION = 'new';
-
-    /**
-     * PDFファイル用アイコンファイルのパス
-     */
-    const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
-
-    /**
-     * TXTファイル用アイコンファイルのパス
-     */
-    const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
-
-    /**
      * ファイル保存ディレクトリのbaseUrl用パス。
      */
     const UPLOAD_DIR_PATH_FROM_BASE = '/media/upload/';
@@ -64,14 +43,25 @@ class Setuco_Data_Constant_Media
     const FILEEXT_ALL_VALUE = 'all';
 
     /**
+     * 絞り込み処理で使うファイル種別「全て」のSelectBoxでの表示文字列
+     */
+    const FILEEXT_ALL_STRING = '--指定なし--';
+
+    /**
      * サムネイルの標準表示幅
      */
     const THUMB_WIDTH = 65;
 
     /**
-     * 絞り込み処理で使うファイル種別「全て」のSelectBoxでの表示文字列
+     * SetucoCMSで対応するファイル種類（拡張子）のうち、画像の拡張子のみを得る
+     *
+     * @return array SetucoCMSで対応する画像の拡張子の配列
+     * @author akitsukada
      */
-    const FILEEXT_ALL_STRING = '--指定なし--';
+    public static function IMAGE_FILE_EXTENSIONS()
+    {
+        return array('jpg', 'gif', 'png');
+    }
 
     /**
      * SetucoCMSで対応するファイル種類（拡張子）を得る
@@ -82,17 +72,6 @@ class Setuco_Data_Constant_Media
     public static function VALID_FILE_EXTENSIONS()
     {
         return array_merge(self::IMAGE_FILE_EXTENSIONS(), array('pdf', 'ext'));
-    }
-
-    /**
-     * SetucoCMSで対応するファイル種類（拡張子）うち、画像の拡張子のみを得る
-     *
-     * @return array SetucoCMSで対応する画像の拡張子の配列
-     * @author akitsukada
-     */
-    public static function IMAGE_FILE_EXTENSIONS()
-    {
-        return array('jpg', 'gif', 'png');
     }
 
     /**
@@ -107,9 +86,9 @@ class Setuco_Data_Constant_Media
     }
 
     /**
-     * サムネイルのアップロード先ディレクトリのフルパスを得る
+     * サムネイルの格納先ディレクトリのフルパスを得る
      *
-     * @return string サムネイルのアップロード先ディレクトリ名
+     * @return string サムネイルの格納先ディレクトリ名
      * @author akitsukada
      */
     public static function MEDIA_THUMB_DIR_FULLPATH()

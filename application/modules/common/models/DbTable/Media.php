@@ -77,18 +77,18 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
      * @return Selectオブジェクトの実行(fetchAll)結果
      * @author akitsukada
      */
-    public function loadMedias($sortColumn, $order, $fileType, $limit, $pageNumber)
+    public function loadMedias($sortColumn, $order, $limit, $pageNumber, $targetExt, $tmpFileExt)
     {
 
         $select = $this->select()
                         ->order("{$sortColumn} {$order}")
                         ->limitPage($pageNumber, $limit);
 
-        if ($fileType !== 'all') {
-            // 拡張子絞り込み指定されていた場合のみWhere句を設定
-            $select->where('type = ?', $fileType);
+        if ($targetExt === 'all') {
+            // 絞り込みなしの場合、一時ファイル拡張子以外のレコードを全件取得
+            $select->where('type != ?', $tmpFileExt);
         } else {
-            $select->where('type != ?', Setuco_Data_Constant_Media::TEMP_FILE_EXTENSION);
+            $select->where('type = ?', $targetExt);
         }
         
         return $this->fetchAll($select)->toArray();

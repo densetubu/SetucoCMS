@@ -24,6 +24,27 @@
  */
 class Admin_Model_Media
 {
+    /**
+     * ファイルの新規登録中に作成する一時ファイルの名前
+     * (物理ファイル名でなくmediaテーブルのname属性の値)
+     */
+    const TEMP_FILE_NAME = 'tmpName';
+
+    /**
+     * ファイルの新規登録中に作成する一時ファイルの拡張子
+     */
+    const TEMP_FILE_EXTENSION = 'new';
+    
+    /**
+     * PDFファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
+
+    /**
+     * TXTファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
+
 
     /**
      * メディア表のDAO
@@ -53,10 +74,12 @@ class Admin_Model_Media
      * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($sortColumn, $order, $fileType, $limit, $pageNumber)
+    public function findMedias($sortColumn, $order, $limit, $pageNumber, $fileExt)
     {
 
-        $medias = $this->_mediaDao->loadMedias($sortColumn, $order, $fileType, $limit, $pageNumber);
+        $medias = $this->_mediaDao->loadMedias(
+                $sortColumn, $order, $limit, $pageNumber,
+                $fileExt, self::TEMP_FILE_EXTENSION);
         foreach ($medias as $cnt => $media) {
             $media = $this->_addThumbPathInfo($media);
             $medias[$cnt] = $media;
@@ -87,11 +110,11 @@ class Admin_Model_Media
 
         switch ($media['type']) {
             case 'pdf' :
-                $media['thumbUrl'] = Setuco_Data_Constant_Media::ICON_PATH_PDF;
+                $media['thumbUrl'] = self::ICON_PATH_PDF;
                 $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
                 break;
             case 'txt' :
-                $media['thumbUrl'] = Setuco_Data_Constant_Media::ICON_PATH_TXT;
+                $media['thumbUrl'] = self::ICON_PATH_TXT;
                 $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
                 break;
             case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
@@ -120,9 +143,9 @@ class Admin_Model_Media
         if (Setuco_Util_Media::isImageExtension($pathinfo['extension'])) {
             $thumbFullPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $pathinfo['filename'] . '.gif';
         } elseif ($pathinfo['extension'] === 'pdf') {
-            $thumbFullPath = APPLICATION_PATH . "/../public" . Setuco_Data_Constant_Media::ICON_PATH_PDF;
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_PDF;
         } elseif ($pathinfo['extension'] === 'txt') {
-            $thumbFullPath = APPLICATION_PATH . "/../public" . Setuco_Data_Constant_Media::ICON_PATH_TXT;
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_TXT;
         }
         $mediaFullPath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$pathinfo['basename']}";
         $media['mediaExists'] = file_exists($mediaFullPath);
@@ -269,8 +292,8 @@ class Admin_Model_Media
 
         // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
         $newRec = array(
-            'name' => Setuco_Data_Constant_Media::TEMP_FILE_NAME,
-            'type' => Setuco_Data_Constant_Media::TEMP_FILE_EXTENSION,
+            'name' => self::TEMP_FILE_NAME,
+            'type' => self::TEMP_FILE_EXTENSION,
             'create_date' => date("Y-m-d H:i:s", time()),
             'update_date' => date("Y-m-d H:i:s", time()),
         );
