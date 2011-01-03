@@ -772,10 +772,10 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         $fileUploadValidator = new Zend_Validate_File_Upload();
         $fileUploadValidator->setMessage(
-                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                "サーバーエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::INI_SIZE);
         $fileUploadValidator->setMessage(
-                "サイズエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
+                "サーバーエラー　アップロードできるファイルのサイズは {$minSizeString} 以上 {$maxSizeString} 以下です。",
                 Zend_Validate_File_Upload::FORM_SIZE);
         $validators[] = $fileUploadValidator;
 
