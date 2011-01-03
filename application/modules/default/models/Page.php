@@ -62,10 +62,10 @@ class Default_Model_Page extends Common_Model_PageAbstract
      * @return boolean ページを登録している
      * @author suzuki-mar
      */
-    public function isEntryedPage()
+    public function isEntryExists()
     {
-        $pages = $this->findLastUpdatedPages(1);
-        $result = (boolean)$pages;
+        $count = $this->countPages(Setuco_Data_Constant_Page::STATUS_RELEASE);
+        $result = ($count > 0);
         return $result;
     }
 

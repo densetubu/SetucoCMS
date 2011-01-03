@@ -78,7 +78,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         //サイト情報をviewにセットする
         $this->view->siteInfos = $modelSite->getSiteInfo();
 
-        //セットしてある場合は、ページタイトルをセットする
+        //ページタイトルがセットされていないときは、ページタイトルはデフォルトのページタイトル
         if (!is_null($this->_pageTitle)) {
             $this->view->pageTitle = $this->_pageTitle;
         }
@@ -95,26 +95,19 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         //categoryテーブルのモデルクラスのインスタンス生成
         $modelCategory = new Default_Model_Category();
 
-        //カテゴリー一覧をviewにセットする
         $categories = $modelCategory->findCategoryLists();
 
-
+        
         //すでに登録されていたら、未分類のカテゴリーを追加する
         if (is_array($categories)) {
             $result = $this->_addDefaultCategory($categories);
         } else {
             $modelPage = new Default_Model_Page();
-            $unCategorizes = Setuco_Data_Constant_Category::getUnCategorizeds();
-            //ひとつも出記事が登録されていたら、リンクする
-            $unCategorizes['is_used'] = $modelPage->isEntryedPage();
-            $categories[] = $unCategorizes;
+            $uncategorizedInfos = Setuco_Data_Constant_Category::uncategorizeds();
+            //ひとつでも記事が登録されていたら、リンクする
+            $uncategorizedInfos['is_used'] = $modelPage->isEntryExists();
+            $categories[] = $uncategorizedInfos;
             $result = $categories;
-        }
-
-
-        //取得できなかった場合はfalseを返す
-        if (!isset($result)) {
-            return false;
         }
 
         return $result;
@@ -129,7 +122,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     private function _addDefaultCategory($categories)
     {
-        $default = Setuco_Data_Constant_Category::getUnCategorizeds();
+        $default = Setuco_Data_Constant_Category::uncategorizeds();
 
         //カテゴリーが登録されていて配列の場合は、配列に未分類のカテゴリーを追加する
         //カテゴリーが新規作成されていない場合もリンクする
