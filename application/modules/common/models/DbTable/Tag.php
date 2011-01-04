@@ -37,12 +37,12 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
     protected $_primary = 'id';
 
     /**
-     * タグの名前とどれぐらい使用されているかを取得する
+     * タグクラウド情報を取得する
      *
-     * @return array タグの名前とどれぐらい使用されているかの配列
+     * @return array タグクラウドの情報を取得する
      * @author suzuki-mar
      */
-    public function findTagCountAndName()
+    public function findTagCloudInfos()
     {
         //タグ名とどれぐらい使用されているかをカウントする
         $select = $this->select()->from(array('t' => $this->_name), array('id', 'name'));

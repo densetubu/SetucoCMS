@@ -51,9 +51,7 @@ class Default_Model_Tag extends Common_Model_TagAbstract
      */
     public function getTagClouds()
     {
-
-        //nameとタグの使用数のカウントを取得する
-        $tags  = $this->_tagDao->findTagCountAndName();
+        $tags  = $this->_tagDao->findTagCloudInfos();
 
 
         //からならfalseを返す

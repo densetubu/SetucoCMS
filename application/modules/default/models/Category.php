@@ -55,18 +55,19 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
         //使用されているカテゴリーを取得する
         $useCategories = $this->_categoryDao->findUsedCategories();
 
-        //使用されているカテゴリーのIDの配列を取得する
-        foreach ($useCategories as $value) {
-            $useIds[] = $value['id'];
-        }
 
         if ($useCategories !== false) {
+            //使用されているカテゴリーのIDの配列を取得する
+            foreach ($useCategories as $value) {
+                $useIds[] = $value['id'];
+            }
+
             foreach ($categories as &$value) {
                 $value['is_used'] = in_array($value['id'], $useIds);
             }
             unset($value);
-        
-        //ひとつも使用されていない場合は、すべて失敗にする
+
+            //ひとつも使用されていない場合は、すべて失敗にする
         } else {
             foreach ($categories as &$value) {
                 $value['is_used'] = false;
