@@ -270,7 +270,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $element = $form->createElement('text', $elementName);
-        $this->_addCommonFormElementOptions($element);
+        $this->_addFormElementCommonOptions($element);
 
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('カテゴリー名を入力してください。');
@@ -310,7 +310,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //idをセットするhiddenタグを生成
         $element = $form->createElement('hidden', 'id');
-        $this->_addCommonFormElementOptions($element);
+        $this->_addFormElementCommonOptions($element);
 
         $element->addValidators(array(
             array('NotEmpty', true),
@@ -332,7 +332,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     private function _addParentIdElement(Setuco_Form &$form)
     {
         $element = $form->createElement('hidden', 'parent_id');
-        $this->_addCommonFormElementOptions($element);
+        $this->_addFormElementCommonOptions($element);
 
         $element->addValidators(array(
             array('NotEmpty', true),

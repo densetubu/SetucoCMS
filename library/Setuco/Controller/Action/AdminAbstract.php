@@ -149,7 +149,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      * @return void
      * @author suzuki-mar
      */
-    protected function _addCommonFormElementOptions(&$element, $cancelOptions = null)
+    protected function _addFormElementCommonOptions(&$element, $cancelOptions = null)
     {
         if( !(isset($cancelOptions['required']) && $cancelOptions['required'] === false)) {
             $element->setRequired();

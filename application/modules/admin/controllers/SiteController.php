@@ -119,7 +119,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $form = new Setuco_Form();
 
         $textElement = $form->createElement('text', 'name');
-        $this->_addCommonFormElementOptions($textElement);
+        $this->_addFormElementCommonOptions($textElement);
 
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('サイト名を入力してください。');
@@ -139,7 +139,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         $urlElement = $form->createElement('text', 'url');
         
-        $this->_addCommonFormElementOptions($urlElement);
+        $this->_addFormElementCommonOptions($urlElement);
         $urlElement->addFilter('fullUrl');
 
         $notEmpty = new Zend_Validate_NotEmpty();
@@ -164,7 +164,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
 
         $commentElement = $form->createElement('text', 'comment');
-        $this->_addCommonFormElementOptions($commentElement, array('required' => false));
+        $this->_addFormElementCommonOptions($commentElement, array('required' => false));
         $stringLength = new Zend_Validate_StringLength(
                         array(
                             'max' => 300
@@ -178,7 +178,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
 
         $keywordElement = $form->createElement('text', 'keyword');
-        $this->_addCommonFormElementOptions($keywordElement, array('required' => false));
+        $this->_addFormElementCommonOptions($keywordElement, array('required' => false));
         $stringLength = new Zend_Validate_StringLength(
                         array(
                             'max' => 300
