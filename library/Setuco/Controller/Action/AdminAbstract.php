@@ -21,7 +21,7 @@
  * @subpackage  Controller_Action
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_Action_Abstract
+abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_Action_ErrorAbstract
 {
     /**
      * ページのタイトル
