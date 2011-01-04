@@ -24,7 +24,8 @@
 abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_Action_Abstract
 {
     /**
-     * スクリプト(view)ファイルを、本番環境ように変更する
+     * スクリプト(view)ファイルを、本番環境用に変更する
+     * Not Found用とサーバーエラー用の２種類のviewファイルがある
      *
      * @return void
      * @author suzuki-mar
@@ -48,7 +49,7 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
     }
 
     /**
-     * エラーコードレスポンスを設定する
+     * HTTPリクエストにエラーコードレスポンスを設定する
      * 
      * @return void
      * @author suzuki-mar
@@ -63,6 +64,7 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
 
 
     /**
+     * error_handlerは、ZFのエラーコントローラーに標準に設定されているパラメーター
      * エラータイプ(error_handelr->type)からレスポンスコードを求める
      *
      * @param string $errorType error_handelr->type
@@ -93,7 +95,7 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
      * @return void
      * @author suzuki-mar
      */
-    protected function _setDefaultErrorMessageForView()
+    protected function _setDefaultErrorParamsForView()
     {
 
         $errors = $this->_getParam('error_handler');
@@ -101,11 +103,10 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-
-                
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:                
                 $this->view->message = 'Page not found';
                 break;
+            
             default:
                 // application error
                 $this->getResponse()->setHttpResponseCode(500);
@@ -127,6 +128,12 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
         $this->view->request = $errors->request;
     }
 
+    /**
+     * ログのプラグインリソースが有効になっているときに取得する
+     *
+     * @return Logのリソース  有効でない場合はfalse
+     * @author suzuki-mar
+     */
     protected function _getErrorLog()
     {
         $bootstrap = $this->getInvokeArg('bootstrap');
@@ -139,7 +146,7 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
 
     /**
      * モジュール毎に違うレイアウトを表示する
-     * エラーコントローラーなど、レイアウトが無効になっているものに使用する
+     * エラーコントローラーは、レイアウトが無効になっている
      *
      * @return void
      * @author suzuki_mar

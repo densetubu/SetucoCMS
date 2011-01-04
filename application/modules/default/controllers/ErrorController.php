@@ -53,7 +53,7 @@ class ErrorController extends Setuco_Controller_Action_DefaultAbstract
             $this->_changeErrorRender();
         //開発時はデフォルトのエラービューを表示する
         } else {
-            $this->_setDefaultErrorMessageForView();
+            $this->_setDefaultErrorParamsForView();
         }
     }
 
