@@ -99,6 +99,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', $this->_getParam('inputCreateCategoryName', '新規カテゴリー'));
     }
 
+
     /**
      * カテゴリーを新規作成するアクションです
      * indexアクションに遷移します
@@ -110,7 +111,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームから値を送信されなかったら、indexに遷移する
         if (!$this->_request->isPost()) {
-            $this->_redirect('/admin/category/index');
+            return $this->_forward404();
         }
 
         //入力したデータをバリデートチェックをする
@@ -148,7 +149,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームから値を送信されなかったら、indexに遷移する 直接アクセスの禁止
         if (!$this->_request->isPost()) {
-            $this->_redirect('/admin/category/index');
+            return $this->_forward404();
         }
 
         //入力したデータをバリデートチェックをする
@@ -188,7 +189,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームからidが送信されなかったら、indexに遷移する
         if (!$this->_hasParam('id')) {
-            $this->_redirect('/admin/category/index');
+            $this->_forward404();
         }
 
         //数値以外はエラー
@@ -379,7 +380,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if (!$validateForm->isErrors()) {
             if ($validateType === 'create') {
                 $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました。';
-            } elseif($validateType === 'update') {
+            } elseif ($validateType === 'update') {
                 $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました。';
             } else {
                 $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました。';
@@ -389,5 +390,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $validateForm->markAsError();
         }
     }
+
 }
 

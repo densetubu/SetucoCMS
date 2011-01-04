@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 管理側のエラーコントローラー
  *
@@ -24,22 +25,88 @@
  */
 class Admin_ErrorController extends Setuco_Controller_Action_AdminAbstract
 {
+
     /**
      * クラスの共通設定 
      *
      */
     public function init()
     {
-    	//親コントローラーの設定を引き継ぐ
-    	parent::init();
-    	
+        //親コントローラーの設定を引き継ぐ
+        parent::init();
+
         //モジュール毎に違うレイアウトを表示する
         $this->_setLayout();
-
     }
 
     public function errorAction()
     {
+        $this->_originalErrorAction();
+
+        //開発時はデフォルトのエラービューを表示する
+        if (APPLICATION_ENV === 'production') {
+            $this->_changeErrorRender();
+        }
+    }
+
+    /**
+     * スクリプト(view)ファイルを、本番環境ように変更する
+     *
+     * @author suzuki-mar
+     */
+    protected function _changeErrorRender()
+    {
+        $errors    = $this->_getParam('error_handler');
+        $errorCode = $this->_getParam('errorCode', $this->_getResponeByErrorType($errors->type));
+
+        switch ($errorCode) {
+            case '404':
+                $viewFile = 'error_404';
+                break;
+
+            default:
+                $viewFile = 'error_default';
+                break;
+        }
+
+        $this->_helper->viewRenderer->setScriptAction($viewFile);
+    }
+
+    /**
+     * エラータイプ(error_handelr->type)からレスポンスコードを求める
+     *
+     * @param string $errorType error_handelr->type
+     * @return int レスポンスコード
+     * @author suzuki-mar
+     */
+    protected function _getResponeByErrorType($errorType)
+    {
+        switch ($errorType) {
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+
+                $result = 404;
+                break;
+            default:
+                $result = 500;
+                break;
+        }
+
+        return $result;
+    }
+
+    /**
+     * オリジナルのエラーアクション処理
+     * 新しくロジックを書くところと分けるために定義する
+     * ZFにはじめから定義してあったロジック
+     *
+     * @return void
+     * @author suzuki-mar
+     */
+    protected function _originalErrorAction()
+    {
+
         $errors = $this->_getParam('error_handler');
         
         switch ($errors->type) {
@@ -68,7 +135,7 @@ class Admin_ErrorController extends Setuco_Controller_Action_AdminAbstract
             $this->view->exception = $errors->exception;
         }
 
-        $this->view->request   = $errors->request;
+        $this->view->request = $errors->request;
     }
 
     public function getLog()
@@ -83,6 +150,7 @@ class Admin_ErrorController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * モジュール毎に違うレイアウトを表示する
+     * エラーコントローラーなど、レイアウトが無効になっているものに使用する
      *
      * @return void
      * @author suzuki_mar
@@ -93,9 +161,10 @@ class Admin_ErrorController extends Setuco_Controller_Action_AdminAbstract
 
         // レイアウトの適用がうまくできないので、initメソッド内で設定する
         $options = array('layout' => 'layout',
-                'layoutPath' => APPLICATION_PATH . "/modules/{$moduleName}/views/layouts",
-                'content' => 'content');
+            'layoutPath' => APPLICATION_PATH . "/modules/{$moduleName}/views/layouts",
+            'content' => 'content');
         Zend_Layout::startMvc($options);
     }
+
 }
 

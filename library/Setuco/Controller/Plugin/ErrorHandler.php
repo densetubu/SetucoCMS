@@ -1,4 +1,5 @@
 <?php
+
 /**
  * エラーコントローラーを制御するプラグインです。
  * このプラグインで、モジュールごとに使用するエラーコントローラーを変更します。
@@ -25,17 +26,16 @@
 class Setuco_Controller_Plugin_ErrorHandler extends Zend_Controller_Plugin_Abstract
 {
 
-	/**
-	 * ディスパッチする前に実行するメソッド
-	 * エラーコントローラーの種類を変更する
-	 */
-	public function routeShutdown(Zend_Controller_Request_Abstract $request) 
-	{
-		//フロントコントローラーに登録されているエラープラグインを取得して、設定する
-		$errorHanlder = Zend_Controller_Front::getInstance()->getPlugin("Zend_Controller_Plugin_ErrorHandler");
-		//モジュールごとにエラーコントローラークラスを使用する
-		$errorHanlder->setErrorHandlerModule($request->getModuleName());
-	   
-	   
-	}
+    /**
+     * ディスパッチする前に実行するメソッド
+     * エラーコントローラーの種類を変更する
+     */
+    public function routeShutdown(Zend_Controller_Request_Abstract $request)
+    {
+        //フロントコントローラーに登録されているエラープラグインを取得して、設定する
+        $errorHanlder = Zend_Controller_Front::getInstance()->getPlugin("Zend_Controller_Plugin_ErrorHandler");
+        //モジュールごとにエラーコントローラークラスを使用する
+        $errorHanlder->setErrorHandlerModule($request->getModuleName());
+    }
+
 }
