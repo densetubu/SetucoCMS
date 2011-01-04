@@ -22,6 +22,21 @@
 class Setuco_Form extends Zend_Form
 {
     /**
+     * Setucoのライブラリーのパスを設定する
+     *
+     * @author suzuki-mar
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->addElementPrefixPath('Setuco_Validator', 'Setuco/Validator', 'validate');
+        $this->addElementPrefixPath('Setuco_Filter', 'Setuco/Filter', 'filter');
+
+    }
+
+
+    /**
      * 最小限のデコレータのみ使うフォーム要素を指定する
      *
      * @param mixed $elements 要素名か要素名の配列

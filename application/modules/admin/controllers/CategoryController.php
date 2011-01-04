@@ -344,18 +344,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         return $element;
     }
 
-    /**
-     * フォームエレメントの共通設定をする
-     * requiredなどの設定をする
-     *
-     * @param Zend_Form_Element $element　共通の設定をするフォームエレメントクラス
-     * @return void
-     */
-    private function _addCommonFormElementOptions(&$element)
-    {
-        $element->setRequired()
-                ->addFilter('StringTrim');
-    }
 
     /**
      * フォームにバリデートエラーメッセージをセットする

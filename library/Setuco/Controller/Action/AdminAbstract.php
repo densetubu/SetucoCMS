@@ -139,4 +139,24 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         return $currentNavAction->getTitle();
     }
 
+    /**
+     * フォームエレメントの共通設定をする
+     * requiredなどの設定をする
+     *　第２引数で、設定しない項目を指定できる
+     *
+     * @param Zend_Form_Element $element　共通の設定をするフォームエレメントクラス
+     * @param array[option] キャンセル名前のキーにfalseを渡すと設定しないことができる
+     * @return void
+     * @author suzuki-mar
+     */
+    protected function _addCommonFormElementOptions(&$element, $cancelOptions = null)
+    {
+        if( !(isset($cancelOptions['required']) && $cancelOptions['required'] === false)) {
+            $element->setRequired();
+        }
+
+        $element->addFilter(new Setuco_Filter_FullWidthStringTrim());
+    }
+
+
 }

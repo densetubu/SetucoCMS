@@ -49,7 +49,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         parent::init();
         $this->_siteService = new Admin_Model_Site();
 
-        $this->_validateUpdateForm = $this->_updateForm();
+        $this->_validateUpdateForm = $this->_createValidateUpdateForm();
     }
 
     /**
@@ -108,58 +108,89 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * フォームの雛形を作成します。
+     * バリデートするフォームクラスのインスタンスを生成します
+     *
      *
      * @return Zend_Form
+     * @author suzuki-mar
      */
-    private function _updateForm()
+    private function _createValidateUpdateForm()
     {
         $form = new Setuco_Form();
-        $form->setMethod('post');
 
         $textElement = $form->createElement('text', 'name');
-        $textElement->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    //文字列の長さを指定する
-                    array('stringLength', true, array(20, 100)),
-                ));
+        $this->_addCommonFormElementOptions($textElement);
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('サイト名を入力してください。');
+        $nameValidators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'max' => 100
+                        )
+        );
+        $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
+        $nameValidators[] = array($stringLength, true);
+
+        $textElement->addValidators($nameValidators);
         $form->addElement($textElement);
 
-        $urlElement = $form->createElement('text', 'url');
 
-        $urlElement->addPrefixPath('Setuco_Validator', 'Setuco/Validator', 'validate');
-        $urlElement->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    array('url', true),
-                    //文字列の長さを指定する
-                    array('stringLength', true, array(6, 30)),
-                ));
+        $urlElement = $form->createElement('text', 'url');
+        
+        $this->_addCommonFormElementOptions($urlElement);
+        $urlElement->addFilter('fullUrl');
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('サイトURLを入力してください。');
+        $urlValidators[] = array($notEmpty, true);
+
+        $urlCheck = new Setuco_Validator_Url();
+        $urlCheck->setMessage('サイトURLは正しいURLを入力してください');
+        $urlValidators[] = array($urlCheck, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'min' => 6,
+                            'max' => 100
+                        )
+        );
+        $stringLength->setMessage('サイトURLは、%min%文字以上%max%文字以下で入力してください。');
+        $urlValidators[] = array($stringLength, true);
+        $urlElement->addValidators($urlValidators);
+
         $form->addElement($urlElement);
 
+
         $commentElement = $form->createElement('text', 'comment');
-        $commentElement->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    //文字列の長さを指定する
-                    array('stringLength', true, array(20, 300)),
-                ));
+        $this->_addCommonFormElementOptions($commentElement, array('required' => false));
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'max' => 300
+                        )
+        );
+        $stringLength->setMessage('サイトの説明は%max%文字以下で入力してください。');
+        $commentValidators[] = array($stringLength, true);
+        $commentElement->addValidators($commentValidators);
+
         $form->addElement($commentElement);
 
 
         $keywordElement = $form->createElement('text', 'keyword');
-        $keywordElement->setRequired()
-                ->addFilter('StringTrim')
-                ->addValidators(array(
-                    array('NotEmpty', true),
-                    //文字列の長さを指定する
-                    array('stringLength', true, array(2, 300)),
-                ));
+        $this->_addCommonFormElementOptions($keywordElement, array('required' => false));
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'max' => 300
+                        )
+        );
+        $stringLength->setMessage('キーワードは%max%文字以下で入力してください。');
+        $keywordValidators[] = array($stringLength, true);
+        $keywordElement->addValidators($keywordValidators);
+
         $form->addElement($keywordElement);
+
+
         return $form;
     }
 
