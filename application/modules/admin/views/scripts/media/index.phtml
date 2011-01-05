@@ -111,7 +111,7 @@
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
                     </a>
                     <?php else: ?>
-                    <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $media['alt'] ?>" />
+                    <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
                     <?php endif ?>
                     <?php if (!$media['thumbExists']): ?>
                     <br />
