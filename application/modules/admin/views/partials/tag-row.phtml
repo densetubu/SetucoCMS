@@ -21,6 +21,9 @@
 <?php
     $form = clone($this->editTagForm);
     $form->addAllIdSuffix($this->index);
+    $form->getElement('tag')->setValue($this->tag['name']);
+    $form->getElement('id')->setValue($this->tag['id']);
+    $form->getElement('preTag')->setValue($this->tag['name']);
 ?>
 
 <td>
