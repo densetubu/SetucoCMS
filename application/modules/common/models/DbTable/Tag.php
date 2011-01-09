@@ -107,18 +107,16 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      *
      * @param string $tagName 検索したいキーワード
      * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければnull。
+     * @author akitsukada
      */
     public function loadTagIdsByTagName($tagName)
     {
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $select->where('name LIKE ?', "%{$tagName}%");
-
         $rowset = $this->fetchAll($select)->toArray();
-
         if (count($rowset) == 0) {
             return null;
         }
-
         $tagIds = array();
         foreach ($rowset as $cnt => $tag) {
             array_push($tagIds, (int)$tag['id']);
