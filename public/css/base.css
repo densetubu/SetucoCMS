@@ -817,15 +817,15 @@ ul#directory li ul li.page p img {
 
 
 /*------------------------------------------------------------*/
-/*    -- tag only style --                                   */
+/*    -- tag and category only style --                       */
 /*------------------------------------------------------------*/
-div.tagEdit {
+div.rowEdit {
     display: none;
 }
 
 
 /*------------------------------------------------------------*/
-/*    -- media only style --                                   */
+/*    -- media only style --                                  */
 /*------------------------------------------------------------*/
 p#upload_img1 {
     padding-bottom:5px;
@@ -860,11 +860,4 @@ div#mainContent dl#siteForm dd#site_description_d {
 }
 div#mainContent dl#siteForm dd span {
     font-size: 80%;
-}
-
-/*------------------------------------------------------------*/
-/*    -- category only style --                                   */
-/*------------------------------------------------------------*/
-form.tagEdit {
-    display: none;
 }

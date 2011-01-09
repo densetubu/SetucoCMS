@@ -64,27 +64,15 @@ function hidePageElementEdit(switcher) {
 
 /*********************
  * category/index
+ * tag/index
  *********************/
 function showRowEdit(switcher) {
     dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
-    dojo.query(switcher.parentNode).prev().children().at(1).children().style('display', 'block');
+    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'block');
 }
-
 function hideRowEdit(switcher) {
-    dojo.query(switcher.parentNode.parentNode).style('display', 'none');
-    dojo.query(switcher.parentNode.parentNode).parent().prev().style('display', 'inline');
-}
-
-/********************
- * tag/index
- ********************/
-function showTagEdit(switcher) {
-    dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
-    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'inline');
-}
-function hideTagEdit(switcher) {
     dojo.query(switcher.parentNode.parentNode.parentNode).style('display', 'none');
-    dojo.query(switcher.parentNode.parentNode.parentNode).prev().style('display', 'inline');
+    dojo.query(switcher.parentNode.parentNode.parentNode).prev().style('display', 'block');
 }
 
 /********************

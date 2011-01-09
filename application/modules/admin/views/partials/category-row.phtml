@@ -22,8 +22,8 @@
 <td>
     <span class="tagInfo"><?php echo $this->escape($this->category['name']) ?></span>
 
-    <div>
-        <form class="tagEdit" action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
+    <div class="rowEdit">
+        <form action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
             <p>
                 <input type="text" name="name" id="name<?php  echo $this->category['id'] ?>" value="<?php echo $this->escape($this->category['name']) ?>" />
                 <input type="hidden" name="id" id="id<?php echo $this->category['id'] ?>" value="<?php echo $this->category['id'] ?>" />

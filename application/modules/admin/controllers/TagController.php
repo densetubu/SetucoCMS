@@ -125,7 +125,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         $cancel = new Zend_Form_Element_Button('cancel', array(
             'id'      => 'cancel',
             'label'   => 'キャンセル',
-            'onclick' => 'hideTagEdit(this)'
+            'onclick' => 'hideRowEdit(this)'
         ));
         $id = new Zend_Form_Element_Hidden('id', array(
             'id'    => 'id',
