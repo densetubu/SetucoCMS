@@ -68,11 +68,7 @@ class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
         $select = $this->select()
                 ->from($this->_name, $selectColumns)
                 ->order("{$sortColumn} {$order}");
-        $rowset = $this->fetchAll($select);
-        if ($rowset->count() == 0) {
-            return array();
-        }
-        return $rowset->toArray();
+        return $this->fetchAll($select)->toArray();
     }
 
 }

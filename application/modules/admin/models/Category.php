@@ -58,7 +58,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         }
 
         //指定したソートをしたデータを取得する
-        $searchResult = $this->_categoryDao->findSortCategories($order, $pageNumber, $limit);
+        $searchResult = $this->_categoryDao->loadSortCategories($order, $pageNumber, $limit);
 
         //配列の方が操作しやすいので配列を戻り値にする
         $result = $searchResult->toArray();
@@ -96,7 +96,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function findAllCategoryIdAndNameSet()
     {
-        $result = $this->_categoryDao->findCategories(array('id', 'name'), 'name');
+        $result = $this->_categoryDao->loadAllCategoriesSpecifiedColumns(array('id', 'name'), 'name');
         $idNameSet = array();
         foreach ($result as $row) {
             $idNameSet[$row['id']] = $row['name'];
@@ -192,7 +192,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function deleteCategory($id)
     {
-        
+
         $primary = $this->_categoryDao->getPrimary();
 
         //文字列の可能性があるので、数値にキャストする

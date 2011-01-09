@@ -58,7 +58,7 @@ class Admin_Model_Directory
     public function createDirectoryInfo()
     {
         $directory = new Zend_Navigation();
-        $categories = $this->_categoryDao->findCategoriesByParentId(Setuco_Data_Constant_Category::NO_PARENT_ID, 'name');
+        $categories = $this->_categoryDao->loadCategoriesByParentId(Setuco_Data_Constant_Category::NO_PARENT_ID, 'name');
         foreach ($categories as $category) {
             $directory->addPage($this->_createNavCategory($category['id'], $category['name']));
         }
@@ -96,7 +96,7 @@ class Admin_Model_Directory
      */
     private function _createNavPages($categoryId)
     {
-        $pages = $this->_pageDao->findPagesByCategoryId($categoryId);
+        $pages = $this->_pageDao->loadPagesByCategoryId($categoryId);
         $navPages = array();
         foreach ($pages as $page) {
             $navPages[] = Zend_Navigation_Page::factory(array(

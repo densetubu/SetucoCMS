@@ -46,7 +46,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
     public function findLastUpdatedPages($limit)
     {
         //更新順のページを取得する
-        $result = $this->_pageDao->findLastUpdatePages($limit);
+        $result = $this->_pageDao->loadLastUpdatePages($limit);
 
         //からならfalseを返す
         if (empty($result)) {
@@ -79,7 +79,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function findPagesByTagId($tagId, $currentPage, $limit)
     {
-        return $this->_pageDao->findPagesByTagId($tagId, $currentPage, $limit)->toArray();
+        return $this->_pageDao->loadPagesByTagId($tagId, $currentPage, $limit);
     }
 
     /**
@@ -91,7 +91,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function countPagesByTagId($tagId)
     {
-        return count($this->_pageDao->findPagesByTagId($tagId));
+        return count($this->_pageDao->loadPagesByTagId($tagId));
     }
 }
 

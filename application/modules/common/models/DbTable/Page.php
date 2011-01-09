@@ -49,10 +49,10 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     /**
      * 新着ページを取得する
      *
-     * @param int $getPageCount 何件のページを取得するのか
+     * @param int $limit 何件のページを取得するのか
      * @author suzuki-mar
      */
-    public function findLastUpdatePages($getPageCount)
+    public function loadLastUpdatePages($limit)
     {
         $select = $this->select();
 
@@ -63,7 +63,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
         $select->order('update_date DESC');
 
         //指定した件数しか取得しない
-        $select->limit($getPageCount);
+        $select->limit($limit);
 
         $result = $this->fetchAll($select)->toArray();
         return $result;
@@ -72,12 +72,12 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     /**
      * 最近作成(公開)したページを取得する
      *
-     * @param  int     $getPageCount   何件のページを取得するのか
+     * @param  int     $limit          何件のページを取得するのか
      * @param  boolean $isJoinCategory カテゴリーテーブルを結合するならtrue。デフォルトはしない
      * @param  boolean $isJoinAccount  アカウントテーブルを結合するならtrue。 デフォルトはしない
      * @author charlesvineyard
      */
-    public function findLastCreatedPages($getPageCount, $isJoinCategory = false, $isJoinAccount = false)
+    public function loadLastCreatedPages($limit, $isJoinCategory = false, $isJoinAccount = false)
     {
         $select = $this->select();
         $select->from(array('p' => $this->_name));
@@ -94,7 +94,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
 
         $select->where('status = ?', self::STATUS_OPEN)
                 ->order('create_date desc')
-                ->limit($getPageCount);
+                ->limit($limit);
 
         return $this->fetchAll($select)->toArray();
     }
@@ -134,7 +134,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @author akitsukada
      * @return array 取得したページデータ
      */
-    public function findPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function loadPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->select();
 
@@ -177,7 +177,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array 取得したページデータを格納した配列
      * @author akitsukada
      */
-    public function findPagesByTagId($tagId, $pageNumber = null, $limit = null)
+    public function loadPagesByTagId($tagId, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -201,7 +201,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             $select->limitPage($pageNumber, $limit);
         }
 
-        return $this->fetchAll($select);
+        return $this->fetchAll($select)->toArray();
     }
 
     /**
@@ -214,7 +214,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array 取得したページデータを格納した配列。
      * @author akitsukada charlesvineyard
      */
-    public function searchPages($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function loadPagesByKeyword($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements, $sortColumn, $order);
 
@@ -303,7 +303,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
             $bind[':keyword'] = "%{$keyword}%";
         }
         if (in_array('tag', $targetColumns)) {
-            if (!is_null($tagIds)) {
+            if (is_array($tagIds) && !empty($tagIds)) {
                 if ($orwhere !== '') {
                     $orwhere .= ' OR ';
                 }
@@ -343,7 +343,7 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    public function findSortedPages($sortColumn, $order, $pageNumber, $limit, $isJoinAccount = false)
+    public function loadSortedPages($sortColumn, $order, $pageNumber, $limit, $isJoinAccount = false)
     {
         $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
         if ($isJoinAccount) {

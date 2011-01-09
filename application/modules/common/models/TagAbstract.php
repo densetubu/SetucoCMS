@@ -52,7 +52,7 @@ abstract class Common_Model_TagAbstract
      */
     public function findTagsByPageId($pageId)
     {
-        return $this->_tagDao->findTagByPageId($pageId)->toArray();
+        return $this->_tagDao->loadTagByPageId($pageId);
     }
 
 }

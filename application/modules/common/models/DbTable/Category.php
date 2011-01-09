@@ -66,7 +66,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
         //初期設定をしているカテゴリーのSELECT文を取得する
         $select = $this->select();
         $this->_addParentIdWhere($select, '!=');
-        
+
         return $select;
     }
 
@@ -113,7 +113,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array 使用されているカテゴリー一覧
      * @author suzuki-mar
      */
-    public function findUsedCategories()
+    public function loadUsedCategories()
     {
         //初期設定をしているカテゴリーのSELECT文を取得する 外部結合する設定
         $select = $this->_initializeJoinSelect();
@@ -162,7 +162,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array 使用されているカテゴリー一覧
      * @author suzuki-mar
      */
-    public function findAllCategories()
+    public function loadAllCategories()
     {
         //初期設定をしているカテゴリーのSELECT文を取得する 外部結合する設定
         $select = $this->_initializeJoinSelect();
@@ -185,7 +185,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array    カテゴリー情報の一覧
      * @author  suzuki-mar
      */
-    public function findSortCategories($sort, $page, $limit)
+    public function loadSortCategories($sort, $page, $limit)
     {
 
         //初期設定をしたSELECTオブジェクト
@@ -208,7 +208,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array カテゴリー情報の一覧
      * @author charlesvineyard
      */
-    public function findCategories($selectColumns, $sortColumn, $order = 'ASC')
+    public function loadAllCategoriesSpecifiedColumns($selectColumns, $sortColumn, $order = 'ASC')
     {
         $select = $this->_initializeSelect()
                         ->from($this->_name, $selectColumns)
@@ -223,7 +223,7 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
      * @return array カテゴリー情報の一覧
      * @author charlesvineyard
      */
-    public function findCategoriesByParentId($parentId, $sortColumn, $order = 'ASC')
+    public function loadCategoriesByParentId($parentId, $sortColumn, $order = 'ASC')
     {
         $select = $this->_initializeSelect()
                         ->where('parent_id = ?', $parentId)

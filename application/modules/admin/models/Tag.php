@@ -64,7 +64,7 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      */
     public function findTags($order, $pageNumber, $limit)
     {
-        return $this->_tagDao->findSortedTags($order, $pageNumber, $limit);
+        return $this->_tagDao->loadSortedTags($order, $pageNumber, $limit);
     }
 
     /**

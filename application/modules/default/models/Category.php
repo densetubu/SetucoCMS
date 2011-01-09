@@ -45,7 +45,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
     public function findCategoryLists()
     {
         //未分類以外のカテゴリーを取得する
-        $categories = $this->_categoryDao->findAllCategories();
+        $categories = $this->_categoryDao->loadAllCategories();
 
         if ($categories === false) {
             return false;
@@ -53,7 +53,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
 
 
         //使用されているカテゴリーを取得する
-        $useCategories = $this->_categoryDao->findUsedCategories();
+        $useCategories = $this->_categoryDao->loadUsedCategories();
 
 
         if ($useCategories !== false) {

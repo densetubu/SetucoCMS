@@ -65,7 +65,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     public function findPages($sortColmn, $order, $pageNumber, $limit)
     {
-        return $this->_pageDao->findSortedPages(
+        return $this->_pageDao->loadSortedPages(
             $sortColmn, $order, $pageNumber, $limit, true);
     }
 
@@ -80,11 +80,8 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     public function findLastCreatedPages($limit)
     {
-        return $this->_pageDao->findLastCreatedPages($limit, true, true);
-
+        return $this->_pageDao->loadLastCreatedPages($limit, true, true);
     }
-
-    
 
     /**
      * 今月作成(公開)したページ数を取得する
@@ -152,7 +149,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     {
         $tagIds = array();
         foreach ($tagNames as $tag) {
-            $tagId = $this->_tagDao->findTagIdByTagName($tag);
+            $tagId = $this->_tagDao->loadTagIdByTagName($tag);
             if ($tagId === null) {
                 $insertedTagId = $this->_tagDao->insert(array('name' => $tag));
                 $tagIds[] = $insertedTagId;

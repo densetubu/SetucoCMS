@@ -131,7 +131,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
      */
     public function getLastUpdateDateWithPastDays()
     {
-        $lastCreatedPage = array_pop($this->_pageDao->findLastCreatedPages(1));
+        $lastCreatedPage = array_pop($this->_pageDao->loadLastCreatedPages(1));
 
         //登録されていない場合は、falseを返す
         if (empty($lastCreatedPage)) {

@@ -42,7 +42,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @return array タグクラウドの情報を取得する
      * @author suzuki-mar
      */
-    public function findTagCloudInfos()
+    public function loadTagCloudInfos()
     {
         //タグ名とどれぐらい使用されているかをカウントする
         $select = $this->select()->from(array('t' => $this->_name), array('id', 'name'));
@@ -77,10 +77,10 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @return array タグ情報の配列
      * @author charlesvineyard
      */
-    public function findSortedTags($order, $page, $limit)
+    public function loadSortedTags($order, $page, $limit)
     {
         $select = $this->select()->limitPage($page, $limit)->order("name {$order}");
-        return $this->fetchAll($select);
+        return $this->fetchAll($select)->toArray();
     }
 
     /**
@@ -90,7 +90,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @return array 取得したタグ情報を格納した配列
      * @author akitsukada
      */
-    public function findTagByPageId($pageId)
+    public function loadTagByPageId($pageId)
     {
         $select = $this->select()->from(array('t' => $this->_name));
 
@@ -99,8 +99,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
 
         $select->where('pt.page_id = ?', $pageId);
 
-        return $this->fetchAll($select);
-
+        return $this->fetchAll($select)->toArray();
     }
 
     /**
@@ -109,20 +108,22 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @param string $tagName 検索したいキーワード
      * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければnull。
      */
-    public function findTagIdsByTagName($tagName)
+    public function loadTagIdsByTagName($tagName)
     {
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $select->where('name LIKE ?', "%{$tagName}%");
-        $findResult = $this->fetchAll($select)->toArray();
-        if (count($findResult) > 0) {
-            $tagIds = array();
-            foreach ($findResult as $cnt => $tag) {
-                array_push($tagIds, (int)$tag['id']);
-            }
-            return $tagIds;
-        } else {
+
+        $rowset = $this->fetchAll($select)->toArray();
+
+        if (count($rowset) == 0) {
             return null;
         }
+
+        $tagIds = array();
+        foreach ($rowset as $cnt => $tag) {
+            array_push($tagIds, (int)$tag['id']);
+        }
+        return $tagIds;
     }
 
     /**
@@ -131,7 +132,7 @@ class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
      * @param string $tagName 検索したいタグ名
      * @return array|null タグID。該当するタグがなければnull。
      */
-    public function findTagIdByTagName($tagName)
+    public function loadTagIdByTagName($tagName)
     {
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $select->where('name = ?', $tagName);

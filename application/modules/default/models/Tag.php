@@ -51,7 +51,7 @@ class Default_Model_Tag extends Common_Model_TagAbstract
      */
     public function getTagClouds()
     {
-        $tags  = $this->_tagDao->findTagCloudInfos();
+        $tags  = $this->_tagDao->loadTagCloudInfos();
 
 
         //からならfalseを返す
@@ -70,7 +70,7 @@ class Default_Model_Tag extends Common_Model_TagAbstract
                 $counts[$i] = $value['count'];
                 $i++;
             }
-            
+
             //タグが、最大のレベルまでいったらループを終了する
             if ($i > 10) {
                 break;
