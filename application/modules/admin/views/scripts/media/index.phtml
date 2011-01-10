@@ -106,23 +106,48 @@
             <?php foreach ($this->medias as $cnt => $media): ?>
             <tr <?php echo $cnt % 2 === 0 ? '' : 'class="check"' ?>>
                 <td class="thumb">
-                    <?php if ($media['mediaExists']): ?>
-                    <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
-                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
-                    </a>
+                    <?php if (($media['type'] === 'pdf' || $media['type'] === 'txt')
+                                                && !$media['mediaExists']): #PDF/TXTでファイルなし ?>
                     <?php else: ?>
-                    <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="<?php echo $this->escape($media['alt']) ?>" />
-                    <?php endif ?>
-                    <?php if (!$media['thumbExists']): ?>
-                    <br />
-                    <span class="attentionMessage">※[<?php echo $media['thumbUrl'] ?>]が見つかりません。</span>
+                        <?php if ($media['mediaExists'] && $media['thumbExists']): #ファイルあり・サムネイルあり ?>
+                        <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
+                            <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="「<?php echo $this->escape($media['name']) ?>」を表示" />
+                        </a>
+                        <?php endif ?>
+                        <?php if ($media['mediaExists'] && !$media['thumbExists']): #ファイルあり・サムネイルなし ?>
+                        <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
+                            「<?php echo $this->escape($media['name']) ?>」を表示
+                        </a>
+                        <?php endif ?>
+                        <?php if (!$media['mediaExists'] && $media['thumbExists']): #ファイルなし・サムネイルあり ?>
+                        <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="「<?php echo $this->escape($media['name']) ?>」を表示" />
+                        <?php endif ?>
+                        <?php if (!$media['mediaExists'] && !$media['thumbExists']): #ファイルなし・サムネイルなし(何も表示しない) ?>
+                        <?php endif ?>
                     <?php endif ?>
                 </td>
                 <td>
                     <?php echo $this->escape("{$media['name']} [{$media['type']}]") . "\n"; ?>
-                    <?php if (!$media['mediaExists']): ?>
-                    <br />
-                    <span class="attentionMessage">※[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
+                    <?php if (($media['type'] === 'pdf' || $media['type'] === 'txt')
+                                                && !$media['mediaExists']): #PDF/TXTでファイルなし ?>
+                        <br />
+                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
+                    <?php else: ?>
+                        <?php if ($media['mediaExists'] && $media['thumbExists']): #ファイルあり・サムネイルあり ?>
+                        <?php // 何も表示しない ?>
+                        <?php endif ?>
+                        <?php if ($media['mediaExists'] && !$media['thumbExists']): #ファイルあり・サムネイルなし ?>
+                        <br />
+                        <span class="attentionMessage">※サムネイル画像[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
+                        <?php endif ?>
+                        <?php if (!$media['mediaExists'] && $media['thumbExists']): #ファイルなし・サムネイルあり ?>
+                        <br />
+                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
+                        <?php endif ?>
+                        <?php if (!$media['mediaExists'] && !$media['thumbExists']): #ファイルなし・サムネイルなし ?>
+                        <br />
+                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
+                        <?php endif ?>
                     <?php endif ?>
                 </td>
                 <td><?php echo $media['update_date'] ?></td>

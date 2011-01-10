@@ -46,7 +46,7 @@
             <dt>
                 <?php echo $this->updateForm->getElement('preExtension') ?>
                 <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
-                    <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="<?php echo $this->escape($this->mediaData['comment']) ?>" />
+                    <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="「<?php echo $this->escape($this->mediaData['name']) ?>」を表示" />
                 </a>
             </dt>
             <dt>ファイル名</dt>
