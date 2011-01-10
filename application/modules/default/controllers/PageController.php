@@ -161,7 +161,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
         foreach ($entries as $cnt => $entry) {
-            $entries[$cnt]['contents'] = mb_substr($entry['contents'], 0, 100, 'UTF-8');
+            $entries[$cnt]['contents'] = mb_substr(strip_tags($entry['contents']), 0, 100, 'UTF-8');
             $entries[$cnt]['update_date'] = date('Y年m月d日', strtotime($entry['update_date']));
         }
         $this->view->entries = $entries;
