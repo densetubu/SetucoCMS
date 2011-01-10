@@ -35,25 +35,6 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
     }
 
     /**
-     * 存在するタグ名か調べます。
-     *
-     * @param  string $name タグ名
-     * @return boolean 存在すれば true
-     * @author charlesvineyard
-     */
-    public function isExistsTagName($name)
-    {
-        $row = $this->_tagDao->fetchRow(
-            $this->_tagDao->select()
-                 ->where('name = ?', $name)
-            );
-        if (is_null($row)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * タグ情報を取得する。タグ名でソートします。
      *
      * @param  string $order       asc か　desc
@@ -87,9 +68,6 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      */
     public function registTag($name)
     {
-        if ($this->isExistsTagName($name)) {
-            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
-        }
         $this->_tagDao->insert(array('name' => $name));
     }
 
@@ -103,9 +81,6 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      */
     public function updateTag($id, $name)
     {
-        if ($this->isExistsTagName($name)) {
-            throw new Zend_Db_Exception('入力されたタグ名は既に存在します。');
-        }
         $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
         $this->_tagDao->update(array('name' => $name), $where);
     }

@@ -115,7 +115,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
             'id'         => 'tag',
             'value'      => '',
             'required'   => true,
-            'validators' => $this->_makeTagValidators(),
+            'validators' => $this->_makeTagValidators(true),
             'filters'    => array('StringTrim')
         ));
         $submit = new Zend_Form_Element_Submit('sub', array(
@@ -143,10 +143,11 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
     /**
      * タグ名用のバリデーターを作成する。
      *
+     * @param  bool  $isEditing 編集用のバリデータなら true。デフォルトはfalse。
      * @return array Zend_Validateインターフェースとオプションの配列の配列
      * @author charlesvineyard
      */
-    private function _makeTagValidators()
+    private function _makeTagValidators($isEditing = false)
     {
         $validators[] = array();
 
@@ -163,14 +164,16 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
-        $noRecordExists = new Zend_Validate_Db_NoRecordExists(
-            array(
-                'table' => 'tag',
-                'field' => 'name'
-            )
-        );
-        $noRecordExists->setMessage('「%value%」は既に登録されています。');
-        $validators[] = array($noRecordExists, true);
+        if ($isEditing != true) {
+            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+                array(
+                    'table' => 'tag',
+                    'field' => 'name'
+                )
+            );
+            $noRecordExists->setMessage('「%value%」は既に登録されています。');
+            $validators[] = array($noRecordExists, true);
+        }
 
         return $validators;
     }
