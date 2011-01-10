@@ -139,7 +139,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 一覧にはコンテンツの頭５行のみ表示する（現在とりあえず生コンテンツデータそのまま表示）
+     * @todo 一覧にはコンテンツの頭５行のみ表示する（現在とりあえず100文字表示）
      */
     public function categoryAction()
     {
@@ -158,8 +158,13 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
 
         $currentPage = $this->_getPageNumber();
-        $this->view->entries = $this->_pageService->findPagesByCategoryId(
+        $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
+        foreach ($entries as $cnt => $entry) {
+            $entries[$cnt]['contents'] = mb_substr($entry['contents'], 0, 100, 'UTF-8');
+            $entries[$cnt]['update_date'] = date('Y年m月d日', strtotime($entry['update_date']));
+        }
+        $this->view->entries = $entries;
 
         $category = $this->_categoryService->findCategory($id);
         if (is_null($category['name'])) {
