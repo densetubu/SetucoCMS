@@ -160,9 +160,11 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $currentPage = $this->_getPageNumber();
         $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
+        $date = new Zend_Date();
         foreach ($entries as $cnt => $entry) {
             $entries[$cnt]['contents'] = mb_substr($entry['contents'], 0, 100, 'UTF-8');
-            $entries[$cnt]['update_date'] = date('Y年m月d日', strtotime($entry['update_date']));
+            $date->set($entry['update_date'], Zend_Date::ISO_8601);
+            $entries[$cnt]['update_date'] = $date->toString('Y/MM/dd HH:mm');
         }
         $this->view->entries = $entries;
 
