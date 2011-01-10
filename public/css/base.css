@@ -87,6 +87,12 @@ dl.straight dd {
     float: left;
     margin-right: 25px;
 }
+/* -- 必須テキスト -- */
+span.required {
+    color: #dd0000;
+    padding-right: 5px;
+    font-weight: bold;
+}
 /* -- 注意メッセージ -- */
 span.attentionMessage {
     font-size: 80%;
@@ -467,10 +473,6 @@ td {
     border-right: solid 1px #f6f6f6;
     padding: 7px 5px 7px 15px;
 }
-div#mainContent div.section dl.editArea dt span {
-    font-size: 80%;
-    color: #dd0000;
-}
 td.thumb {
     text-align: center;
 }
@@ -489,11 +491,6 @@ dl#inputArea {
 dl#inputArea dt {
     margin-top: 20px;
     margin-bottom: 3px;
-}
-dl#inputArea dt span {
-    color: #dd0000;
-    padding-right: 5px;
-    font-weight: bold;
 }
 dl#inputArea input {
     font-size: 100%;
@@ -521,9 +518,6 @@ dl.editArea dt {
     width: 20%;
     height: 3em;
     display: block;
-}
-dl.editArea dt span {
-    font-size: 90%;
 }
 div#mainContent dl.editArea dd {
     background: none;
@@ -852,12 +846,15 @@ div#mainContent dl#siteForm dt {
 div#mainContent dl#siteForm dd {
     height: 4em;
 }
+div#mainContent dl#siteForm dt span.attentionMessage {
+    padding-left: 0;
+}
+div#mainContent dl#siteForm dd span {
+    font-size: 80%;
+}
 div#mainContent dl#siteForm dt#site_description_t {
     height: 6em;
 }
 div#mainContent dl#siteForm dd#site_description_d {
     height: 6em;
-}
-div#mainContent dl#siteForm dd span {
-    font-size: 80%;
 }

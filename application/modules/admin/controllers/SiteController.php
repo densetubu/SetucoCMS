@@ -138,7 +138,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
 
         $urlElement = $form->createElement('text', 'url');
-        
+
         $this->_addFormElementCommonOptions($urlElement);
         $urlElement->addFilter('fullUrl');
 
@@ -147,12 +147,12 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $urlValidators[] = array($notEmpty, true);
 
         $urlCheck = new Setuco_Validator_Url();
-        $urlCheck->setMessage('サイトURLは正しいURLを入力してください');
+        $urlCheck->setMessage('サイトURLの形式が正しくありません。');
         $urlValidators[] = array($urlCheck, true);
 
         $stringLength = new Zend_Validate_StringLength(
                         array(
-                            'min' => 6,
+                            'min' => 8,
                             'max' => 100
                         )
         );
