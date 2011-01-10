@@ -147,6 +147,10 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     private function _registTagsIfNotExist($tagNames)
     {
+        if (empty($tagNames)) {
+            return array();
+        }
+
         $tagIds = array();
         foreach ($tagNames as $tag) {
             $tagId = $this->_tagDao->loadTagIdByTagName($tag);

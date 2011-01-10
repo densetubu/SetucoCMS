@@ -869,21 +869,21 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             return $this->_forward('form');
         }
 
-        $pageId = $this->_pageService->registPage(
+        $createdPageId = $this->_pageService->registPage(
             $form->getValue('page_title'),
             $form->getValue('page_contents'),
             $form->getValue('page_outline'),
-            array_unique(Setuco_Util_String::splitCsvString($form->getValue('tag'))),
+            array_unique($this->_splitTagValue($form->getValue('tag'))),
             new Zend_Date(
                 $post['create_date'] . $post['create_time'],
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
             ),
             $this->_getInputStatus(),
-            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($categoryId)
+            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id'))
         );
 
         $this->_helper->flashMessenger('新規ページを作成しました。');
-        $this->_helper->redirector('index', null, null, array('id' => $pageId));
+        $this->_helper->redirector('index', null, null, array('id' => $createdPageId));
     }
 
     /**
@@ -909,9 +909,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
 
         // タグ名を1つずつチェック
-        $tags = Setuco_Util_String::splitCsvString($values['tag']);
+        $tags = $this->_splitTagValue($values['tag']);
         $form->getElement('tag')->setValidators($this->_makeTagValidators());
-        if ($tags !== null) {
+        if ($tags != null) {
             foreach ($tags as $tag) {
                 if (!$form->getElement('tag')->isValid($tag)) {
                     $form->markAsError();
@@ -979,7 +979,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'category_id' => Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id')),
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
-            'tag'         => array_unique(Setuco_Util_String::splitCsvString($form->getValue('tag'))),
+            'tag'         => array_unique($this->_splitTagValue($form->getValue('tag'))),
             'create_date' => new Zend_Date(
                 $post['create_date'] . $post['create_time'],
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
@@ -1057,6 +1057,33 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_pageService->deletePage($id);
         $this->_helper->flashMessenger('「' . $page['title'] . '」を削除しました。');
         $this->_helper->redirector('index');
+    }
+
+    /**
+     * 入力されたタグ文字列を分割し、配列に変換します。
+     *
+     * 文字列の前後の空白は削除されます。
+     * 分割後の文字列が空文字の場合は戻り値に含まれません。
+     * 例) _splitTagValue('a, b ,,c,')
+     *    → [0] => 'a'
+     *      [1] => 'b'
+     *      [2] => 'c'
+     *
+     * @param string $tagValue カンマ区切りの文字列
+     * @return array 分割された文字列
+     * @author charlesvineyard
+     */
+    private function _splitTagValue($tagValue)
+    {
+        $strings = explode(',', $tagValue);
+        $result = array();
+        foreach ($strings as $string) {
+            $trimed = trim($string);
+            if ($trimed !== '') {
+                $result[] = $trimed;
+            }
+        }
+        return $result;
     }
 }
 
