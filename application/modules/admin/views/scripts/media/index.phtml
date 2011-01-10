@@ -76,17 +76,17 @@
     </form>
     <table summary="ファイル一覧の表です。編集ボタンからファイルの編集ができます。削除ボタンから削除ができます。サムネイルを押すとファイルを表示します。" cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="18%" />
-            <col width="22%" />
-            <col width="23%" />
-            <col width="23%" />
+            <col width="20%" />
+            <col width="24%" />
+            <col width="21%" />
+            <col width="21%" />
             <col width="7%" />
             <col width="7%" />
         </colgroup>
         <thead>
             <tr>
                 <th scope="col" id="tableFirst">表示</th>
-                <th scope="col">ファイル
+                <th scope="col">ファイル名[拡張子]
                     <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/name/order/desc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" /></a>
                     <a href="<?php echo $this->baseUrl('/admin/media/index') . '/page/1/type/' . $this->fileType . '/sort/name/order/asc' ?>"><img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" /></a>
                 </th>
