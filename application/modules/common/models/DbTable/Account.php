@@ -20,7 +20,7 @@
  * @subpackage  Model_DbTable
  * @author      mitchang
  */
-class Common_Model_DbTable_Account extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Account extends Setuco_Db_Table_Abstract
 {
     /**
      * 	テーブル名

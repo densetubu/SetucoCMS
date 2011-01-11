@@ -64,7 +64,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function isEntryExists()
     {
-        $count = $this->countPages(Setuco_Data_Constant_Page::STATUS_RELEASE);
+        $count = $this->countPagesByStatus(Setuco_Data_Constant_Page::STATUS_RELEASE);
         $result = ($count > 0);
         return $result;
     }

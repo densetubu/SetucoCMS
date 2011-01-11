@@ -134,7 +134,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->searchForm = $this->_getParam('searchForm', $this->_createSearchForm());
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
-        $this->setPagerForView($this->_pageService->countPages());
+        $this->setPagerForView($this->_pageService->countAllPages());
         $this->_showFlashMessages();
     }
 

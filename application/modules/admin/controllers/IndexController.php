@@ -100,7 +100,7 @@ class Admin_IndexController extends Setuco_Controller_Action_AdminAbstract
                 $createdPageCount - $this->_goalService->findGoalPageCountThisMonth());
 
         // 総ページ数
-        $this->view->totalPageCount = $this->_pageService->countPages();
+        $this->view->totalPageCount = $this->_pageService->countAllPages();
 
         // サイト開設日
         $siteDateInfo = $this->_siteService->getOpenDateWithPastDays();

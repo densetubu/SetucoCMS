@@ -148,29 +148,27 @@ abstract class Common_Model_PageAbstract
     }
 
     /**
-     * ページを数えます。
+     * 状態と作成年月をに合ったページを数えます。
      *
      * @param int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
      *                     指定しなければ全ての状態のものを数えます。
-     * @param int $createYear  YYYY形式の年 指定すればその年に作成したものを数えます
-     * @param int $createMonth MM形式の月 $createYearと一緒に指定すればその月に作成したものを数えます
      * @return int ページ数
      * @author charlesvineyard
      */
-    public function countPages($status = null, $createYear = null, $createMonth = null)
+    public function countPagesByStatus($status = null)
     {
-        $startDate = null;
-        $endDate = null;
-        if ($createYear != null) {
-            if ($createMonth != null) {
-                $startDate = new Zend_Date("{$createYear}-{$createMonth}", 'YYYY-M');
-                $endDate = new Zend_Date($createYear . '-' . ($createMonth + 1), 'YYYY-M');
-            } else {
-                $startDate = new Zend_Date($createYear, 'YYYY');
-                $endDate = new Zend_Date($createYear + 1, 'YYYY');
-            }
-        }
-        return $this->_pageDao->countPages($status, $startDate, $endDate);
+        return $this->_pageDao->countPagesByStatusAndCreateDateSpan($status);
+    }
+
+    /**
+     * 全てのページを数えます。
+     *
+     * @return int ページ数
+     * @author charlesvineyard
+     */
+    public function countAllPages()
+    {
+        return $this->_pageDao->count();
     }
 }
 

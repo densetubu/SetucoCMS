@@ -20,11 +20,11 @@
  * @subpackage  Model_DbTable
  * @author      suzuki-mar
  */
-class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Site extends Setuco_Db_Table_Abstract
 {
     /**
      * テーブル名
-     * 
+     *
      * @var string
      */
     protected $_name = 'site';
@@ -35,6 +35,6 @@ class Common_Model_DbTable_Site extends Zend_Db_Table_Abstract
      * @var string
      */
     protected $_primary = 'id';
-    
+
 }
 

@@ -20,9 +20,8 @@
  * @subpackage  Model_DbTable
  * @author      mitchang
  */
-class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 {
-
     /**
      * テーブル名
      *
@@ -100,16 +99,16 @@ class Common_Model_DbTable_Page extends Zend_Db_Table_Abstract
     }
 
     /**
-     * ページを数えます。
+     * ページの状態と作成日時の幅を指定して、期間中に作られたページを数えます。
      *
      * @param  int $status ページの状態（Setuco_Data_Constant_Page::STATUS_*）
      *                     指定しなければ全ての状態のものを数えます。
-     * @param  int $createDateStart  作成日時の最小値(この値自体を含む)
-     * @param  int $createDateEnd    作成日時の最大値(この値自体を含まない)
+     * @param  Zend_Date|string $createDateStart  作成日時の最小値(この値自体を含む)
+     * @param  Zend_Date|string $createDateEnd    作成日時の最大値(この値自体を含まない)
      * @return int ページ数
      * @author charlesvineyard
      */
-    public function countPages($status = null, $createDateStart = null, $createDateEnd = null)
+    public function countPagesByStatusAndCreateDateSpan($status = null, $createDateStart = null, $createDateEnd = null)
     {
         $select = $this->select();
         if (!is_null($status)) {

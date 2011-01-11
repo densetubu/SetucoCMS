@@ -20,7 +20,7 @@
  * @subpackage  DbTable
  * @author      charlesvineyard suzuki-mar
  */
-class Common_Model_DbTable_Tag extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
 {
     /**
      * テーブル名

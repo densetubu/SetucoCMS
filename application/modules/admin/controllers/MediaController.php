@@ -157,7 +157,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
         // ページネーター用の設定
         $this->view->currentPage = $currentPage;
-        $this->setPagerForView($this->_media->countMedias($fileType));
+        $this->setPagerForView($this->_media->countMediasByType($fileType));
 
         // フラッシュメッセージ設定 (flashMessengerを使うとforward前に設定したメッセージが表示されないので直接viewに設定
         $flashMsgs = $this->_getParam('flashMsgs');

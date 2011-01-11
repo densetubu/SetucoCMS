@@ -92,10 +92,14 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     public function countPagesCreatedThisMonth()
     {
         $date = new Zend_Date();
-        return $this->countPages(
-                Setuco_Data_Constant_Page::STATUS_RELEASE,
-                $date->get(Zend_Date::YEAR),
-                $date->get(Zend_Date::MONTH_SHORT)
+        $createYear = $date->get(Zend_Date::YEAR);
+        $createMonth = $date->get(Zend_Date::MONTH_SHORT);
+
+        $startDate = new Zend_Date("{$createYear}-{$createMonth}", 'Y-M');
+        $endDate = new Zend_Date($createYear . '-' . ($createMonth + 1), 'Y-M');
+
+        return $this->_pageDao->countPagesByStatusAndCreateDateSpan(
+            Setuco_Data_Constant_Page::STATUS_RELEASE, $startDate, $endDate
         );
     }
 

@@ -34,7 +34,7 @@ class Admin_Model_Media
      * ファイルの新規登録中に作成する一時ファイルの拡張子
      */
     const TEMP_FILE_EXTENSION = 'new';
-    
+
     /**
      * PDFファイル用アイコンファイルのパス
      */
@@ -48,7 +48,7 @@ class Admin_Model_Media
 
     /**
      * メディア表のDAO
-     * 
+     *
      * @var Common_Model_DbTable_Media
      */
     private $_mediaDao = null;
@@ -89,7 +89,7 @@ class Admin_Model_Media
 
     /**
      * データベースから取得したMediaデータの、ファイル種別に応じてサムネイルのパス情報を付加する
-     * 
+     *
      * @param array $media DBから取得したファイル情報１件分
      * @return array|false サムネイル情報付加済みの配列。処理に失敗したらfalse。
      * @author akitsukada
@@ -155,7 +155,7 @@ class Admin_Model_Media
 
     /**
      * ファイルシステム上の画像ファイル絶対パスからサムネイルを生成し保存する
-     * 
+     *
      * @param string $imagePath ファイルシステム上に保存された（アップロードされた）画像ファイルの絶対パス
      * @return boolean サムネイル生成、保存に成功したらtrue,失敗ならfalse
      */
@@ -241,15 +241,15 @@ class Admin_Model_Media
     }
 
     /**
-     * DBのMedia表から、条件に合うファイルの件数をカウントする
+     * DBのMedia表から、指定した拡張子のレコードを数える
      *
-     * @param    array $condition 条件を指定する配列
+     * @param    string $type 拡張子の文字列。指定しなければ全てを数える。
      * @return   int カウント結果の件数
      * @author   akitsukada
      */
-    public function countMedias($ext = null)
+    public function countMediasByType($type = null)
     {
-        return $this->_mediaDao->count($ext);
+        return $this->_mediaDao->countMediasByType($type);
     }
 
     /**

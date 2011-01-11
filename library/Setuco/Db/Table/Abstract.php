@@ -1,12 +1,12 @@
 <?php
 /**
- * ambitionテーブルのDbTable(DAO)クラスです。
+ * DbTableの抽象クラスです。
  *
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Common
- * @subpackage Model_DbTable
+ * @package    Db
+ * @subpackage Table
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
@@ -16,24 +16,22 @@
  */
 
 /**
- * @package     Common_Model
- * @subpackage  DbTable
+ * @package    Db
+ * @subpackage Table
  * @author      charlesvineyard
  */
-class Common_Model_DbTable_Ambition extends Setuco_Db_Table_Abstract
+class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {
     /**
-     * テーブル名
+     * 全部で何件あるのか取得する
      *
-     * @var String
+     * @return int 全てのデータ件数
+     * @author suzuki-mar charlesvineyard
      */
-    protected $_name = 'ambition';
+    public function count()
+    {
+        $select = $this->select($this->_name);
+        return $this->fetchAll($select)->count();
+    }
 
-    /**
-     * プライマリーキーのカラム名
-     *
-     * @var String
-     */
-    protected $_primary = 'id';
 }
-

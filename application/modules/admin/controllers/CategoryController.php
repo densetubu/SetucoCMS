@@ -88,7 +88,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
         $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
-        $max = $this->_categoryService->countCategories();
+        $max = $this->_categoryService->countAllCategories();
         $this->setPagerForView($max);
 
         //バリデートに失敗したエラーフォームがあればセットする

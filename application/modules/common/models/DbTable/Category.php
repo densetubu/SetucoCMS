@@ -21,7 +21,7 @@
  * @subpackage  DbTable
  * @author      charlesvineyard suzuki-mar
  */
-class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
 {
 
     /**
@@ -232,33 +232,14 @@ class Common_Model_DbTable_Category extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 全部で何件あるのか取得する
+     * 全ての有効なカテゴリーの件数を数えます。
      *
-     * @return int 何件のデータがあるのか
-     * @author suzuki-mar
+     * @return int 全てのカテゴリー件数
+     * @author charlesvineyard
      */
     public function count()
     {
-        $select = $this->select($this->_name);
-        $result = $this->fetchCount($select);
-        return $result;
-    }
-
-    /**
-     * データの取得件数をカウントする
-     *
-     * @param Zend_Db_Select カウントするSelectオブジェクト
-     * @return int 何件のデータがあるのか
-     * @author suzuki-mar
-     * @todo countRows に名前変更で親クラスに定義
-     */
-    public function fetchCount(Zend_Db_Select $select)
-    {
-        //検索結果をcountする
-        $searchResult = $this->fetchAll($select)->toArray();
-        $result = count($searchResult);
-
-        return $result;
+        return parent::count() - 1;    // PARENT_ROOT_IDの分減らす
     }
 
     /**

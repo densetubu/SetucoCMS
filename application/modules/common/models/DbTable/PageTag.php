@@ -20,7 +20,7 @@
  * @subpackage  Model_DbTable
  * @author      charlesvineyard
  */
-class Common_Model_DbTable_PageTag extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_PageTag extends Setuco_Db_Table_Abstract
 {
     /**
      * テーブル名

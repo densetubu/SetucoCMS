@@ -20,30 +20,30 @@
  * @subpackage  Model_DbTable
  * @author      mitchang akitsukada
  */
-class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
 {
     /**
      * テーブル名
-     * 
+     *
      * @var string
      */
     protected $_name = 'media';
-    
+
     /**
      * プライマリーキーのカラム名
      *
      * @var string
      */
     protected $_primary = 'id';
-    
+
     /**
      * media表から指定されたIDのレコードを削除する
-     * 
+     *
      * @param int $id 削除したいレコードのID
      * @return boolean 削除
      * @author akitsukada
      */
-    public function deleteById($id) 
+    public function deleteById($id)
     {
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
         if ($this->delete($where) == 1) {
@@ -51,28 +51,28 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
         }
         return false;
     }
-    
+
     /**
      * media表の、指定された拡張子のファイル件数をカウントする
-     * 
-     * @param string $ext カウントしたいファイルの拡張子。指定しなければ全ての拡張子になる
+     *
+     * @param string $type カウントしたいファイルの拡張子。指定しなければ全てを数える
      * @return int カウントした件数
      * @author akitsukada
      */
-    public function count($ext = null)
+    public function countMediasByType($type = null)
     {
         $select = $this->select($this->_name);
-        if ($ext !== 'all') {
-            $select->where('type = ?', $ext);
+        if ($type !== 'all') {
+            $select->where('type = ?', $type);
         }
         $select->where('type != ?', 'new'); // ゴミファイル(.new)がひっかかってしまわないように
-        $result = $this->fetchAll($select);       
+        $result = $this->fetchAll($select);
         return count($result);
     }
-    
+
     /**
      * 指定された条件でページネート、ソートされた検索結果を配列で返す
-     * 
+     *
      * @param Zend_Db_Table_Select $select 実行したいSelectオブジェクト
      * @return Selectオブジェクトの実行(fetchAll)結果
      * @author akitsukada
@@ -90,8 +90,8 @@ class Common_Model_DbTable_Media extends Zend_Db_Table_Abstract
         } else {
             $select->where('type = ?', $targetExt);
         }
-        
+
         return $this->fetchAll($select)->toArray();
     }
-    
+
 }

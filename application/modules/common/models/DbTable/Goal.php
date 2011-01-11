@@ -20,7 +20,7 @@
  * @subpackage  Model_DbTable
  * @author      suzuki_mar
  */
-class Common_Model_DbTable_Goal extends Zend_Db_Table_Abstract
+class Common_Model_DbTable_Goal extends Setuco_Db_Table_Abstract
 {
     /**
      * テーブル名
