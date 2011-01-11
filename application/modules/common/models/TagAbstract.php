@@ -40,7 +40,7 @@ abstract class Common_Model_TagAbstract
      */
     public function findTag($id)
     {
-        return $this->_tagDao->find($id)->current()->toArray();
+        return $this->_tagDao->findById($id);
     }
 
     /**

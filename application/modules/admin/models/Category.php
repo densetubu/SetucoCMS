@@ -79,7 +79,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
 
         $categoryData = $this->_categoryDao->findById($id);
 
-        if ($categoryData === false) {
+        if ($categoryData === null) {
             return false;
         }
 

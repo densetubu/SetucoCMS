@@ -243,34 +243,6 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
     }
 
     /**
-     * idからデータを取得する
-     *
-     * @param int $id データを取得するid
-     * @return array データを取得する　存在しなかったらfalseを返す
-     * @author suzuki-mar
-     */
-    public function findById($id)
-    {
-        //$this->_primaryは、fetch時に配列になるので文字列の中間変数を作成する
-        $primary = $this->getPrimary();
-
-        //主キーがidとは限らないので、this-_primaryを使用する
-        $select = $this->select()->from($this->_name)->where("{$primary} = ?", $id);
-
-        //データを取得する
-        $searchResult = $this->fetchRow($select);
-
-        //取得に成功した場合のみ取得したデータを戻り値にする
-        if ($searchResult) {
-            $result = $searchResult->toArray();
-        } else {
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
      * プライマリキーを取得する
      *
      * @return mixed プライマリキー　Zend_Db_Table->_primary

@@ -88,11 +88,12 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
      */
     public function findCategory($id)
     {
-        $result = $this->_categoryDao->find($id)->current();
+        $result = $this->_categoryDao->findById($id);
+
         if (is_null($result)) {
             return false;
         }
-        return $result->toArray();
+        return $result;
     }
 
 }

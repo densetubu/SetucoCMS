@@ -276,7 +276,7 @@ class Admin_Model_Media
      */
     public function findMediaById($id)
     {
-        $media = $this->_mediaDao->find($id)->current()->toArray();
+        $media = $this->_mediaDao->findById($id);
         $media = $this->_addThumbPathInfo($media);
         return $media;
     }
