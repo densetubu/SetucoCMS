@@ -103,7 +103,6 @@ class Admin_Model_Media
 
         $media['uploadUrl'] = Setuco_Data_Constant_Media::UPLOAD_DIR_PATH_FROM_BASE . $fileName;
         $media = $this->_fixMediaPathInfo($media);
-        $media['alt'] = $media['comment'];
 
         $media['thumbUrl'] = '';
         $media['thumbWidth'] = 0;
