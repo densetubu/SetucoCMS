@@ -121,15 +121,7 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
         //公開状態のものしか取得しない
         $select->where('status = ?', Setuco_Data_Constant_Page::STATUS_RELEASE);
 
-        $searchResult = $this->fetchAll($select);
-        $result = $searchResult->toArray();
-
-        //空だったらfalseを返す
-        if (empty($result)) {
-            return false;
-        }
-
-        return $result;
+        return $this->fetchAll($select)->toArray();
     }
 
 
@@ -156,22 +148,15 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
     /**
      * すべてのカテゴリーを取得する
      *
-     * @return array 使用されているカテゴリー一覧
+     * @return array すべてのカテゴリー。なにもなければ空の配列。
      * @author suzuki-mar
      */
     public function loadAllCategories()
     {
         //初期設定をしているカテゴリーのSELECT文を取得する 外部結合する設定
         $select = $this->_initializeJoinSelect();
-        $searchResult = $this->fetchAll($select);
-        $result = $searchResult->toArray();
 
-        //空だったらfalseを返す
-        if (empty($result)) {
-            return false;
-        }
-
-        return $result;
+        return $this->fetchAll($select)->toArray();
     }
 
     /**

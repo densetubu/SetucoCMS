@@ -47,7 +47,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
         //未分類以外のカテゴリーを取得する
         $categories = $this->_categoryDao->loadAllCategories();
 
-        if ($categories === false) {
+        if (empty($categories)) {
             return false;
         }
 
@@ -56,7 +56,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
         $useCategories = $this->_categoryDao->loadUsedCategories();
 
 
-        if ($useCategories !== false) {
+        if (!empty($useCategories)) {
             //使用されているカテゴリーのIDの配列を取得する
             foreach ($useCategories as $value) {
                 $useIds[] = $value['id'];
