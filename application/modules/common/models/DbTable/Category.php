@@ -30,12 +30,14 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
      * @var String
      */
     protected $_name = 'category';
+
     /**
      * プライマリーキーのカラム名
      *
      * @var String
      */
     protected $_primary = 'id';
+
     /**
      * テーブルのalias名
      *
@@ -49,11 +51,6 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
      * @var int
      */
     const PARENT_ROOT_ID = -1;
-
-    /**
-     * 未分類のカテゴリー
-     */
-    const DEFAULT_ID = 0;
 
     /**
      * 共通の初期設定をしたSELECTオブジェクト
