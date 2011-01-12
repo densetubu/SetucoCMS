@@ -56,7 +56,7 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      */
     public function countAllTags()
     {
-        return $this->_tagDao->count();
+        return $this->_tagDao->countAll();
     }
 
     /**

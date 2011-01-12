@@ -168,7 +168,7 @@ abstract class Common_Model_PageAbstract
      */
     public function countAllPages()
     {
-        return $this->_pageDao->count();
+        return $this->_pageDao->countAll();
     }
 }
 

@@ -237,9 +237,9 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
      * @return int 全てのカテゴリー件数
      * @author charlesvineyard
      */
-    public function count()
+    public function countAll()
     {
-        return parent::count() - 1;    // PARENT_ROOT_IDの分減らす
+        return parent::countAll() - 1;    // PARENT_ROOT_IDの分減らす
     }
 
     /**

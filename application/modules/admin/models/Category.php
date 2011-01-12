@@ -112,7 +112,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function countAllCategories()
     {
-        return $this->_categoryDao->count();
+        return $this->_categoryDao->countAll();
     }
 
     /**

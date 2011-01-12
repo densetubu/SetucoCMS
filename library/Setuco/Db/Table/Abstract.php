@@ -28,7 +28,7 @@ class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @return int 全てのデータ件数
      * @author suzuki-mar charlesvineyard
      */
-    public function count()
+    public function countAll()
     {
         $select = $this->select($this->_name);
         return $this->fetchAll($select)->count();
