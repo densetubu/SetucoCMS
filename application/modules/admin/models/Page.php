@@ -56,7 +56,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      * ページ情報を取得する
      * アカウント情報も取得します。
      *
-     * @param string  $sortColmn  並べ替えをするカラムのカラム名
+     * @param string $sortColmn  並べ替えをするカラムのカラム名
      * @param string $order       asc か　desc
      * @param int    $pageNumber  ページ番号(オフセットカウント)
      * @param int    $limit       一つのページに出力する数(オフセット)
@@ -65,7 +65,7 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     public function findPages($sortColmn, $order, $pageNumber, $limit)
     {
-        return $this->_pageDao->loadSortedPages(
+        return $this->_pageDao->loadPages4Pager(
             $sortColmn, $order, $pageNumber, $limit, true);
     }
 

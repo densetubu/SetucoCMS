@@ -72,14 +72,14 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
      * 指定した並び順でタグ一覧を取得します。
      *
      * @param string|array $order 並び順
-     * @param int $page 現在のページ番号
+     * @param int $pageNumber 取得するページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
      * @return array タグ情報の配列
      * @author charlesvineyard
      */
-    public function loadSortedTags($order, $page, $limit)
+    public function loadTags4Pager($order, $pageNumber, $limit)
     {
-        $select = $this->select()->limitPage($page, $limit)->order("name {$order}");
+        $select = $this->select()->limitPage($pageNumber, $limit)->order("name {$order}");
         return $this->fetchAll($select)->toArray();
     }
 

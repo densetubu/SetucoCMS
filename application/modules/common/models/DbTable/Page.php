@@ -126,14 +126,16 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
     /**
      * カテゴリを指定してページを取得する。pageNumberとlimitの両方が指定された場合だけ、ページネータ用のデータを取得する。
      *
-     * @param int $categoryId 取得したいカテゴリのID
-     * @param int $status ページの状態。デフォルトは全て。
-     * @param int $pageNumber ページネータの何ページ目を表示するか
-     * @param int $limig １ページに表示するページ数
+     * @param  int    $categoryId 取得したいカテゴリのID
+     * @param  int    $status     ページの状態。デフォルトは全て。
+     * @param  int    $pageNumber ページネータの何ページ目を表示するか
+     * @param  int    $limit      １ページに表示するページ数
+     * @param  string $sortColumn 並べ替えるカラム名
+     * @param  string $order      並べ替えの順序。 昇順ならASC。降順ならDESC。
      * @author akitsukada
      * @return array 取得したページデータ
      */
-    public function loadPagesByCategoryId($categoryId, $status = null, $pageNumber = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function loadPagesByCategoryId4Pager($categoryId, $status = null, $pageNumber = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->select();
 
@@ -176,7 +178,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      * @return array 取得したページデータを格納した配列
      * @author akitsukada
      */
-    public function loadPagesByTagId($tagId, $pageNumber = null, $limit = null)
+    public function loadPagesByTagId4Pager($tagId, $pageNumber = null, $limit = null)
     {
         $select = $this->select();
 
@@ -213,7 +215,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      * @return array 取得したページデータを格納した配列。
      * @author akitsukada charlesvineyard
      */
-    public function loadPagesByKeyword($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function loadPagesByKeyword4Pager($keyword, $tagIds, $pageNumber, $limit, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         $select = $this->_createSelectByKeyword($keyword, $tagIds, $targetColumns, $refinements, $sortColumn, $order);
 
@@ -335,14 +337,14 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      * 指定した並び順とオフセットでページ一覧を取得します。
      *
      * @param string  $sortColmn  並べ替えをするカラムのカラム名
-     * @param string  $order 並び順 asc か desc
-     * @param int $page 現在のページ番号
+     * @param string  $order 並び順 ASC か DESC
+     * @param int $page 取得するページ番号
      * @param int $limit 1ページあたり何件のデータを取得するのか
      * @param boolean $isJoinAccount アカウントテーブルを結合するなら true。 デフォルトは false
      * @return array ページ情報の配列
      * @author charlesvineyard
      */
-    public function loadSortedPages($sortColumn, $order, $pageNumber, $limit, $isJoinAccount = false)
+    public function loadPages4Pager($sortColumn, $order, $pageNumber, $limit, $isJoinAccount = false)
     {
         $select = $this->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
         if ($isJoinAccount) {
@@ -351,8 +353,8 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
                             'page.account_id = a.id',
                             array('account_id' => 'a.id', 'a.nickname'));
         }
-
         $select->limitPage($pageNumber, $limit)->order("{$sortColumn} {$order}");
+
         return $this->fetchAll($select)->toArray();
     }
 

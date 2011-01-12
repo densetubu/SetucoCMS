@@ -77,7 +77,7 @@ abstract class Common_Model_PageAbstract
             $targetColumns = $this->_searchTargetColumns;
         }
 
-        return $this->_pageDao->loadPagesByKeyword(
+        return $this->_pageDao->loadPagesByKeyword4Pager(
             $keyword,
             $this->_searchTagIdsByKeyword($keyword),
             $currentPage,
@@ -132,7 +132,7 @@ abstract class Common_Model_PageAbstract
      */
     public function findPagesByCategoryId($categoryId, $status = null, $currentPage = null, $limit = null, $sortColumn = 'update_date', $order = 'DESC')
     {
-        return $this->_pageDao->loadPagesByCategoryId($categoryId, $status, $currentPage, $limit, $sortColumn, $order);
+        return $this->_pageDao->loadPagesByCategoryId4Pager($categoryId, $status, $currentPage, $limit, $sortColumn, $order);
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class Common_Model_PageAbstract
      */
     public function countPagesByCategoryId($categoryId, $status = null)
     {
-        return count($this->_pageDao->loadPagesByCategoryId($categoryId, $status));
+        return count($this->_pageDao->loadPagesByCategoryId4Pager($categoryId, $status));
     }
 
     /**

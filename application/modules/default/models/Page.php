@@ -79,7 +79,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function findPagesByTagId($tagId, $currentPage, $limit)
     {
-        return $this->_pageDao->loadPagesByTagId($tagId, $currentPage, $limit);
+        return $this->_pageDao->loadPagesByTagId4Pager($tagId, $currentPage, $limit);
     }
 
     /**
@@ -91,7 +91,7 @@ class Default_Model_Page extends Common_Model_PageAbstract
      */
     public function countPagesByTagId($tagId)
     {
-        return count($this->_pageDao->loadPagesByTagId($tagId));
+        return count($this->_pageDao->loadPagesByTagId4Pager($tagId));
     }
 }
 

@@ -58,12 +58,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
         }
 
         //指定したソートをしたデータを取得する
-        $searchResult = $this->_categoryDao->loadSortCategories($order, $pageNumber, $limit);
-
-        //配列の方が操作しやすいので配列を戻り値にする
-        $result = $searchResult->toArray();
-
-        return $result;
+        return $this->_categoryDao->loadCategories4Pager($order, $pageNumber, $limit);
     }
 
     /**

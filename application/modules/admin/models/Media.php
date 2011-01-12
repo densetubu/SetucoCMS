@@ -74,11 +74,10 @@ class Admin_Model_Media
      * @return   array 取得したデータを格納した二次元配列
      * @author   akitsukada
      */
-    public function findMedias($sortColumn, $order, $limit, $pageNumber, $fileExt)
+    public function findMedias($sortColumn, $order, $pageNumber, $limit, $fileExt)
     {
-
-        $medias = $this->_mediaDao->loadMedias(
-                $sortColumn, $order, $limit, $pageNumber,
+        $medias = $this->_mediaDao->loadMedias4Pager(
+                $sortColumn, $order, $pageNumber, $limit,
                 $fileExt, self::TEMP_FILE_EXTENSION);
         foreach ($medias as $cnt => $media) {
             $media = $this->_addThumbPathInfo($media);
@@ -96,7 +95,6 @@ class Admin_Model_Media
      */
     private function _addThumbPathInfo(array $media)
     {
-
         $fileName = "{$media['id']}.{$media['type']}";
         $filePath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$fileName}";
         $fileExists = file_exists($filePath);
@@ -285,7 +283,6 @@ class Admin_Model_Media
      */
     public function createNewMediaID()
     {
-
         // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
         $newRec = array(
             'name' => self::TEMP_FILE_NAME,

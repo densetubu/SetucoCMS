@@ -176,24 +176,22 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
 
     /**
      * 指定したソートでカテゴリー一覧を取得します。
-     * @param String $sort カテゴリーを昇順か降順でソートするのか 文字列
-     * @param int $page 現在のページ番号
-     * @param int $limit 1ページあたり何件のデータを取得するのか
-     * @return array    カテゴリー情報の一覧
-     * @author  suzuki-mar
+     *
+     * @param  string $order カテゴリーを昇順か降順でソートするのか 文字列
+     * @param  int    $pageNumber 取得するページ番号
+     * @param  int    $limit 1ページあたり何件のデータを取得するのか
+     * @return array  カテゴリー情報の一覧
+     * @author suzuki-mar
      */
-    public function loadSortCategories($sort, $page, $limit)
+    public function loadCategories4Pager($order, $pageNumber, $limit)
     {
-
         //初期設定をしたSELECTオブジェクト
         $select = $this->_initializeSelect();
 
-        $select->limitPage($page, $limit)->order("name {$sort}");
+        $select->order("name {$order}")
+               ->limitPage($pageNumber, $limit);
 
-        //データを取得する
-        $result = $this->fetchAll($select);
-
-        return $result;
+        return $this->fetchAll($select)->toArray();
     }
 
     /**

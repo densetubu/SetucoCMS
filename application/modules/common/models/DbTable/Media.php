@@ -61,9 +61,8 @@ class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
      * @return Selectオブジェクトの実行(fetchAll)結果
      * @author akitsukada
      */
-    public function loadMedias($sortColumn, $order, $limit, $pageNumber, $targetExt, $tmpFileExt)
+    public function loadMedias4Pager($sortColumn, $order, $pageNumber, $limit, $targetExt, $tmpFileExt)
     {
-
         $select = $this->select()
                         ->order("{$sortColumn} {$order}")
                         ->limitPage($pageNumber, $limit);
