@@ -106,19 +106,22 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
      * タグ名をキーワード検索し、該当するタグのIDを返す。
      *
      * @param string $tagName 検索したいキーワード
-     * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければnull。
+     * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければ空の配列。
      * @author akitsukada
      */
-    public function loadTagIdsByTagName($tagName)
+    public function loadTagIdsByKeyword($keyword)
     {
         $select = $this->select()->from(array('t' => $this->_name), 'id');
-        $select->where('name LIKE ?', "%{$tagName}%");
-        $rowset = $this->fetchAll($select)->toArray();
-        if (count($rowset) == 0) {
-            return null;
+        $select->where('name LIKE ?', "%{$keyword}%");
+
+        $rowset = $this->fetchAll($select);
+
+        if ($rowset->count() == 0) {
+            return array();
         }
+
         $tagIds = array();
-        foreach ($rowset as $cnt => $tag) {
+        foreach ($rowset->toArray() as $cnt => $tag) {
             array_push($tagIds, (int)$tag['id']);
         }
         return $tagIds;
@@ -128,18 +131,20 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
      * タグ名を検索し、該当するタグのIDを返す。
      *
      * @param string $tagName 検索したいタグ名
-     * @return array|null タグID。該当するタグがなければnull。
+     * @return int|null タグID。該当するタグがなければnull。
+     * @author charlesvineyard
      */
     public function loadTagIdByTagName($tagName)
     {
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $select->where('name = ?', $tagName);
-        $result = $this->fetchRow($select);
-        if (count($result) == 0) {
+
+        $row = $this->fetchRow($select);
+
+        if (is_null($row)) {
             return null;
         }
-        $result = $result->toArray();
-        return $result['id'];
+        return (int) array_pop($row->toArray());
     }
 
 }

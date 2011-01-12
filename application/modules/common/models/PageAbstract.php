@@ -119,7 +119,7 @@ abstract class Common_Model_PageAbstract
      */
     protected function _searchTagIdsByKeyword($keyword)
     {
-        return $this->_tagDao->loadTagIdsByTagName($keyword);
+        return $this->_tagDao->loadTagIdsByKeyword($keyword);
     }
 
 
