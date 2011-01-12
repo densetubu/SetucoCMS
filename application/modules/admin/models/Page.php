@@ -171,17 +171,18 @@ class Admin_Model_Page extends Common_Model_PageAbstract
     /**
      * ページを更新する
      *
-     * @param int   $id       ページID
-     * @param array $pageInfo ページ情報の配列
-     * @return void
+     * @param int   $id         ページID
+     * @param array $updateData キー:カラム名、値:更新する値の配列
+     * @return bool 更新できたら true。更新するデータがなければ false。
      * @author charlesvineyard
      */
-    public function updatePage($id, $pageInfo)
+    public function updatePage($id, $updateData)
     {
+        // ページとタグの関連を一旦全て削除
         $this->_pageTagDao->delete($this->_pageTagDao->getAdapter()->quoteInto('page_id = ?', $id));
 
-        if (!empty($pageInfo['tag'])) {
-            $tagIds = $this->_registTagsIfNotExist($pageInfo['tag']);
+        if (!empty($updateData['tag'])) {
+            $tagIds = $this->_registTagsIfNotExist($updateData['tag']);
             foreach ($tagIds as $tagId) {
                 $this->_pageTagDao->insert(array(
                     'page_id' => $id,
@@ -189,12 +190,11 @@ class Admin_Model_Page extends Common_Model_PageAbstract
                 ));
             }
         }
-        unset($pageInfo['tag']);
+        unset($updateData['tag']);
 
-        $pageInfo['update_date'] = new Zend_Date();
+        $updateData['update_date'] = new Zend_Date();
 
-        $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
-        $this->_pageDao->update($pageInfo, $where);
+        return $this->_pageDao->updateByPrimary($updateData, $id);
     }
 
     /**

@@ -254,16 +254,13 @@ class Admin_Model_Media
     /**
      * 受け取ったファイルの情報で、Media表の指定されたIDのレコードを更新する
      *
-     * @param  array $mediaInfo 更新対象のレコードを「カラム名 => 値」で表現した連想配列
+     * @param  array $updateData 更新対象のレコードを「カラム名 => 値」で表現した連想配列
      * @return int 更新した行数（IDを指定しているので0か1になる）
      * @author akitsukada
      */
-    public function updateMediaInfo($id, $mediaInfo)
+    public function updateMediaInfo($id, $updateData)
     {
-        // DBにデータを登録
-        //アップデートする条件のwhere句を生成する
-        $where = $this->_mediaDao->getAdapter()->quoteInto("id = ?", (int) $id);
-        return $this->_mediaDao->update($mediaInfo, $where);
+        return $this->_mediaDao->updateByPrimary($updateData, $id);
     }
 
     /**

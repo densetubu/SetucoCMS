@@ -76,20 +76,19 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      *
      * @param  $id   タグID
      * @param  $name タグ名
-     * @return void
+     * @return bool 更新できたら true。該当データがなかったら false。
      * @author charlesvineyard
      */
     public function updateTag($id, $name)
     {
-        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
-        $this->_tagDao->update(array('name' => $name), $where);
+        return $this->_tagDao->updateByPrimary(array('name' => $name), $id);
     }
 
     /**
      * タグを削除する。
      *
      * @param  $id   タグID
-     * @return void
+     * @return bool 更新できたら true。該当データがなかったら false。
      * @author charlesvineyard
      */
     public function deleteTag($id)

@@ -80,7 +80,7 @@ class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      *
      * @param mixed $key プライマリキーの値(複数の場合あり)
      * @return boolean 削除できたら true。該当レコードが存在しなければ false。
-     * @author akitsukada
+     * @author akitsukada charlesvineyard
      */
     public function deleteByPrimary()
     {
@@ -107,6 +107,50 @@ class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         }
 
         $effectedRowCount = $this->delete($where);
+        if ($effectedRowCount == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 指定されたIDのレコードを更新する。
+     *
+     * このメソッドは複合キーに対応するため可変長引数です。
+     * 主キーが2つからなる複合キーの場合は、次のように1つ1つを引数に指定して呼び出してください。
+     * それぞれが _primary に指定したカラムと順序に対応します。
+     * deleteByPrimary('キー１の値', 'キー2の値');
+     *
+     * @param array $updateData キー:カラム名、値:更新する値の配列。
+     * @param mixed $key プライマリキーの値(複数の場合あり)
+     * @return boolean 更新できたら true。該当レコードが存在しなければ false。
+     * @author charlesvineyard
+     */
+    public function updateByPrimary($updateData)
+    {
+        $primary = (array) $this->_primary;
+
+        if (count($primary) > func_num_args() - 1) {
+            throw new Zend_Db_Table_Exception("プライマリキーに対する値が少なすぎます。");
+        }
+        if (count($primary) < func_num_args() - 1) {
+            throw new Zend_Db_Table_Exception("プライマリキーに対する値が多すぎます。");
+        }
+
+        $where = array();
+        $i = 1;
+        foreach ($primary as $key) {
+            if (is_array(func_get_arg($i))) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . $i . "番目のキー)");
+            }
+            if (is_null(func_get_arg($i))) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に NULL は指定できません。(" . $i . "番目のキー)");
+            }
+            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', func_get_arg($i));
+            $i++;
+        }
+
+        $effectedRowCount = $this->update($updateData, $where);
         if ($effectedRowCount == 0) {
             return false;
         }

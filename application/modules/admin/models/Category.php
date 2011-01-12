@@ -164,17 +164,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function updateCategory($id, $updateData)
     {
-        //データをupdateする
-        $primary = $this->_categoryDao->getPrimary();
-
-        //数値にキャストする
-        $id = (int)$id;
-        //アップデートする条件のwhere句を生成する
-        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
-
-        $this->_categoryDao->update($updateData, $where);
-
-        return true;
+        return $this->_categoryDao->updateByPrimary($updateData, $id);
     }
 
     /**
