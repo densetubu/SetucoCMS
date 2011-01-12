@@ -20,7 +20,7 @@
  * @subpackage Table
  * @author      charlesvineyard
  */
-class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
+abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {
     /**
      * 全部で何件あるのか取得する
