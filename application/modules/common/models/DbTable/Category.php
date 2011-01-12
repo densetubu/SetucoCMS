@@ -242,27 +242,5 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
         return parent::countAll() - 1;    // PARENT_ROOT_IDの分減らす
     }
 
-    /**
-     * プライマリキーを取得する
-     *
-     * @return mixed プライマリキー　Zend_Db_Table->_primary
-     * @author suzuki-mar
-     */
-    public function getPrimary()
-    {
-        $primary = $this->_primary;
-
-        //一回getPrimaryを使用したら、配列になってしまう ZendFrameworkの仕様?
-        if (is_array($primary) && count($primary) === 1) {
-            //配列はひとつしかない
-            $primary = array_values($primary);
-            $result = $primary[0];
-        } else {
-            $result = $primary;
-        }
-
-        return $result;
-    }
-
 }
 
