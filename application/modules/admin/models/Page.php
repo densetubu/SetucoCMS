@@ -206,7 +206,6 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      */
     public function deletePage($id)
     {
-        $where = $this->_pageDao->getAdapter()->quoteInto('id = ?', $id);
-        $this->_pageDao->delete($where);
+        return $this->_pageDao->deleteByPrimary($id);
     }
 }

@@ -236,7 +236,7 @@ class Admin_Model_Media
      */
     public function deleteMediaById($id)
     {
-        return $this->_mediaDao->deleteById((int) $id);
+        return $this->_mediaDao->deleteByPrimary($id);
     }
 
     /**
@@ -275,7 +275,7 @@ class Admin_Model_Media
      */
     public function findMediaById($id)
     {
-        $media = $this->_mediaDao->findById($id);
+        $media = $this->_mediaDao->loadByPrimary($id);
         $media = $this->_addThumbPathInfo($media);
         return $media;
     }

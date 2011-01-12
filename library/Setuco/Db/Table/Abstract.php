@@ -42,7 +42,7 @@ class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      *
      * 主キーが2つからなる複合キーの場合は、次のように1つ1つを引数に指定して呼び出してください。
      * それぞれが _primary に指定したカラムと順序に対応します。
-     * findById('キー１の値', 'キー2の値');
+     * loadByPrimary('キー１の値', 'キー2の値');
      *
      * このメソッドは親クラスのfindメソッドに委譲しています。
      * 呼び出しに関する制約はそちらのコメントも参照してください。
@@ -52,13 +52,65 @@ class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @see Zend_Db_Table_Abstract::find()
      * @author charlesvineyard
      */
-    public function findById()
+    public function loadByPrimary()
     {
+        foreach (func_get_args() as $i => $arg) {
+            if (is_array($arg)) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . ($i + 1) . "番目のキー)");
+            }
+            if (is_null($arg)) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に NULL は指定できません。(" . ($i + 1) . "番目のキー)");
+            }
+        }
+
         $rowset = call_user_func_array('parent::find', func_get_args());
         if ($rowset->count() == 0) {
             return null;
         }
         return $rowset->current()->toArray();
+    }
+
+    /**
+     * 指定されたIDのレコードを削除する。
+     *
+     * このメソッドは複合キーに対応するため可変長引数です。
+     * 主キーが2つからなる複合キーの場合は、次のように1つ1つを引数に指定して呼び出してください。
+     * それぞれが _primary に指定したカラムと順序に対応します。
+     * deleteByPrimary('キー１の値', 'キー2の値');
+     *
+     * @param mixed $key プライマリキーの値(複数の場合あり)
+     * @return boolean 削除できたら true。該当レコードが存在しなければ false。
+     * @author akitsukada
+     */
+    public function deleteByPrimary()
+    {
+        $primary = (array) $this->_primary;
+
+        if (count($primary) > func_num_args()) {
+            throw new Zend_Db_Table_Exception("プライマリキーに対する値が少なすぎます。");
+        }
+        if (count($primary) < func_num_args()) {
+            throw new Zend_Db_Table_Exception("プライマリキーに対する値が多すぎます。");
+        }
+
+        $where = array();
+        $i = 0;
+        foreach ($primary as $key) {
+            if (is_array(func_get_arg($i))) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . ($i + 1) . "番目のキー)");
+            }
+            if (is_null(func_get_arg($i))) {
+                throw new Zend_Db_Table_Exception("プライマリキーに対する値に NULL は指定できません。(" . ($i + 1) . "番目のキー)");
+            }
+            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', func_get_arg($i));
+            $i++;
+        }
+
+        $effectedRowCount = $this->delete($where);
+        if ($effectedRowCount == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

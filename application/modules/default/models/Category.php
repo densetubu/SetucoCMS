@@ -88,7 +88,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
      */
     public function findCategory($id)
     {
-        $result = $this->_categoryDao->findById($id);
+        $result = $this->_categoryDao->loadByPrimary($id);
 
         if (is_null($result)) {
             return false;

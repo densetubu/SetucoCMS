@@ -37,22 +37,6 @@ class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
     protected $_primary = 'id';
 
     /**
-     * media表から指定されたIDのレコードを削除する
-     *
-     * @param int $id 削除したいレコードのID
-     * @return boolean 削除
-     * @author akitsukada
-     */
-    public function deleteById($id)
-    {
-        $where = $this->getAdapter()->quoteInto('id = ?', $id);
-        if ($this->delete($where) == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * media表の、指定された拡張子のファイル件数をカウントする
      *
      * @param string $type カウントしたいファイルの拡張子。指定しなければ全てを数える

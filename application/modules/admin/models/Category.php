@@ -77,7 +77,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     {
         $id = (int)$id;
 
-        $categoryData = $this->_categoryDao->findById($id);
+        $categoryData = $this->_categoryDao->loadByPrimary($id);
 
         if ($categoryData === null) {
             return false;
@@ -126,7 +126,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
     {
 
         //idのカテゴリーが存在するかを調べる
-        $category = $this->_categoryDao->findById($id);
+        $category = $this->_categoryDao->loadByPrimary($id);
 
         //取得できたら、trueにする
         $result = (boolean) $category;
@@ -188,16 +188,7 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      */
     public function deleteCategory($id)
     {
-
-        $primary = $this->_categoryDao->getPrimary();
-
-        //文字列の可能性があるので、数値にキャストする
-        $id = (int)$id;
-        //アップデートする条件のwhere句を生成する
-        $where = $this->_categoryDao->getAdapter()->quoteInto("{$primary} = ?", $id);
-        $this->_categoryDao->delete($where);
-
-        return true;
+        return $this->_categoryDao->deleteByPrimary($id);
     }
 
 }

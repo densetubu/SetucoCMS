@@ -55,7 +55,7 @@ abstract class Common_Model_PageAbstract
      */
     public function findPage($id)
     {
-        return $this->_pageDao->findById($id);
+        return $this->_pageDao->loadByPrimary($id);
     }
 
 

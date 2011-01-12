@@ -67,5 +67,6 @@ class Admin_Model_Account
             $idNameSet[$row['id']] = $row['nickname'];
         }
         return $idNameSet;
-    }}
+    }
+}
 

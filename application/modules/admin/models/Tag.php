@@ -94,7 +94,6 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
      */
     public function deleteTag($id)
     {
-        $where = $this->_tagDao->getAdapter()->quoteInto('id = ?', $id);
-        $this->_tagDao->delete($where);
+        return $this->_tagDao->deleteByPrimary($id);
     }
 }
