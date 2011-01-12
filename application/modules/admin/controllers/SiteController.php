@@ -146,7 +146,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $notEmpty->setMessage('サイトURLを入力してください。');
         $urlValidators[] = array($notEmpty, true);
 
-        $urlCheck = new Setuco_Validator_Url();
+        $urlCheck = new Setuco_Validate_Url();
         $urlCheck->setMessage('サイトURLの形式が正しくありません。');
         $urlValidators[] = array($urlCheck, true);
 

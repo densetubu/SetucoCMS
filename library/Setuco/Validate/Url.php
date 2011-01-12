@@ -8,8 +8,7 @@
  * @package    Setuco_Validate
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
- * @ve/**
-rsion
+ * @version
  * @link
  * @since      File available since Release 0.1.0
  * @author     suzuki_mar
@@ -24,8 +23,7 @@ rsion
  */
 
 
-
-class Setuco_Validator_Url extends Zend_Validate_Abstract
+class Setuco_Validate_Url extends Zend_Validate_Abstract
 {
     /**
      * エラーメッセージのキー

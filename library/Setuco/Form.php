@@ -30,7 +30,7 @@ class Setuco_Form extends Zend_Form
     {
         parent::__construct();
         
-        $this->addElementPrefixPath('Setuco_Validator', 'Setuco/Validator', 'validate');
+        $this->addElementPrefixPath('Setuco_Validate', 'Setuco/Validate', 'validate');
         $this->addElementPrefixPath('Setuco_Filter', 'Setuco/Filter', 'filter');
 
     }
