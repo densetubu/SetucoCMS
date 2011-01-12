@@ -42,7 +42,7 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
      * @return array カテゴリー情報 取得できなかったらfalse
      * @author suzuki-mar
      */
-    public function findCategoryLists()
+    public function findCategoryList()
     {
         //未分類以外のカテゴリーを取得する
         $categories = $this->_categoryDao->loadAllCategories();
@@ -53,12 +53,12 @@ class Default_Model_Category extends Common_Model_CategoryAbstract
 
 
         //使用されているカテゴリーを取得する
-        $useCategories = $this->_categoryDao->loadUsedCategories();
+        $usedCategories = $this->_categoryDao->loadUsedCategories();
 
 
-        if (!empty($useCategories)) {
+        if (!empty($usedCategories)) {
             //使用されているカテゴリーのIDの配列を取得する
-            foreach ($useCategories as $value) {
+            foreach ($usedCategories as $value) {
                 $useIds[] = $value['id'];
             }
 
