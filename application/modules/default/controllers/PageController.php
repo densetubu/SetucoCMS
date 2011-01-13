@@ -106,6 +106,8 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
     {
 
         $keyword = $this->_getParam('query');
+        $keyword = Zend_Filter::filterStatic($keyword, 'UrlDecode', array (), 'Setuco_Filter');
+        $keyword = Zend_Filter::filterStatic($keyword, 'FullWidthStringTrim', array (), 'Setuco_Filter');
         $currentPage = $this->_getPageNumber();
         $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
 

@@ -57,8 +57,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
     /**
      * REST形式にリダイレクトするパラメーターを取得する
-     * module controller action parameter
-     * ファイル名はrest_url.xml
+     * ファイル名は rest-params.xml
      *
      * @return array REST形式にリダイレクトするパラメーター
      * @author suzuki-mar
@@ -92,20 +91,61 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return $redirectParams;
     }
 
-
     /**
      * REST形式のURLにリダイレクトするものだったら、リダイレクトする
      *
      *
-     * @param array $redirectParams リダイレクトするパラメーター配列
+     * @param array $restParamConfigs リダイレクトするパラメーター配列
      * @return mixed  リダイレクトする場合はvoid しない場合はfalse
      * @author suzuki-mar
      */
-    protected function _restRedirectIfNeeded($redirectParams)
+    protected function _restRedirectIfNeeded($restParamConfigs)
+    {
+        if (!$this->_isRedirectNeeded($restParamConfigs)) {
+            return false;
+        }
+
+        $controller = $this->_getParam('controller');
+        $action     = $this->_getParam('action');
+        $queryConfigs = $restParamConfigs[$controller][$action]['query'];
+
+        //urlに付加するパラメーターのキーバリューを取得する
+        $queryParams = array();
+        foreach ($queryConfigs as $queryConfig) {
+            $param = $this->_getParam($queryConfig['value']);
+
+            // '/'が入ってるとエラーになるのでエンコードする
+            if (is_array($param)) {
+                foreach ($param as $index => $partialParam) {
+                    $param[$index] = urlencode($partialParam);
+                }
+            } else {
+                $param = urlencode($param);
+            }
+
+            $queryParams[$queryConfig['value']] = $param;
+        }
+
+        return $this->_helper->redirector(
+                $action,
+                $controller,
+                $this->_getParam('module'),
+                $queryParams);
+
+    }
+
+    /**
+     * REST形式のURLにリダイレクトするかどうか判断します。
+     *
+     * @param array $redirectParams リダイレクトするパラメーター配列
+     * @return bool リダイレクトする場合は true。しない場合はfalse。
+     * @author suzuki_mar charlesvineyard
+     */
+    private function _isRedirectNeeded($restParamConfigs)
     {
         //設定ファイルに書いてあるものしか、リダイレクトしない
         //リダイレクトしないモジュールは、nullが渡ってくる
-        if (is_null($redirectParams)) {
+        if (is_null($restParamConfigs)) {
             return false;
         }
 
@@ -113,46 +153,33 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $queryString = urldecode($_SERVER['QUERY_STRING']);
 
         if ($queryString == null) {
-            false;
+            return false;
         }
 
-        //可読性を上げるために一時変数を作成する
-        $module     = $this->_getParam('module');
         $controller = $this->_getParam('controller');
         $action     = $this->_getParam('action');
 
-        if (!isset($redirectParams[$controller][$action]['query'])) {
+        if (!isset($restParamConfigs[$controller][$action]['query'])) {
             return false;
         }
-        $queries = $redirectParams[$controller][$action]['query'];
 
-        $requiredParamNames = array();
-        foreach ($queries as $index => $query) {
+        $queryConfigs = $restParamConfigs[$controller][$action]['query'];
+        foreach ($queryConfigs as $index => $queryConfig) {
             //複数選択するものに対応するため
-            if (is_array($this->_getParam($query['value']))) {
-                $query['value'] .= "[]";
+            if (is_array($this->_getParam($queryConfig['value']))) {
+                $queryConfig['value'] .= "[]";
             }
-
             //必須クエリが queryString に入ってなかったらリダイレクトしない
-            if ($query['required'] === 'true') {
-                if (strpos($queryString, "{$query['value']}=") === false) {
+            if ($queryConfig['required'] === 'true') {
+                if (strpos($queryString, "{$queryConfig['value']}=") === false) {
                     return false;
                 }
             }
         }
 
-        //urlに付加するパラメーターのキーバリューを取得する
-        $queryParams = array();
-        foreach ($queries as $query) {
-            $queryParams[$query['value']] = $this->_getParam($query['value']);
-        }
-
-        return $this->_helper->redirector(
-                $action,
-                $controller,
-                $module,
-                $queryParams);
+        return true;
     }
+
 
     /**
      * レイアウトを設定します。
