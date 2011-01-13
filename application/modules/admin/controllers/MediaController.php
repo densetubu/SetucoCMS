@@ -556,7 +556,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // 絞り込みフォームのオブジェクト
         $searchForm = new Zend_Form();
         $searchForm->setMethod('post');
-        $searchForm->setAction('/admin/media/index');
+        $searchForm->setAction($this->_helper->url('index'));
 
         // ファイルタイプのセレクトボックス
         $fileTypeSelector = new Zend_Form_Element_Select('fileType');
