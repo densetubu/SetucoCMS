@@ -46,27 +46,13 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
     }
 
     /**
-     * HTTPレスポンスコード(ステータスコード)を設定します。
-     *
-     * @return int 設定したコード
-     * @author charlesvineyard
-     */
-    protected function _setHttpResponseCode() {
-        $code = 500;
-        if ($this->_is404Error()) {
-            $code = 404;
-        }
-        $this->getResponse()->setHttpResponseCode((int) $code);
-        return $code;
-    }
-
-    /**
      * 運用時の処理です。
      *
      * @return void
      * @author charlesvineyard
      */
-    protected function _productionOperation() {
+    protected function _productionOperation()
+    {
         $code = $this->_setHttpResponseCode();
 
         $viewFile = 'error-default';
@@ -77,28 +63,19 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
     }
 
     /**
-     * 開発時の処理です。
+     * HTTPレスポンスコード(ステータスコード)を設定します。
      *
-     * @return void
+     * @return int 設定したコード
      * @author charlesvineyard
      */
-    protected function _developmentOperation() {
-        $this->_setHttpResponseCode();
-        $this->view->message = $this->_getMessage();
-
-        $errorHandler = $this->_getParam('error_handler');
-        $this->view->request = $errorHandler->request;
-
-        //ログが有効になっている場合は、ログの例外メッセージをセットする
-        $log = $this->_getErrorLog();
-        if ($log !== false) {
-            $log->crit($this->view->message, $errorHandler->exception);
+    protected function _setHttpResponseCode()
+    {
+        $code = 500;
+        if ($this->_is404Error()) {
+            $code = 404;
         }
-
-        // conditionally display exceptions
-        if ($this->getInvokeArg('displayExceptions') == true) {
-            $this->view->exception = $errorHandler->exception;
-        }
+        $this->getResponse()->setHttpResponseCode((int) $code);
+        return $code;
     }
 
     /**
@@ -107,7 +84,8 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
      * @return bool するなら true。しないなら false。
      * @author charlesvineyard
      */
-    protected function _is404Error() {
+    protected function _is404Error()
+    {
         $errorHandler = $this->_getParam('error_handler');
         if (!is_null($errorHandler)) {
             // エラーハンドラータイプが NotFound にするものだったら
@@ -127,15 +105,81 @@ abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_
     }
 
     /**
+     * 開発時の処理です。
+     *
+     * @return void
+     * @author charlesvineyard
+     */
+    protected function _developmentOperation()
+    {
+        $this->_setHttpResponseCode();
+        $this->view->message = $this->_getMessage();
+
+        $errorHandler = $this->_getParam('error_handler');
+        $requestParams = $errorHandler->request->getParams();
+        $this->_replaceInvisibleParam(array('password'), $requestParams);
+        $this->view->requestParams = $requestParams;
+
+        //ログが有効になっている場合は、ログの例外メッセージをセットする
+        $log = $this->_getErrorLog();
+        if ($log !== false) {
+            $log->crit($this->view->message, $errorHandler->exception);
+        }
+
+        // conditionally display exceptions
+        if ($this->getInvokeArg('displayExceptions') == true) {
+            $this->view->exception = $errorHandler->exception;
+        }
+    }
+
+    /**
      * メッセージを取得します。
      *
      * @return string メッセージ
      * @author charlesvineyard
      */
-    protected function _getMessage() {
+    protected function _getMessage()
+    {
         if ($this->_is404Error()) {
             return 'Page not found';
         }
         return 'Application error';
+    }
+
+    /**
+     * 不可視のパラメータ(パスワードなど)を伏せ字に置換します。
+     *
+     * @param array $invisibleParamNames 不可視の置換したいパラメータのキーの配列
+     * @param array $params キー:パラメータ名、値:パラメータ値の連想配列
+     */
+    protected function _replaceInvisibleParam($invisibleParamNames, &$params)
+    {
+        $replaceChar = '*';
+        foreach((array) $invisibleParamNames as $paramName) {
+            if (!array_key_exists($paramName, $params)) {
+                continue;
+            }
+            $replacement = '';
+            for ($i = 0; $i < strlen($params[$paramName]); $i++) {
+                $replacement .= $replaceChar;
+            }
+            $params[$paramName] = $replacement;
+        }
+    }
+
+    /**
+     * ログのプラグインリソースが有効になっているときに取得する
+     *
+     * @return Logのリソース 有効でない場合はfalse
+     * @author suzuki-mar
+     */
+    protected function _getErrorLog()
+    {
+        $bootstrap = $this->getInvokeArg('bootstrap');
+        if (!$bootstrap->hasPluginResource('Log')) {
+            return false;
+        }
+        $log = $bootstrap->getResource('Log');
+        return $log;
     }
 }

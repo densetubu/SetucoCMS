@@ -17,7 +17,7 @@
       <p><?php echo $this->exception->getTraceAsString() ?></p>
 
       <h4>Request Parameters:</h4>
-      <p><?php echo var_export($this->request->getParams(), true) ?></p>
+      <p><?php echo var_export($this->requestParams, true) ?></p>
       <?php endif ?>
     </div>
 </div>
