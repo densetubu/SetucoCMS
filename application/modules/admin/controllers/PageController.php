@@ -363,6 +363,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                          'outline',
                          'tag'
                      ),    // selected指定
+                     'filters' => array(
+                         'UrlDecode',
+                     ),
                  )
              )
              ->addElement(
@@ -371,6 +374,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                  array(
                      'multiOptions' => $this->_addUnselectedOption($categories),
                      'value' => self::UNSELECTED_VALUE,    // selected指定
+                     'filters' => array(
+                         'UrlDecode',
+                     ),
                  )
              )
              ->addElement(
@@ -380,6 +386,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'multiOptions' => $this->_addUnselectedOption(
                          $this->_accountService->findAllAccountIdAndNicknameSet()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
+                     'filters' => array(
+                         'UrlDecode',
+                     ),
                  )
              )
              ->addElement(
@@ -389,6 +398,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'multiOptions' => $this->_addUnselectedOption(
                          Setuco_Data_Constant_Page::ALL_STATUSES()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
+                     'filters' => array(
+                         'UrlDecode',
+                     ),
                  )
              )
              ->addElement(
