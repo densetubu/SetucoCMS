@@ -111,7 +111,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームから値を送信されなかったら、indexに遷移する
         if (!$this->_request->isPost()) {
-            return $this->_forward404();
+            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
         //入力したデータをバリデートチェックをする
@@ -149,7 +149,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     {
         //フォームから値を送信されなかったら、indexに遷移する 直接アクセスの禁止
         if (!$this->_request->isPost()) {
-            return $this->_forward404();
+            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
         //入力したデータをバリデートチェックをする
@@ -187,9 +187,8 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      */
     public function deleteAction()
     {
-        //フォームからidが送信されなかったら、indexに遷移する
         if (!$this->_hasParam('id')) {
-            $this->_forward404();
+            throw new Setuco_Controller_Exception('パラメータ[id]がありません。');
         }
 
         //数値以外はエラー

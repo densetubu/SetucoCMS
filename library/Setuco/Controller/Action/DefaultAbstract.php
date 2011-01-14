@@ -22,7 +22,7 @@
  * @subpackage  Controller_Action
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_ErrorAbstract
+abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract
 {
 
     /**
@@ -58,7 +58,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 
     }
 
-    
+
     /**
      * defaultモジュール共通でviewに変数を渡す処理をします。
      *
@@ -97,7 +97,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
 
         $categories = $modelCategory->findCategoryLists();
 
-        
+
         //すでに登録されていたら、未分類のカテゴリーを追加する
         if (is_array($categories)) {
             $result = $this->_addDefaultCategory($categories);

@@ -24,142 +24,118 @@
 abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_Action_Abstract
 {
     /**
-     * スクリプト(view)ファイルを、本番環境用に変更する
-     * Not Found用とサーバーエラー用の２種類のviewファイルがある
+     * HTTPステータスコードを 404(Not Found) とするエラーハンドラーのタイプの配列
+     *
+     * @var array
+     */
+    private $_notFoundErrorHandlerTypes = array (
+        Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE,
+        Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER,
+        Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION,
+    );
+
+    /**
+     * レイアウトを設定します。
      *
      * @return void
-     * @author suzuki-mar
+     * @author charlesvineyard
      */
-    protected function _changeErrorRender()
+    protected function _initLayout()
     {
-        $errors    = $this->_getParam('error_handler');
-        $errorCode = $this->_getParam('errorCode', $this->_getErrorResponeByErrorType($errors->type));
+        $this->_helper->layout->disableLayout();
+    }
 
-        switch ($errorCode) {
-            case 404:
-                $viewFile = 'error_404';
-                break;
-
-            default:
-                $viewFile = 'error_default';
-                break;
+    /**
+     * HTTPレスポンスコード(ステータスコード)を設定します。
+     *
+     * @return int 設定したコード
+     * @author charlesvineyard
+     */
+    protected function _setHttpResponseCode() {
+        $code = 500;
+        if ($this->_is404Error()) {
+            $code = 404;
         }
+        $this->getResponse()->setHttpResponseCode((int) $code);
+        return $code;
+    }
 
+    /**
+     * 運用時の処理です。
+     *
+     * @return void
+     * @author charlesvineyard
+     */
+    protected function _productionOperation() {
+        $code = $this->_setHttpResponseCode();
+
+        $viewFile = 'error-default';
+        if (404 == $code) {
+            $viewFile = 'error-404';
+        }
         $this->_helper->viewRenderer->setScriptAction($viewFile);
     }
 
     /**
-     * HTTPリクエストにエラーコードレスポンスを設定する
-     * 
-     * @return void
-     * @author suzuki-mar
-     */
-    protected function _setErrorResponeCode()
-    {
-        $errors = $this->_getParam('error_handler');
-
-        $errorCode = $this->_getParam('errorCode', $this->_getErrorResponeByErrorType($errors->type));
-        $this->getResponse()->setHttpResponseCode($errorCode);
-    }
-
-
-    /**
-     * error_handlerは、ZFのエラーコントローラーに標準に設定されているパラメーター
-     * エラータイプ(error_handelr->type)からレスポンスコードを求める
-     *
-     * @param string $errorType error_handelr->type
-     * @return int レスポンスコード
-     * @author suzuki-mar
-     */
-    protected function _getErrorResponeByErrorType($errorType)
-    {
-        switch ($errorType) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-
-                $result = 404;
-                break;
-            default:
-                $result = 500;
-                break;
-        }
-
-        return $result;
-    }
-
-    /**
-     * オリジナルのエラーメッセージをviewにセットする
-     * ZFの標準のスクリプトファイルで必要なものを設定する
+     * 開発時の処理です。
      *
      * @return void
-     * @author suzuki-mar
+     * @author charlesvineyard
      */
-    protected function _setDefaultErrorParamsForView()
-    {
+    protected function _developmentOperation() {
+        $this->_setHttpResponseCode();
+        $this->view->message = $this->_getMessage();
 
-        $errors = $this->_getParam('error_handler');
-
-        switch ($errors->type) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:                
-                $this->view->message = 'Page not found';
-                break;
-            
-            default:
-                // application error
-                $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = 'Application error';
-                break;
-        }
+        $errorHandler = $this->_getParam('error_handler');
+        $this->view->request = $errorHandler->request;
 
         //ログが有効になっている場合は、ログの例外メッセージをセットする
         $log = $this->_getErrorLog();
         if ($log !== false) {
-            $log->crit($this->view->message, $errors->exception);
+            $log->crit($this->view->message, $errorHandler->exception);
         }
 
         // conditionally display exceptions
         if ($this->getInvokeArg('displayExceptions') == true) {
-            $this->view->exception = $errors->exception;
+            $this->view->exception = $errorHandler->exception;
         }
-
-        $this->view->request = $errors->request;
     }
 
     /**
-     * ログのプラグインリソースが有効になっているときに取得する
+     * HTTPステータスコードを 404(Not Found) とするか判断します。
      *
-     * @return Logのリソース  有効でない場合はfalse
-     * @author suzuki-mar
+     * @return bool するなら true。しないなら false。
+     * @author charlesvineyard
      */
-    protected function _getErrorLog()
-    {
-        $bootstrap = $this->getInvokeArg('bootstrap');
-        if (!$bootstrap->hasPluginResource('Log')) {
-            return false;
+    protected function _is404Error() {
+        $errorHandler = $this->_getParam('error_handler');
+        if (!is_null($errorHandler)) {
+            // エラーハンドラータイプが NotFound にするものだったら
+            if (array_search($errorHandler->type,
+                $this->_notFoundErrorHandlerTypes) !== false) {
+                return true;
+            }
         }
-        $log = $bootstrap->getResource('Log');
-        return $log;
+
+        if ($this->getResponse()->isException()) {
+            $exceptions = $this->getResponse()->getException();
+            if (404 == $exceptions[0]->getCode()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
-     * モジュール毎に違うレイアウトを表示する
-     * エラーコントローラーは、レイアウトが無効になっている
+     * メッセージを取得します。
      *
-     * @return void
-     * @author suzuki_mar
+     * @return string メッセージ
+     * @author charlesvineyard
      */
-    protected function _setLayout()
-    {
-        $moduleName = $this->_getParam('module', 'default');
-
-        // レイアウトの適用がうまくできないので、initメソッド内で設定する
-        $options = array('layout' => 'layout',
-            'layoutPath' => APPLICATION_PATH . "/modules/{$moduleName}/views/layouts",
-            'content' => 'content');
-        Zend_Layout::startMvc($options);
+    protected function _getMessage() {
+        if ($this->_is404Error()) {
+            return 'Page not found';
+        }
+        return 'Application error';
     }
-
 }

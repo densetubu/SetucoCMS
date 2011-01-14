@@ -320,34 +320,4 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             $this->view->$paramName = $flashMessages;
         }
     }
-
-    /**
-     * 404（ページがみつからない）のエラー処理をするアクションにフォーワードする
-     *
-     *
-     * @return void
-     * @author suzuki-mar
-     */
-    protected function _forward404()
-    {
-        $this->_setParam('errorCode', 404);
-        throw new Setuco_Exception('ページは存在しません。', 404);
-        return $this->_forward('error', 'error');
-    }
-
-    /**
-     * 404以外のエラー処理をするアクションにフォーワードする
-     *
-     *
-     * @return void
-     * @author suzuki-mar
-     */
-    protected function _forwardError()
-    {
-        $this->_setParam('errorCode', 500);
-        throw new Setuco_Exception('サーバーエラーです。', 500);
-        return $this->_forward('error', 'error');
-    }
-
-
 }
