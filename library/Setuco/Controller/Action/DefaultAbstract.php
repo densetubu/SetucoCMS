@@ -71,7 +71,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         $modelTag = new Default_Model_Tag();
         //タグクラウドをviewにセットする
         $this->view->tagClouds = $modelTag->getTagClouds();
-        $this->view->categoryLists = $this->_getCategoryLists();
+        $this->view->categoryLists = $this->_getCategoryList();
 
         //siteテーブルのモデルクラスのインスタンス生成
         $modelSite = new Default_Model_Site();
@@ -90,12 +90,12 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      * @return array カテゴリー一覧　取得できなかった場合はfalseを返す
      * @author suzuki-mar
      */
-    private function _getCategoryLists()
+    private function _getCategoryList()
     {
         //categoryテーブルのモデルクラスのインスタンス生成
         $modelCategory = new Default_Model_Category();
 
-        $categories = $modelCategory->findCategoryLists();
+        $categories = $modelCategory->findCategoryList();
 
 
         //すでに登録されていたら、未分類のカテゴリーを追加する
@@ -103,10 +103,10 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
             $result = $this->_addDefaultCategory($categories);
         } else {
             $modelPage = new Default_Model_Page();
-            $uncategorizedInfos = Setuco_Data_Constant_Category::uncategorizeds();
+            $uncategorizedInfo = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
             //ひとつでも記事が登録されていたら、リンクする
-            $uncategorizedInfos['is_used'] = $modelPage->isEntryExists();
-            $categories[] = $uncategorizedInfos;
+            $uncategorizedInfo['is_used'] = $modelPage->isEntryExists();
+            $categories[] = $uncategorizedInfo;
             $result = $categories;
         }
 
@@ -122,7 +122,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     private function _addDefaultCategory($categories)
     {
-        $default = Setuco_Data_Constant_Category::uncategorizeds();
+        $default = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
 
         //カテゴリーが登録されていて配列の場合は、配列に未分類のカテゴリーを追加する
         //カテゴリーが新規作成されていない場合もリンクする

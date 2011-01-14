@@ -71,7 +71,7 @@ class Setuco_Data_Constant_Media
      */
     public static function VALID_FILE_EXTENSIONS()
     {
-        return array_merge(self::IMAGE_FILE_EXTENSIONS(), array('pdf', 'ext'));
+        return array_merge(self::IMAGE_FILE_EXTENSIONS(), array('pdf', 'txt'));
     }
 
     /**

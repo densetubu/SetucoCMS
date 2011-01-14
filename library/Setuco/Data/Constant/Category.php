@@ -56,7 +56,7 @@ class Setuco_Data_Constant_Category
      * @return array 未分類のカテゴリーデータ
      * @author suzuki-mar
      */
-    public static function uncategorizeds()
+    public static function UNCATEGORIZED_INFO()
     {
         $_unCategorizeds = array('id' => self::UNCATEGORIZED_ID, 'name' => self::UNCATEGORIZED_STRING);
         return $_unCategorizeds;
