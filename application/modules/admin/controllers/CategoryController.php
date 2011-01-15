@@ -99,12 +99,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', $this->_getParam('inputCreateCategoryName', '新規カテゴリー'));
     }
 
-
     /**
      * カテゴリーを新規作成するアクションです
      * indexアクションに遷移します
      *
      * @return void
+     * @throws POSTメソッドでアクセスしなかった場合　insert文の実行に失敗した場合
      * @author charlesvineyard suzuki-mar
      */
     public function createAction()
@@ -119,14 +119,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $inputData = $this->_validateCreateForm->getValues();
             $registData['name'] = $inputData['cat_name'];
 
-            $isCreateSuccess = $this->_categoryService->registCategory($registData);
-
-            //カテゴリーを新規作成する
-            if ($isCreateSuccess) {
-                $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
-            } else {
-                $errorMessages = $this->_setExceptionErrorMessages('create');
+            try {
+                $this->_categoryService->registCategory($registData);
+            } catch (Zend_Exception $e) {
+                throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
             }
+
+            $isCreateSuccess = true;
+            $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
         }
 
         if (!(isset($isCreateSuccess) && $isCreateSuccess === true)) {
@@ -143,6 +143,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * indexアクションに遷移します
      *
      * @return void
+     * @throws POSTメソッドでアクセスしなかった場合、update文の実行に失敗した場合
      * @author charlesvineyard suzuki_mar
      */
     public function updateAction()
@@ -158,15 +159,15 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
             $oldName = $this->_categoryService->findNameById($validateData['id']);
 
-            $isUpdateSuccess = $this->_categoryService->updateCategory($validateData['id'], $validateData);
-            if ($isUpdateSuccess) {
-                $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
-
-                $this->_helper->flashMessenger($actionMessage);
-            } else {
-                //DBの実行に失敗した場合はエラーメッセージがないので、例外エラーメッセージを設定する
-                $this->_setExceptionErrorMessages('update');
+            try {
+                $this->_categoryService->updateCategory($validateData['id'], $validateData);
+            } catch (Zend_Exception $e) {
+                throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
             }
+
+            $isUpdateSuccess = true;
+            $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
+            $this->_helper->flashMessenger($actionMessage);
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
@@ -183,6 +184,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * カテゴリーを削除するアクションです
      *
      * @return void
+     * @throws idパラメーターがない場合　delete文の実行に失敗した場合
      * @author charlesvineyard suzuki-mar
      */
     public function deleteAction()
@@ -197,11 +199,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
             $categoryName = $this->_categoryService->findNameById($this->_getParam('id'));
 
-            $isDeleteSuccess = $this->_categoryService->deleteCategory($this->_getParam('id'));
-            //カテゴリーを削除する
-            if ($isDeleteSuccess) {
-                $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
+            try {
+                $this->_categoryService->deleteCategory($this->_getParam('id'));
+            } catch (Zend_Exception $e) {
+                throw new Setuco_Exception('delete文の実行に失敗しました。' . $e->getMessage());
             }
+
+            $isDeleteSuccess = true;
+            $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
@@ -341,41 +346,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $form->addElement($element);
 
         return $element;
-    }
-
-
-    /**
-     * フォームにバリデートエラーメッセージをセットする
-     * Formクラスのチェックでバリデートエラーとなる場合は、すでにメッセージが設定されているので
-     * なにもしない
-     *
-     * @param  string $validateType createだと新規作成 updateだと編集　deleteだと削除
-     * @return void
-     * @author suzuki-mar
-     */
-    private function _setExceptionErrorMessages($validateType)
-    {
-        if ($validateType === 'create') {
-            $validateForm = $this->_validateCreateForm;
-        } elseif ($validateType === 'update') {
-            $validateForm = $this->_validateUpdateForm;
-        } else {
-            $validateForm = $this->_validateDeleteForm;
-        }
-
-        //例外的なエラー　SQL(DBに登録する)に失敗した場合など　本来は実行されない
-        if (!$validateForm->isErrors()) {
-            if ($validateType === 'create') {
-                $errorMessages['accidental'] = 'カテゴリーの新規作成に失敗しました。';
-            } elseif ($validateType === 'update') {
-                $errorMessages['accidental'] = 'カテゴリーの編集に失敗しました。';
-            } else {
-                $errorMessages['accidental'] = 'カテゴリーの削除に失敗しました。';
-            }
-
-            $validateForm->setErrorMessages($errorMessages);
-            $validateForm->markAsError();
-        }
     }
 
 }

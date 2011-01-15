@@ -91,10 +91,14 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
             $validateData = $this->_validateUpdateForm->getValues();
 
             //サイト情報を編集する
-            $isUpdateSuccess = $this->_siteService->updateSite($validateData, $this->_getParam('id'));
-            if ($isUpdateSuccess) {
-                $this->_helper->flashMessenger('サイト情報を編集しました。');
+            try {
+                $this->_siteService->updateSite($validateData, $this->_getParam('id'));
+            } catch(Zend_Exception $e) {
+                throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
             }
+
+            $isUpdateSuccess = true;
+            $this->_helper->flashMessenger('サイト情報を編集しました。');
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する

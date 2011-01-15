@@ -134,18 +134,17 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * コントローラーから、バリデートチェックした入力パラメーターをすべて取得する
      *
      * @param array $registData 新規登録するカテゴリーのデータ
-     * @return boolean 登録できたか　SQLが正常に実行できたら、成功とする
+     * @return int insertしたレコードのプライマリーキー
+     * @throws insert文の実行に失敗したら例外が発生する
      * @author suzuki-mar
+     * @todo バージョン2以降では、parent_idの設定をする
+     *
      */
     public function registCategory($registData)
     {
-        //バージョン1では、nullにする
+        //バージョン1では、parent_idは固定値
         $registData['parent_id'] = Common_Model_DbTable_Category::PARENT_ROOT_ID;
-
-        //データをinsertする
-        $this->_categoryDao->insert($registData);
-
-        return true;
+        return $this->_categoryDao->insert($registData);
     }
 
     /**
@@ -154,7 +153,8 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      *
      * @param int   $id  アップデートするデータのID
      * @param array $categoryInfo 入力したデータ: バリデートチェックした入力データ
-     * @return boolean 編集できたか SQLが正常に実行できたら、成功とする
+     * @return boolean 編集したか
+     * @throws update文の実行に失敗したら例外が発生する
      * @author suzuki-mar
      */
     public function updateCategory($id, $updateData)
@@ -168,7 +168,8 @@ class Admin_Model_Category extends Common_Model_CategoryAbstract
      * コントローラーから、削除するidを取得する
      *
      * @param  int   $deleteId  削除するデータのID
-     * @return boolean 削除できたか SQLが正常に実行できたら成功とする
+     * @return boolean 削除したか
+     * @throws delete文の実行に失敗したら例外が発生する
      * @author suzuki-mar
      */
     public function deleteCategory($id)
