@@ -29,26 +29,28 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * Siteのサービスクラス
+     *
      * @var Admin_Model_Site
      */
     private $_siteService;
+
     /**
      * 編集のバリデートフォーム
      *
      * @var Setuco_Form
      */
-    private $_validateUpdateForm;
+    private $_updateFormValidator;
 
     /**
      * クラス変数の設定をする
+     *
      * @author suzuki-mar
      */
     public function init()
     {
         parent::init();
         $this->_siteService = new Admin_Model_Site();
-
-        $this->_validateUpdateForm = $this->_createValidateUpdateForm();
+        $this->_updateFormValidator = $this->_createUpdateFormValidator();
     }
 
     /**
@@ -61,20 +63,15 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     {
         $siteInfos = $this->_siteService->getSiteInfo();
 
-        //カラ以外の入力したものは、入力したものをデフォルト値にする
+        //空文字以外の入力したものは、入力したものをデフォルト値にする
         if ($this->_hasParam('inputValues')) {
             foreach ($this->_getParam('inputValues') as $key => $value) {
-                //スペースだけもチェックする
-                $value = trim($value);
-                if (!empty($value)) {
-                    $siteInfos[$key] = $value;
-                }
+                $siteInfos[$key] = $value;
             }
         }
 
         $this->view->sites = $siteInfos;
 
-        
         //バリデートに失敗したエラーフォームがあればセットする
         if ($this->_hasParam('errorForm')) {
             $this->view->errorForm = $this->_getParam('errorForm');
@@ -99,28 +96,23 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         }
 
         //入力したデータをバリデートチェックをする
-        if ($this->_validateUpdateForm->isValid($this->_getAllParams())) {
-
-            $validateData = $this->_validateUpdateForm->getValues();
-
-            //サイト情報を編集する
-            try {
-                $this->_siteService->updateSite($validateData, $this->_getParam('id'));
-            } catch (Zend_Exception $e) {
-                throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
-            }
-
-            $isUpdateSuccess = true;
-            $this->_helper->flashMessenger('サイト情報を編集しました。');
-        }
-
-        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
-            $this->_setParam('inputValues', $_POST);
-            $this->_setParam('errorForm', $this->_validateUpdateForm);
+        if (!$this->_updateFormValidator->isValid($this->_getAllParams())) {
+            $this->_setParam('inputValues', $this->_updateFormValidator->getValues());
+            $this->_setParam('errorForm', $this->_updateFormValidator);
             return $this->_forward('index');
         }
 
+        $validData = $this->_updateFormValidator->getValues();
+
+        //サイト情報を編集する
+        try {
+            $this->_siteService->updateSite($validData, $this->_getParam('id'));
+        } catch (Zend_Exception $e) {
+            throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
+        }
+
+        $isUpdateSuccess = true;
+        $this->_helper->flashMessenger('サイト情報を編集しました。');
         $this->_helper->redirector('index');
     }
 
@@ -131,7 +123,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      * @return Zend_Form
      * @author suzuki-mar
      */
-    private function _createValidateUpdateForm()
+    private function _createUpdateFormValidator()
     {
         $form = new Setuco_Form();
 
