@@ -111,15 +111,13 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
      */
     public function loadTagIdsByKeyword($keyword)
     {
+        $keyword = $this->escapeLikeString($keyword);
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $select->where('name LIKE ?', "%{$keyword}%");
-
         $rowset = $this->fetchAll($select);
-
         if ($rowset->count() == 0) {
             return array();
         }
-
         $tagIds = array();
         foreach ($rowset->toArray() as $cnt => $tag) {
             array_push($tagIds, (int)$tag['id']);

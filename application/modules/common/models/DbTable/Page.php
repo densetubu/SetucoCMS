@@ -256,10 +256,10 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
                 array('p' => $this->_name),
                 array('*')
         );
+        $keyword = $this->escapeLikeString($keyword);
 
         // ORDER BY
         $select->order("{$sortColumn} {$order}");
-
         // JOIN
         $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
         $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
@@ -279,7 +279,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
         $orwhere = '';
         $bind = array();
         if (in_array('title', $targetColumns)) {
-            $orwhere .= 'p.title LIKE :keyword';
+            $orwhere .= "p.title LIKE :keyword";
             $bind[':keyword'] = "%{$keyword}%";
         }
         if (in_array('contents', $targetColumns)) {

@@ -71,7 +71,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 指定されたIDのレコードを削除する。
+     * 指定されたIDのレコードを削除します。
      *
      * このメソッドは複合キーに対応するため可変長引数です。
      * 主キーが2つからなる複合キーの場合は、次のように1つ1つを引数に指定して呼び出してください。
@@ -157,4 +157,18 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         return true;
     }
 
+    /**
+     * WHERE句のLIKE演算子に与える文字列を\（バックスラッシュ）でエスケープします。
+     *
+     * エスケープされるのは "\" "%" "_" の三文字です。
+     * "%"や"_"が検索できるようになります。
+     *
+     * @param string $str LIKE検索を行う検索対象文字列
+     * @return string エスケープ済みの検索対象文字列
+     */
+    public function escapeLikeString($str)
+    {
+        $str = addcslashes($str, '\\%_');
+        return $str;
+    }
 }
