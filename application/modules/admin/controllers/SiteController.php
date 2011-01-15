@@ -32,7 +32,6 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      * @var Admin_Model_Site
      */
     private $_siteService;
-
     /**
      * 編集のバリデートフォーム
      *
@@ -60,8 +59,22 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $this->view->sites = $this->_getParam('inputValues', $this->_siteService->getSiteInfo());
+        $siteInfos = $this->_siteService->getSiteInfo();
 
+        //カラ以外の入力したものは、入力したものをデフォルト値にする
+        if ($this->_hasParam('inputValues')) {
+            foreach ($this->_getParam('inputValues') as $key => $value) {
+                //スペースだけもチェックする
+                $value = trim($value);
+                if (!empty($value)) {
+                    $siteInfos[$key] = $value;
+                }
+            }
+        }
+
+        $this->view->sites = $siteInfos;
+
+        
         //バリデートに失敗したエラーフォームがあればセットする
         if ($this->_hasParam('errorForm')) {
             $this->view->errorForm = $this->_getParam('errorForm');
@@ -93,7 +106,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
             //サイト情報を編集する
             try {
                 $this->_siteService->updateSite($validateData, $this->_getParam('id'));
-            } catch(Zend_Exception $e) {
+            } catch (Zend_Exception $e) {
                 throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
             }
 
@@ -102,7 +115,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         }
 
         //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if ( !(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
+        if (!(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
             $this->_setParam('inputValues', $_POST);
             $this->_setParam('errorForm', $this->_validateUpdateForm);
             return $this->_forward('index');
@@ -151,13 +164,13 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $urlValidators[] = array($notEmpty, true);
 
         $urlCheck = new Setuco_Validate_Url();
-        $urlCheck->setMessage('サイトURLの形式が正しくありません。');
+        $urlCheck->setMessage('サイトURLを入力してください。');
         $urlValidators[] = array($urlCheck, true);
 
         $stringLength = new Zend_Validate_StringLength(
                         array(
                             'min' => 8,
-                            'max' => 100
+                            'max' => 30
                         )
         );
         $stringLength->setMessage('サイトURLは、%min%文字以上%max%文字以下で入力してください。');
@@ -165,7 +178,6 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $urlElement->addValidators($urlValidators);
 
         $form->addElement($urlElement);
-
 
         $commentElement = $form->createElement('text', 'comment');
         $this->_addFormElementCommonOptions($commentElement, array('required' => false));
@@ -183,14 +195,17 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         $keywordElement = $form->createElement('text', 'keyword');
         $this->_addFormElementCommonOptions($keywordElement, array('required' => false));
-        $stringLength = new Zend_Validate_StringLength(
+        $stringLength = new Setuco_Validate_KeywordLength(
                         array(
-                            'max' => 300
+                            'max' => 50,
+                            'count_max' => 15
                         )
         );
-        $stringLength->setMessage('キーワードは%max%文字以下で入力してください。');
+
         $keywordValidators[] = array($stringLength, true);
         $keywordElement->addValidators($keywordValidators);
+        //同じキーワードを削除する
+        $keywordElement->addFilter('deselectSameKeyword');
 
         $form->addElement($keywordElement);
 
