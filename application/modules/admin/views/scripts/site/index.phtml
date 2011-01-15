@@ -29,14 +29,14 @@
 </div>
 <!-- topicpath END -->
 
-    <!-- section START --> 
-    <div class="section"> 
-        <div class="hAreaL"> 
-            <div class="hAreaR"> 
-                <div class="hArea"> 
+    <!-- section START -->
+    <div class="section">
+        <div class="hAreaL">
+            <div class="hAreaR">
+                <div class="hArea">
                     <h3><img src="<?php echo $this->baseUrl('/images/admin/site/h_site.jpg') ?>" width="122" height="18" alt="サイト情報の編集" /></h3>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </div>
 
         <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
@@ -47,29 +47,29 @@
 
 
 
-        <form action="/admin/site/update" method="post"> 
+        <form action="<?php echo $this->baseUrl('/admin/site/update') ?>" method="post">
 
-            <dl id="siteForm" class="editArea"> 
+            <dl id="siteForm" class="editArea">
 
-                <dt><label for="name"><span class="required">[必須]</span>サイト名</label></dt> 
+                <dt><label for="name"><span class="required">[必須]</span>サイト名</label></dt>
                 <dd><input type="text" id="name" name="name" value="<?php echo $this->escape($this->sites['name']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->escape($this->sites['name']) ?>'; }" /><br /><span>サイト上に表示される名前です。</span></dd>
 
-                <dt><label for="url"><span class="required">[必須]</span>サイトURL<br /><span class="attentionMessage">（リンク切れに注意）</span></label></dt> 
+                <dt><label for="url"><span class="required">[必須]</span>サイトURL<br /><span class="attentionMessage">（リンク切れに注意）</span></label></dt>
                 <dd><input type="text" id="url" name="url" value="<?php echo $this->escape($this->sites['url']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->escape($this->sites['url']) ?>'; }" /><br /><span>サイトを表示するURLです。</span></dd>
 
                 <dt id="site_description_t"><label for="comment">説明</label></dt>
                 <dd id="site_description_d"><textarea rows="2" cols="" id="comment" name="comment"><?php echo $this->escape($this->sites['comment']) ?></textarea><br /><span>サイトの説明です。サイトの概要を入力してください。</span></dd>
-<!--<dd><input type="text" id="comment" name="comment" value='' /></dd>--> 
+<!--<dd><input type="text" id="comment" name="comment" value='' /></dd>-->
 
-                <dt><label for="keyword">キーワード<br /><span class="attentionMessage">（カンマ[&nbsp;,&nbsp;]で区切る）</span></label></dt> 
+                <dt><label for="keyword">キーワード<br /><span class="attentionMessage">（カンマ[&nbsp;,&nbsp;]で区切る）</span></label></dt>
                 <dd><input type="text" id="keyword" name="keyword" value="<?php echo $this->escape($this->sites['keyword']) ?>" /><br /><span>サイトのキーワードです。サイトに関連する単語を入力してください。</span></dd>
 
-            </dl> 
+            </dl>
 
-            <p class="defaultOver"><input type="submit" id="sub" name="sub" value="サイト情報を変更" /></p> 
+            <p class="defaultOver"><input type="submit" id="sub" name="sub" value="サイト情報を変更" /></p>
 
-        </form> 
+        </form>
 
-    </div> 
-    <!-- section END --> 
+    </div>
+    <!-- section END -->
 
