@@ -1,24 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-script-type" content="text/jascript" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta name="author" content="ErinaMikami with SetucoCMS Project" />
+        <meta name="copyright" content="SetucoCMS" />
+        <meta http-equiv="imagetoolbar" content="no" />
+        <title>エラーページ:SetucoCMS</title>
+        <link href="/css/base.css" media="screen" rel="stylesheet" type="text/css" />
+        
+    </head>
 
-<!-- section START -->
-<div class="section">
+    <body id="errorPage">
 
-    <div class="default">
-      <h2>An error occurred</h2>
-      <h3><?php echo $this->message ?></h3>
+        <!-- container START -->
+        <div id="container">
 
-      <?php if (isset($this->exception)): ?>
+            <!-- header START -->
+            <div id="header">
 
-      <h4>Exception information:</h4>
-      <p>
-          Message: <?php echo $this->exception->getMessage() ?>
-      </p>
+                <div>
+                    <h1>
+                        <a href="/admin" title="管理画面のトップに戻ります">
+                            <img src="/images/admin/header/logo.gif" alt="せつこCMS"  width="136" height="33" />
 
-      <h4>Stack trace:</h4>
-      <p><?php echo $this->exception->getTraceAsString() ?></p>
+                        </a>
+                    </h1>
+                    <h2>
+                        <a href="http://setucocms/" title="サイトのトップページを表示します" target="_blank">
+                            <span>日本電子専門学校</span>
+                            <img src="/images/admin/header/btn_watchSite.jpg" alt="サイトを確認する" width="108" height="29" />
+                        </a>
+                    </h2>
+                </div>
 
-      <h4>Request Parameters:</h4>
-      <p><?php echo var_export($this->requestParams, true) ?></p>
-      <?php endif ?>
-    </div>
-</div>
-<!-- section END -->
+                <ul>
+                    <li id="utilLogout">
+                        <a href="/admin/login/logout">ログアウト</a>
+                    </li>
+                    <li id="utilAccount">
+                        <span>管理者さん</span>でログイン中
+                    </li>
+                </ul>
+
+            </div>
+            <!-- header END -->
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+
+                    <!-- mainContentInner START -->
+                    <div id="mainContentInner">
+
+                        <!-- section START -->
+                        <div class="section">
+
+                            <div class="hAreaText">
+                                <h3 id="textType">An error occurred</h3>
+                            </div>
+
+                            <div class="default">
+                                  <h3><?php echo $this->message ?></h3>
+
+                                  <?php if (isset($this->exception)): ?>
+
+                                  <h4>Exception information:</h4>
+                                  <p>
+                                      Message: <?php echo $this->exception->getMessage() ?>
+                                  </p>
+
+                                  <h4>Stack trace:</h4>
+                                  <p><?php echo $this->exception->getTraceAsString() ?></p>
+
+                                  <h4>Request Parameters:</h4>
+                                  <p><?php echo var_export($this->requestParams, true) ?></p>
+                                  <?php endif ?>
+                            </div>
+
+                        </div>
+                        <!-- section END -->
+
+                    </div>
+                    <!-- mainContentInner END -->
+
+                </div>
+                <!-- mainContent END -->
+
+            </div>
+            <!-- content END -->
+
+            <p id="copyright">Copyright &copy; 2010 <a href="http://sourceforge.jp/projects/setucocms/simple/">SetucoCMS</a>.AllRights reserved.</p>
+
+        </div>
+        <!-- container END -->
+
+    </body>
+</html>

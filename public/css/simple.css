@@ -487,3 +487,15 @@ p#copyright {
     background-color: #3399cc;
     padding: 0.8em 1em;
 }
+
+/*---------------------------------------------------------------*/
+/*-- errorPage style --------------------------------------------*/
+/*---------------------------------------------------------------*/
+body#errorPage div#content div#mainContent {
+    width: 800px;
+    max-width: 100%;
+    float: none;
+}
+body#errorPage div#content div#mainContent div.entryBody p {
+    max-width: 100%;
+}

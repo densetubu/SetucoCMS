@@ -249,7 +249,7 @@ div#container div#content {
 /*------------------------------------------------------------*/
 /*    mainContent style                                       */
 /*------------------------------------------------------------*/
-div #content div#mainContent {
+div#content div#mainContent {
     width: 100%;
     float: right;
 }
@@ -857,4 +857,26 @@ div#mainContent dl#siteForm dt#site_description_t {
 }
 div#mainContent dl#siteForm dd#site_description_d {
     height: 6em;
+}
+
+
+/*------------------------------------------------------------*/
+/*    -- errorPage only style --                              */
+/*------------------------------------------------------------*/
+body#errorPage div#content div#mainContent {
+    float: none;
+}
+body#errorPage div#mainContent div#mainContentInner {
+    background: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+body#errorPage div.default {
+    padding-left: 10px;
+}
+body#errorPage div.default h3 {
+    color: #5DC0E9;
+}
+body#errorPage div.default h4 {
+    margin-top: 10px;
 }
