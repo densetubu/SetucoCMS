@@ -1,24 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta http-equiv="content-script-type" content="text/javascript" />
 
-<!-- section START -->
-<div class="section">
+        <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />
 
-    <div class="default">
-      <h2>An error occurred</h2>
-      <h3><?php echo $this->message ?></h3>
+        <title>エラーページ｜サイト名</title>
 
-      <?php if (isset($this->exception)): ?>
+    </head>
+    <body id="errorPage">
 
-      <h4>Exception information:</h4>
-      <p>
-          Message: <?php echo $this->exception->getMessage() ?>
-      </p>
+        <!-- wrapper START -->
+        <div id="wrapper">
 
-      <h4>Stack trace:</h4>
-      <p><?php echo $this->exception->getTraceAsString() ?></p>
+            <!-- header START -->
+            <div id="header_innerL">
+                <div id="header_innerR"> 
+                    <div id="header_inner"> 
+                        <div id="discript"> 
+                            <h1><a href="/" tabindex="1">サイト名</a></h1>
+                        </div>
+                    </div>
+                 </div>
+            </div>
 
-      <h4>Request Parameters:</h4>
-      <p><?php echo var_export($this->requestParams, true) ?></p>
-      <?php endif ?>
-    </div>
-</div>
-<!-- section END -->
+            <!-- header END -->
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+
+                    <!-- entry START -->
+                    <div class="entry">
+
+                        <div class="entryHead">
+                            <h2><span>An error occurred</span></h2>
+                        </div>
+
+                        <div class="entryBody">
+
+                          <h3><?php echo $this->message ?></h3>
+
+                          <?php if (isset($this->exception)): ?>
+
+                          <h4>Exception information:</h4>
+                          <p>
+                              Message: <?php echo $this->exception->getMessage() ?>
+                          </p>
+
+                          <h4>Stack trace:</h4>
+                          <p><?php echo $this->exception->getTraceAsString() ?></p>
+
+                          <h4>Request Parameters:</h4>
+                          <p><?php echo var_export($this->requestParams, true) ?></p>
+                          <?php endif ?>
+
+                        </div>
+
+                    </div>
+                    <!-- entry END -->
+
+                </div>
+                <!-- mainContent END -->
+
+            </div>
+            <!-- content END -->
+
+            <p id='copyright'>Copyright &copy; 開設年 サイト名 AllRight reserved.</p>
+
+        </div>
+        <!-- container END -->
+
+    </body>
+
+</html>
