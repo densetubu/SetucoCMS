@@ -168,7 +168,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      */
     public function escapeLikeString($str)
     {
-        $str = addcslashes($str, '\\%_');
+        $str = addcslashes($str, '\\%_<>{}:[]+.*()|^$?');
         return $str;
     }
 }
