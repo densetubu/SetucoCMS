@@ -11,7 +11,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     charlesvineyard
+ * @author     akitsukada
  */
 
 /**
