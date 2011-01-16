@@ -119,7 +119,6 @@
                         <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
                             「<?php echo $this->escape($media['name']) ?>」を表示
                         </a>
-                        <br />
                         <span class="attentionMessage">※サムネイル画像[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                         <?php endif ?>
                         <?php if (!$media['mediaExists'] && $media['thumbExists']): #ファイルなし・サムネイルあり ?>
