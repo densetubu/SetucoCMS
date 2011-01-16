@@ -33,7 +33,6 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      * @var Admin_Model_Site
      */
     private $_siteService;
-
     /**
      * 編集のバリデートフォーム
      *
@@ -66,7 +65,9 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         //空文字以外の入力したものは、入力したものをデフォルト値にする
         if ($this->_hasParam('inputValues')) {
             foreach ($this->_getParam('inputValues') as $key => $value) {
-                $siteInfos[$key] = $value;
+                if ($this->_isInputFiled($key, $value)) {
+                    $siteInfos[$key] = $value;
+                }
             }
         }
 
@@ -79,6 +80,27 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
+    }
+
+    /**
+     * 入力した項目かを調べる
+     *
+     * @param string $filedName 入力した項目の名前
+     * @param string $filedValue　入力した項目の値
+     * @return boolean 入力した項目か
+     * @author suzuki-mar
+     */
+    private function _isInputFiled($filedName, $filedValue)
+    {
+        $filedValue = trim($filedValue);
+        if (!empty($filedValue)) {
+            return false;
+        }
+
+        if ($filedName !== 'url' || $filedValue !== 'http://') {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -164,8 +186,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         $stringLength = new Zend_Validate_StringLength(
                         array(
-                            'min' => 8,
-                            'max' => 30
+                            'max' => 50
                         )
         );
         $stringLength->setMessage('サイトURLは、%min%文字以上%max%文字以下で入力してください。');
