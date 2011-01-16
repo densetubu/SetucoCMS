@@ -36,6 +36,13 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     protected $_pageLimit = null;
 
     /**
+     * RESTリダイレクトのときにパラメーターのドットに付加する文字列
+     *
+     * @var string
+     */
+    const DOT_ADDITION_STRING = '%^';
+
+    /**
      * 全てのコントローラ共通の初期処理です。
      *
      * @return void
@@ -113,16 +120,13 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $queryParams = array();
         foreach ($queryConfigs as $queryConfig) {
             $param = $this->_getParam($queryConfig['value']);
-
-            // '/'が入ってるとエラーになるのでエンコードする
             if (is_array($param)) {
                 foreach ($param as $index => $partialParam) {
-                    $param[$index] = urlencode($partialParam);
+                    $param[$index] = $this->_encodeRestParam($partialParam);
                 }
             } else {
-                $param = urlencode($param);
+                $param = $this->_encodeRestParam($param);
             }
-
             $queryParams[$queryConfig['value']] = $param;
         }
 
@@ -180,6 +184,26 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         return true;
     }
 
+    /**
+     * パラメーターをリダイレクトパラムで確実に送信出来るようにエンコードします。
+     *
+     * @param  string $param エンコードするパラメーター
+     * @return string エンコード後のパラメーター
+     * @author charlesvineyard
+     */
+    private function _encodeRestParam($param) {
+        $result = $param;
+
+        // '.'だけだと消える可能性があるので文字を付加する
+        if ($param === '.') {
+            $result = $param . Setuco_Controller_Action_Abstract::DOT_ADDITION_STRING;
+        }
+
+        // '/'が入ってるとエラーになるのでエンコードする
+        $result = urlencode($result);
+
+        return $result;
+    }
 
     /**
      * レイアウトを設定します。

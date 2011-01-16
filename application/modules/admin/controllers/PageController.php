@@ -345,7 +345,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'id' => 'query',
                      'class' => 'defaultInput',
                      'filters' => array(
-                         'UrlDecode',
+                         'RestParamDecode',
                          'FullWidthStringTrim',
                      ),
                      'validators' => $this->_makeSearchQueryValidators()
@@ -364,7 +364,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                          'tag'
                      ),    // selected指定
                      'filters' => array(
-                         'UrlDecode',
+                         'RestParamDecode',
                      ),
                  )
              )
@@ -375,7 +375,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                      'multiOptions' => $this->_addUnselectedOption($categories),
                      'value' => self::UNSELECTED_VALUE,    // selected指定
                      'filters' => array(
-                         'UrlDecode',
+                         'RestParamDecode',
                      ),
                  )
              )
@@ -387,7 +387,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                          $this->_accountService->findAllAccountIdAndNicknameSet()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
                      'filters' => array(
-                         'UrlDecode',
+                         'RestParamDecode',
                      ),
                  )
              )
@@ -399,7 +399,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                          Setuco_Data_Constant_Page::ALL_STATUSES()),
                      'value' => Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE,    // selected指定
                      'filters' => array(
-                         'UrlDecode',
+                         'RestParamDecode',
                      ),
                  )
              )
