@@ -108,6 +108,7 @@
                 <td class="thumb">
                     <?php if (($media['type'] === 'pdf' || $media['type'] === 'txt')
                                                 && !$media['mediaExists']): #PDF/TXTでファイルなし ?>
+                    <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                     <?php else: ?>
                         <?php if ($media['mediaExists'] && $media['thumbExists']): #ファイルあり・サムネイルあり ?>
                         <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
@@ -118,37 +119,21 @@
                         <a href="<?php echo $this->baseUrl($media['uploadUrl']) ?>">
                             「<?php echo $this->escape($media['name']) ?>」を表示
                         </a>
+                        <br />
+                        <span class="attentionMessage">※サムネイル画像[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                         <?php endif ?>
                         <?php if (!$media['mediaExists'] && $media['thumbExists']): #ファイルなし・サムネイルあり ?>
                         <img src="<?php echo $this->baseUrl($media['thumbUrl']) ?>" alt="「<?php echo $this->escape($media['name']) ?>」を表示" />
+                        <br />
+                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                         <?php endif ?>
                         <?php if (!$media['mediaExists'] && !$media['thumbExists']): #ファイルなし・サムネイルなし(何も表示しない) ?>
+                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
                         <?php endif ?>
                     <?php endif ?>
                 </td>
                 <td>
                     <?php echo $this->escape("{$media['name']} [{$media['type']}]") . "\n"; ?>
-                    <?php if (($media['type'] === 'pdf' || $media['type'] === 'txt')
-                                                && !$media['mediaExists']): #PDF/TXTでファイルなし ?>
-                        <br />
-                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
-                    <?php else: ?>
-                        <?php if ($media['mediaExists'] && $media['thumbExists']): #ファイルあり・サムネイルあり ?>
-                        <?php // 何も表示しない ?>
-                        <?php endif ?>
-                        <?php if ($media['mediaExists'] && !$media['thumbExists']): #ファイルあり・サムネイルなし ?>
-                        <br />
-                        <span class="attentionMessage">※サムネイル画像[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
-                        <?php endif ?>
-                        <?php if (!$media['mediaExists'] && $media['thumbExists']): #ファイルなし・サムネイルあり ?>
-                        <br />
-                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
-                        <?php endif ?>
-                        <?php if (!$media['mediaExists'] && !$media['thumbExists']): #ファイルなし・サムネイルなし ?>
-                        <br />
-                        <span class="attentionMessage">※アップロードされたファイル[<?php echo $media['uploadUrl'] ?>]が見つかりません。</span>
-                        <?php endif ?>
-                    <?php endif ?>
                 </td>
                 <td><?php echo $media['update_date'] ?></td>
                 <td><?php echo $media['create_date'] ?></td>

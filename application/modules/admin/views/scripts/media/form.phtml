@@ -12,7 +12,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      array        $mediaData   編集対象のファイル情報を収めた配列
+ * @param      array        $this->mediaDataData   編集対象のファイル情報を収めた配列
  * @param      Zend_Form    $updateForm  ファイル編集用のフォームオブジェクト
  * @param      string       $fileSizeMax アップロードできる最大ファイルサイズ（'*KB'などの形式）
  * @param      array        $flashMessage フラッシュメッセージが入った配列
@@ -45,9 +45,31 @@
         <dl id="inputArea">
             <dt>
                 <?php echo $this->updateForm->getElement('preExtension') ?>
-                <a href="<?php echo $this->baseUrl("/media/upload/{$this->mediaData['id']}.{$this->mediaData['type']}") ?>">
+                <?php if (($this->mediaData['type'] === 'pdf' || $this->mediaData['type'] === 'txt')
+                                            && !$this->mediaData['mediaExists']): #PDF/TXTでファイルなし ?>
+                <span class="attentionMessage">※アップロードされたファイル[<?php echo $this->mediaData['uploadUrl'] ?>]が見つかりません。</span>
+                <?php else: ?>
+                    <?php if ($this->mediaData['mediaExists'] && $this->mediaData['thumbExists']): #ファイルあり・サムネイルあり ?>
+                    <a href="<?php echo $this->baseUrl($this->mediaData['uploadUrl']) ?>">
+                        <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="「<?php echo $this->escape($this->mediaData['name']) ?>」を表示" />
+                    </a>
+                    <?php endif ?>
+                    <?php if ($this->mediaData['mediaExists'] && !$this->mediaData['thumbExists']): #ファイルあり・サムネイルなし ?>
+                    <a href="<?php echo $this->baseUrl($this->mediaData['uploadUrl']) ?>">
+                        「<?php echo $this->escape($this->mediaData['name']) ?>」を表示
+                    </a>
+                    <br />
+                    <span class="attentionMessage">※サムネイル画像[<?php echo $this->mediaData['uploadUrl'] ?>]が見つかりません。</span>
+                    <?php endif ?>
+                    <?php if (!$this->mediaData['mediaExists'] && $this->mediaData['thumbExists']): #ファイルなし・サムネイルあり ?>
                     <img src="<?php echo $this->baseUrl($this->mediaData['thumbUrl']) ?>" alt="「<?php echo $this->escape($this->mediaData['name']) ?>」を表示" />
-                </a>
+                    <br />
+                    <span class="attentionMessage">※アップロードされたファイル[<?php echo $this->mediaData['uploadUrl'] ?>]が見つかりません。</span>
+                    <?php endif ?>
+                    <?php if (!$this->mediaData['mediaExists'] && !$this->mediaData['thumbExists']): #ファイルなし・サムネイルなし(何も表示しない) ?>
+                    <span class="attentionMessage">※アップロードされたファイル[<?php echo $this->mediaData['uploadUrl'] ?>]が見つかりません。</span>
+                    <?php endif ?>
+                <?php endif ?>
             </dt>
             <dt>ファイル名</dt>
             <dd><?php echo $this->updateForm->getElement('name') ?></dd>
