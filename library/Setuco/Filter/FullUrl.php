@@ -1,6 +1,7 @@
 <?php
 /**
- * urlの先頭にhttp:// が付いていなかったら付ける
+ * 文字列の先頭にhttp:// が付いていなかったら付ける
+ * 文字がからの場合はhttp://をつけない
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -30,6 +31,13 @@ class Setuco_Filter_FullUrl implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        $removeFilter = new Setuco_Filter_RemoveSpace();
+        $value = $removeFilter->filter($value);
+
+        if (empty($value)) {
+            return $value;
+        }
+
         //マッチしたのがなければ、http://を付加する
         $matches[] = preg_match('/^http:\/\//', $value);
         $matches[] = preg_match('/^https:\/\//', $value);
