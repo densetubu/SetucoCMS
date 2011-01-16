@@ -15,7 +15,7 @@
  * @param      string    $message       メッセージ
  * @param      Exception $exception     例外
  * @param      array     $requestParams 全てのリクエストパラメータ
- * @author     suzuki-mar charlesvineyard skyguild
+ * @author     suzuki-mar charlesvineyard ErinaMikami
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -57,7 +57,7 @@
                           </p>
 
                           <h4>Stack trace:</h4>
-                          <p><?php echo $this->exception->getTraceAsString() ?></p>
+                          <pre><?php echo $this->exception->getTraceAsString() ?></pre>
 
                           <h4>Request Parameters:</h4>
                           <p><?php echo var_export($this->requestParams, true) ?></p>
