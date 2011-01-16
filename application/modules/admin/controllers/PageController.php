@@ -114,8 +114,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        if ($this->_getParam('id') !== null) {
+        if ($this->_hasParam('id')) {
             return $this->_editFormOperation();
+        }
+        if ($this->_hasParam('query')) {
+            return $this->_searchOperation();
         }
         $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
         $sortValidator = new Zend_Validate_InArray(array('title', 'create_date'));
@@ -178,12 +181,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * ページを検索して一覧表示するアクション
+     * ページを検索して一覧表示する処理
      *
      * @return void
      * @author charlesvineyard
      */
-    public function searchAction()
+    protected function _searchOperation()
     {
         $searchForm = $this->_createSearchForm();
         if (!$this->_isValidSearchForm($searchForm, $this->_getAllParams())) {
@@ -337,7 +340,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $categories[Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE] = Setuco_Data_Constant_Category::UNCATEGORIZED_STRING;
 
         $form = new Setuco_Form();
-        $form->setAction($this->_helper->url('search'))
+        $form->setAction($this->_helper->url('index'))
              ->addElement(
                  'Text',
                  'query',

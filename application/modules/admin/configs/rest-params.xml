@@ -11,7 +11,7 @@
 
 <config>
     <page>
-        <search>
+        <index>
             <query value="query">
                 <required value="true" />
             </query>
@@ -27,6 +27,6 @@
             <query value="status">
                 <required value="true" />
             </query>
-        </search>
+        </index>
     </page>
 </config>
