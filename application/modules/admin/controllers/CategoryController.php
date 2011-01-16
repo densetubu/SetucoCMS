@@ -34,19 +34,19 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var Setuco_Form
      */
-    private $_validateCreateForm = null;
+    private $_newFormValidator = null;
     /**
      * 編集用のバリデーションチェックフォーム
      *
      * @var Setuco_Form
      */
-    private $_validateUpdateForm = null;
+    private $_updateFormValidator = null;
     /**
      * 削除用のフォーム (エラーメッセージ）を入れるだけ
      *
      * @var Setuco_Form
      */
-    private $_validateDeleteForm = null;
+    private $_deleteFormValidator = null;
 
     /**
      * コントローラーの共通設定をする
@@ -64,12 +64,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->_categoryService = new Admin_Model_Category();
 
         //新規作成用のバリデートフォーム
-        $this->_validateCreateForm = $this->_createNewValidateForm();
+        $this->_newFormValidator = $this->_createNewFormValidator();
         //編集用のバリデートフォーム
-        $this->_validateUpdateForm = $this->_createUpdateValidateForm();
+        $this->_updateFormValidator = $this->_createUpdateFormValidator();
 
         //削除用のフォーム（エラーメッセージを入れるだけ)
-        $this->_validateDeleteForm = new Setuco_Form();
+        $this->_deleteFormValidator = new Setuco_Form();
     }
 
     /**
@@ -115,14 +115,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         //入力したデータがエラーだったら、入力画面に遷移する
-        if (!$this->_validateCreateForm->isValid($this->_getAllParams())) {
-            $this->_setParam('errorForm', $this->_validateCreateForm);
+        if (!$this->_newFormValidator->isValid($this->_getAllParams())) {
+            $this->_setParam('errorForm', $this->_newFormValidator);
             $this->_setParam('inputCreateCategoryName', $this->_getParam('cat_name'));
             return $this->_forward('index');
         }
 
 
-        $inputData = $this->_validateCreateForm->getValues();
+        $inputData = $this->_newFormValidator->getValues();
         $registData['name'] = $inputData['cat_name'];
 
         try {
@@ -151,12 +151,12 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         //入力したデータがエラーだたら入力画面に遷移する
-        if (!$this->_validateUpdateForm->isValid($this->_getAllParams())) {
-            $this->_setParam('errorForm', $this->_validateUpdateForm);
+        if (!$this->_updateFormValidator->isValid($this->_getAllParams())) {
+            $this->_setParam('errorForm', $this->_updateFormValidator);
             return $this->_forward('index');
         }
 
-        $validateData = $this->_validateUpdateForm->getValues();
+        $validateData = $this->_updateFormValidator->getValues();
 
         $oldName = $this->_categoryService->findNameById($validateData['id']);
 
@@ -190,7 +190,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         if (!$validator->isValid($this->_getParam('id'))) {
 
             $this->_setExceptionErrorMessages('delete');
-            $this->_setParam('errorForm', $this->_validateDeleteForm);
+            $this->_setParam('errorForm', $this->_deleteFormValidator);
             return $this->_forward('index');
         }
 
@@ -214,7 +214,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form 新規作成用のフォーム
      * @author suzuki-mar
      */
-    private function _createNewValidateForm()
+    private function _createNewFormValidator()
     {
 
         $form = new Setuco_Form();
@@ -231,7 +231,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      * @return Setuco_Form 編集用のフォーム
      * @author suzuki-mar
      */
-    private function _createUpdateValidateForm()
+    private function _createUpdateFormValidator()
     {
         //フォームクラスの生成
         $form = new Setuco_Form();

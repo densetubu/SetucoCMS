@@ -149,7 +149,10 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $urlElement = $form->createElement('text', 'url');
 
         $this->_addFormElementCommonOptions($urlElement);
+        //先頭にhttp://を付加して、スペースを削除する
         $urlElement->addFilter('fullUrl');
+        $urlElement->addFilter('removeSpace');
+
 
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('サイトURLを入力してください。');

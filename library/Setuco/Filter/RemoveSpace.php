@@ -1,6 +1,6 @@
 <?php
 /**
- * urlの先頭にhttp:// が付いていなかったら付ける
+ * スペース（半角、全角)を削除します。
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -18,26 +18,21 @@
  * @package    Setuco_Filter
  * @author     suzuki-mar
  */
-class Setuco_Filter_FullUrl implements Zend_Filter_Interface
+class Setuco_Filter_RemoveSpace implements Zend_Filter_Interface
 {
     /**
      * フィルター処理です。
      *
      * @param  string $value フィルタをかける文字列
-     * @return string 先頭にhttpが付いていなかったらつけます
+     * @return string スペースを削除します。
      * @see Zend_Filter_Interface::filter()
      * @author suzuki-mar
      */
     public function filter($value)
     {
-        //マッチしたのがなければ、http://を付加する
-        $matches[] = preg_match('/^http:\/\//', $value);
-        $matches[] = preg_match('/^https:\/\//', $value);
-        
-        if (!in_array(true, $matches)) {
-           $value = "http://{$value}";
-        }
 
-        return $value;
+        $value = str_replace('　', '', $value);
+        $result = str_replace(' ', '', $value);
+        return $result;
     }
 }
