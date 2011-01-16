@@ -496,6 +496,9 @@ body#errorPage div#content div#mainContent {
     max-width: 100%;
     float: none;
 }
+body#errorPage div#content div#mainContent div.entry {
+    min-height: 150px;
+}
 body#errorPage div#content div#mainContent div.entryBody p {
     max-width: 100%;
 }

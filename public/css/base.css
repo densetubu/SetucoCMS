@@ -176,8 +176,8 @@ div#header h1 {
 }
 div#header h1 a {
     display: block;
-    width: 152px;
-    height: 29px;
+    width: 136px;
+    height: 33px;
 }
 div#header h1 a img {
     vertical-align: top;
@@ -879,4 +879,7 @@ body#errorPage div.default h3 {
 }
 body#errorPage div.default h4 {
     margin-top: 10px;
+}
+body#errorPage div.default p {
+    margin-top: 5px;
 }
