@@ -40,7 +40,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      *
      * @var string
      */
-    const DOT_ADDITION_STRING = '%^';
+    const DOT_ADDITIONAL_STRING = '%^';
 
     /**
      * 全てのコントローラ共通の初期処理です。

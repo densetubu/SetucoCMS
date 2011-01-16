@@ -35,7 +35,7 @@ class Setuco_Filter_RestParamDecode implements Zend_Filter_Interface
         $result = $urlDecodeFilter->filter($value);
 
         // ドットに付加文字列がつけられていた場合除去する(付加文字列がつくのは元が'.'の場合のみ)
-        if ($result === '.' . Setuco_Controller_Action_Abstract::DOT_ADDITION_STRING) {
+        if ($result === '.' . Setuco_Controller_Action_Abstract::DOT_ADDITIONAL_STRING) {
             $result = '.';
         }
         return $result;
