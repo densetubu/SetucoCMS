@@ -318,7 +318,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             $select->where($orwhere);
         }
 
-        // 管理側ページ編集・削除画面で、カテゴリー・制作者・公開状態が指定された場合にWhere句を編集
+        // カテゴリー・制作者・公開状態が指定された場合にWhere句を編集
         if (is_array($refinements) && !empty($refinements)) {
             foreach ($refinements as $column => $value) {
                 if ($column === 'category_id' && $value === null) {
