@@ -189,7 +189,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                             'max' => 50
                         )
         );
-        $stringLength->setMessage('サイトURLは、%max%文字以下で入力してください。');
+        $stringLength->setMessage('サイトURLは%max%文字以下で入力してください。');
         $urlValidators[] = array($stringLength, true);
         $urlElement->addValidators($urlValidators);
 
