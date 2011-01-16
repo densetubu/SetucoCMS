@@ -158,10 +158,9 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     }
 
     /**
-     * WHERE句のLIKE演算子に与える文字列を\（バックスラッシュ）でエスケープします。
+     * WHERE句のLIKE演算子や正規表現に与える文字列を\（バックスラッシュ）でエスケープします。
      *
-     * エスケープされるのは "\" "%" "_" の三文字です。
-     * "%"や"_"が検索できるようになります。
+     * エスケープされた文字が検索できるようになります。
      *
      * @param string $str LIKE検索を行う検索対象文字列
      * @return string エスケープ済みの検索対象文字列
