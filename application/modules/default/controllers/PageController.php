@@ -109,14 +109,17 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $keyword = Zend_Filter::filterStatic($keyword, 'UrlDecode', array (), 'Setuco_Filter');
         $keyword = Zend_Filter::filterStatic($keyword, 'FullWidthStringTrim', array (), 'Setuco_Filter');
         $currentPage = $this->_getPageNumber();
-        $searchResultCount = $this->_pageService->countPagesByKeyword($keyword);
+        $searchResultCount = $this->_pageService->countPagesByKeyword(
+                $keyword, null, array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
 
         if ($searchResultCount == 0) {
             // 検索結果が0件の場合ビュー切り替え
             $this->_helper->viewRenderer('searchnot');
         } else {
 
-            $searchResult = $this->_pageService->searchPages($keyword, $currentPage, self::LIMIT_PAGE_SEARCH);
+            $searchResult = $this->_pageService->searchPages(
+                    $keyword, $currentPage, self::LIMIT_PAGE_SEARCH, null,
+                    array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
                 $date->set($entry['update_date'], Zend_Date::ISO_8601);
@@ -256,9 +259,12 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $page = $this->_pageService->findPage($id);
 
         if (is_null($page)) {
-            // idに該当するページなし（通常おこらない不適切なアクセス ex.URL手入力など）
-            // @todo 仕様策定と実装
+            throw new Setuco_Exception('ページが存在しません');
         }
+        if ($page['status'] != Setuco_Data_Constant_Page::STATUS_RELEASE) {
+            throw new Setuco_Exception('ページが存在しません');
+        }
+
         // カテゴリー情報の取得
         $categoryId = $page['category_id'];
         if (is_null($categoryId)) {
