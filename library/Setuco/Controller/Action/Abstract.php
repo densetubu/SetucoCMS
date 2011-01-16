@@ -196,7 +196,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
 
         // '.'だけだと消える可能性があるので文字を付加する
         if ($param === '.') {
-            $result = $param . Setuco_Controller_Action_Abstract::DOT_ADDITION_STRING;
+            $result = $param . Setuco_Controller_Action_Abstract::DOT_ADDITIONAL_STRING;
         }
 
         // '/'が入ってるとエラーになるのでエンコードする
