@@ -304,12 +304,14 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             $bind[':keyword'] = "%{$keyword}%";
         }
         if (in_array('tag', $targetColumns)) {
+            if ($orwhere !== '') {
+                $orwhere .= ' OR ';
+            }
             if (is_array($tagIds) && !empty($tagIds)) {
-                if ($orwhere !== '') {
-                    $orwhere .= ' OR ';
-                }
-                $orwhere .= 't.id IN(:tagIds)';
+                $orwhere .= ' t.id IN(:tagIds) ';
                 $bind[':tagIds'] = implode(",", $tagIds);
+            } elseif (is_array($tagIds) && empty($tagIds)) {
+                $orwhere .= ' t.id != t.id ';
             }
         }
         if ($orwhere !== '') {
