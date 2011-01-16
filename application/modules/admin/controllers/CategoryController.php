@@ -87,7 +87,9 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $this->_showFlashMessages();
 
         //全部のデータからデータと該当したデータが何件あったか(limitしないで)を取得する
-        $this->view->categories = $this->_categoryService->findCategories($this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit());
+        $this->view->categories = $this->_categoryService->findCategories(
+            $this->_getParam('sort'), $this->_getPageNumber(), $this->_getPageLimit()
+        );
         $max = $this->_categoryService->countAllCategories();
         $this->setPagerForView($max);
 
@@ -96,7 +98,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             $this->view->errorForm = $this->_getParam('errorForm');
         }
 
-        $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', $this->_getParam('inputCreateCategoryName', '新規カテゴリー'));
+        $this->view->inputCreateCategoryName = $this->_getParam('inputCreateCategoryName', '新規カテゴリー');
     }
 
     /**
@@ -132,7 +134,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
-        $this->_redirect('/admin/category/index');
+        $this->_helper->redirector('index');
     }
 
     /**
@@ -168,8 +170,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
         $this->_helper->flashMessenger($actionMessage);
-
-        $this->_redirect('/admin/category/index');
+        $this->_helper->redirector('index');
     }
 
     /**
@@ -204,7 +205,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
 
-        $this->_redirect('/admin/category/index');
+        $this->_helper->redirector('index');
     }
 
     /**
