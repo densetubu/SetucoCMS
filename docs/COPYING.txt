@@ -1,4 +1,4 @@
-Copyright and License notice about SetucoCMS
+Copyright and License Notice about SetucoCMS
 ============================================
 
 Most of the files included in SetucoCMS package are licensed under
