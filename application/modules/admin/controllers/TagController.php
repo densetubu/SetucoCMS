@@ -113,6 +113,7 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
              ->addDecorator('Form');
         $tag = new Zend_Form_Element_Text('tag', array(
             'id'         => 'tag',
+            'class'      => 'defaultInput',
             'value'      => '',
             'required'   => true,
             'validators' => $this->_makeTagValidators(true),

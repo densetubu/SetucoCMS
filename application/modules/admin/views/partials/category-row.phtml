@@ -20,12 +20,12 @@
 ?>
 
 <td>
-    <span class="tagInfo"><?php echo $this->escape($this->category['name']) ?></span>
+    <span><?php echo $this->escape($this->category['name']) ?></span>
 
     <div class="rowEdit">
         <form action="<?php echo $this->baseUrl('/admin/category/update') ?>" method="post">
             <p>
-                <input type="text" name="name" id="name<?php  echo $this->category['id'] ?>" value="<?php echo $this->escape($this->category['name']) ?>" />
+                <input type="text" name="name" class="defaultInput" id="name<?php  echo $this->category['id'] ?>" value="<?php echo $this->escape($this->category['name']) ?>" />
                 <input type="hidden" name="id" id="id<?php echo $this->category['id'] ?>" value="<?php echo $this->category['id'] ?>" />
                 <input type="hidden" name="parent_id" id="parent_id<?php echo $this->category['id'] ?>" value="<?php echo $this->category['parent_id'] ?>" />
                 <input type="submit" class="sub" value="保存" />
@@ -44,6 +44,6 @@
 <?php $redirectUrl = $this->baseUrl("/admin/category/delete/id/{$this->category['id']}") ?>
 <td>
     <a href='javascript:void(0)' onclick='confirmDeleteRedirect("<?php echo $redirectUrl ?>", "<?php echo $this->escape($this->category['name']) ?>");'>
-        <img src='<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>' alt='削除' width='27' height='27' />
+        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt='削除' width='27' height='27' />
     </a>
 </td>
