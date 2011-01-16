@@ -92,14 +92,15 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _isInputFiled($filedName, $filedValue)
     {
-        $filedValue = trim($filedValue);
-        if (!empty($filedValue)) {
+        
+        if (empty($filedValue)) {
             return false;
         }
 
-        if ($filedName !== 'url' || $filedValue !== 'http://') {
+        if ($filedName === 'url' && $filedValue === 'http://') {
             return false;
         }
+
         return true;
     }
 
