@@ -77,7 +77,7 @@ class Admin_Model_Site extends Common_Model_SiteAbstract
     public function updateSite($updateData)
     {
         //データは1件しかないないので、whereはいらない
-        return $this->_siteDao->update($updateData, true);
+        return $this->_siteDao->update($updateData);
     }
 
     /**

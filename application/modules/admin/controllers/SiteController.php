@@ -90,9 +90,9 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateAction()
     {
-        //フォームから値を送信されなかったら、indexに遷移する
+        //フォームから値を送信されなかったら、エラーページに遷移する
         if (!$this->_request->isPost()) {
-            $this->_helper->redirector('index');
+            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
         //入力したデータをバリデートチェックをする
@@ -156,7 +156,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $urlValidators[] = array($notEmpty, true);
 
         $urlCheck = new Setuco_Validate_Url();
-        $urlCheck->setMessage('サイトURLを入力してください。');
+        $urlCheck->setMessage('サイトURLの形式が正しくありません。');
         $urlValidators[] = array($urlCheck, true);
 
         $stringLength = new Zend_Validate_StringLength(

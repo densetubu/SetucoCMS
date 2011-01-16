@@ -30,7 +30,11 @@ class Setuco_Filter_FullUrl implements Zend_Filter_Interface
      */
     public function filter($value)
     {
-        if (!preg_match('/^http?s:\/\//', $value)) {
+        //マッチしたのがなければ、http://を付加する
+        $matches[] = preg_match('/^http:\/\//', $value);
+        $matches[] = preg_match('/^https:\/\//', $value);
+        
+        if (!in_array(true, $matches)) {
            $value = "http://{$value}";
         }
 

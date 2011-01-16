@@ -114,27 +114,24 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
-        //入力したデータをバリデートチェックをする
-        if ($this->_validateCreateForm->isValid($this->_getAllParams())) {
-            $inputData = $this->_validateCreateForm->getValues();
-            $registData['name'] = $inputData['cat_name'];
-
-            try {
-                $this->_categoryService->registCategory($registData);
-            } catch (Zend_Exception $e) {
-                throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
-            }
-
-            $isCreateSuccess = true;
-            $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
-        }
-
-        if (!(isset($isCreateSuccess) && $isCreateSuccess === true)) {
+        //入力したデータがエラーだったら、入力画面に遷移する
+        if (!$this->_validateCreateForm->isValid($this->_getAllParams())) {
             $this->_setParam('errorForm', $this->_validateCreateForm);
             $this->_setParam('inputCreateCategoryName', $this->_getParam('cat_name'));
             return $this->_forward('index');
         }
 
+
+        $inputData = $this->_validateCreateForm->getValues();
+        $registData['name'] = $inputData['cat_name'];
+
+        try {
+            $this->_categoryService->registCategory($registData);
+        } catch (Zend_Exception $e) {
+            throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
+        }
+
+        $this->_helper->flashMessenger("「{$registData['name']}」を作成しました。");
         $this->_redirect('/admin/category/index');
     }
 
@@ -153,29 +150,24 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
             throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
-        //入力したデータをバリデートチェックをする
-        if ($this->_validateUpdateForm->isValid($this->_getAllParams())) {
-            $validateData = $this->_validateUpdateForm->getValues();
-
-            $oldName = $this->_categoryService->findNameById($validateData['id']);
-
-            try {
-                $this->_categoryService->updateCategory($validateData['id'], $validateData);
-            } catch (Zend_Exception $e) {
-                throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
-            }
-
-            $isUpdateSuccess = true;
-            $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
-            $this->_helper->flashMessenger($actionMessage);
-        }
-
-        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!(isset($isUpdateSuccess) && $isUpdateSuccess === true)) {
+        //入力したデータがエラーだたら入力画面に遷移する
+        if (!$this->_validateUpdateForm->isValid($this->_getAllParams())) {
             $this->_setParam('errorForm', $this->_validateUpdateForm);
             return $this->_forward('index');
         }
 
+        $validateData = $this->_validateUpdateForm->getValues();
+
+        $oldName = $this->_categoryService->findNameById($validateData['id']);
+
+        try {
+            $this->_categoryService->updateCategory($validateData['id'], $validateData);
+        } catch (Zend_Exception $e) {
+            throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
+        }
+
+        $actionMessage = "「{$oldName}」を「{$validateData['name']}」に変更しました。";
+        $this->_helper->flashMessenger($actionMessage);
 
         $this->_redirect('/admin/category/index');
     }
@@ -190,31 +182,27 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
     public function deleteAction()
     {
         if (!$this->_hasParam('id')) {
-            throw new Setuco_Controller_Exception('パラメータ[id]がありません。');
+            throw new Setuco_Controller_IllegalAccessException('パラメータ[id]がありません。');
         }
 
         //数値以外はエラー
         $validator = new Zend_Validate_Digits($this->_getParam('id'));
-        if ($validator->isValid($this->_getParam('id'))) {
+        if (!$validator->isValid($this->_getParam('id'))) {
 
-            $categoryName = $this->_categoryService->findNameById($this->_getParam('id'));
-
-            try {
-                $this->_categoryService->deleteCategory($this->_getParam('id'));
-            } catch (Zend_Exception $e) {
-                throw new Setuco_Exception('delete文の実行に失敗しました。' . $e->getMessage());
-            }
-
-            $isDeleteSuccess = true;
-            $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
-        }
-
-        //フラッシュメッセージを保存していない場合は、エラーメッセージを保存する
-        if (!(isset($isDeleteSuccess) && $isDeleteSuccess === true)) {
             $this->_setExceptionErrorMessages('delete');
             $this->_setParam('errorForm', $this->_validateDeleteForm);
             return $this->_forward('index');
         }
+
+        $categoryName = $this->_categoryService->findNameById($this->_getParam('id'));
+
+        try {
+            $this->_categoryService->deleteCategory($this->_getParam('id'));
+        } catch (Zend_Exception $e) {
+            throw new Setuco_Exception('delete文の実行に失敗しました。' . $e->getMessage());
+        }
+
+        $this->_helper->flashMessenger("「{$categoryName}」を削除しました。");
 
         $this->_redirect('/admin/category/index');
     }
