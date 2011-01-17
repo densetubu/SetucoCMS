@@ -221,8 +221,9 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
 
         $keywordValidators[] = array($stringLength, true);
         $keywordElement->addValidators($keywordValidators);
-        //同じキーワードを削除する
+        //同じキーワードを削除して、キーワードごとにtrimを使用する
         $keywordElement->addFilter('deselectSameKeyword');
+        $keywordElement->addFilter('trimKeywords');
 
         $form->addElement($keywordElement);
 
