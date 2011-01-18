@@ -259,10 +259,10 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $page = $this->_pageService->findPage($id);
 
         if (is_null($page)) {
-            throw new Setuco_Exception('ページが存在しません');
+            throw new Setuco_Exception('ページが存在しません', 404);
         }
         if ($page['status'] != Setuco_Data_Constant_Page::STATUS_RELEASE) {
-            throw new Setuco_Exception('ページが存在しません');
+            throw new Setuco_Exception('ページが存在しません', 404);
         }
 
         // カテゴリー情報の取得

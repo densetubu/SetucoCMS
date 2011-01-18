@@ -90,7 +90,7 @@ class Admin_DirectoryController extends Setuco_Controller_Action_AdminAbstract
         ));
         if ($categoryId !== Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE) {
             if (!$categoryIdValidator->isValid($categoryId)) {
-                throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
+                throw new Setuco_Controller_Exception('ページがありません。', 404);
             }
         }
 

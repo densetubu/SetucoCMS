@@ -155,7 +155,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         ));
         $id = $this->_getParam('id');
         if (!$idValidator->isValid($id)) {
-            throw new UnexpectedValueException('指定されたページがありません。');    // TODO 暫定仕様
+            throw new Setuco_Controller_Exception('ページがありません。', 404);
         }
 
         $page = $this->_pageService->findPage($id);
