@@ -1,0 +1,80 @@
+<?php
+/**
+ * アカウント情報更新画面
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Category
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array            $account   アカウント情報データ
+ * @param      array[option]    $flashMessages アクションの実行結果
+ * @param      Setuco_Form      $errorForm エラーメッセージを表示するフォームクラス
+ * @author     suzuki-mar
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>マイアカウントの編集</p>
+</div>
+<!-- topicpath END -->
+
+    <!-- section START -->
+    <div class="section">
+        <div class="hAreaL">
+            <div class="hAreaR">
+                <div class="hArea">
+                    <h3>
+                        <img src="<?php echo $this->baseUrl('/images/admin/account/h_myaccount.jpg') ?>" width="149" height="18" alt="マイアカウントの編集" />
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+        <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+
+        <form action="sub_edit.php" method="post" class="accountEdit">
+            
+            <input type="hidden" id="edit_type" name="edit_type" value="name" />
+        
+            <dl class="editArea">
+                <dt><label for="user_name">アカウント名</label></dt>
+
+                    <dd><input type="text" id="user_name" name="user_name" value='admin' /></dd>
+            </dl>
+            
+            <p class="editAreaP"><input type="submit" id="sub" name="sub" value="アカウント名を変更" /></p>
+        
+        </form>
+
+        <form action="sub_edit.php" method="post" class="accountEdit">
+            
+            <input type="hidden" id="edit_type" name="edit_type" value="pass" />
+            
+            <dl class="editArea">
+                <dt><label for="pass_old">現在のパスワード</label></dt>
+                    <dd><input type="password" id="pass_old" name="pass_old" value="" /></dd>
+                <dt><label for="user_pass">新しいパスワード</label></dt>
+                    <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
+                <dt><label for="pass_check">パスワード確認</label></dt>
+                    <dd><input type="password" id="pass_check" name="pass_check" value="" /></dd>
+            </dl>
+            
+            <p class="editAreaP"><input type="submit" id="sub" name="sub" value="パスワードを変更" /></p>
+        
+        </form>
+
+    </div>
+    <!-- section END -->
+

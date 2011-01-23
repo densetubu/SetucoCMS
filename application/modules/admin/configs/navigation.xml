@@ -164,5 +164,26 @@
                 </site_index>
             </pages>
         </site>
+        <account>
+            <id>account</id>
+            <title>マイアカウントの編集</title>
+            <label>アカウント</label>
+            <module>admin</module>
+            <controller>account</controller>
+            <action>index</action>
+            <order>60</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/admin/gNav/h_menu_account.jpg</src>
+            <pages>
+                <account_index>
+                    <id>account_index</id>
+                    <title>マイアカウントの編集</title>
+                    <label>マイアカウントの編集</label>
+                    <module>admin</module>
+                    <controller>account</controller>
+                    <action>index</action>
+                </account_index>
+            </pages>
+        </account>
     </nav>
 </config>
