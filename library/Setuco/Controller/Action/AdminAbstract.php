@@ -84,19 +84,17 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      * ヘッダーに関する初期処理です。
      *
      * @return Zend_Navigation
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
      */
     protected function _initHeader()
     {
-        $auth = Zend_Auth::getInstance();
-        if (! $auth->hasIdentity()) {
+        $auth = new Admin_Model_Auth();
+
+        if (! $auth->isLoggedIn()) {
             return;
         }
 
-        $loginId = $auth->getIdentity();
-        $accountService = new Admin_Model_Account();
-        $account = $accountService->findAccountByLoginId($loginId);
-        $this->view->nickName = $account['nickname'];
+        $this->view->nickName = $this->_getAccountInfos('nickname');
 
         $siteService = new Admin_Model_Site();
         $site = $siteService->getSiteInfo();
@@ -112,6 +110,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      */
     public function postDispatch()
     {
+       
         $this->view->headTitle(($this->_pageTitle === null)
             ? $this->_chooseHeadTitle() : $this->_pageTitle,
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
@@ -125,9 +124,9 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      */
     protected function _chooseHeadTitle()
     {
-
         $currentNavController = $this->_navigation->findByController(
         $this->getRequest()->getControllerName());
+
         if(! $currentNavController) {
             return null;
         }
@@ -158,5 +157,24 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
         $element->addFilter(new Setuco_Filter_FullWidthStringTrim());
     }
 
+    /**
+     * ログインしているユーザーの情報を取得する
+     *
+     * @param string[option] $columnName 取得するカラム　指定がない場合はすべて取得する
+     * @return array ユーザーの情報
+     * @author suzuki-mar
+     */
+    protected function _getAccountInfos($columnName = null)
+    {
+        $auth = new Admin_Model_Auth();
 
+        if(is_null($columnName)) {
+            $result = $auth->getAccountInfos();
+        } else {
+            $accountInfos = $auth->getAccountInfos();
+            $result = $accountInfos[$columnName];
+        }
+        
+        return $result;
+    }
 }

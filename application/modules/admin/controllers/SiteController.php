@@ -134,7 +134,6 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
             throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
         }
 
-        $isUpdateSuccess = true;
         $this->_helper->flashMessenger('サイト情報を編集しました。');
         $this->_helper->redirector('index');
     }

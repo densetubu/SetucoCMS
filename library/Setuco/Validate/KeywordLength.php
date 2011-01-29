@@ -57,13 +57,13 @@ class Setuco_Validate_KeywordLength extends Zend_Validate_Abstract
     protected $_min = null;
     /**
      * キーワードの最大文字数
-     * 
+     *
      * @var int
      */
     protected $_max = null;
     /**
      * キーワードの最小個数
-     * 
+     *
      * @var int
      */
     protected $_count_min = null;

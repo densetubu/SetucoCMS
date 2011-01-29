@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ログイン処理をするコントローラ
  *
@@ -24,6 +25,7 @@
  */
 class Admin_LoginController extends Setuco_Controller_Action_Abstract
 {
+
     /**
      * 初期化処理
      *
@@ -66,14 +68,16 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         }
 
         $authModel = new Admin_Model_Auth();
-        if (!$authModel->login(
-                $form->getValue('login_id'),
-                $form->getValue('password'))
-        ) {
+        $authModel->login($form->getValue('login_id'), $form->getValue('password'));
+
+        if (!$authModel->isLoginSuccess()) {
             $this->_setParam('form', $form);
             $form->addError('アカウントIDまたはパスワードが間違っています。');
             return $this->_forward('index');
         }
+
+        $authModel->setAccountInfos();
+
         $this->_helper->redirector('index', 'index');
     }
 
@@ -89,7 +93,6 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         Zend_Auth::getInstance()->clearIdentity();
         $this->_helper->flashMessenger('ログアウトしました。');
         $this->_helper->redirector('index');
-
     }
 
     /**
@@ -102,33 +105,33 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     {
         $form = new Setuco_Form();
         $form->clearDecorators()
-             ->setDisableLoadDefaultDecorators(true)
-             ->setAction($this->_helper->url('auth'))
-             ->addDecorator('FormElements')
-             ->addDecorator('Form');
+                ->setDisableLoadDefaultDecorators(true)
+                ->setAction($this->_helper->url('auth'))
+                ->addDecorator('FormElements')
+                ->addDecorator('Form');
         $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウントID'));
         $accountId->setRequired(true)
-                  ->setValidators($this->_makeLoginIdValidators())
-                  ->setFilters(array('StringTrim'))
-                  ->clearDecorators()
-                  ->setDisableLoadDefaultDecorators(true)
-                  ->addDecorator('ViewHelper')
-                  ->addDecorator('HtmlTag', array('tag' => 'dd'))
-                  ->addDecorator('Label', array('tag' => 'dt'));
+                ->setValidators($this->_makeLoginIdValidators())
+                ->setFilters(array('StringTrim'))
+                ->clearDecorators()
+                ->setDisableLoadDefaultDecorators(true)
+                ->addDecorator('ViewHelper')
+                ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         $password = new Zend_Form_Element_Password('password', array('label' => 'パスワード'));
         $password->setRequired(true)
-                  ->setValidators($this->_makePasswordValidators())
-                  ->clearDecorators()
-                 ->setDisableLoadDefaultDecorators(true)
-                 ->addDecorator('ViewHelper')
-                 ->addDecorator('HtmlTag', array('tag' => 'dd'))
-                 ->addDecorator('Label', array('tag' => 'dt'));
+                ->setValidators($this->_makePasswordValidators())
+                ->clearDecorators()
+                ->setDisableLoadDefaultDecorators(true)
+                ->addDecorator('ViewHelper')
+                ->addDecorator('HtmlTag', array('tag' => 'dd'))
+                ->addDecorator('Label', array('tag' => 'dt'));
         $submit = new Zend_Form_Element_Submit('sub');
         $submit->setLabel('ログイン')
-               ->clearDecorators()
-               ->setDisableLoadDefaultDecorators(true)
-               ->addDecorator('ViewHelper')
-               ->addDecorator('HtmlTag', array('tag' => 'p'));
+                ->clearDecorators()
+                ->setDisableLoadDefaultDecorators(true)
+                ->addDecorator('ViewHelper')
+                ->addDecorator('HtmlTag', array('tag' => 'p'));
         $form->addElements(array(
             $accountId,
             $password,
@@ -170,5 +173,6 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
 
         return $validators;
     }
+
 }
 

@@ -68,5 +68,36 @@ class Admin_Model_Account
         }
         return $idNameSet;
     }
+
+    /**
+     * 指定したパスワードが同じかを調べる
+     *
+     * @param string $password 同じかをチェックするパスワード
+     * @param string $loginId パスワードが同じかを調べるユーザーのログインID
+     * @return boolean 同じかどうか
+     */
+    public function isSamePassword($password, $loginId)
+    {
+        $accountInfos = $this->findAccountByLoginId($loginId);
+        $hashPassword = hash('sha1', $password);
+        
+        return ($hashPassword === $accountInfos['password']);
+    }
+
+    /**
+     * パスワード情報を変更する
+     *
+     * @param string $password 変更するパスワード
+     * @param string $loginId パスワードを変更するID
+     * @return int 変更した件数
+     * @author suzuki-mar
+     */
+    public function updatePassword($password, $loginId)
+    {
+      $where = $this->_accountDao->getAdapter()->quoteInto('login_id LIKE ?', $loginId);
+      $updateParams['password'] = sha1($password);
+      return $this->_accountDao->update($updateParams, $where);
+      
+    }
 }
 
