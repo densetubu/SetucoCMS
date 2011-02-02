@@ -895,7 +895,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
             ),
             $this->_getInputStatus(),
-            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id'))
+            Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id')),
+            $this->_getAccountInfos('id')
         );
 
         $this->_helper->flashMessenger('新規ページを作成しました。');

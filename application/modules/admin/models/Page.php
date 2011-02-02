@@ -112,20 +112,20 @@ class Admin_Model_Page extends Common_Model_PageAbstract
      * @param array     $tags        タグ名の配列
      * @param Zend_Date $create_date 作成日時
      * @param int       $status      公開状態
-     * @param int       $category_id カテゴリーID
+     * @param int       $categoryId カテゴリーID
+     * @param int       $accountId アカウントのID
      * @return int 登録したページのID
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
      */
     public function registPage($title, $contents, $outline, $tags,
-            $createDate, $status, $categoryId)
+            $createDate, $status, $categoryId, $accountId)
     {
-        $account = $this->_accountDao->loadAccountByLoginId(Zend_Auth::getInstance()->getIdentity());
         $page = array(
             'title'       => $title,
             'contents'    => $contents,
             'outline'     => $outline,
             'create_date' => $createDate,
-            'account_id'  => $account['id'],
+            'account_id'  => $accountId,
             'status'      => $status,
             'category_id' => $categoryId,
             'update_date' => $createDate,

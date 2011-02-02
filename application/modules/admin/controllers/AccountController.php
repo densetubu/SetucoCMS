@@ -58,6 +58,9 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
+        // フラッシュメッセージ設定
+        $this->_showFlashMessages();
+
         //バリデートに失敗したエラーフォームがあればセットする
         if ($this->_hasParam('errorForm')) {
             $this->view->errorForm = $this->_getParam('errorForm');

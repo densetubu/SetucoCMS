@@ -43,7 +43,9 @@ class Setuco_Validate_Password extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        if (!preg_match('/^[a-zA-Z0-9-._]+$/', $value)) {
+        $allowSymbol = '!"#$%&\'()=~|\-^@\[;:\],.\/`{+*}>?';
+
+        if (!preg_match("/^[a-zA-Z0-9{$allowSymbol}]+$/", $value)) {
             $this->_error(self::NOT_MATCH);
             return false;
         }

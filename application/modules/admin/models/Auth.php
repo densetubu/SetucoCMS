@@ -13,7 +13,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     Yuu Yamanaka, charlesvineyard
+ * @author     Yuu Yamanaka, charlesvineyard　suzuki-mar
  */
 
 /**
@@ -22,7 +22,7 @@
  * @subpackage Model
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
- * @author     Yuu Yamanaka, charlesvineyard
+ * @author     Yuu Yamanaka, charlesvineyard suzuki_mar
  */
 class Admin_Model_Auth
 {

@@ -168,7 +168,7 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     {
         $auth = new Admin_Model_Auth();
 
-        if(is_null($columnName)) {
+        if (is_null($columnName)) {
             $result = $auth->getAccountInfos();
         } else {
             $accountInfos = $auth->getAccountInfos();
