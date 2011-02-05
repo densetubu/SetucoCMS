@@ -87,10 +87,11 @@ class Admin_Model_Goal
     {
         $thisMonth = new Zend_Date();
         $thisMonth->set(1, Zend_Date::DAY);
-        $thisMonth = $thisMonth->toString('YYYY-MM-dd');
-        for ($fillingGoal = $lastGoal; $fillingGoal['target_month'] !== $thisMonth; $lastGoal = $fillingGoal) {
-            $lastGoalDate = new Zend_Date($lastGoal['target_month'], 'YYYY-MM-dd');
-            $fillingGoal['target_month'] = $lastGoalDate->addMonth(1)->toString('YYYY-MM-dd');
+        $thisMonth = $thisMonth->toString('yyyy-MM-dd');
+        $lastGoalDate = new Zend_Date($lastGoal['target_month'], 'yyyy-MM-dd');;
+        for ($fillingGoal = $lastGoal; $fillingGoal['target_month'] !== $thisMonth; $lastGoal = $fillingGoal['target_month']) {
+            $lastGoalDate->addMonth(1);
+            $fillingGoal['target_month'] = $lastGoalDate->toString('yyyy-MM-dd');
             unset($fillingGoal['id']);
             $this->_goalDao->insert($fillingGoal);
         }
