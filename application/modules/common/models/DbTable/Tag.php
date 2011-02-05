@@ -113,7 +113,8 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
     {
         $keyword = $this->escapeLikeString($keyword);
         $select = $this->select()->from(array('t' => $this->_name), 'id');
-        $select->where('name LIKE ?', "%{$keyword}%");
+        $columnExpr = $this->getBsReplacedExpression('name');
+        $select->where("{$columnExpr} LIKE ?", "%{$keyword}%");
         $rowset = $this->fetchAll($select);
         if ($rowset->count() == 0) {
             return array();

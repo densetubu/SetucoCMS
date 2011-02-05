@@ -23,6 +23,13 @@
 abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
 {
     /**
+     * SQL文中のバックスラッシュ(\)を置換する文字列
+     *
+     * @var string
+     */
+    const BACKSLASH_REPLACER = '__BS__';
+    
+    /**
      * 全部で何件あるのか取得する
      *
      * @return int 全てのデータ件数
@@ -159,15 +166,32 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
     /**
      * WHERE句のLIKE演算子や正規表現に与える文字列を\（バックスラッシュ）でエスケープします。
-     *
      * エスケープされた文字が検索できるようになります。
+     * バックスラッシュ自体を検索するときは、getBsReplacedExpressionとセットで使う必要があります。
      *
      * @param string $str LIKE検索を行う検索対象文字列
      * @return string エスケープ済みの検索対象文字列
+     * @author akitsukada
      */
     public function escapeLikeString($str)
     {
-        $str = addcslashes($str, '\\%_<>{}:[]+.*()|^$?');
+        $str = str_replace('\\', self::BACKSLASH_REPLACER, $str);
+        $str = addcslashes($str, '%_<>{}:[]+.*()|^$?');
         return $str;
+    }
+
+    /**
+     * $columnNameにSQL文のカラム名、リテラルを受け取り、MySQL,PostgreSQLのreplace関数を
+     * 適用した表現を返します。replace関数は'\'をBACKSLASH_REPLACERに置換します。
+     * 例："col" → "replace(col, '\\\\', '__BACKSLASH__')"
+     * LIKE検索時には、escapeLikeStringとセットで使う必要があります。
+     *
+     * @param string $columnName
+     * @return string 受け取ったカラム名にreplace関数を適用した表現
+     * @author akitsukada
+     */
+    public function getBsReplacedExpression($columnName)
+    {
+        return "replace({$columnName}, '\\\\', '" . self::BACKSLASH_REPLACER . "')";
     }
 }

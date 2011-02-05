@@ -279,7 +279,6 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
                 array('p' => $this->_name),
                 array('*')
         );
-        $keyword = $this->escapeLikeString($keyword);
 
         // ORDER BY
         $select->order("{$sortColumn} {$order}");
@@ -300,17 +299,20 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 
         // WHERE句の生成
         $orwhere = '';
+        $keyword = $this->escapeLikeString($keyword);
         $bind = array();
         if (in_array('title', $targetColumns)) {
-            $orwhere .= "p.title LIKE :keyword";
+            $orwhere .= " (";
+            $orwhere .= $this->getBsReplacedExpression('p.title') . " LIKE :keyword";
             $bind[':keyword'] = "%{$keyword}%";
+            $orwhere .= ")";
         }
         if (in_array('contents', $targetColumns)) {
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
             }
             $orwhere .= " (";
-            $orwhere .= " p.contents LIKE :keyword ";
+            $orwhere .= $this->getBsReplacedExpression('p.contents') . " LIKE :keyword";
             $bind[':keyword'] = "%{$keyword}%";
             if ($keyword !== '' && !is_null($keyword)) {
                 $orwhere .= " AND (p.contents NOT REGEXP :exp1 OR p.contents REGEXP :exp2) ";
@@ -323,19 +325,24 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
             }
-            $orwhere.= 'p.outline LIKE :keyword';
+            $orwhere .= " (";
+            $orwhere .= $this->getBsReplacedExpression('p.outline') . " LIKE :keyword";
             $bind[':keyword'] = "%{$keyword}%";
+            $orwhere .= ")";
         }
         if (in_array('tag', $targetColumns)) {
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
             }
+            $orwhere .= " (";
             if (is_array($tagIds) && !empty($tagIds)) {
                 $orwhere .= ' t.id IN(:tagIds) ';
                 $bind[':tagIds'] = implode(",", $tagIds);
-            } elseif (is_array($tagIds) && empty($tagIds)) {
-                $orwhere .= ' t.id != t.id ';
+            } else {
+                // 該当するタグが無かったときは明示的にfalseとする
+                $orwhere .= 't.id <> t.id';
             }
+            $orwhere .= ")";
         }
         if ($orwhere !== '') {
             $select->where($orwhere);
