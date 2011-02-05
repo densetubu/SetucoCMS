@@ -98,7 +98,7 @@ CREATE TABLE ambition (
 CREATE TABLE goal (
     id           INT AUTO_INCREMENT NOT NULL,
     page_count   INT NOT NULL,
-    target_month DATE NOT NULL,
+    target_month DATE NOT NULL UNIQUE,
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
@@ -120,7 +120,7 @@ ON page_tag(tag_id);
 INSERT INTO account 
     (login_id, nickname, password)
 VALUES
-    ('admin', '管理者さん', SHA1('password'));
+    ('admin', '管理者', SHA1('password'));
 
 INSERT INTO category 
     (id, name, parent_id)
@@ -130,12 +130,16 @@ VALUES
 INSERT INTO site 
     (name, url, comment, keyword, open_date)
 VALUES
-    ('日本電子専門学校 電設部', 'http://penguin.jec.ac.jp/', '日本電子専門学校電設部SetucoCMSプロジェクトです。', 'せつこ,俺だ,結婚,してくれ', '2010-02-11 10:00:00');
+    ('サイト名を入力してください',
+     'http://example.com/',
+     'サイトの説明を入力してください。',
+     'サイトのキーワードを入力してください。',
+     now());
 
 INSERT INTO ambition 
     (ambition)
 VALUES
-    ('せつこーおれだーけっこｎ（ｒｙ');
+    ('目標を入力してください。');
 
 INSERT INTO goal 
     (page_count, target_month)
