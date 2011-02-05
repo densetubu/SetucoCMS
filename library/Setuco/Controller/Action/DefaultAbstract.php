@@ -55,9 +55,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     public function init()
     {
         parent::init();
-
     }
-
 
     /**
      * defaultモジュール共通でviewに変数を渡す処理をします。
@@ -72,6 +70,7 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
         //タグクラウドをviewにセットする
         $this->view->tagClouds = $modelTag->getTagClouds();
         $this->view->categoryLists = $this->_getCategoryList();
+        
 
         //siteテーブルのモデルクラスのインスタンス生成
         $modelSite = new Default_Model_Site();
@@ -92,53 +91,22 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     private function _getCategoryList()
     {
-        //categoryテーブルのモデルクラスのインスタンス生成
-        $modelCategory = new Default_Model_Category();
 
+        $modelCategory = new Default_Model_Category();
         $categories = $modelCategory->findCategoryList();
 
+        $uncategorizedCategoryInfos = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
 
-        //すでに登録されていたら、未分類のカテゴリーを追加する
-        if (is_array($categories)) {
-            $result = $this->_addDefaultCategory($categories);
+        $modelPage = new Default_Model_Page();
+        $uncategorizedCategoryInfos['is_used'] = $modelPage->isEntryUncategorizedPage();
+
+        //カテゴリーに登録していない場合は未分離のカテゴリーのみ表示する
+        if ($categories !== false) {
+            array_push($categories, $uncategorizedCategoryInfos);
         } else {
-            $modelPage = new Default_Model_Page();
-            $uncategorizedInfo = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
-            //ひとつでも記事が登録されていたら、リンクする
-            $uncategorizedInfo['is_used'] = $modelPage->isEntryExists();
-            $categories[] = $uncategorizedInfo;
-            $result = $categories;
+            $categories = array($uncategorizedCategoryInfos);
         }
 
-        return $result;
-    }
-
-    /**
-     * 未分類のカテゴリーを追加したカテゴリーを取得する
-     *
-     * @param array[option] $subjects 元となる配列
-     * @return array 未分類のカテゴリーを追加したもの 未分類のカテゴリーはis_defaultの要素がある
-     * @author suzuki-mar
-     */
-    private function _addDefaultCategory($categories)
-    {
-        $default = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
-
-        //カテゴリーが登録されていて配列の場合は、配列に未分類のカテゴリーを追加する
-        //カテゴリーが新規作成されていない場合もリンクする
-        foreach ($categories as $value) {
-            //ひとつでも使用されていなかったら、設定する
-            if (!($value['is_used'])) {
-                $isLink = true;
-                break;
-            }
-        }
-
-        $default['is_used'] = (isset($isLink));
-
-        //未分類のカテゴリーを追加する
-        $categories[] = $default;
         return $categories;
     }
-
 }

@@ -173,13 +173,12 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         }
         $this->view->entries = $entries;
 
-        $category = $this->_categoryService->findCategory($id);
-        if (is_null($category['name'])) {
-            // 未分類カテゴリのIDは0、カテゴリ名を「未分類」に設定
-            $category['id'] = Setuco_Data_Constant_Category::UNCATEGORIZED_VALUE;
-            $category['name'] = '未分類';
+        if (is_null($id)) {
+            $category = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
+        } else {
+            $category = $this->_categoryService->findCategory($id);
         }
-
+        
         $this->view->category = $category;
         $this->_pageTitle = "「{$category['name']}」カテゴリーのページ";
 

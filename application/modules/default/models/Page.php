@@ -70,6 +70,18 @@ class Default_Model_Page extends Common_Model_PageAbstract
     }
 
     /**
+     * 未分類のカテゴリーのページを登録しているか
+     *
+     * @return boolean 未分離のカテゴリーのページを登録しているか
+     * @author suzuki-mar
+     */
+    public function isEntryUncategorizedPage()
+    {
+        $count = $this->_pageDao->countUncategorizedPage('open');
+        return ($count > 0);
+    }
+
+    /**
      * タグを指定してページを取得する
      *
      * @param int $tagId 取得したいタグID

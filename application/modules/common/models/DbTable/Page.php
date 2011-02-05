@@ -1,4 +1,5 @@
 <?php
+
 /**
  * pageテーブルのDbTable(DAO)クラスです。
  *
@@ -22,6 +23,7 @@
  */
 class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 {
+
     /**
      * テーブル名
      *
@@ -49,6 +51,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      * 新着ページを取得する
      *
      * @param int $limit 何件のページを取得するのか
+     * @return 新着ページのデータ
      * @author suzuki-mar
      */
     public function loadLastUpdatePages($limit)
@@ -96,6 +99,26 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
                 ->limit($limit);
 
         return $this->fetchAll($select)->toArray();
+    }
+
+    /**
+     * 未分類のカテゴリーのページ数をカウントする
+     *
+     * @param string[option] $status 公開しているものを取得する場合は、open 非公開のものはdraft
+     * @return int 未分離のカテゴリーのページ数
+     * @author suzuki-mar
+     */
+    public function countUncategorizedPage($status = null)
+    {
+        $select = $this->select();
+        if ($status === 'draft') {
+            $select->where('status = ?', self::STATUS_DRAFT);
+        } elseif ($status === 'open') {
+            $select->where('status = ?', self::STATUS_OPEN);
+        }
+        $select->where('category_id IS NULL');
+
+        return $this->fetchAll($select)->count();
     }
 
     /**

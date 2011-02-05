@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ページ情報管理用サービス
  *
@@ -30,15 +31,13 @@ abstract class Common_Model_PageAbstract
      *
      * @var array
      */
-     private $_searchTargetColumns = array('title', 'contents', 'outline', 'tag');
-
+    private $_searchTargetColumns = array('title', 'contents', 'outline', 'tag');
     /**
      * PageテーブルのDAO
      *
      * @var Common_Model_DbTable_Page
      */
     protected $_pageDao;
-
     /**
      * TagテーブルのDAO
      *
@@ -58,7 +57,7 @@ abstract class Common_Model_PageAbstract
         return $this->_pageDao->loadByPrimary($id);
     }
 
-
+    
     /**
      * ページのキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
      *
@@ -70,22 +69,21 @@ abstract class Common_Model_PageAbstract
      * @todo 取得するカラムを動的にしたい。今は全取得。
      * @todo 引数まとめてクラス化する?
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10,
-            $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function searchPages($keyword, $currentPage = 1, $limit = 10, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
     {
         if ($targetColumns == null) {
             $targetColumns = $this->_searchTargetColumns;
         }
 
         return $this->_pageDao->loadPagesByKeyword4Pager(
-            $keyword,
-            $this->_searchTagIdsByKeyword($keyword),
-            $currentPage,
-            $limit,
-            $targetColumns,
-            $refinements,
-            $sortColumn,
-            $order
+                $keyword,
+                $this->_searchTagIdsByKeyword($keyword),
+                $currentPage,
+                $limit,
+                $targetColumns,
+                $refinements,
+                $sortColumn,
+                $order
         );
     }
 
@@ -107,7 +105,7 @@ abstract class Common_Model_PageAbstract
         if (in_array('tag', $targetColumns)) {
             $tagIds = $this->_searchTagIdsByKeyword($keyword);
         }
-        return (int)($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements));
+        return (int) ($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements));
     }
 
     /**
@@ -121,7 +119,6 @@ abstract class Common_Model_PageAbstract
     {
         return $this->_tagDao->loadTagIdsByKeyword($keyword);
     }
-
 
     /**
      * カテゴリを指定してページを取得する（ページネータ対応）
@@ -147,6 +144,7 @@ abstract class Common_Model_PageAbstract
         return count($this->_pageDao->loadPagesByCategoryId4Pager($categoryId, $status));
     }
 
+
     /**
      * 状態と作成年月をに合ったページを数えます。
      *
@@ -170,5 +168,6 @@ abstract class Common_Model_PageAbstract
     {
         return $this->_pageDao->countAll();
     }
+
 }
 
