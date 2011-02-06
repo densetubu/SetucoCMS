@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>Todo List</title>
+<link rel="stylesheet" type="text/css" href="media/style.css">
+</head>
+<body>
+
+<table border="0" cellspacing="0" cellpadding="0" height="48" width="100%">
+  <tr>
+    <td class="header_top">Setuco</td>
+  </tr>
+  <tr><td class="header_line"><img src="media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+  <tr>
+    <td class="header_menu">
+        
+                                                                                                
+                              		  [ <a href="classtrees_Setuco.html" class="menu">class tree: Setuco</a> ]
+		  [ <a href="elementindex_Setuco.html" class="menu">index: Setuco</a> ]
+		  	    [ <a href="elementindex.html" class="menu">all elements</a> ]
+    </td>
+  </tr>
+  <tr><td class="header_line"><img src="media/empty.png" width="1" height="1" border="0" alt=""  /></td></tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="200" class="menu">
+	<div id="todolist">
+			<p><a href="todolist.html">Todo List</a></p>
+	</div>
+      <b>Packages:</b><br />
+              <a href="li_Admin.html">Admin</a><br />
+              <a href="li_Common.html">Common</a><br />
+              <a href="li_Default.html">Default</a><br />
+              <a href="li_Setuco.html">Setuco</a><br />
+            <br /><br />
+                  
+      
+                </td>
+    <td>
+      <table cellpadding="10" cellspacing="0" width="100%" border="0"><tr><td valign="top">
+
+<div align="center"><h1>Todo List</h1></div>
+<h2>Setuco</h2>
+<h3><a href="Setuco/Controller_Action/Setuco_Controller_Action_DefaultAbstract.html#var$_pageLimit">Setuco_Controller_Action_DefaultAbstract::$_pageLimit</a></h3>
+<ul>
+    <li>PAGE_LIMITの削除</li>
+</ul>
+<h3><a href="Setuco/Controller_Action/Setuco_Controller_Action_AdminAbstract.html#var$_pageLimit">Setuco_Controller_Action_AdminAbstract::$_pageLimit</a></h3>
+<ul>
+    <li>PAGE_LIMITの削除</li>
+</ul>
+<h3><a href="Setuco/Controller_Action/Setuco_Controller_Action_DefaultAbstract.html#constPAGE_LIMIT">Setuco_Controller_Action_DefaultAbstract::PAGE_LIMIT</a></h3>
+<ul>
+    <li>定数の削除 検討事項のチケット完了時に削除する</li>
+</ul>
+<h3><a href="Setuco/Controller_Action/Setuco_Controller_Action_AdminAbstract.html#constPAGE_LIMIT">Setuco_Controller_Action_AdminAbstract::PAGE_LIMIT</a></h3>
+<ul>
+    <li>定数の削除 検討課題のチケットチェック時に削除する</li>
+</ul>
+<h2>Admin</h2>
+<h3><a href="Admin/Model/Admin_Model_Media.html#methoddeleteMediaById">Admin_Model_Media::deleteMediaById()</a></h3>
+<ul>
+    <li>page_media 表からの子レコード削除</li>
+</ul>
+<h3><a href="Admin/Controller/Admin_PageController.html#methodpreviewAction">Admin_PageController::previewAction()</a></h3>
+<ul>
+    <li>実装</li>
+</ul>
+<h3><a href="Admin/Model/Admin_Model_Category.html#methodregistCategory">Admin_Model_Category::registCategory()</a></h3>
+<ul>
+    <li>バージョン2以降では、parent_idの設定をする</li>
+</ul>
+<h3><a href="Admin/Controller/Admin_CategoryController.html#method_addNameFormElement">Admin_CategoryController::_addNameFormElement()</a></h3>
+<ul>
+    <li>多段になったらバリデートルールを修正する必要がある</li>
+</ul>
+<h3><a href="Admin/Controller/Admin_MediaController.html#method_createSearchForm">Admin_MediaController::_createSearchForm()</a></h3>
+<ul>
+    <li>フォームのハッシュ値の設定</li>
+</ul>
+<h3><a href="Admin/Controller/Admin_MediaController.html#method_createUpdateForm">Admin_MediaController::_createUpdateForm()</a></h3>
+<ul>
+    <li>フォームのハッシュ値の設定</li>
+</ul>
+<h3><a href="Admin/Controller/Admin_MediaController.html#method_createUploadForm">Admin_MediaController::_createUploadForm()</a></h3>
+<ul>
+    <li>フォームのハッシュ値の設定</li>
+</ul>
+<h2>Common</h2>
+<h3><a href="Common/Model/Common_Model_PageAbstract.html#methodsearchPages">Common_Model_PageAbstract::searchPages()</a></h3>
+<ul>
+    <li>取得するカラムを動的にしたい。今は全取得。</li>
+    <li>引数まとめてクラス化する?</li>
+</ul>
+<h2>Default</h2>
+<h3><a href="Default/Controller/PageController.html#methodcategoryAction">PageController::categoryAction()</a></h3>
+<ul>
+    <li>一覧にはコンテンツの頭５行のみ表示する（現在は100文字表示）</li>
+</ul>
+<h3><a href="Default/Controller/PageController.html#methodtagAction">PageController::tagAction()</a></h3>
+<ul>
+    <li>一覧には、ページ本文の先頭15文字を表示する（現在はhtmlタグ等含めて15文字なので表示されるのはそれ以下）</li>
+</ul>
+        <div class="credit">
+		    <hr />
+		    Documentation generated on Sun, 06 Feb 2011 22:31:45 +0900 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.3</a>
+	      </div>
+      </td></tr></table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
