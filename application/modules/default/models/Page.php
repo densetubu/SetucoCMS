@@ -41,7 +41,6 @@ class Default_Model_Page extends Common_Model_PageAbstract
      *
      * @param int 何件のデータを取得するのか　標準は10件　取得できない場合はfalseを返す
      * @author suzuki-mar
-     * @todo limitのデフォルト修正
      */
     public function findLastUpdatedPages($limit)
     {
@@ -87,7 +86,6 @@ class Default_Model_Page extends Common_Model_PageAbstract
      * @param int $tagId 取得したいタグID
      * @return array 該当するタグがつけられたページのデータを格納した配列
      * @author akitsukada
-     * @todo limitのデフォルト修正
      */
     public function findPagesByTagId($tagId, $currentPage, $limit)
     {

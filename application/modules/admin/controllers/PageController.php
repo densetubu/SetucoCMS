@@ -963,7 +963,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 内容の実装 現在はスケルトン
+     * @todo 実装
      */
     public function previewAction()
     {

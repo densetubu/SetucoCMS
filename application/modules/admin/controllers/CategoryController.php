@@ -79,7 +79,6 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
      *
      * @return void
      * @author charlesvineyard suzuki-mar saniker10
-     * @todo Flashメッセージの取得
      */
     public function indexAction()
     {

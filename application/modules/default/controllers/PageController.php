@@ -144,7 +144,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 一覧にはコンテンツの頭５行のみ表示する（現在とりあえず100文字表示）
+     * @todo 一覧にはコンテンツの頭５行のみ表示する（現在は100文字表示）
      */
     public function categoryAction()
     {
@@ -193,7 +193,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      *
      * @return void
      * @author akitsukada
-     * @todo 一覧には、ページ本文の先頭15文字を表示する（現在はhtmlタグ等含めてcontentsのデータ先頭から単純に15文字。要検討）
+     * @todo 一覧には、ページ本文の先頭15文字を表示する（現在はhtmlタグ等含めて15文字なので表示されるのはそれ以下）
      */
     public function tagAction()
     {
