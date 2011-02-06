@@ -130,16 +130,16 @@ VALUES
 INSERT INTO site 
     (name, url, comment, keyword, open_date)
 VALUES
-    ('サイト名を入力してください',
+    ('サイト名を設定してください',
      'http://example.com/',
-     'サイトの説明を入力してください。',
-     'サイトのキーワードを入力してください。',
+     'サイトの説明を設定してください。',
+     'サイトのキーワードを設定してください。',
      now());
 
 INSERT INTO ambition 
     (ambition)
 VALUES
-    ('目標を入力してください。');
+    ('目標を設定してください。');
 
 INSERT INTO goal 
     (page_count, target_month)
