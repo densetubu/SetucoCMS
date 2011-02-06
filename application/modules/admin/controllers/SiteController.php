@@ -5,8 +5,8 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
+ * @category    Setuco
+ * @package     Admin
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
@@ -92,7 +92,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _isInputFiled($filedName, $filedValue)
     {
-        
+
         if (empty($filedValue)) {
             return false;
         }

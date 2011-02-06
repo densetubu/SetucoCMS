@@ -4,15 +4,15 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
+ * @category    Setuco
+ * @package     Admin
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @version
  * @link
  * @since       File available since Release 0.1.0
- * @author	    akitsukada
+ * @author      akitsukada
  */
 
 
@@ -22,7 +22,7 @@
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
- * @author	    akitsukada
+ * @author      akitsukada
  */
 class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 {

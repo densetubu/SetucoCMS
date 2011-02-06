@@ -27,7 +27,7 @@ class Setuco_Util_String
      *
      * @param  int    $number 数
      * @return string 文字列の符号付きの数
-	 * @author charlesvineyard
+     * @author charlesvineyard
      */
     public static function convertSign2String($number)
     {

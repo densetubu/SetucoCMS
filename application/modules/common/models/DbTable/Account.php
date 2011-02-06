@@ -23,16 +23,16 @@
 class Common_Model_DbTable_Account extends Setuco_Db_Table_Abstract
 {
     /**
-     * 	テーブル名
+     *     テーブル名
      *
-     *	@var string
+     *    @var string
      */
     protected $_name = 'account';
 
     /**
-     *	プライマリキーのカラム名
+     *    プライマリキーのカラム名
      *
-     *	@var string
+     *    @var string
      */
     protected $_primary = 'id';
 

@@ -20,7 +20,7 @@
 
 //ページタイトルがある場合とない場合でページタイトルの形式を変更する
 if (empty($this->pageTitle)) {
-	$this->headTitle($this->escape($this->siteInfos['name']));
+    $this->headTitle($this->escape($this->siteInfos['name']));
 } else {
     $this->headTitle($this->pageTitle)->setSeparator(' | ')->headTitle($this->escape($this->siteInfos['name']));
 }
