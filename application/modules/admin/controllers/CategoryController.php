@@ -5,8 +5,8 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
+ * @category    Setuco
+ * @package     Admin
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project. (http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2

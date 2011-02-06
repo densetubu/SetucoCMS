@@ -5,8 +5,8 @@
  *
  * LICENSE: ライセンスに関する情報
  *
- * @category 	Setuco
- * @package 	Admin
+ * @category    Setuco
+ * @package     Admin
  * @subpackage  Controller
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
@@ -155,7 +155,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     private function _isPasswordValid($inputParams)
     {
         $results['password'] = $this->_updatePasswordFormValidator->isValid($inputParams);
-        
+
         if (!$this->_accountService->isSamePassword($this->_getParam('pass_old'), $this->_getAccountInfos('login_id'))) {
 
             $allErrorMessages[] = '現在のパスワードが一致しません。';
@@ -173,6 +173,6 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
             $results['old_password'] = false;
         }
 
-        return !in_array(false, $results);        
+        return !in_array(false, $results);
     }
 }
