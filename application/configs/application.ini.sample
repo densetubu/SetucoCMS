@@ -18,6 +18,7 @@ resources.db.params.host = "localhost"
 resources.db.params.username = "oooooooo"
 resources.db.params.password = "xxxxxxxx"
 resources.db.params.dbname = "setucocms"
+resources.db.params.charset = "utf8"
 resources.db.isDefaultTableAdapter = true
 
 [staging : production]
