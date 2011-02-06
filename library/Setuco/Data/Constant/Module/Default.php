@@ -5,8 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Data
- * @subpackage Constant_Module
+ * @package    Setuco
+ * @subpackage Data_Constant_Module
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
@@ -16,8 +16,8 @@
  */
 
 /**
- * @package    Setuco_Data
- * @subpackage Constant
+ * @package    Setuco
+ * @subpackage Data_Constant_Module
  * @author     suzuki-mar
  */
 class Setuco_Data_Constant_Module_Default

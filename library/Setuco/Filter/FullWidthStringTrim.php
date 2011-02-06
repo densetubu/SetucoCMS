@@ -5,7 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Filter
+ * @package    Setuco
+ * @subpackage    Filter
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
@@ -15,7 +16,8 @@
  */
 
 /**
- * @package    Setuco_Filter
+ * @package    Setuco
+ * @subpackage    Filter
  * @author     akitsukada
  */
 class Setuco_Filter_FullWidthStringTrim extends Zend_Filter_StringTrim

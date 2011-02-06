@@ -6,7 +6,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Validate
+ * @package     Setuco
+ * @subpackage  Validate
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @version
@@ -17,7 +18,8 @@
 
 /**
  * @category    Setuco
- * @package     Setuco_Validate
+ * @package     Setuco
+ * @subpackage  Validate
  * @copyright   Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @author      suzuki-mar

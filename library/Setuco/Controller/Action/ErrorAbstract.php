@@ -16,9 +16,8 @@
  */
 
 /**
- * @category    Setuco
- * @package     Setuco
- * @subpackage  Controller_Action
+ * @package    Setuco
+ * @subpackage Controller_Action
  * @author      suzuki-mar
  */
 abstract class Setuco_Controller_Action_ErrorAbstract extends Setuco_Controller_Action_Abstract

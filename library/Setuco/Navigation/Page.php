@@ -7,7 +7,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Navigation
+ * @package     Setuco
+ * @subpackage  Navigation
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
@@ -17,8 +18,8 @@
  */
 
 /**
- * @category Setuco
- * @package Navigation
+ * @package     Setuco
+ * @subpackage  Navigation
  * @author  charlelsvineyard
  */
 class Setuco_Navigation_Page extends Zend_Navigation_Page_Mvc

@@ -1,4 +1,25 @@
 <?php
+/**
+ * Zend_Form_DecoratorのSetuco用拡張クラスです。
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Setuco
+ * @subpackage Form_Decorator_SuffixString
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @version
+ * @link
+ * @since      File available since Release 0.1.0
+ * @author     charlelsvineyard
+ */
+
+/**
+ * @package    Setuco
+ * @subpackage Form_Decorator_SuffixString
+ * @author     charlelsvineyard
+ */
 class Setuco_Form_Decorator_SuffixString extends Zend_Form_Decorator_Abstract
 {
     /**

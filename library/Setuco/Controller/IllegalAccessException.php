@@ -5,7 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category    Setuco
- * @package     Controller
+ * @package    Setuco
+ * @subpackage Controller
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
@@ -15,8 +16,8 @@
  */
 
 /**
- * @category    Setuco
- * @package     Controller
+ * @package    Setuco
+ * @subpackage Controller
  * @author      charlesvineyard
  */
 

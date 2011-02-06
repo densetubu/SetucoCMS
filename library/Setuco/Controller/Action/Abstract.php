@@ -7,8 +7,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Controller
- * @subpackage Action
+ * @package    Setuco
+ * @subpackage Controller_Action
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @ve/**
@@ -19,11 +19,8 @@
  */
 
 /**
- * @category    Setuco
- * @package     Setuco_Controller
- * @subpackage  Action
- * @copyright   Copyright (c) 2010 SetucoCMS Project.
- * @license
+ * @package    Setuco
+ * @subpackage Controller_Action
  * @author      suzuki-mar
  */
 abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action

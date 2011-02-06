@@ -16,8 +16,8 @@
  */
 
 /**
- * @package     Common_Model
- * @subpackage  DbTable
+ * @package     Common
+ * @subpackage  Model_DbTable
  * @author      charlesvineyard suzuki-mar
  */
 class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract

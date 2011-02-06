@@ -16,7 +16,6 @@
  */
 
 /**
- * @category    Setuco
  * @package     Default
  * @subpackage  Controller
  * @author      suzuki-mar akitsukada

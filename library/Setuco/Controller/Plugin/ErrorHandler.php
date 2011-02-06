@@ -18,7 +18,6 @@
  */
 
 /**
- * @category    Setuco
  * @package     Setuco
  * @subpackage  Controller_Plugin
  * @author      suzuki-mar

@@ -5,8 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Setuco_Form
- * @subpackage Page
+ * @package    Setuco
+ * @subpackage Form_Page
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
@@ -16,8 +16,8 @@
  */
 
 /**
- * @package    Setuco_Form
- * @subpackage Page
+ * @package    Setuco
+ * @subpackage Form_Page
  * @author     charlesvineyard
  */
 class Setuco_Form_Page_StatusUpdate extends Setuco_Form

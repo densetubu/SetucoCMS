@@ -5,8 +5,8 @@
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Db
- * @subpackage Table
+ * @package    Setuco
+ * @subpackage Db_Table
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
@@ -16,8 +16,8 @@
  */
 
 /**
- * @package    Db
- * @subpackage Table
+ * @package    Setuco
+ * @subpackage Db_Table
  * @author      charlesvineyard
  */
 abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
