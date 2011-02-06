@@ -509,7 +509,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * ファイル削除処理。DB（mediaテーブル）のレコードとファイルシステム上の実ファイルを両方削除する。
      *
      * @return void
-     * @todo ファイルとDBでちゃんと２フェーズコミットする。どちらかNGなら両方ともロールバックするなど
      * @author akitsukada
      */
     public function deleteAction()
@@ -596,7 +595,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * @return Zend_Form ファイル新規アップロード用フォームオブジェクト
      * @author akitsukada
      * @todo フォームのハッシュ値の設定
-     * @todo 複数ファイルのアップロード
      */
     private function _createUploadForm()
     {
