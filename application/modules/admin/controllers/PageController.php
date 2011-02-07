@@ -108,6 +108,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
     /**
      * ページの一覧表示のアクション
+     * パラメーターにidがあればページを編集する
+     * パラメーターにqueryがあればページを検索する
      *
      * @return void
      * @author akitsukada charlesvineyard
@@ -117,9 +119,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if ($this->_hasParam('id')) {
             return $this->_editFormOperation();
         }
+
         if ($this->_hasParam('query')) {
             return $this->_searchOperation();
         }
+
         $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
         $sortValidator = new Zend_Validate_InArray(array('title', 'create_date'));
         if (!$sortValidator->isValid($sortColumn)) {
@@ -184,16 +188,17 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページを検索して一覧表示する処理
      *
      * @return void
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
      */
     protected function _searchOperation()
     {
         $searchForm = $this->_createSearchForm();
+        
         if (!$this->_isValidSearchForm($searchForm, $this->_getAllParams())) {
             $this->_setParam('searchForm', $searchForm);
-            return $this->_forward('index');
         }
         $keyword = $searchForm->getValue('query');
+
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
 
@@ -238,7 +243,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $form->isValid($values);
 
         // キーワードが入力されたときだけ検索対象をチェックする
-        if ($values['query'] != null) {
+        if (!empty($values['query'])) {
             $targets = $form->getElement('targets');
             $targets->setRequired(true);
             $targets->setValidators($this->_makeSearchTargetsValidators());
@@ -252,6 +257,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 $form->addError('キーワードを入力するか、カテゴリー・制作者・公開状態のどれかを指定してください。');
             }
         }
+
         return !$form->isErrors();
     }
 
