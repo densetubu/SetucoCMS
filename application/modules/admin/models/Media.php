@@ -167,9 +167,10 @@ class Admin_Model_Media
 
         // 画像のパスからイメージオブジェクト取得
         $imageInfo = pathinfo($imagePath);
-        $ext = $imageInfo['extension'];
+        $ext = Setuco_Util_Media::getImageType($imagePath);
+
         switch ($ext) {
-            case 'jpg' :
+            case 'jpeg' :
                 $originalImage = imagecreatefromjpeg($imagePath);
                 break;
             case 'gif' :

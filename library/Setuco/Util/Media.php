@@ -81,4 +81,21 @@ class Setuco_Util_Media
         return true;
     }
 
+    /**
+     * 画像の拡張式を取得する
+     *
+     * ファイル名に関係なく正しい拡張式を取得する
+     *
+     * @param string $filePath 拡張式を取得するファイルタイプ
+     * @return string 拡張式
+     * @author suzuki-mar
+     */
+    public static function getImageType($imagePath)
+    {
+       $imageInfo = getimagesize($imagePath);
+       $imageType = image_type_to_mime_type($imageInfo[2]);
+       //ファイル前の種類を取り除く image/png の imageの部分
+       $result = preg_replace('/^(image|application)\//', '', $imageType);
+       return $result;
+    }
 }
