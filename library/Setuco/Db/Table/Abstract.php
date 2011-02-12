@@ -194,4 +194,20 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         return "replace({$columnName}, '\\\\', '" . self::BACKSLASH_REPLACER . "')";
     }
+
+    /**
+     * 実行したSQLクエリーを取得する
+     * 
+     * @return array 実行したSQLクエリー
+     * @author suzuki-mar
+     */
+    public function getExecutSqls()
+    {
+        foreach ($this->_db->getProfiler()->getQueryProfiles() as $profiler) {
+           $result[] = $profiler->getQuery();
+        }
+
+        return $result;
+    }
+    
 }

@@ -53,7 +53,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
 
-
     /**
      * 使用するプラグインを登録する
      *
