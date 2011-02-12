@@ -97,7 +97,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
      * ファイルのアップロードフォームやアップロードしてあるファイルの一覧を表示するページ
      *
      * @return void
-     * @author akitsukada
+     * @author akitsukada suzuki-mar
      */
     public function indexAction()
     {
@@ -137,6 +137,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル情報の取得とファイルの存在確認
         $medias = $this->_media->findMedias(
                         $sortColumn, $order, $currentPage, $this->_getPageLimit(), $fileType);
+        #var_dump($medias); exit;
         $this->view->medias = $medias;
 
         // アップロードできる最大サイズをviewに教える
@@ -252,7 +253,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // 拡張子が画像でファイル内容が有効ならサムネイル生成
             if (Setuco_Util_Media::isImageExtension($extType)) {
-                if (!$this->_media->isValidImageData($newFileName)) {
+                if (Setuco_Util_Media::isValidImageData($newFileName) !== true) {
                     $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」は不正な画像データです。";
                     $this->_removeFileById($newId);
                     continue;

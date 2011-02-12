@@ -71,4 +71,6 @@ class Common_Model_DbTable_Account extends Setuco_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
+    
+
 }
