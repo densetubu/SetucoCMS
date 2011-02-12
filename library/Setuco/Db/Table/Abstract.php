@@ -61,7 +61,8 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      */
     public function loadByPrimary()
     {
-        foreach (func_get_args() as $i => $arg) {
+        $args = func_get_args();
+        foreach ($args as $i => $arg) {
             if (is_array($arg)) {
                 throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . ($i + 1) . "番目のキー)");
             }
@@ -70,7 +71,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
             }
         }
 
-        $rowset = call_user_func_array('parent::find', func_get_args());
+        $rowset = call_user_func_array('parent::find', $args);
         if ($rowset->count() == 0) {
             return null;
         }
@@ -103,13 +104,14 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         $where = array();
         $i = 0;
         foreach ($primary as $key) {
-            if (is_array(func_get_arg($i))) {
+            $arg = func_get_arg($i);
+            if (is_array($arg)) {
                 throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . ($i + 1) . "番目のキー)");
             }
-            if (is_null(func_get_arg($i))) {
+            if (is_null($arg)) {
                 throw new Zend_Db_Table_Exception("プライマリキーに対する値に NULL は指定できません。(" . ($i + 1) . "番目のキー)");
             }
-            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', func_get_arg($i));
+            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', $arg);
             $i++;
         }
 
@@ -147,13 +149,14 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         $where = array();
         $i = 1;
         foreach ($primary as $key) {
-            if (is_array(func_get_arg($i))) {
+            $arg = func_get_arg($i);
+            if (is_array($arg)) {
                 throw new Zend_Db_Table_Exception("プライマリキーに対する値に配列は指定できません。(" . $i . "番目のキー)");
             }
-            if (is_null(func_get_arg($i))) {
+            if (is_null($arg)) {
                 throw new Zend_Db_Table_Exception("プライマリキーに対する値に NULL は指定できません。(" . $i . "番目のキー)");
             }
-            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', func_get_arg($i));
+            $where[] = $this->getAdapter()->quoteInto($key . ' = ?', $arg);
             $i++;
         }
 
