@@ -253,7 +253,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
 
             // 拡張子が画像でファイル内容が有効ならサムネイル生成
             if (Setuco_Util_Media::isImageExtension($extType)) {
-                if (!$this->_media->isValidImageData($newFileName)) {
+                if (Setuco_Util_Media::isValidImageData($newFileName) !== true) {
                     $uploadErrorMsgs[] = "ファイル「{$fileInfo['name']}」は不正な画像データです。";
                     $this->_removeFileById($newId);
                     continue;

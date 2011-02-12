@@ -158,6 +158,11 @@ class Admin_Model_Media
      */
     public function saveThumbnailFromImage($imagePath)
     {
+        //不正な画像データの場合はサムネイルを作成しない
+        if (!Setuco_Util_Media::isValidImageData($imagePath)) {
+            return false;
+        }
+
         // アップロードされた画像のオブジェクトを保持
         $originalImage = null;
 
@@ -295,17 +300,6 @@ class Admin_Model_Media
         $result = $this->_mediaDao->insert($newRec);
 
         return $result;
-    }
-
-    /**
-     * フルパスで指定されたファイルが画像として有効かどうかを調べる
-     *
-     * @param string $imagePath サムネイルの元になる画像ファイルのフルパス
-     * @return boolean 有効な画像ファイルであればtrue、無効なファイルならfalseを返す。
-     */
-    public function isValidImageData($imagePath)
-    {
-        return (boolean) getimagesize($imagePath);
     }
 
 }
