@@ -71,7 +71,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
             }
         }
 
-        $rowset = call_user_func_array('parent::find', $args);
+        $rowset = parent::find($args);
         if ($rowset->count() == 0) {
             return null;
         }

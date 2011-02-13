@@ -112,8 +112,6 @@ class Common_Model_DbTable_Category extends Setuco_Db_Table_Abstract
      */
     public function loadUsedCategories()
     {
-        $this->getExecutSqls();
-
         //初期設定をしているカテゴリーのSELECT文を取得する 外部結合する設定
         $select = $this->_initializeJoinSelect();
 
