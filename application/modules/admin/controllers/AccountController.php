@@ -136,7 +136,6 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $passValidators[] = $confirmCheck;
 
         $passwordCheck = new Setuco_Validate_Password();
-        $passwordCheck->setMessage('パスワードに使用できる文字は半角英数字とアンダースコアとバックスラッシュを除いた一部の半角記号のみです。');
         $passValidators[] = $passwordCheck;
 
         $passElement->addValidators($passValidators);
