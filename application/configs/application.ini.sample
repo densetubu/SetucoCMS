@@ -19,7 +19,7 @@ resources.db.params.username = "oooooooo"
 resources.db.params.password = "xxxxxxxx"
 resources.db.params.dbname = "setucocms"
 resources.db.params.charset = "utf8"
-resources.db.params.profiler = true
+
 resources.db.isDefaultTableAdapter = true
 
 [staging : production]
@@ -32,3 +32,4 @@ phpSettings.display_errors = 1
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
 resources.frontController.params.displayExceptions = 1
+resources.db.params.profiler = true
