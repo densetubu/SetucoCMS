@@ -94,7 +94,7 @@ class Admin_Model_Account
      */
     public function updatePassword($password, $loginId)
     {
-      $where = $this->_accountDao->getAdapter()->quoteInto('login_id LIKE ?', $loginId);
+      $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
       $updateParams['password'] = sha1($password);
       return $this->_accountDao->update($updateParams, $where);
       

@@ -204,7 +204,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @return array 実行したSQLクエリー
      * @author suzuki-mar
      */
-    public function getExecutSqls()
+    public function getExecutedAllSql()
     {
         foreach ($this->_db->getProfiler()->getQueryProfiles() as $profiler) {
            $result[] = $profiler->getQuery();

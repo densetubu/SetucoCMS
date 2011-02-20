@@ -29,7 +29,7 @@ class Setuco_Validate_Password extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::NOT_MATCH => 'パスワードに使用できる文字は半角英数字とアンダースコア、バックスラッシュを除く半角記号です。',
+        self::NOT_MATCH => 'パスワードに使用できる文字は半角英数字[0-9][a-z][A-Z]と一部の半角記号[! " # - $ % & \' ( ) = ~ | ^ @ [ ; : ] , . / ` { + * } < > ?]のみです。',
     );
 
     /**
@@ -42,7 +42,7 @@ class Setuco_Validate_Password extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $allowSymbol = '!"#$%&\'()=~|\-^@\[;:\],.\/`{+*}>?';
+        $allowSymbol = '!"#$%&\'()=~|\-^@\[;:\],.\/`{+*}<>?';
 
         if (!preg_match("/^[a-zA-Z0-9{$allowSymbol}]+$/", $value)) {
             $this->_error(self::NOT_MATCH);
