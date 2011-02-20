@@ -289,16 +289,15 @@ class Admin_Model_Media
      */
     public function createNewMediaID()
     {
-        // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻のレコード
+        // nameとtypeは一時的な名前、create_dateやupdate_dateは現在時刻の仮レコードを登録してIDを得る
+        $now = new Zend_Date();
         $newRec = array(
             'name' => self::TEMP_FILE_NAME,
             'type' => self::TEMP_FILE_EXTENSION,
-            'create_date' => date("Y-m-d H:i:s", time()),
-            'update_date' => date("Y-m-d H:i:s", time()),
+            'create_date' => $now->toString('yyyy-MM-dd HH:mm:ss'),
+            'update_date' => $now->toString('yyyy-MM-dd HH:mm:ss')
         );
-
         $result = $this->_mediaDao->insert($newRec);
-
         return $result;
     }
 
