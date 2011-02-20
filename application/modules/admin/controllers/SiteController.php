@@ -71,7 +71,11 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
             }
         }
 
+        //blur属性に戻したときに\がエスケープされるので、2重に挿入する
+        $siteInfos['name_blur'] = str_replace('\\', '\\\\', $siteInfos['name']);
+        $siteInfos['url_blur'] = str_replace('\\', '\\\\', $siteInfos['url']);
         $this->view->sites = $siteInfos;
+
 
         //バリデートに失敗したエラーフォームがあればセットする
         if ($this->_hasParam('errorForm')) {

@@ -52,7 +52,7 @@
                     </label>
                 </dt>
                 <dd>
-                    <input type="text" id="name" name="name" value="<?php echo $this->escape($this->sites['name']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->escape($this->sites['name']) ?>'; }" /><br />
+                    <input type="text" id="name" name="name" value="<?php echo $this->escape($this->sites['name']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['name_blur'] ?>'; }" /><br />
                     <span>サイト上に表示される名前です。</span>
                 </dd>
                 <dt>
@@ -62,7 +62,7 @@
                     </label>
                 </dt>
                 <dd>
-                    <input type="text" id="url" name="url" value="<?php echo $this->escape($this->sites['url']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->escape($this->sites['url']) ?>'; }" /><br />
+                    <input type="text" id="url" name="url" value="<?php echo $this->escape($this->sites['url']) ?>" onblur="if(this.value == '') { this.value='<?php echo $this->sites['url_blur'] ?>'; }" /><br />
                     <span>サイトを表示するURLです。</span>
                 </dd>
                 <dt id="site_description_t">
