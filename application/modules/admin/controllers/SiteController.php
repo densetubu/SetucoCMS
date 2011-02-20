@@ -161,6 +161,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                             'max' => 100
                         )
         );
+        $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
         $nameValidators[] = array($stringLength, true);
 
@@ -189,6 +190,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                             'max' => 50
                         )
         );
+        $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイトURLは%max%文字以下で入力してください。');
         $urlValidators[] = array($stringLength, true);
         $urlElement->addValidators($urlValidators);
@@ -202,6 +204,7 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
                             'max' => 300
                         )
         );
+        $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイトの説明は%max%文字以下で入力してください。');
         $commentValidators[] = array($stringLength, true);
         $commentElement->addValidators($commentValidators);
