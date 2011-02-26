@@ -3,7 +3,13 @@ README
 ============
 
 --------------------------------------------
-Setting
+RELEASE INFORMATION
+--------------------------------------------
+SetucoCMS 1.0.0 Release
+Released on 2011/02/
+
+--------------------------------------------
+SETTING
 --------------------------------------------
 This directory should be used to place project specfic documentation including
 but not limited to project notes, generated API/phpdoc documentation, or
@@ -30,10 +36,20 @@ The following is a sample VHOST you might want to consider for your project.
 </VirtualHost>
 
 --------------------------------------------
+PACKAGE
+--------------------------------------------
+
+--------------------------------------------
+SYSTEM REQUIREMENTS
+--------------------------------------------
+SetutcoCMS requires PHP 5.2.4 or later.
+Please see our reference guide for more detailed system requirements:
+
+--------------------------------------------
 QUESTIONS AND FEEDBACK
 --------------------------------------------
 To the following where to make contact please if there are some any suggestions.
-mail:setucocms@gmail.com
+SetucoCMS-public ML:setucocms-public@lists.sourceforge.jp
 
 --------------------------------------------
 LICENSE
