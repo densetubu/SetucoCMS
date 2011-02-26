@@ -273,6 +273,7 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
                             'max' => 100
                         )
         );
+        $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('カテゴリー名は%max%文字以下で入力してください。');
         $validators[] = array($stringLength, true);
 

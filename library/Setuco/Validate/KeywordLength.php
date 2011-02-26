@@ -115,6 +115,9 @@ class Setuco_Validate_KeywordLength extends Zend_Validate_Abstract
                     'max' => $this->_max,
                     'min' => $this->_min
                 ));
+
+
+        $this->_stringValidate->setEncoding("UTF-8");
     }
 
     /**
