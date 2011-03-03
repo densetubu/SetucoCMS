@@ -6,7 +6,7 @@ README
 RELEASE INFORMATION
 --------------------------------------------
 SetucoCMS 1.0.0 Release
-Released on 2011/02/
+Released on 2011/03/04
 
 --------------------------------------------
 SETTING
