@@ -307,6 +307,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             $bind[':keyword'] = "%{$keyword}%";
             $orwhere .= ")";
         }
+
         if (in_array('contents', $targetColumns)) {
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
@@ -321,6 +322,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             }
             $orwhere .= ")";
         }
+
         if (in_array('outline', $targetColumns)) {
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
@@ -330,6 +332,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             $bind[':keyword'] = "%{$keyword}%";
             $orwhere .= ")";
         }
+
         if (in_array('tag', $targetColumns)) {
             if ($orwhere !== '') {
                 $orwhere .= ' OR ';
@@ -344,6 +347,9 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             }
             $orwhere .= ")";
         }
+
+        
+
         if ($orwhere !== '') {
             $select->where($orwhere);
         }
