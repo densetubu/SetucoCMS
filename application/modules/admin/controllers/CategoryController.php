@@ -219,7 +219,14 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
 
         $form = new Setuco_Form();
 
-        $this->_addNameFormElement($form, 'create');
+        $name = new Zend_Form_Element_Text('cat_name', array(
+            'id'         => 'cat_name',
+            'required'   => true,
+            'validators' => $this->_makeNameValidators('create'),
+            'filters'    => array('StringTrim')
+        ));
+        
+        $form->addElement($name);
 
         return $form;
     }
@@ -236,33 +243,43 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         //フォームクラスの生成
         $form = new Setuco_Form();
 
-        $this->_addNameFormElement($form, 'update');
-        $this->_addIdFormElement($form);
-        $this->_addParentIdElement($form);
+        $name = new Zend_Form_Element_Text('name', array(
+            'id'         => 'name',
+            'required'   => true,
+            'validators' => $this->_makeNameValidators('update'),
+            'filters'    => array('StringTrim')
+        ));
 
+         $id = new Zend_Form_Element_Hidden('id', array(
+            'id'    => 'id',
+            'required'   => true,
+            'validators' => $this->_makeIdValidators('update'),
+            'filters'    => array('StringTrim')
+
+        ));
+
+        $parentId = new Zend_Form_Element_Hidden('parent_id', array(
+            'id'    => 'parent_id',
+            'required'   => true,
+            'validators' => $this->_makeParentIdValidators('update'),
+            'filters'    => array('StringTrim')
+        ));
+
+        $form->addElements(array($name, $id, $parentId));
+        
         return $form;
     }
 
     /**
-     * カテゴリー名のフォームエレメントクラスのインスタンスをフォームクラスに設定する
+     * カテゴリー名のバリデートルールを取得する
      *
-     * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
      * @param string $validateType バリデートルールのタイプ create updateのみ指定できる
      * @return void
      * @author suzuki-mar
      * @todo 多段になったらバリデートルールを修正する必要がある
      */
-    private function _addNameFormElement(Setuco_Form &$form, $validateType)
+    private function _makeNameValidators($validateType)
     {
-        //バリデートタイプで、nameを変更する
-        if ($validateType === 'create') {
-            $elementName = 'cat_name';
-        } else {
-            $elementName = 'name';
-        }
-
-        $element = $form->createElement('text', $elementName);
-        $this->_addFormElementCommonOptions($element);
 
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('カテゴリー名を入力してください。');
@@ -287,54 +304,37 @@ class Admin_CategoryController extends Setuco_Controller_Action_AdminAbstract
         $noRecordExists->setMessage('「%value%」は既に登録されています。');
         $validators[] = array($noRecordExists, true);
 
-        $element->addValidators($validators);
-
-        $form->addElement($element);
+        return $validators;
     }
 
     /**
-     * カテゴリーIDのフォームエレメントクラスのインスタンスをフォームクラスに追加する
+     * IDのバリデートルールを取得する
      *
-     * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
      * @return Zend_Form_Element カテゴリーIDのフォームエレメントクラス
      * @author suzuki-mar
      */
-    private function _addIdFormElement(Setuco_Form &$form)
+    private function _makeIdValidators()
     {
-        //idをセットするhiddenタグを生成
-        $element = $form->createElement('hidden', 'id');
-        $this->_addFormElementCommonOptions($element);
+        $validators[] = new Zend_Validate_NotEmpty();
+        $validators[] = new Zend_Validate_Int();
 
-        $element->addValidators(array(
-            array('NotEmpty', true),
-            array('Int')
-        ));
-
-        $form->addElement($element);
-
-        return $element;
+        return $validators;
     }
 
     /**
-     * カテゴリーの親IDのフォームエレメントクラスのインスタンスをフォームクラスに追加する
+     * parentIDのバリデートルールを取得する
      *
      * @param Setuco_Form　$form フォームエレメントを追加するフォームクラス
      * @return Zend_Form_Element カテゴリーの親IDのフォームエレメントクラス
      * @author suzuki-mar
      */
-    private function _addParentIdElement(Setuco_Form &$form)
+    private function _makeParentIdValidators()
     {
-        $element = $form->createElement('hidden', 'parent_id');
-        $this->_addFormElementCommonOptions($element);
+        
+        $validators[] = new Zend_Validate_NotEmpty();
+        $validators[] = new Zend_Validate_Int();
 
-        $element->addValidators(array(
-            array('NotEmpty', true),
-            array('Int')
-        ));
-
-        $form->addElement($element);
-
-        return $element;
+        return $validators;
     }
 
 }

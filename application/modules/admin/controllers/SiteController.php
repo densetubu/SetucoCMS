@@ -153,8 +153,50 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = new Setuco_Form();
 
-        $textElement = $form->createElement('text', 'name');
-        $this->_addFormElementCommonOptions($textElement);
+        $nameElement = new Zend_Form_Element_Text('name', array(
+                    'id' => 'name',
+                    'required' => true,
+                    'validators' => $this->_makeSiteNameValiDators(),
+                    'filters' => array('StringTrim')
+                ));
+        $form->addElement($nameElement);
+
+        $urlElement = new Zend_Form_Element_Text('url', array(
+                    'id' => 'url',
+                    'required' => true,
+                    'validators' => $this->_makeSiteUrlValiDators(),
+                    'filters' => array('StringTrim', 'fullUrl', 'removeSpace')
+                ));
+        $form->addElement($urlElement);
+
+        $commentElement = new Zend_Form_Element_Text('comment', array(
+                    'id' => 'comment',
+                    'required' => false,
+                    'validators' => $this->_makeCommentValiDators(),
+                    'filters' => array('StringTrim')
+                ));
+        $form->addElement($commentElement);
+
+        $keywordElement = new Zend_Form_Element_Text('keyword', array(
+                    'id' => 'keyword',
+                    'required' => false,
+                    'validators' => $this->_makeKeywordValiDators(),
+                    'filters' => array('StringTrim', 'deselectSameKeyword', 'trimKeywords')
+                ));
+
+        $form->addElement($keywordElement);
+
+        return $form;
+    }
+
+    /**
+     * サイト名のバリデートルールを生成する
+     *
+     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
+     * @author suzuki-mar
+     */
+    private function _makeSiteNameValiDators()
+    {
 
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('サイト名を入力してください。');
@@ -169,18 +211,17 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
         $nameValidators[] = array($stringLength, true);
 
-        $textElement->addValidators($nameValidators);
-        $form->addElement($textElement);
+        return $nameValidators;
+    }
 
-
-        $urlElement = $form->createElement('text', 'url');
-
-        $this->_addFormElementCommonOptions($urlElement);
-        //先頭にhttp://を付加して、スペースを削除する
-        $urlElement->addFilter('fullUrl');
-        $urlElement->addFilter('removeSpace');
-
-
+    /**
+     * サイトのURLのバリデートルールを生成する
+     *
+     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
+     * @author suzuki-mar
+     */
+    private function _makeSiteUrlValiDators()
+    {
         $notEmpty = new Zend_Validate_NotEmpty();
         $notEmpty->setMessage('サイトURLを入力してください。');
         $urlValidators[] = array($notEmpty, true);
@@ -197,12 +238,19 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイトURLは%max%文字以下で入力してください。');
         $urlValidators[] = array($stringLength, true);
-        $urlElement->addValidators($urlValidators);
 
-        $form->addElement($urlElement);
+        return $urlValidators;
+    }
 
-        $commentElement = $form->createElement('text', 'comment');
-        $this->_addFormElementCommonOptions($commentElement, array('required' => false));
+    /**
+     * コメントのバリデートルールを生成する
+     *
+     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
+     * @author suzuki-mar
+     */
+    private function _makeCommentValiDators()
+    {
+
         $stringLength = new Zend_Validate_StringLength(
                         array(
                             'max' => 300
@@ -211,13 +259,18 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイトの説明は%max%文字以下で入力してください。');
         $commentValidators[] = array($stringLength, true);
-        $commentElement->addValidators($commentValidators);
 
-        $form->addElement($commentElement);
+        return $commentValidators;
+    }
 
-
-        $keywordElement = $form->createElement('text', 'keyword');
-        $this->_addFormElementCommonOptions($keywordElement, array('required' => false));
+    /**
+     * キーワード用のバリデートルールを生成する
+     *
+     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
+     * @author suzuki-mar
+     */
+    private function _makeKeywordValiDators()
+    {
         $stringLength = new Setuco_Validate_KeywordLength(
                         array(
                             'max' => 50,
@@ -226,15 +279,8 @@ class Admin_SiteController extends Setuco_Controller_Action_AdminAbstract
         );
 
         $keywordValidators[] = array($stringLength, true);
-        $keywordElement->addValidators($keywordValidators);
-        //同じキーワードを削除して、キーワードごとにtrimを使用する
-        $keywordElement->addFilter('deselectSameKeyword');
-        $keywordElement->addFilter('trimKeywords');
 
-        $form->addElement($keywordElement);
-
-
-        return $form;
+        return $keywordValidators;
     }
 
 }
