@@ -300,11 +300,17 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
         // WHERE句の生成
         $orwhere = '';
         $keyword = $this->escapeLikeString($keyword);
+
         $bind = array();
+        if(!empty($targetColumns)) {
+            $bind[':keyword'] = "%{$keyword}%";
+            $bind[':exp1'] = "<[^>]*{$keyword}[^<]*>";
+            $bind[':exp2'] = ">[^<]*{$keyword}+";
+        }
+
         if (in_array('title', $targetColumns)) {
             $orwhere .= " (";
             $orwhere .= $this->getBsReplacedExpression('p.title') . " LIKE :keyword";
-            $bind[':keyword'] = "%{$keyword}%";
             $orwhere .= ")";
         }
 
@@ -314,11 +320,9 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             }
             $orwhere .= " (";
             $orwhere .= $this->getBsReplacedExpression('p.contents') . " LIKE :keyword";
-            $bind[':keyword'] = "%{$keyword}%";
             if ($keyword !== '' && !is_null($keyword)) {
                 $orwhere .= " AND (p.contents NOT REGEXP :exp1 OR p.contents REGEXP :exp2) ";
-                $bind[':exp1'] = "<[^>]*{$keyword}[^<]*>";
-                $bind[':exp2'] = ">[^<]*{$keyword}+";
+                
             }
             $orwhere .= ")";
         }
@@ -329,7 +333,6 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             }
             $orwhere .= " (";
             $orwhere .= $this->getBsReplacedExpression('p.outline') . " LIKE :keyword";
-            $bind[':keyword'] = "%{$keyword}%";
             $orwhere .= ")";
         }
 
@@ -347,8 +350,6 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
             }
             $orwhere .= ")";
         }
-
-        
 
         if ($orwhere !== '') {
             $select->where($orwhere);
@@ -368,6 +369,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 
         array_unique($bind);
         $select->bind($bind);
+        
         return $select;
     }
 
