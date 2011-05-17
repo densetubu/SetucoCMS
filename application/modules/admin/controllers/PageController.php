@@ -197,12 +197,12 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$this->_isValidSearchForm($searchForm, $this->_getAllParams())) {
             $this->_setParam('searchForm', $searchForm);
         }
-        $keyword = $searchForm->getValue('query');
 
+        //検索パラメーターの引数オブジェクトを生成する
+        $keyword = $searchForm->getValue('query');
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
-
-        $pages = $this->_pageService->searchPages(
+        $pageParamIns = new Common_Model_Page_Param(
             $keyword,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
@@ -211,7 +211,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             self::DEFAULT_SORT_COLUMN,
             self::DEFAULT_ORDER
         );
-
+        
+        $pages = $this->_pageService->searchPages($pageParamIns);
         $pages = self::adjustPages($pages);
 
         $this->_helper->viewRenderer('index');
@@ -220,12 +221,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->setPagerForView(
-            $this->_pageService->countPagesByKeyword(
-                $keyword, $targets, $refinements
-            )
+            $this->_pageService->countPagesByKeyword($pageParamIns)
         );
         $this->view->isSearched = true;
         $this->_pageTitle = "ページの編集・削除";
+
     }
 
     /**
