@@ -74,4 +74,16 @@ class Setuco_Util_String
         return $string;
     }
 
+    /**
+     * 先頭の文字を小文字にする
+     *
+     * @param string $string 文字列
+     * @return 先頭の文字を小文字にしたもの
+     */
+    public static function convertToFirstLower($string)
+    {
+        $firstString = substr($string, 0, 1);
+        $firstString = strtolower($firstString);
+        return $firstString . substr($string, 1);
+    }
 }

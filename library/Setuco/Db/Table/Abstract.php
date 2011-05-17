@@ -30,15 +30,6 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     const BACKSLASH_REPLACER = '__BS__';
 
     /**
-     * 複数回bindできるようにするために、
-     * bindする値を複数保持しておく
-     *
-     * @var array
-     */
-    private $_bindHolders = array();
-
-
-    /**
      * 全部で何件あるのか取得する
      *
      * @return int 全てのデータ件数
@@ -233,60 +224,6 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         $allSqls = $this->getExecutedAllSql();
         $lastIndex = count($allSqls) - 1;
         return $allSqls[$lastIndex];
-    }
-
-    
-     /**
-     * SELECTオブジェクトにキーワード検索のWHERE句を追加する
-     *
-     * キーワード検索とは($targetColumn LIKE "%$keyword1%") AND ($targetColumn LIKE "%$keyword1%")
-     * のようなWHERE句
-     *
-     * $likeListsは空白ごとに区切る
-     *
-     * @param string $keyword LIKEに使用する文字列　空白ごとに区切って使用する
-     * @param string $targetColumn LIKEで指定するカラム名
-     * @param Zend_Db_Select $select 追加するSELECTインスタンス
-     * @return $this 自分自身のインスタンスを返す
-     */
-    protected function _addKeywordSearchWhere($keyword, $targetColumn, Zend_Db_Select &$select)
-    {
-        $likeLists = Setuco_Util_String::convertArrayByDelimiter($keyword);
-
-        $where = '(';
-
-        for ($i = 0; $i < count($likeLists); $i++) {
-
-            if ($i !== 0) {
-                $where .= "AND";
-            }
-
-            $bindName = $targetColumn . $i;
-            $where .= " (";
-            $where .= $this->getBsReplacedExpression("p.{$targetColumn}") . " LIKE :{$bindName}";
-            $this->_addBindHolders(":{$bindName}", "%{$likeLists[$i]}%");
-            $where .= ")";
-        }
-
-        $where .= ")";
-
-        $select->where($where);
-
-        return $this;
-    }
-
-    /**
-     * bindする値を保持する
-     *
-     * @param string $name バインドのキー
-     * @param string $value バインドする値
-     * @return $this 自分自身のインスタンス
-     * @author suzuki-mar
-     */
-    protected function _addBindHolders($name, $value)
-    {
-        $this->_bindHolders[$name] = $value;
-        return $this;
     }
 
     /**

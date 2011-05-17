@@ -48,8 +48,9 @@ class Setuco_Filter_DeselectSameKeyword implements Zend_Filter_Interface
         }
 
         $result = substr($result, 0, -1);
-        
+
 
         return $result;
     }
 }
+

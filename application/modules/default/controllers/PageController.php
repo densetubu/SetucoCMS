@@ -99,7 +99,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      * キーワード検索結果を表示するアクション。
      *
      * @return void
-     * @author akitsukada
+     * @author akitsukada suzuki-mar
      */
     public function searchAction()
     {
@@ -108,17 +108,18 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $keyword = Zend_Filter::filterStatic($keyword, 'RestParamDecode', array (), 'Setuco_Filter');
         $keyword = Zend_Filter::filterStatic($keyword, 'FullWidthStringTrim', array (), 'Setuco_Filter');
         $currentPage = $this->_getPageNumber();
-        $searchResultCount = $this->_pageService->countPagesByKeyword(
-                $keyword, null, array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
 
-        if ($searchResultCount == 0) {
+        $searchParamIns = new Common_Model_Page_Param($keyword, $currentPage, self::LIMIT_PAGE_SEARCH, null,
+                    array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
+
+        $searchResultCount = $this->_pageService->countPagesByKeyword($searchParamIns);
+
+        if ($searchResultCount === 0) {
             // 検索結果が0件の場合ビュー切り替え
             $this->_helper->viewRenderer('searchnot');
         } else {
+            $searchResult = $this->_pageService->searchPages($searchParamIns);
 
-            $searchResult = $this->_pageService->searchPages(
-                    $keyword, $currentPage, self::LIMIT_PAGE_SEARCH, null,
-                    array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
             $date = new Zend_Date();
             foreach($searchResult as $key => $entry) {
                 $date->set($entry['update_date'], Zend_Date::ISO_8601);
