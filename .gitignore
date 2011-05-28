@@ -2,6 +2,7 @@ public/.htaccess
 .buildpath
 .project
 .settings
+nbproject
 public/media/upload/*.*
 public/media/thumbnail/*.*
 Thumbs.db
