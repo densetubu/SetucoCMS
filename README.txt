@@ -38,16 +38,11 @@ The following is a sample VHOST you might want to consider for your project.
 </VirtualHost>
 
 --------------------------------------------
-PACKAGE
---------------------------------------------
-
---------------------------------------------
 SYSTEM REQUIREMENTS
 --------------------------------------------
 SetutcoCMS requires:
 PHP 5.2.4 or later
 MySQL Server 5.1 or later
-Please see our reference guide for more detailed system requirements:
 
 --------------------------------------------
 QUESTIONS AND FEEDBACK
@@ -59,3 +54,4 @@ SetucoCMS-public ML:setucocms-public@lists.sourceforge.jp
 LICENSE
 --------------------------------------------
 The files in this archive are released under the SetucoCMS license.
+see /docs/CPYING.txt
