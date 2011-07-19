@@ -275,12 +275,16 @@ div.entryBody p {
     max-width: 40em;
 }
 div.entryBody li {
+    margin-left: 3px;
     margin-bottom: 5px;
     list-style-position: inside;
 }
-div.entryBody ul.list li {
+div.entryBody ul li {
     list-style-type: disc;
-    margin-left: 3px;
+}
+div.entryBody li ol,
+div.entryBody li ul {
+    margin-left: 10px;
 }
 
 /*---------------------------------------------------------------*/
