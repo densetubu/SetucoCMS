@@ -8,7 +8,7 @@ RELEASE INFORMATION
 SetucoCMS version 1 Release
 Released on 2011/03/04
 
-You can see CHANGELOG to see detailed change history.
+You can see CHANGELOG.txt to see detailed change history.
 
 --------------------------------------------
 SETTING
@@ -54,4 +54,4 @@ SetucoCMS-public ML:setucocms-public@lists.sourceforge.jp
 LICENSE
 --------------------------------------------
 The files in this archive are released under the SetucoCMS license.
-see /docs/CPYING.txt
+see /docs/COPYING.txt
