@@ -20,10 +20,7 @@
 <div id="header_innerR"> 
     <div id="header_inner"> 
 
-        <div id="discript"> 
-            <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1"><?php echo $this->escape($this->siteInfos['name']) ?></a></h1>
-            <p><?php echo $this->escape($this->siteInfos['comment']) ?></p>
-        </div> 
+        <h1><a href="<?php echo $this->baseUrl('') ?>" tabindex="1"><?php echo $this->escape($this->siteInfos['name']) ?></a></h1>
 
         <form action="<?php echo $this->baseUrl('/page/search/') ?>" method="get">
             <dl>
@@ -32,6 +29,8 @@
             </dl>
             <p><input type="submit" value="検索" tabindex="3" /></p>
         </form>
- 
+
+        <p id="discript"><?php echo $this->escape($this->siteInfos['comment']) ?></p>
+
     </div> 
  </div> 
