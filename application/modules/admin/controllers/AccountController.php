@@ -75,7 +75,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      * @return void
      * @author suzuki-mar
      */
-    public function updateAction()
+    public function updatePasswordAction()
     {
         //フォームから値を送信されなかったら、エラーページに遷移する
         if (!$this->_request->isPost()) {
