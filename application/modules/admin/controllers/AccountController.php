@@ -33,6 +33,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      * @var Admin_Model_Account
      */
     private $_accountService;
+
     /**
      * パスワード情報をチェックするバリデートフォームクラス
      *
