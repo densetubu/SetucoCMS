@@ -44,6 +44,18 @@
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
 
+    <form id="<?php echo $this->nicknameForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->nicknameForm->getMethod() ?>" action="<?php echo $this->nicknameForm->getAction() ?>">
+        <dl class="editArea">
+            <dt>ログインID</dt>
+                <dd><?php echo $this->loginId ?></dd>
+            <dt><label for="user_nickname">ニックネーム</label></dt>
+              <dd><?php echo $this->nicknameForm->getElement('user_nickname') . "\n" ?></dd>
+        </dl>
+
+        <p class="defaultOver"><?php echo $this->nicknameForm->getElement('submit') . "\n" ?></p>
+
+    </form>
+
     <form action="<?php echo $this->baseUrl('/admin/account/update-password') ?>" method="post" class="accountEdit">
 
         <input type="hidden" id="edit_type" name="edit_type" value="pass" />

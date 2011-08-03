@@ -59,6 +59,12 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
+        $this->view->loginId = $this->_getAccountInfos('login_id');
+
+        // ニックネーム
+        $this->view->nicknameForm = $this->_getParam('nicknameForm',
+                $this->_createNicknameForm());
+
         // フラッシュメッセージ設定
         $this->_showFlashMessages();
 
@@ -66,6 +72,81 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         if ($this->_hasParam('errorForm')) {
             $this->view->errorForm = $this->_getParam('errorForm');
         }
+    }
+
+    /**
+     * ニックネームの更新アクションです
+     * indexアクションに遷移します
+     *
+     * @return void
+     * @author ErinaMikami
+     */
+    public function updateNicknameAction()
+    {
+        $form = $this->_createNicknameForm();
+        if (!$form->isValid($_POST)) {
+            $form->getElement('ambition')->setValue($preAmbition);
+            $this->_setParam('nicknameForm', $form);
+            return $this->_forward('index');
+        }
+        $this->_accountService->updateNickname($this->_getAccountInfos('login_id'), $form->getValue('user_nickname'));
+//         $authModel->setAccountInfos();
+
+        $this->_helper->redirector('index');
+    }
+
+    /**
+     * ニックネームのフォームを作成します。
+     *
+     * @return Setuco_Form ニックネームフォーム
+     * @author ErinaMikami
+     */
+    private function _createNicknameForm()
+    {
+        $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
+        $form = new Setuco_Form();
+        $form->setAttrib('id', 'nicknameForm')
+             ->setMethod('post')
+             ->setAction($this->_helper->url('update-nickname'));
+        $form->addElement('text', 'user_nickname', array(
+            'id'         => 'user_nickname',
+            'required'   => true,
+            'value'      => $account['nickname'],
+            'filters'    => array('StringTrim'),
+//             'validators' => $this->_makeNicknameValidators()
+        ));
+        $form->addElement('submit', 'submit', array(
+            'id'    => 'sub_nickname',
+            'label' => 'ニックネームを変更'
+        ));
+        $form->setMinimalDecoratorElements(array('user_nickname', 'submit'));
+        return $form;
+    }
+
+    /**
+     * ニックネームのバリデーターを作成する。
+     *
+     * @return array Zend_Validateインターフェースとオプションの配列の配列
+     * @author ErinaMikami
+     */
+    private function _makeNicknameValidators()
+    {
+        $validators[] = array();
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('野望を入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+            array(
+                'max' => 100
+            )
+        );
+        $stringLength->setMessage('野望は%max%文字以下で入力してください。');
+        $stringLength->setEncoding("UTF-8");
+        $validators[] = array($stringLength, true);
+
+        return $validators;
     }
 
     /**
