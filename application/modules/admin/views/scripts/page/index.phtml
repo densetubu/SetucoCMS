@@ -45,7 +45,6 @@
             <dl class="over">
                 <dt>
                     <label for="query">検索キーワード</label>
-                    <span class="attentionMessage">（複数指定不可）</span>
                 </dt>
                 <dd><?php echo $this->searchForm->getElement('query') ?></dd>
                 <dd class="clear"><?php echo $this->searchForm->getElement('targets') ?></dd>
@@ -65,7 +64,9 @@
             'pages' => $this->pages,
             'categoryForm' => $this->categoryForm,
             'statusForm' => $this->statusForm,
-            'isSearched' => $this->isSearched))
+            'isSearched' => $this->isSearched,
+            'params' => $this->params
+        ))
     ?>
     <?php echo $this->paginator //ページャーの表示 ?>
 </div>

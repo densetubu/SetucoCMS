@@ -33,6 +33,9 @@ class Setuco_Filter_DeselectSameKeyword implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        $trimKeyword = new Setuco_Filter_TrimKeywords();
+        $value = $trimKeyword->filter($value);
+
         $keywordLists = explode(',', $value);
 
         $deselectedKeywordLists = array();
@@ -48,8 +51,9 @@ class Setuco_Filter_DeselectSameKeyword implements Zend_Filter_Interface
         }
 
         $result = substr($result, 0, -1);
-        
+
 
         return $result;
     }
 }
+

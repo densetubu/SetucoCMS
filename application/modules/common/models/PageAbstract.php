@@ -61,51 +61,40 @@ abstract class Common_Model_PageAbstract
     /**
      * ページのキーワード検索を行う。検索対象はタイトル、本文、概要、タグ。（ページネータ対応）
      *
-     * @param string $keyword 検索したいテキスト。
-     * @param int $currentPage ページネータの何ページ目を表示するか。
-     * @param int $limit ページネータで１ページに何件表示するか。
+     * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
      * @return array 検索結果を格納した配列
-     * @author akitsukada
+     * @author akitsukada suzuki-mar
      * @todo 取得するカラムを動的にしたい。今は全取得。
-     * @todo 引数まとめてクラス化する?
      */
-    public function searchPages($keyword, $currentPage = 1, $limit = 10, $targetColumns = null, $refinements = null, $sortColumn = 'update_date', $order = 'DESC')
+    public function searchPages(Common_Model_Page_Param $paramIns)
     {
-        if ($targetColumns == null) {
-            $targetColumns = $this->_searchTargetColumns;
+        if (!is_null($paramIns->getTargetColumns())) {
+            $params['_targetColumns'] = $this->_searchTargetColumns;
         }
 
-        return $this->_pageDao->loadPagesByKeyword4Pager(
-                $keyword,
-                $this->_searchTagIdsByKeyword($keyword),
-                $currentPage,
-                $limit,
-                $targetColumns,
-                $refinements,
-                $sortColumn,
-                $order
-        );
+        $params['_tagIds'] = $this->_searchTagIdsByKeyword($paramIns->getKeyword());
+        $paramIns->setDaoParams($params);
+
+        return $this->_pageDao->loadPagesByKeyword4Pager($paramIns);
     }
 
     /**
      * ページのキーワード検索結果の合計数を求める。
      *
-     * @param string $keyword 検索キーワード
-     * @param array $targetColumns 検索対象の配列 (title|contents|outline|tag)
-     * @param array $refinements 絞り込み条件 カテゴリー、アカウント、状態を指定
+     * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
      * @return int 該当するページの合計数
-     * @author akitsukada
+     * @author akitsukada suzuki-mar
      */
-    public function countPagesByKeyword($keyword, $targetColumns = null, $refinements = null)
+    public function countPagesByKeyword(Common_Model_Page_Param $paramIns)
     {
-        if ($targetColumns == null) {
-            $targetColumns = $this->_searchTargetColumns;
+        if (!is_null($paramIns->getTargetColumns())) {
+            $params['_targetColumns'] = $this->_searchTargetColumns;
         }
-        $tagIds = array();
-        if (in_array('tag', $targetColumns)) {
-            $tagIds = $this->_searchTagIdsByKeyword($keyword);
-        }
-        return (int) ($this->_pageDao->countPagesByKeyword($keyword, $tagIds, $targetColumns, $refinements));
+
+        $params['_tagIds'] = $this->_searchTagIdsByKeyword($paramIns->getKeyword());
+        $paramIns->setDaoParams($params);
+
+        return (int) ($this->_pageDao->countPagesByKeyword($paramIns));
     }
 
     /**

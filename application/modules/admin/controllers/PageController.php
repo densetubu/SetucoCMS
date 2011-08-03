@@ -197,20 +197,28 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$this->_isValidSearchForm($searchForm, $this->_getAllParams())) {
             $this->_setParam('searchForm', $searchForm);
         }
-        $keyword = $searchForm->getValue('query');
 
+        $keyword = $searchForm->getValue('query');
+        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
+        $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
+
+        //検索パラメーターの引数オブジェクトを生成する
+        $keyword = $searchForm->getValue('query');
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
-
-        $pages = $this->_pageService->searchPages(
+        $pageParamIns = new Common_Model_Page_Param(
             $keyword,
             $this->_getPageNumber(),
             $this->_getPageLimit(),
             $targets,
             $refinements,
-            self::DEFAULT_SORT_COLUMN,
-            self::DEFAULT_ORDER
+            $sortColumn,
+            $sortOrder
         );
+
+        $pages = $this->_pageService->searchPages($pageParamIns);
+
+        $this->view->params = $this->_makeQueryString($targets);
 
         $pages = self::adjustPages($pages);
 
@@ -220,12 +228,31 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->categoryForm = $this->_createCategoryForm();
         $this->view->statusForm = new Setuco_Form_Page_StatusUpdate();
         $this->setPagerForView(
-            $this->_pageService->countPagesByKeyword(
-                $keyword, $targets, $refinements
-            )
+            $this->_pageService->countPagesByKeyword($pageParamIns)
         );
-        $this->view->isSearched = true;
+
         $this->_pageTitle = "ページの編集・削除";
+
+    }
+
+    /**
+     * 検索後のソートボタンのリンクURLに使うため、検索された条件のURLパラメータを取得します。
+     *
+     * @param array   $targets _searchOperationメソッドで取得したパラメータ'targets'の配列
+     * @return string /query/~~(/targets/~~){3}/category_id/~~/account_id/~~/status/~~
+     * @author akitsukada
+     */
+    private function _makeQueryString($targets)
+    {
+        $params = $this->getRequest()->getParams();
+        $paramsInfo = '/query/' . $params['query'];
+        foreach ($targets as $column) {
+            $paramsInfo .= '/targets/' . $column;
+        }
+        $paramsInfo .= '/category_id/' . $params['category_id'];
+        $paramsInfo .= '/account_id/' . $params['account_id'];
+        $paramsInfo .= '/status/' . $params['status'];
+        return $paramsInfo;
     }
 
     /**

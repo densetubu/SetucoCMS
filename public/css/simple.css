@@ -7,6 +7,13 @@
     margin: 0;
     padding: 0;
 }
+h1,h2,h3,h4,
+p,li,span,
+dt,dd,
+th,td
+{
+    word-wrap:break-word;
+}
 ul li {
     list-style: none;
 }
@@ -41,6 +48,10 @@ a:link , a:visited {
 a:hover , a:active {
     color: #33cc33;
 }
+input:hover {
+    filter:Alpha(opacity:80%);
+    opacity: 0.8;
+}
 pre {
     white-space: -moz-pre-wrap; /* Mozilla */
     white-space: -pre-wrap;     /* Opera 4-6 */
@@ -63,7 +74,6 @@ div#wrapper {
 /*---------------------------------------------------------------*/
 div#header_innerL{
     background: url(../images/front/simple/bg_headerL.jpg) no-repeat left top;
-    height: 100px;
     padding-left: 20px;
     margin-bottom: 20px;
     zoom: 100%;
@@ -80,30 +90,24 @@ div#header_innerL:after {
 div#header_innerL div#header_innerR {
     background: url(../images/front/simple/bg_headerR.jpg) no-repeat right top;
     padding-right: 20px;
-    height: 100px;
 }
 div#header_innerL div#header_innerR div#header_inner {
     background: url(../images/front/simple/bg_header.jpg) repeat-x;
-    height: 100px;
 }
 
 /*---------------------------------------------------------------*/
 /*-- discription style（サイトロゴ、説明） ----------------------*/
 /*---------------------------------------------------------------*/
 div#header_inner h1 {
-    font-size: 180%;
-    margin-top: 25px;
-}
-input:hover {
-    filter:Alpha(opacity:80%);
-    opacity: 0.8;
-}
-div#header_inner div#discript {
     float: left;
+    width:490px;
+    font-size: 180%;
+    margin-top: 15px;
+    margin-bottom:6px;
 }
-div#header_inner div#discript p {
-    margin-top: 6px;
-    margin-left: 3px;
+div#header_inner p#discript {
+    clear:both;
+    margin-top: 15px;
 }
 
 /*---------------------------------------------------------------*/
@@ -111,7 +115,7 @@ div#header_inner div#discript p {
 /*---------------------------------------------------------------*/
 div#header_inner form {
     float: right;
-    margin-top: 50px;
+    margin-top: 25px;
 }
 div#header_inner dl {
     float: left;
@@ -224,6 +228,7 @@ div.entryHead h2 span {
     background: url(../images/front/simple/bg_entryTitle.gif) no-repeat left center;
     padding-left: 24px;
     display: block;
+    max-width:550px;
 }
 div.entryHead p {
     float: right;
@@ -252,6 +257,7 @@ dl.category dt {
 }
 dl.category dd {
     float: left;
+    max-width:200px;
 }
 div.entryBody {
     clear: both;
@@ -275,12 +281,16 @@ div.entryBody p {
     max-width: 40em;
 }
 div.entryBody li {
+    margin-left: 3px;
     margin-bottom: 5px;
     list-style-position: inside;
 }
-div.entryBody ul.list li {
+div.entryBody ul li {
     list-style-type: disc;
-    margin-left: 3px;
+}
+div.entryBody li ol,
+div.entryBody li ul {
+    margin-left: 10px;
 }
 
 /*---------------------------------------------------------------*/

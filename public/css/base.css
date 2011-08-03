@@ -33,6 +33,13 @@ body {
     text-align: center;
     line-height: 1.5;
 }
+h1,h2,h3,h4,
+p,li,span,
+dt,dd,
+th,td
+{
+    word-wrap: break-word;
+}
 
 /*------------------------------------------------------------*/
 /*    common style                                            */
@@ -55,7 +62,7 @@ pre {
     word-wrap: break-word;      /* IE 5.5+ */
 }
 .clear {
-    clear:both;
+    clear: both;
 }
 /* -- 空き、幅、調整用 -- */
 .default {
@@ -77,7 +84,7 @@ dl.straight {
     zoom: 100%
 }
 dl.straight dt {
-    float:left;
+    float: left;
     clear: left;
 }
 dl.straight dd {
@@ -194,6 +201,7 @@ div#header h2 {
     font-weight: normal;
     margin-right: 10px;
     padding-left: 5px;
+    width:860px;
 }
 div#header h2 a span {
     border-bottom: solid 1px #535c5c;
@@ -302,9 +310,9 @@ ul#gNav li dl dd#active {
 ul#gNav li dl dd#active a ,
 ul#gNav li dl dd#active a:hover {
     background: url(../images/admin/gNav/bg_menuLink_act.gif) no-repeat left center;
-    font-weight:bold;
+    font-weight: bold;
     color:#5f5f5f;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 /*------------------------------------------------------------*/
@@ -432,7 +440,7 @@ div#pageNav ul {
     zoom: 100%;
 }
 div#pageNav ul li {
-    display:inline;
+    display: inline;
     margin-right: 4px;
     margin-left: 4px;
 }
@@ -441,15 +449,15 @@ div#pageNav ul li.current span {
     background-color: #eaeaea;
     padding: 4px 7px;
     text-decoration: none;
-    border:solid 1px #dedede;
+    border: solid 1px #dedede;
 }
 div#pageNav ul li.navNumber a:hover {
     background-color: #f4f4f4;
-    border:solid 1px #dedede;
+    border: solid 1px #dedede;
 }
 div#pageNav ul li.current span {
     background-color: #dedede;
-    border:solid 1px #d0d0d0;
+    border: solid 1px #d0d0d0;
     font-weight: bold;
 }
 
@@ -517,7 +525,7 @@ dl.editArea {
     zoom: 100%
 }
 dl.editArea dt {
-    float:left;
+    float: left;
     clear: left;
     background-color: #e8effe;
     margin-bottom: 10px;
@@ -650,7 +658,7 @@ dl#designs dd {
 }
 dl#designs dt {
     margin-right: 7px;
-    float:left;
+    float: left;
 }
 dl#designs dd {
     width: 70%;
@@ -676,6 +684,7 @@ div#mainContent dl.contentsList {
 div#mainContent dl.contentsList dt ,
 div#mainContent dl.contentsList dd {
     float: left;
+    max-width:640px;
 }
 div#mainContent dl.contentsList dt {
     margin-right: 5px;
@@ -799,6 +808,7 @@ ul#directory li p.folder {
     font-size: 110%;
     padding-top: 0;
     padding-right: 3px;
+    max-width:630px;
 }
 ul#directory li p.folder a {
     text-decoration: none;
@@ -811,6 +821,7 @@ ul#directory li p.folder img {
 }
 ul#directory li ul li.page p {
     margin-right: 8px;
+    max-width:550px;
 }
 ul#directory li ul li.page p img {
     padding: 0 0 2px 3px;
