@@ -237,13 +237,13 @@ div#header ul li#utilLogout {
     padding-right: 15px;
 }
 div#header ul li#utilManual a ,
-div#header ul li#utilAccount span {
+div#header ul li#utilAccount a {
     padding-left: 12px;
 }
 div#header ul li#utilManual a {
     background: url(../images/admin/header/bg_manual.gif) no-repeat left center;
 }
-div#header ul li#utilAccount span {
+div#header ul li#utilAccount a {
     background: url(../images/admin/header/bg_nowLogin.gif) no-repeat left center;
     font-weight: bold;
 }
