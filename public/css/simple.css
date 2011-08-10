@@ -76,6 +76,7 @@ div#header_innerL{
     background: url(../images/front/simple/bg_headerL.jpg) no-repeat left top;
     padding-left: 20px;
     margin-bottom: 20px;
+    min-height: 100px;
     zoom: 100%;
 }
 div#header_innerL:after {
@@ -90,9 +91,11 @@ div#header_innerL:after {
 div#header_innerL div#header_innerR {
     background: url(../images/front/simple/bg_headerR.jpg) no-repeat right top;
     padding-right: 20px;
+    min-height: 100px;
 }
 div#header_innerL div#header_innerR div#header_inner {
     background: url(../images/front/simple/bg_header.jpg) repeat-x;
+    min-height: 100px;
 }
 
 /*---------------------------------------------------------------*/
