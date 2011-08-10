@@ -99,7 +99,7 @@ div#header_innerL div#header_innerR div#header_inner {
 }
 
 /*---------------------------------------------------------------*/
-/*-- discription style（サイトロゴ、説明） ----------------------*/
+/*-- descript style（サイトロゴ、説明）    ----------------------*/
 /*---------------------------------------------------------------*/
 div#header_inner h1 {
     float: left;
@@ -108,7 +108,7 @@ div#header_inner h1 {
     margin-top: 15px;
     margin-bottom:6px;
 }
-div#header_inner p#discript {
+div#header_inner p#descript {
     clear:both;
     margin-top: 15px;
 }
