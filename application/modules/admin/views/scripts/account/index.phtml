@@ -42,7 +42,7 @@
     </div>
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
-    <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+    <?php echo $this->partial('error-message.phtml', array('errorForm' => $this->nicknameForm)) ?>
 
     <form id="<?php echo $this->nicknameForm->getId() ?>" enctype="application/x-www-form-urlencoded" method="<?php echo $this->nicknameForm->getMethod() ?>" action="<?php echo $this->nicknameForm->getAction() ?>">
         <dl class="editArea">
@@ -56,6 +56,10 @@
 
     </form>
 
+    <?php if (isset($this->errorForm)) {
+            echo $this->partial('error-message.phtml', array('errorForm' => $this->errorForm));
+          }
+    ?>
     <form action="<?php echo $this->baseUrl('/admin/account/update-password') ?>" method="post" class="accountEdit">
 
         <input type="hidden" id="edit_type" name="edit_type" value="pass" />

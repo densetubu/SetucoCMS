@@ -85,11 +85,11 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createNicknameForm();
         if (!$form->isValid($_POST)) {
-            $form->getElement('ambition')->setValue($preAmbition);
             $this->_setParam('nicknameForm', $form);
             return $this->_forward('index');
         }
         $this->_accountService->updateNickname($this->_getAccountInfos('login_id'), $form->getValue('user_nickname'));
+        $this->_helper->flashMessenger('ニックネームを変更しました。');
 //         $authModel->setAccountInfos();
 
         $this->_helper->redirector('index');
@@ -113,7 +113,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
             'required'   => true,
             'value'      => $account['nickname'],
             'filters'    => array('StringTrim'),
-//             'validators' => $this->_makeNicknameValidators()
+            'validators' => $this->_makeNicknameValidators()
         ));
         $form->addElement('submit', 'submit', array(
             'id'    => 'sub_nickname',
@@ -126,25 +126,37 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     /**
      * ニックネームのバリデーターを作成する。
      *
+     * @param  bool  $isEditing 編集用のバリデータなら true。デフォルトはfalse。
      * @return array Zend_Validateインターフェースとオプションの配列の配列
      * @author ErinaMikami
      */
-    private function _makeNicknameValidators()
+    private function _makeNicknameValidators($isEditing = false)
     {
         $validators[] = array();
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('野望を入力してください。');
+        $notEmpty->setMessage('ニックネームを入力してください。');
         $validators[] = array($notEmpty, true);
 
         $stringLength = new Zend_Validate_StringLength(
             array(
-                'max' => 100
+                'max' => 16
             )
         );
-        $stringLength->setMessage('野望は%max%文字以下で入力してください。');
+        $stringLength->setMessage('ニックネームは%max%文字以下で入力してください。');
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
+
+        if ($isEditing != true) {
+            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+                array(
+                    'table' => 'account',
+                    'field' => 'nickname'
+                )
+            );
+            $noRecordExists->setMessage('「%value%」は既に登録されています。');
+            $validators[] = array($noRecordExists, true); //TODO 同IDなら同ニックネームでも通すようにする
+        }
 
         return $validators;
     }
