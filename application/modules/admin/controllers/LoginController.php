@@ -68,8 +68,9 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         }
 
         $authModel = new Admin_Model_Auth();
-        $authModel->login($form->getValue('login_id'), $form->getValue('password'));
 
+        $authModel->login($form->getValue('login_id'), $form->getValue('password'));
+        
         if (!$authModel->isLoginSuccess()) {
             $this->_setParam('form', $form);
             $form->addError('アカウントIDまたはパスワードが間違っています。');

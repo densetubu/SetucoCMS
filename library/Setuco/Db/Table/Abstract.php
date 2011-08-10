@@ -28,7 +28,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      * @var string
      */
     const BACKSLASH_REPLACER = '__BS__';
-    
+
     /**
      * 全部で何件あるのか取得する
      *
@@ -199,7 +199,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     }
 
     /**
-     * 実行したSQLクエリーを取得する
+     * 実行したSQLクエリーを全件取得する
      * 
      * @return array 実行したSQLクエリー
      * @author suzuki-mar
@@ -212,5 +212,33 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
         return $result;
     }
-    
+
+    /**
+     * 実行した最後のSQLクエリーを取得する
+     *
+     * @return string 実行したSQLクエリー
+     * @author suzuki-mar
+     */
+    public function getExecutedLastSql()
+    {
+        $allSqls = $this->getExecutedAllSql();
+        $lastIndex = count($allSqls) - 1;
+        return $allSqls[$lastIndex];
+    }
+
+    /**
+     * バインドホルダーをSelectオブジェクトにバインドする
+     *
+     * 複数回セット出来るようにメソッドを定義しなおした
+     *
+     * @param Zend_Db_Select $select バインドするSELECTインスタンス
+     * @return $this 自分自身のインスタンス
+     * @author suzuki-mar
+     */
+    protected function _bindOfBindHolders(Zend_Db_Select &$select)
+    {
+        $select->bind($this->_bindHolders);
+        return $this;
+    }
+
 }

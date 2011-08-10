@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 文字列に関するユーティリティ
  *
@@ -22,6 +23,7 @@
  */
 class Setuco_Util_String
 {
+
     /**
      * 数の符号を文字列に変換します。
      *
@@ -35,6 +37,22 @@ class Setuco_Util_String
             return 'プラス' . $number;
         }
         return 'マイナス' . $number * -1;
+    }
+
+    /**
+     * 文字列をデリミターで区切って配列にする
+     * デフォルトのデリミターは空白
+     * 全角でも区切り文字にする
+     *
+     * @param string $string 配列にする文字列
+     * @param string[option] $delimiter デフォルトは半角空白
+     * @return array 文字列を配列にした物
+     */
+    public static function convertArrayByDelimiter($string, $delimter = " ")
+    {
+        $string = mb_convert_encoding($string, "UTF-8", "auto");
+        $string = mb_convert_kana($string, "s", "UTF-8");
+        return explode($delimter, $string);
     }
 
     /**
@@ -56,4 +74,16 @@ class Setuco_Util_String
         return $string;
     }
 
+    /**
+     * 先頭の文字を小文字にする
+     *
+     * @param string $string 文字列
+     * @return 先頭の文字を小文字にしたもの
+     */
+    public static function convertToFirstLower($string)
+    {
+        $firstString = substr($string, 0, 1);
+        $firstString = strtolower($firstString);
+        return $firstString . substr($string, 1);
+    }
 }
