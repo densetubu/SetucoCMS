@@ -134,6 +134,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$orderValidator->isValid($order)) {
             $order = self::DEFAULT_ORDER;
         }
+
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
         $pages = self::adjustPages($pages);
 
@@ -362,11 +363,17 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     private function _createSearchForm()
     {
+        $logicOptions = array(
+            0 => 'OR',
+            1 => 'AND',
+        );
+
         $targetOptions = array(
             'title' => 'タイトル',
             'contents' => '本文',
             'outline' => '概要',
             'tag' => 'タグ',
+
         );
 
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();
