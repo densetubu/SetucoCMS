@@ -46,8 +46,12 @@
                 <dt>
                     <label for="query">検索キーワード</label>
                 </dt>
+
                 <dd><?php echo $this->searchForm->getElement('query') ?></dd>
+                <dd class="clear"><input id="search_type_and" type="radio" name="search_type" value="AND" /><label for="search_type_and">AND</label></dd>
+                <dd><input id="search_type_or" type="radio" name="search_type" value="OR" checked="checked" /><label for="search_type_or">OR</label></dd>
                 <dd class="clear"><?php echo $this->searchForm->getElement('targets') ?></dd>
+                
             </dl>
             <dl class="under">
                 <dt>カテゴリー</dt>
