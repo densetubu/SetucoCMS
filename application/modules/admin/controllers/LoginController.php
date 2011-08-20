@@ -25,6 +25,13 @@
  */
 class Admin_LoginController extends Setuco_Controller_Action_Abstract
 {
+    /**
+     * 認証サービス
+     *
+     * @var Admin_Model_Auth
+     */
+    private $_authService;
+
 
     /**
      * 初期化処理
@@ -36,6 +43,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     {
         parent::init();
         $this->_setLayoutName('layout-login');
+        $this->_authService = new Admin_Model_Auth();
     }
 
     /**
@@ -67,17 +75,13 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
             return $this->_forward('index');
         }
 
-        $authModel = new Admin_Model_Auth();
+        $this->_authService->login($form->getValue('login_id'), $form->getValue('password'));
 
-        $authModel->login($form->getValue('login_id'), $form->getValue('password'));
-        
-        if (!$authModel->isLoginSuccess()) {
+        if (!$this->_authService->isLoggedIn()) {
             $this->_setParam('form', $form);
             $form->addError('アカウントIDまたはパスワードが間違っています。');
             return $this->_forward('index');
         }
-
-        $authModel->setAccountInfos();
 
         $this->_helper->redirector('index', 'index');
     }
@@ -91,7 +95,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
      */
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        $this->_authService->logout();
         $this->_helper->flashMessenger('ログアウトしました。');
         $this->_helper->redirector('index');
     }
