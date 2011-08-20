@@ -1,0 +1,32 @@
+<h2>入力情報確認</h2>
+<p>以下の情報で登録します、よろしいですか？</p>
+<dl>
+  <dt>サイト名</dt>
+    <dd>
+        <?php echo $this->params['site_name'] ;?></dd>
+  <dt>サイトURL</dt>
+    <dd><?php echo $this->params['site_url'] ;?></dd>
+  <dt>サイトの説明</dt>
+    <dd><?php echo $this->params['site_comment'] ;?></dd>
+  <dt>データベース名</dt>
+    <dd><?php echo $this->params['host'] ;?></dd>
+  <dt>データベース名</dt>
+    <dd><?php echo $this->params['dbname'] ;?></dd>
+  <dt>接続ユーザー名</dt>
+    <dd><?php echo $this->params['username'] ;?></dd>
+  <dt>パスワード</dt>
+    <dd><?php echo $this->params['password'] ;?></dd>
+</dl>
+
+<form method="post">
+  <input type="hidden" name="site_name" value="<?php echo $this->params['site_name'] ;?>">
+  <input type="hidden" name="site_comment" value="<?php echo $this->params['site_comment'] ;?>">
+  <input type="hidden" name="site_url" value="<?php echo $this->params['site_url'] ;?>">
+  <input type="hidden" name="host" value="<?php echo $this->params['host'] ;?>">
+  <input type="hidden" name="dbname" value="<?php echo $this->params['dbname'] ;?>">
+  <input type="hidden" name="username" value="<?php echo $this->params['username'] ;?>">
+  <input type="hidden" name="password" value="<?php echo $this->params['password'] ?>">
+  <input type="hidden" name="password2" value="<?php echo $this->params['password2'] ?>">
+<input type="submit" name="action" value="送信">
+</form>
+

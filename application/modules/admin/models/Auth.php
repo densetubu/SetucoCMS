@@ -92,13 +92,18 @@ class Admin_Model_Auth
     /**
      * ユーザー情報を書き込む
      *
+     * @param array[option] $setDatas nullだとログイン時の状態を保存する
      * @return void
      * @author suzuki-mar
      */
-    public function setAccountInfos()
+    public function setAccountInfos(array $setDatas = null)
     {
+        if ($setDatas === null) {
+            $setDatas = $this->_authAdapter->getResultRowObject(null, 'password');
+        }
+        
         $storage = $this->_authInstance->getStorage();
-        $storage->write($this->_authAdapter->getResultRowObject(null, 'password'));
+        $storage->write($setDatas);
     }
 
     /**
@@ -110,8 +115,13 @@ class Admin_Model_Auth
     public function getAccountInfos()
     {
         $storage = $this->_authInstance->getStorage();
-        $userInfoInstance = $storage->read();
-        return get_object_vars($userInfoInstance);
+        $result = $storage->read();
+
+        if (is_object($result)) {
+           $result = get_object_vars($result);
+        }
+        
+        return $result;
     }
 
     /**

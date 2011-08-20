@@ -1,0 +1,34 @@
+<?php
+
+class Db {
+    
+    var $dbh;
+    
+    public function __construct($db_host, $db_user, $db_pass, $db_name)
+    {
+        $this->dbh = new PDO();
+        $this->dbh->query('SET NAMES UTF-8');
+    }
+    public function __destruct()
+    {
+        $this->dbh = null;
+    }
+    
+    public function query($query)
+    {
+        $this->dbh->query($query);
+    }
+    
+    public function setucocmsRegister()
+    {
+        $query  = '';
+        $query .= 'UPDATE site';
+        $query .= 'SET';
+        $query .= 'name = "'. $params['site_name'] .'",';
+        $query .= 'url  = "'. $params['host'] .'",';
+        $query .= 'comment = "'. $params['site_comment'] .'"';
+        
+        return $this->query($query);
+    }
+    
+}
