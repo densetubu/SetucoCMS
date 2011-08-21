@@ -14,6 +14,7 @@ class Db {
             echo $e;
         }
     }
+    
     public function __destruct()
     {
         $this->dbh = null;

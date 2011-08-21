@@ -15,7 +15,9 @@ if ( !empty($_POST['confirm']) || !empty($_POST['action']) ){
     
         if ( !empty($_POST['action']) ){
             $view->setMainArea('form_action');
-            
+
+
+
             $dbh = new Db('localhost', 'setucocms', 'setucocms', 'setucocms');
             
             $querys = $common->getInitializeTablesSql();
