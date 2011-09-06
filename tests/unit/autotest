@@ -1,43 +1,49 @@
 #!/usr/bin/env php
 <?php
 
-$currend_dir = realpath(dirname($argv[0]));
-define('PHPUNITRUNNER_PATH', "{$currend_dir}/testrunner/bin/phpunitrunner");
+define('CURRENT_DIR', realpath(dirname($argv[0])));
+define('PHPUNITRUNNER_PATH', CURRENT_DIR . "/testrunner/bin/phpunitrunner");
 $opt = getopt("gv", array("target:"));
-$run_options = " -acR -p {$currend_dir}/test_helper.php ";
-
-if (isset($opt['g'])) {
-    $run_options .= ' -g ';
-}
-if (isset($opt['v'])) {
-    $run_options .= ' -v ';
-}
-
-$target = "";
-
-if (isset($opt['target'])) {
-    switch ($opt['target']) {
-    case 'application' :
-        $target = " -w {$currend_dir}/../../application/ -a {$currend_dir}/application/";
-        break;
-    case 'library' :
-        $target = " -w {$currend_dir}/../../library/ -a {$currend_dir}/library/";
-        break;
-    default :
-        echo "invalid target : \"{$opt['target']}\".\n";
-        usage();
-        exit();
-    }
-}
-
+$run_options = make_run_options($opt);
+$target = make_target($opt);
 $command = PHPUNITRUNNER_PATH . $run_options . $target;
 $command = preg_replace("/\//", DIRECTORY_SEPARATOR, $command);
 echo "command : {$command}\n\n";
 system($command);
 
-function usage() {
+function make_run_options($opt) {
+    $run_options = " -acR -p " . CURRENT_DIR . "/test_helper.php ";
+    if (isset($opt['g'])) {
+        $run_options .= ' -g ';
+    }
+    if (isset($opt['v'])) {
+        $run_options .= ' -v ';
+    }
+    return $run_options;
+}
+
+function make_target($opt) {
+    $target = "";
+    if (isset($opt['target'])) {
+        switch ($opt['target']) {
+        case 'application' :
+            $target = " -w " . CURRENT_DIR . "/../../application/ -a " . CURRENT_DIR . "/application/";
+            break;
+        case 'library' :
+            $target = " -w " . CURRENT_DIR . "/../../library/ -a " . CURRENT_DIR . "/library/";
+            break;
+        default :
+            echo "invalid target : \"{$opt['target']}\".\n";
+            usage_exit();
+        }
+    }
+    return $target;
+}
+
+function usage_exit() {
     echo <<< USAGE
 usage: autotest [-gv] [--target=application|library]
 
 USAGE;
+    exit(-1);
 }
