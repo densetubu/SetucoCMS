@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+$currend_dir = realpath(dirname($argv[0]));
+define('PHPUNITRUNNER_PATH', "{$currend_dir}/testrunner/bin/phpunitrunner");
+$opt = getopt("gv", array("target:"));
+$run_options = " -acR -p {$currend_dir}/test_helper.php ";
+
+if (isset($opt['g'])) {
+    $run_options .= ' -g ';
+}
+if (isset($opt['v'])) {
+    $run_options .= ' -v ';
+}
+
+$target = "";
+
+if (isset($opt['target'])) {
+    switch ($opt['target']) {
+    case 'application' :
+        $target = " -w {$currend_dir}/../../application/ -a {$currend_dir}/application/";
+        break;
+    case 'library' :
+        $target = " -w {$currend_dir}/../../library/ -a {$currend_dir}/library/";
+        break;
+    default :
+        echo "invalid target : \"{$opt['target']}\".\n";
+        usage();
+        exit();
+    }
+}
+
+$command = PHPUNITRUNNER_PATH . $run_options . $target;
+$command = preg_replace("/\//", DIRECTORY_SEPARATOR, $command);
+echo "command : {$command}\n\n";
+system($command);
+
+function usage() {
+    echo <<< USAGE
+usage: autotest [-gv] [--target=application|library]
+
+USAGE;
+}

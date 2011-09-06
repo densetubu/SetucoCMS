@@ -60,14 +60,6 @@ class Admin_Model_Media
      */
     const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
 
-
-    /**
-     * メディア表のDAO
-     *
-     * @var Common_Model_DbTable_Media
-     */
-    private $_mediaDao = null;
-
     /**
      * コンストラクター。DAOのインスタンスを初期化する
      *
@@ -76,7 +68,11 @@ class Admin_Model_Media
      */
     public function __construct()
     {
-        $this->_mediaDao = new Common_Model_DbTable_Media();
+    }
+
+    public function getMediaDao()
+    {
+		return new Common_Model_DbTable_Media();
     }
 
     /**
@@ -91,7 +87,7 @@ class Admin_Model_Media
      */
     public function findMedias($sortColumn, $order, $pageNumber, $limit, $fileExt)
     {
-        $medias = $this->_mediaDao->loadMedias4Pager(
+        $medias = $this->getMediaDao()->loadMedias4Pager(
                 $sortColumn, $order, $pageNumber, $limit,
                 $fileExt, self::TEMP_FILE_EXTENSION);
         foreach ($medias as $cnt => $media) {
@@ -255,7 +251,7 @@ class Admin_Model_Media
      */
     public function deleteMediaById($id)
     {
-        return $this->_mediaDao->deleteByPrimary($id);
+        return $this->getMediaDao()->deleteByPrimary($id);
     }
 
     /**
@@ -267,7 +263,7 @@ class Admin_Model_Media
      */
     public function countMediasByType($type = null)
     {
-        return $this->_mediaDao->countMediasByType($type);
+        return $this->getMediaDao()->countMediasByType($type);
     }
 
     /**
@@ -279,7 +275,7 @@ class Admin_Model_Media
      */
     public function updateMediaInfo($id, $updateData)
     {
-        return $this->_mediaDao->updateByPrimary($updateData, $id);
+        return $this->getMediaDao()->updateByPrimary($updateData, $id);
     }
 
     /**
@@ -291,7 +287,7 @@ class Admin_Model_Media
      */
     public function findMediaById($id)
     {
-        $media = $this->_mediaDao->loadByPrimary($id);
+        $media = $this->getMediaDao()->loadByPrimary($id);
         $media = $this->_addThumbPathInfo($media);
         return $media;
     }
@@ -312,7 +308,7 @@ class Admin_Model_Media
             'create_date' => $now->toString('yyyy-MM-dd HH:mm:ss'),
             'update_date' => $now->toString('yyyy-MM-dd HH:mm:ss')
         );
-        $result = $this->_mediaDao->insert($newRec);
+        $result = $this->getMediaDao()->insert($newRec);
         return $result;
     }
 
