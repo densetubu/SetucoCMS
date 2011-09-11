@@ -7,7 +7,7 @@ if (is_win()) {
 } else {
     define('PHPUNITRUNNER_PATH', '"' . CURRENT_DIR . '/testrunner/bin/phpunitrunner"');
 }
-$opt = getopt("gv", array("target:"));
+$opt = getopt("cgv", array("target:"));
 $run_options = make_run_options($opt);
 $target = make_target($opt);
 $command = PHPUNITRUNNER_PATH . $run_options . $target;
@@ -16,13 +16,17 @@ echo "command : {$command}\n\n";
 system($command);
 
 function make_run_options($opt) {
-    $run_options = ' -acR -p "' . CURRENT_DIR . '/test_helper.php" ';
+    $run_options = ' -aR ';
     if (isset($opt['g'])) {
         $run_options .= ' -g ';
     }
     if (isset($opt['v'])) {
         $run_options .= ' -v ';
     }
+    if (isset($opt['c'])) {
+        $run_options .= ' -c ';
+    }
+    $run_options .= ' -p "' . CURRENT_DIR . '/test_helper.php" ';
     return $run_options;
 }
 
