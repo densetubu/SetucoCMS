@@ -2,7 +2,7 @@
 <?php
 
 define('CURRENT_DIR', realpath(dirname($argv[0])));
-define('PHPUNITRUNNER_PATH', CURRENT_DIR . "/testrunner/bin/phpunitrunner");
+define('PHPUNITRUNNER_PATH', '"' . CURRENT_DIR . '/testrunner/bin/phpunitrunner"');
 $opt = getopt("gv", array("target:"));
 $run_options = make_run_options($opt);
 $target = make_target($opt);
@@ -12,7 +12,7 @@ echo "command : {$command}\n\n";
 system($command);
 
 function make_run_options($opt) {
-    $run_options = " -acR -p " . CURRENT_DIR . "/test_helper.php ";
+    $run_options = ' -acR -p "' . CURRENT_DIR . '/test_helper.php" ';
     if (isset($opt['g'])) {
         $run_options .= ' -g ';
     }
@@ -27,10 +27,10 @@ function make_target($opt) {
     if (isset($opt['target'])) {
         switch ($opt['target']) {
         case 'application' :
-            $target = " -w " . CURRENT_DIR . "/../../application/ -a " . CURRENT_DIR . "/application/";
+            $target = ' -w "' . CURRENT_DIR . '/../../application/" -a "' . CURRENT_DIR . '/application/"';
             break;
         case 'library' :
-            $target = " -w " . CURRENT_DIR . "/../../library/ -a " . CURRENT_DIR . "/library/";
+            $target = ' -w "' . CURRENT_DIR . '/../../library/" -a "' . CURRENT_DIR . '/library/"';
             break;
         default :
             echo "invalid target : \"{$opt['target']}\".\n";
