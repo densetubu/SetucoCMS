@@ -40,6 +40,16 @@ function make_target($opt) {
     return $target;
 }
 
+function is_win() {
+  switch (PHP_OS) {
+  case 'WINNT':
+  case 'WIN32':
+    return true;
+  default:
+    return false;
+  }
+}
+
 function usage_exit() {
     echo <<< USAGE
 usage: autotest [-gv] [--target=application|library]
