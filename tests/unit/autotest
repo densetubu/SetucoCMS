@@ -2,7 +2,11 @@
 <?php
 
 define('CURRENT_DIR', realpath(dirname($argv[0])));
-define('PHPUNITRUNNER_PATH', '"' . CURRENT_DIR . '/testrunner/bin/phpunitrunner"');
+if (is_win()) {
+    define('PHPUNITRUNNER_PATH', '"' . CURRENT_DIR . '/testrunner/bin/phpunitrunner.bat"');
+} else {
+    define('PHPUNITRUNNER_PATH', '"' . CURRENT_DIR . '/testrunner/bin/phpunitrunner"');
+}
 $opt = getopt("gv", array("target:"));
 $run_options = make_run_options($opt);
 $target = make_target($opt);
