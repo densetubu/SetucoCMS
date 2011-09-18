@@ -3,6 +3,21 @@ CHANGELOG
 ============
 
 --------------------------------------------
-Version 1.0.0 (04 Mar 2011)
+Version 1.0.0 (2011/03/04)
 --------------------------------------------
-- initial release
+- initial release.
+
+--------------------------------------------
+Version 1.1.0 (2011/09/24)
+--------------------------------------------
+- Page management function
+    - Correspond to search by two or more keywords by the search service by the side of management and an inspection.
+    - Correct so that a sort function may become effective also on the screen after search.
+
+- Inspection side (theme: simple)
+    - Attach a list mark and space to a list tag, and adjust appearance to it.
+    - A continuous long alphanumeric character corrects the problem overflowing on the screen.
+
+- Other
+    - Correct so that session data can be updated by arbitrary data.
+    - Correct license information.
