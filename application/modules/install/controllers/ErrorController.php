@@ -32,6 +32,7 @@ class Install_ErrorController extends Setuco_Controller_Action_ErrorAbstract
      */
     public function errorAction()
     {
+
         // URL(admin/error/error)で直接アクセスの対策
         if (is_null($this->_getParam('error_handler'))) {
             throw new Setuco_Controller_IllegalAccessException('ページがありません。', 404);
@@ -45,4 +46,5 @@ class Install_ErrorController extends Setuco_Controller_Action_ErrorAbstract
             $this->_developmentOperation();
         }
     }
+
 }

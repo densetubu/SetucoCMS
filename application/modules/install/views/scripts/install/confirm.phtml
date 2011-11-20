@@ -1,32 +1,41 @@
 <h2>入力情報確認</h2>
 <p>以下の情報で登録します、よろしいですか？</p>
 <dl>
+  <dt>管理者アカウントID</dt>
+    <dd><?php echo $this->inputValues['account_id'] ?></dd>
+  <dt>管理者パスワード</dt>
+    <dd>****(入力OK)</dd>
   <dt>サイト名</dt>
-    <dd>
-        <?php echo $this->params['site_name'] ;?></dd>
+    <dd><?php echo $this->inputValues['site_name'] ?></dd>
   <dt>サイトURL</dt>
-    <dd><?php echo $this->params['site_url'] ;?></dd>
+    <dd><?php echo $this->inputValues['site_url'] ?></dd>
   <dt>サイトの説明</dt>
-    <dd><?php echo $this->params['site_comment'] ;?></dd>
+    <dd><?php echo $this->inputValues['site_comment'] ?></dd>
   <dt>データベース名</dt>
-    <dd><?php echo $this->params['db_host'] ;?></dd>
+    <dd><?php echo $this->inputValues['db_host'] ?></dd>
   <dt>データベース名</dt>
-    <dd><?php echo $this->params['db_name'] ;?></dd>
+    <dd><?php echo $this->inputValues['db_name'] ?></dd>
   <dt>接続ユーザー名</dt>
-    <dd><?php echo $this->params['db_user'] ;?></dd>
+    <dd><?php echo $this->inputValues['db_user'] ?></dd>
   <dt>パスワード</dt>
-    <dd><?php echo $this->params['db_pass'] ;?></dd>
+    <dd>****(入力OK)</dd>
 </dl>
 
 <form action="<?php echo $this->baseUrl('install/install/action') ?>" method="post">
-  <input type="hidden" name="site_name" value="<?php echo $this->params['site_name'] ;?>">
-  <input type="hidden" name="site_comment" value="<?php echo $this->params['site_comment'] ;?>">
-  <input type="hidden" name="site_url" value="<?php echo $this->params['site_url'] ;?>">
-  <input type="hidden" name="db_host" value="<?php echo $this->params['db_host'] ;?>">
-  <input type="hidden" name="db_name" value="<?php echo $this->params['db_name'] ;?>">
-  <input type="hidden" name="db_user" value="<?php echo $this->params['db_user'] ;?>">
-  <input type="hidden" name="db_pass" value="<?php echo $this->params['db_pass'] ?>">
-  <input type="hidden" name="db_pass2" value="<?php echo $this->params['db_pass2'] ?>">
+  <input type="hidden" name="account_id" value="<?php echo $this->inputValues['account_id'] ?>">
+  <input type="hidden" name="account_pass" value="<?php echo $this->inputValues['account_pass'] ?>">
+  <input type="hidden" name="account_pass_check" value="<?php echo $this->inputValues['account_pass_check'] ?>">
+  <input type="hidden" name="site_name" value="<?php echo $this->inputValues['site_name'] ?>">
+  <input type="hidden" name="site_comment" value="<?php echo $this->inputValues['site_comment'] ?>">
+  <input type="hidden" name="site_url" value="<?php echo $this->inputValues['site_url'] ?>">
+  <input type="hidden" name="db_host" value="<?php echo $this->inputValues['db_host'] ?>">
+  <input type="hidden" name="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
+  <input type="hidden" name="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
+  <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
 <input type="submit" name="action" value="送信">
+</form>
+<br>
+<form action="<?php echo $this->baseUrl('install/install/')?> ">
+  <input type="submit" value="戻る">
 </form>
 

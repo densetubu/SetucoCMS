@@ -26,7 +26,6 @@ class Install_IndexController extends Setuco_Controller_Action_Abstract
 {
     public function indexAction()
     {
-        
     }
 
 }
