@@ -21,7 +21,8 @@
  * @subpackage Controller_Action
  * @author      suzuki-mar
  */
-abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controller_Action_Abstract
+abstract class Setuco_Controller_Action_InstallAbstract
+                extends Setuco_Controller_Action_Abstract
 {
 
     /**
