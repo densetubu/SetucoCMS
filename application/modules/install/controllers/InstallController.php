@@ -147,9 +147,7 @@ class Install_InstallController
         $dbh = null;
         
         
-        //$this->_helper->redirector('finish', 'install', 'install');
-	$this->_setParam('inputValues', $validData);
-	$this->_forward('finish');
+        $this->_helper->redirector('finish', 'install', 'install');
     }
 
     /**
