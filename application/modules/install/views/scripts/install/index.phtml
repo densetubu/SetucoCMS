@@ -1,32 +1,79 @@
 <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : ''     ?>
 <form method="post" action="<?php echo $this->baseUrl('install/install/confirm') ?>">
-  <label for="account_id">管理者アカウントID</label>
-    <input type="text" name="account_id" id="account_id" size="30" value="<?php echo $this->inputValues['account_id'] ?>">
-    <br>
-  <label for="account_pass">管理者パスワード</label>
-    <input type="password" name="account_pass" id="account_pass" size="30">
-  <br>
-  <label for="account_pass_check">管理者パスワード(確認)</label>
-    <input type="password" name="account_pass_check" id="account_pass_check" size="30">
-  <br>
-  <label for="site_name">サイト名</label>
-    <input type="text" name="site_name" id="site_name" size="30" value="<?php echo $this->inputValues['site_name'] ?>">
-  <br>
-  <label for="site_url">サイトURL</label>
-    <input type="text" name="site_url" id="site_url" size="30" value="<?php echo $this->inputValues['site_url'] ?>">
-  <br>
-  <label for="site_comment">サイトの説明</label>
-    <textarea name="site_comment" id="site_comment" cols="30"><?php echo $this->inputValues['site_comment'] ?></textarea>
+    <dl>
+        <dt>
+            <label for="account_id">管理者アカウントID</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" name="account_id" id="account_id" size="30" value="<?php echo $this->inputValues['account_id'] ?>">
+            </dd>
+        <dt>
+            <label for="account_pass">管理者パスワード</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="password" name="account_pass" id="account_pass" size="30">
+            </dd>
+        <dt>
+            <label for="account_pass_check">管理者パスワード(確認)</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="password" name="account_pass_check" id="account_pass_check" size="30">
+            </dd>
+        <dt>
+            <label for="site_name">サイト名</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" name="site_name" id="site_name" size="30" value="<?php echo $this->inputValues['site_name'] ?>">
+            </dd>
+        <dt>
+            <label for="site_url">サイトURL</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" name="site_url" id="site_url" size="30" value="<?php echo $this->inputValues['site_url'] ?>">
+            </dd>
+        <dt>
+            <label for="site_comment">サイトの説明</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <textarea name="site_comment" id="site_comment" cols="30"><?php echo $this->inputValues['site_comment'] ?></textarea>
+            </dd>
 
-  <br>
-  <label for="db_host">DB Host</label><input type="text" name="db_host" id="db_host" size="30" value="<?php echo $this->inputValues['db_host'] ?>">
-  <br>
-  <label for="db_name">データベース名</label><input type="text" size="20" name="db_name" id="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
-  <br>
-  <label for="db_user">接続ユーザー</label><input type="text" name="db_user" size="20" id="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
-  <br>
-  <label for="db_pass">接続ユーザーのパスワード</label>
-    <input type="password" name="db_pass" size="20" id="db_pass" value="<?php echo $this->inputValues['db_user'] ?>">
-  <br>
-  <input type="submit" value="送信">
+        <dt>
+            <label for="db_host">データベースサーバーホスト</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" name="db_host" id="db_host" size="30" value="<?php echo $this->inputValues['db_host'] ?>">
+            </dd>
+        <dt>
+            <label for="db_name">データベース名</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" size="20" name="db_name" id="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
+            </dd>
+        <dt>
+            <label for="db_user">接続ユーザー</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="text" name="db_user" size="20" id="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
+            </dd>
+        <dt>
+            <label for="db_pass">接続ユーザーのパスワード</label>
+            <span class="required">[必須]</span>
+        </dt>
+            <dd>
+                <input type="password" name="db_pass" size="20" id="db_pass" value="<?php echo $this->inputValues['db_user'] ?>">
+            </dd>
+    </dl>
+    <p class="defaultOver">
+        <input type="submit" value="SetucoCMSの設定をする">
+    </p>
 </form>
