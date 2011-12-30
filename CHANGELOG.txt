@@ -8,7 +8,7 @@ Version 1.0.0 (2011/03/04)
 - initial release.
 
 --------------------------------------------
-Version 1.1.0 (2011/09/24)
+Version 1.1.0 (2011/12/30)
 --------------------------------------------
 - Page management function
     - Correspond to search by two or more keywords by the search service by the side of management and an inspection.
