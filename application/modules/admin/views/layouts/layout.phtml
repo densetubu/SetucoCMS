@@ -39,6 +39,7 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8')
                  ->appendHttpEquiv('imagetoolbar', 'no');
 $this->headTitle('SetucoCMS')->setSeparator(':');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+$this->headScript()->prependFile($this->baseUrl('js/jquery-1.7.1.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 ?>
 <?php echo $this->doctype() . "\n" ?>
