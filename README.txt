@@ -5,8 +5,11 @@ README
 --------------------------------------------
 RELEASE INFORMATION
 --------------------------------------------
-SetucoCMS version 1 Release
+SetucoCMS version 1.0.0 Release
 Released on 2011/03/04
+
+SetucoCMS version 1.0.1 Release
+Released on 2012/01/22
 
 You can see CHANGELOG.txt to see detailed change history.
 
