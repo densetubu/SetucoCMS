@@ -3,7 +3,7 @@ SetucoCMSの著作権、ライセンスに関するご注意
 ============================================
 
 SetucoCMSのパッケージは "GNU PUBLIC LICENSE VERSION 2.0".の元で配布されています。
-see /docs/GPLv2.txt
+/docs/GPLv2.txt
 
 Copyright (c) 2010 SetucoCMS Project All rights reserved.
 http://sourceforge.jp/projects/setucocms
