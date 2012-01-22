@@ -5,10 +5,10 @@ dojo.require('dojo.NodeList-html');
  * global functions
  ********************/
 function hideMessageArea() {
-    dojo.query('.messageArea').style('display', 'none');
+    $('.messageArea').css('display', 'none');
 }
 function hideErrorMessageArea() {
-    dojo.query('.errorMessageArea').style('display', 'none');
+    $('.errorMessageArea').css('display', 'none');
 }
 function confirmDeleteRedirect(url, item){
     if (confirm("「" + item + "」を本当に削除してよろしいですか？")) {
@@ -20,46 +20,38 @@ function confirmDeleteRedirect(url, item){
  * index/index
  ********************/
 function showAmbitionEdit() {
-    dojo.style('ambitionView', {
-        display: 'none'
-    });
-    dojo.style('ambitionEdit', {
-        display: 'inline'
-    });
+    $('#ambitionView').css('display', 'none');
+    $('#ambitionEdit').css('display', 'inline');
 }
 function hideAmbitionEdit() {
-    dojo.style('ambitionEdit', {
-        display: 'none'
-    });
-    dojo.style('ambitionView', {
-        display: 'inline'
-    });
+    $('#ambitionView').css('display', 'inline');
+    $('#ambitionEdit').css('display', 'none');
 }
 
 /********************
  * directory/index
  ********************/
 function openCategory(switcher, openSrcPath, closeSrcPath) {
-    dojo.query(switcher.parentNode).next().style('display', 'block');
-    dojo.query(switcher).children().at(0).attr('src', openSrcPath);
-    dojo.query(switcher).attr('onclick', 'closeCategory(this,\'' + openSrcPath + '\' ,\'' + closeSrcPath + '\')');
+    $(switcher.parentNode).next().css('display', 'block');
+    $(switcher).children('img').attr('src', openSrcPath);
+    $(switcher).attr('onclick', 'closeCategory(this,\'' + openSrcPath + '\' ,\'' + closeSrcPath + '\')');
 }
 function closeCategory(switcher, openSrcPath, closeSrcPath) {
-    dojo.query(switcher.parentNode).next().style('display', 'none');
-    dojo.query(switcher).children().at(0).attr('src', closeSrcPath);
-    dojo.query(switcher).attr('onclick', 'openCategory(this,\'' + openSrcPath + '\' ,\'' + closeSrcPath + '\')');
+    $(switcher.parentNode).next().css('display', 'none');
+    $(switcher).children('img').attr('src', closeSrcPath);
+    $(switcher).attr('onclick', 'openCategory(this,\'' + openSrcPath + '\' ,\'' + closeSrcPath + '\')');
 }
 
 /********************
  * page/index
  ********************/
 function showPageElementEdit(switcher) {
-    dojo.query(switcher).parent().next().style('display', 'inline');
-    defaultHtml = switcher.innerHTML;
+    $(switcher).parent().next().css('display', 'inline');
+    defaultHTML = switcher.innerHTML;
 }
 function hidePageElementEdit(switcher) {
-    dojo.query(switcher).parent().prev().children().at(0).html(defaultHtml);
-    dojo.query(switcher).parent().style('display', 'none');
+    $(switcher).parent().prev().children('select').html(defaultHTML);
+    $(switcher).parent().css('display', 'none');
 }
 
 /*********************
@@ -67,12 +59,12 @@ function hidePageElementEdit(switcher) {
  * tag/index
  *********************/
 function showRowEdit(switcher) {
-    dojo.query(switcher.parentNode).prev().children().at(0).style('display', 'none');
-    dojo.query(switcher.parentNode).prev().children().at(1).style('display', 'block');
+    $(switcher.parentNode).prev().children('span').css('display', 'none');
+    $(switcher.parentNode).prev().children('div').css('display', 'block');
 }
 function hideRowEdit(switcher) {
-    dojo.query(switcher.parentNode.parentNode.parentNode).style('display', 'none');
-    dojo.query(switcher.parentNode.parentNode.parentNode).prev().style('display', 'block');
+    $(switcher.parentNode.parentNode.parentNode).css('display', 'none');
+    $(switcher.parentNode.parentNode.parentNode).prev().css('display', 'block');
 }
 
 /********************
@@ -81,9 +73,11 @@ function hideRowEdit(switcher) {
 var uploadImgIndex = 1;
 
 function addUploadImgForm(switcher) {
-    dojo.query("#upload_img" + ++uploadImgIndex).style('display', 'block');
+    uploadImgIndex++;
+
+    $("#upload_img" + uploadImgIndex).css('display', 'block');
     if (uploadImgIndex == 5) {
-        dojo.query("#upload_img_add").style('display', 'none');
+        $('#upload_img_add').parent().css('display', 'none');
     }
 }
 
