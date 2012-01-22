@@ -47,33 +47,28 @@ if (empty($this->pageTitle)) {
 
         <?php echo $this->headTitle() . "\n" ?>
     </head>
-    <body id="errorPage">
+    <body id="installPage">
 
         <!-- wrapper START -->
         <div id="wrapper">
 
-            <!-- header START -->
-            <div id="header_innerL">
-                <?php echo $this->render('header.phtml'); ?>
-            </div>
-            <!-- header END -->
-
             <!-- content START -->
             <div id="content">
 
-
                 <!-- mainContent START -->
                 <div id="mainContent">
-                <div class="entry">
-                   <?php echo $this->layout()->content . "\n" ?>
-                   </div>
+                    <div class="entry">
+                        <h1>
+                            <img src="<?php echo $this->baseUrl('/images/admin/login/loginLogo.gif') ?>" width="245" height="69" alt="せつこCMS  サイト制作に自由さと楽しさを" />
+                        </h1>
+
+                        <?php echo $this->layout()->content . "\n" ?>
+                    </div>
                 </div>
                 <!-- mainContent END -->
 
             </div>
             <!-- content END -->
-
-            <?php echo $this->render('footer.phtml') ?>
 
         </div>
         <!-- container END -->

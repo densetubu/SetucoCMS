@@ -1,5 +1,5 @@
 <h2>入力情報確認</h2>
-<p>以下の情報で登録します、よろしいですか？</p>
+<p>以下の情報で登録して、よろしいでしょうか？</p>
 <dl>
   <dt>管理者アカウントID</dt>
     <dd><?php echo $this->inputValues['account_id'] ?></dd>
@@ -34,7 +34,7 @@
   <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
 <input type="submit" name="action" value="送信">
 </form>
-<br>
+<br />
 <form action="<?php echo $this->baseUrl('install/install/')?> ">
   <input type="submit" value="戻る">
 </form>
