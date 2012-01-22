@@ -5,11 +5,11 @@ README
 --------------------------------------------
 リリース情報
 --------------------------------------------
-SetucoCMS バージョン 1.0.0
-2011/03/04 リリース
-
 SetucoCMS バージョン 1.1.0
 2011/12/30 リリース
+
+SetucoCMS バージョン 1.1.1
+2012/01/22 リリース
 
 詳細な変更履歴は下記のファイルをご覧ください。
 /CHANGELOG_ja.txt
@@ -26,7 +26,7 @@ application to it's final production location.
 VHOSTの設定
 ---------------------
 
-下記はVHOSTへの記述サンプルです。.
+下記はVHOSTへの記述サンプルです。
 
 <VirtualHost *:80>
    DocumentRoot "/path/to/SetucoCMS/public"
