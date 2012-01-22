@@ -11,7 +11,8 @@ CREATE TABLE account (
     PRIMARY KEY(id),
     UNIQUE(login_id),
     UNIQUE(nickname)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+) 
+ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- tag table 
 CREATE TABLE tag (
@@ -19,7 +20,7 @@ CREATE TABLE tag (
     name    VARCHAR(255) NOT NULL,
     PRIMARY KEY(id),
     UNIQUE(name)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- media table 
 CREATE TABLE media (
@@ -30,7 +31,7 @@ CREATE TABLE media (
     update_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     comment     TEXT,
     PRIMARY KEY(id)
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- category table
 CREATE TABLE category (
@@ -40,7 +41,7 @@ CREATE TABLE category (
     PRIMARY KEY(id),
     UNIQUE(name, parent_id),
     FOREIGN KEY(parent_id) REFERENCES category(id) ON DELETE CASCADE
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- page table
 CREATE TABLE page (
@@ -56,7 +57,7 @@ CREATE TABLE page (
     PRIMARY KEY(id),
     FOREIGN KEY(account_id) REFERENCES account(id) ON DELETE SET NULL,
     FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
-) TYPE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- page_media table 
 CREATE TABLE page_media (
