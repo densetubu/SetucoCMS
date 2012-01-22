@@ -6,4 +6,3 @@ CHANGELOG
 Version 1.0.0 (04 Mar 2011)
 --------------------------------------------
 - initial release
-
