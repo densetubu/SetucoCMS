@@ -1,0 +1,132 @@
+<?php
+/**
+ * サブアカウントの一覧表示画面
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>サブアカウントの編集・削除</p>
+</div>
+<!-- topicpath END -->
+
+<!-- section START -->
+<div class="section">
+    <div class="hAreaL">
+        <div class="hAreaR">
+            <div class="hArea">
+                <h3>
+                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountIndex.jpg') ?>" width="193" height="18" alt="サブアカウントの編集・削除" />
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+    <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+
+    <table summary="サブアカウントの一覧の表です。サブアカウントの編集・削除ができます。" cellpadding="0" cellspacing="0">
+        <colgroup>
+            <col width="40%" />
+            <col width="40%" />
+            <col width="10%" />
+            <col width="10%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col" id="tableFirst">
+                    アカウントID
+                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/desc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/asc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                    </a>
+                </th>
+                <th scope="col">
+                    ニックネーム
+                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/desc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/asc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                    </a>
+                </th>
+                <th scope="col">編集</th>
+                <th scope="col">削除</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <span>account_id</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <span>ニックネーム</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+                    </a>
+                </td>
+            </tr>
+            <tr class="check">
+                <td>
+                    <span>account_id</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <span>ニックネーム</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>account_id</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <span>ニックネーム</span>
+                    <div class="rowEdit"><?php echo $form ?></div>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <?php echo $this->paginator //ページャーの表示 ?>
+</div>
+<!-- section END -->
+
