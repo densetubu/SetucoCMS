@@ -13,7 +13,7 @@
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
-    <p>サブアカウントの編集・削除</p>
+    <p>サブアカウントの一覧</p>
 </div>
 <!-- topicpath END -->
 
@@ -23,7 +23,7 @@
         <div class="hAreaR">
             <div class="hArea">
                 <h3>
-                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountIndex.jpg') ?>" width="193" height="18" alt="サブアカウントの編集・削除" />
+                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountIndex.jpg') ?>" width="193" height="18" alt="サブアカウントの一覧" />
                 </h3>
             </div>
         </div>
@@ -32,12 +32,10 @@
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
 
-    <table summary="サブアカウントの一覧の表です。サブアカウントの編集・削除ができます。" cellpadding="0" cellspacing="0">
+    <table summary="サブアカウントの一覧の表です。" cellpadding="0" cellspacing="0">
         <colgroup>
-            <col width="40%" />
-            <col width="40%" />
-            <col width="10%" />
-            <col width="10%" />
+            <col width="50%" />
+            <col width="50%" />
         </colgroup>
         <thead>
             <tr>
@@ -59,8 +57,6 @@
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                     </a>
                 </th>
-                <th scope="col">編集</th>
-                <th scope="col">削除</th>
             </tr>
         </thead>
         <tbody>
@@ -73,16 +69,6 @@
                     <span>ニックネーム</span>
                     <div class="rowEdit"><?php echo $form ?></div>
                 </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
-                    </a>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                    </a>
-                </td>
             </tr>
             <tr class="check">
                 <td>
@@ -93,16 +79,6 @@
                     <span>ニックネーム</span>
                     <div class="rowEdit"><?php echo $form ?></div>
                 </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
-                    </a>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                    </a>
-                </td>
             </tr>
             <tr>
                 <td>
@@ -112,16 +88,6 @@
                 <td>
                     <span>ニックネーム</span>
                     <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="showRowEdit(this)">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_edit.png') ?>" alt="編集" width="27" height="27" />
-                    </a>
-                </td>
-                <td>
-                    <a href="javascript:void(0)" onclick="confirmDeleteRedirect('<?php echo $this->baseUrl("/admin/tag/delete/id/{$this->tag['id']}") ?>', '<?php echo $this->escape($this->tag['name']) ?>');">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_delete.png') ?>" alt="削除" width="27" height="27" />
-                    </a>
                 </td>
             </tr>
         </tbody>
