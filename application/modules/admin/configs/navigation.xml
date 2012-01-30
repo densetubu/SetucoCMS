@@ -185,8 +185,8 @@
                 </account_index>
                 <sub_account_index>
                     <id>sub_account_index</id>
-                    <title>サブアカウントの編集・削除</title>
-                    <label>サブアカウントの編集・削除</label>
+                    <title>サブアカウントの一覧</title>
+                    <label>サブアカウントの一覧</label>
                     <module>admin</module>
                     <controller>account</controller>
                     <action>subindex</action>
