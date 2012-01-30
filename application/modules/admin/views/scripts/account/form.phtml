@@ -1,0 +1,54 @@
+<?php
+/**
+ * サブアカウント新規追加画面
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>サブアカウントの追加</p>
+</div>
+<!-- topicpath END -->
+
+<!-- section START -->
+<div class="section">
+    <div class="hAreaL">
+        <div class="hAreaR">
+            <div class="hArea">
+                <h3>
+                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountNew.jpg') ?>" width="149" height="18" alt="サブアカウントの追加" />
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+    <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+
+    <form action="" method="post" class="accountEdit">
+        
+        <dl class="editArea">
+            <dt><label for="sub_account">アカウントID</label></dt>
+                <dd><input type="text" id="sub_account" name="sub_account" value="" /></dd>
+            <dt><label for="sub_nickname">ニックネーム</label></dt>
+                <dd><input type="text" id="sub_nickname" name="sub_nickname" value="" /></dd>
+            <dt><label for="user_pass">パスワード</label></dt>
+                <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
+            <dt><label for="pass_check">パスワード確認</label></dt>
+                <dd><input type="password" id="pass_check" name="pass_check" value="" /></dd>
+        </dl>
+        
+        <p class="defaultOver"><input type="submit" id="sub" name="sub" value="サブアカウントを追加" /></p>
+    
+    </form>
+
+</div>
+<!-- section END -->
+
