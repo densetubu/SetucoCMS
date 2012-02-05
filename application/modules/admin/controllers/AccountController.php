@@ -115,7 +115,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     *
     * @return void
     * @throws POSTメソッドでアクセスしなかった場合 insert文の実行に失敗した場合
-    * @author kkyouhei 
+    * @author kkyouhei
     */
     public function createAction()
     {
@@ -139,7 +139,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         } catch (Zend_Exception $e) {
             throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
         }
-        $this->_helper->flashMessenger("「{$registData['login_id']}」を作成しました");
+        $this->_helper->flashMessenger("「{$registData['login_id']}」を作成しました。");
         $this->_helper->redirector('form');
     }
 
@@ -179,7 +179,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     * 新規ユーザを追加するバリデーションチェックするフォームクラスのインスタンスを生成する
     *
     *
-    * @return Zend_Form 
+    * @return Zend_Form
     * @author kkyouhei
     */
     private function _createNewAccountFormValidator()
@@ -213,7 +213,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-    * アカウント名のバリデートルールを作成する
+    * ログインIDのバリデートルールを作成する
     *
     *
     * @return Zend_Validate_NotEmpty Setuco_Validate_StringLength Zend_Valid_Db_NoRecordExists
@@ -233,12 +233,12 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
                         )
         );
         $stringLength->setEncoding('UTF-8');
-        $stringLength->setMessage('アカウントIDは4文字以上30文字以下で入力してください。');
+        $stringLength->setMessage('ログインIDは4文字以上30文字以下で入力してください。');
         $validators[] = array($stringLength, true);
 
         $noRecordExistsOption = array('table' => 'account', 'field' => 'login_id');
         $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
-        $noRecordExists->setMessage( 'アカウントID「%value%」は既に登録されています。' );
+        $noRecordExists->setMessage( '「%value%」は既に登録されています。' );
         $validators[] = array($noRecordExists, true);
 
         return $validators;
@@ -268,7 +268,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
 
         $noRecordExistsOption = array('table' => 'account', 'field' => 'nickname');
         $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
-        $noRecordExists->setMessage('ニックネーム「%value%」は既に登録されています。');
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
         $validators[] = array($noRecordExists, true);
 
         return $validators;
@@ -281,7 +281,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     * @return Zend_NotEmpty Zend_Validate_StringLength Setuco_Validate_Match
     * @author kkyouhei
     */
-    
+
     private function _makeAccountPasswordValidators()
     {
 
