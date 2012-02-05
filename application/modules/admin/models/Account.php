@@ -56,6 +56,17 @@ class Admin_Model_Account
     {
         $this->_accountDao = new Common_Model_DbTable_Account();
     }
+    
+    /**
+    * アカウントを新規追加する
+    *
+    * @author kkyouhei 
+    */
+    public function registAccount($registData)
+    {
+        $registData['password'] = hash('sha1', $registData['password']);
+        return $this->_accountDao->insert($registData);
+    }
 
     /**
      * アカウント情報をロードします。

@@ -50,6 +50,13 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     private $_accountService;
 
     /**
+    * 新規ユーザ情報をチェックするバリデートフォームクラス
+    *
+    * @var Setuco_Form
+    */
+    private $_newAccountFormValidator;
+
+    /**
      * パスワード情報をチェックするバリデートフォームクラス
      *
      * @var Setuco_Form
@@ -63,6 +70,9 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     {
         parent::init();
         $this->_accountService = new Admin_Model_Account();
+
+        $this->_newAccountFormValidator = $this->_createNewAccountFormValidator();
+
         $this->_updatePasswordFormValidator = $this->_createUpdatePasswordFormValidator();
     }
 
@@ -91,6 +101,46 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      */
     public function formAction()
     {
+        // フラッシュメッセージ設定
+        $this->_showFlashMessages();
+
+        //バリデートに失敗したエラーフォームがあればセットする
+        if ($this->_hasParam('errorForm')) {
+            $this->view->errorForm = $this->_getParam('errorForm');
+        }
+    }
+
+    /**
+    *ユーザを新規追加するアクションです
+    *
+    * @return void
+    * @throws POSTメソッドでアクセスしなかった場合 insert文の実行に失敗した場合
+    * @author kkyouhei 
+    */
+    public function createAction()
+    {
+
+        //フォームから値を送信されなかったら、エラーページに遷移する
+        if (!$this->_request->isPost()) {
+            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
+        }
+
+        if(!$this->_newAccountFormValidator->isValid($this->_getAllParams())) {
+            $this->_setParam('errorForm', $this->_newAccountFormValidator);
+            return $this->_forward('form');
+        }
+
+        $inputData = $this->_newAccountFormValidator->getValues();
+        $registData['login_id'] = $inputData['sub_account'];
+        $registData['nickname'] = $inputData['sub_nickname'];
+        $registData['password'] = $inputData['user_pass'];
+        try {
+            $this->_accountService->registAccount($registData);
+        } catch (Zend_Exception $e) {
+            throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
+        }
+        $this->_helper->flashMessenger("「{$registData['login_id']}」を作成しました");
+        $this->_helper->redirector('form');
     }
 
     /**
@@ -123,6 +173,141 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
 
         $this->_helper->flashMessenger('パスワードを編集しました。');
         $this->_helper->redirector('index');
+    }
+
+    /**
+    * 新規ユーザを追加するバリデーションチェックするフォームクラスのインスタンスを生成する
+    *
+    *
+    * @return Zend_Form 
+    * @author kkyouhei
+    */
+    private function _createNewAccountFormValidator()
+    {
+        $form = new Setuco_Form();
+
+        $subAccount = new Zend_Form_Element_Text('sub_account', array(
+                     'id'        => 'sub_account',
+                     'required'  => true,
+                     'validators'=> $this->_makeAccountIdValidators(),
+                     'filters'   => array('StringTrim')
+        ));
+
+        $subNickName = new Zend_Form_Element_Text('sub_nickname', array(
+                     'id'        => 'sub_nickname',
+                     'required'  => true,
+                     'validators'=> $this->_makeAccountNickNameValidators(),
+                     'filters'   => array('StringTrim')
+        ));
+
+        $userPass = new Zend_Form_Element_Password('user_pass', array(
+                     'id'  => 'user_pass',
+                     'required'  => true,
+                     'validators'=> $this->_makeAccountPasswordValidators(),
+                     'filters'   => array('StringTrim')
+        ));
+
+        $form->addElements(array($subAccount, $subNickName, $userPass));
+
+        return $form;
+    }
+
+    /**
+    * アカウント名のバリデートルールを作成する
+    *
+    *
+    * @return Zend_Validate_NotEmpty Setuco_Validate_StringLength Zend_Valid_Db_NoRecordExists
+    * @author kkyouhei
+    */
+
+    private function _makeAccountIdValidators()
+    {
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('ログインIDを入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'min' => 4,
+                            'max' => 30
+                        )
+        );
+        $stringLength->setEncoding('UTF-8');
+        $stringLength->setMessage('アカウントIDは4文字以上30文字以下で入力してください。');
+        $validators[] = array($stringLength, true);
+
+        $noRecordExistsOption = array('table' => 'account', 'field' => 'login_id');
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
+        $noRecordExists->setMessage( 'アカウントID「%value%」は既に登録されています。' );
+        $validators[] = array($noRecordExists, true);
+
+        return $validators;
+    }
+
+    /**
+    * ニックネームのバリデートルールを作成する
+    *
+    *
+    * @return Zend_Validate_NotEmpty Setuco_Validate_StringLength Zend_Valid_Db_NoRecordExists
+    * @author kkyouhei
+    */
+
+    private function _makeAccountNickNameValidators()
+    {
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('ニックネームを入力してください。');
+        $validators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'max'=>16
+                        )
+        );
+        $stringLength->setMessage('ニックネームは16文字以下で入力してください。');
+        $validators[] = array($stringLength, true);
+
+        $noRecordExistsOption = array('table' => 'account', 'field' => 'nickname');
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
+        $noRecordExists->setMessage('ニックネーム「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
+        return $validators;
+    }
+
+    /**
+    * パスワードのバリデートルールを取得する
+    *
+    *
+    * @return Zend_NotEmpty Zend_Validate_StringLength Setuco_Validate_Match
+    * @author kkyouhei
+    */
+    
+    private function _makeAccountPasswordValidators()
+    {
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('パスワードを入力してください。');
+        $validators[] = array($notEmpty);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'min' => 6,
+                            'max' => 30
+                        )
+        );
+        $stringLength->setMessage('パスワードは%min%文字以上%max%文字以下で入力してください。');
+        $validators[] = array($stringLength);
+
+        $confirmCheck = new Setuco_Validate_Match(
+                        array(
+                            'check_key' => 'pass_check'
+                        )
+        );
+        $confirmCheck->setMessage('パスワードとパスワード確認が一致しません。');
+        $validators[] = $confirmCheck;
+
+        return $validators;
+
     }
 
     /**
