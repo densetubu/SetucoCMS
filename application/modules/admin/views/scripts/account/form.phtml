@@ -31,14 +31,13 @@
 
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
-
-    <form action="" method="post" class="accountEdit">
-        
+    <form action="<?php echo $this->baseUrl('/admin/account/create') ?>" method="post" class="accountEdit">
+        <?php print_r($this->inputAccountId);  ?>
         <dl class="editArea">
             <dt><label for="sub_account">ログインID</label></dt>
-                <dd><input type="text" id="sub_account" name="sub_account" value="" /></dd>
+                <dd><input type="text" id="sub_account" name="sub_account" value="<?php echo $this->escape($this->inputAccountId) ?>" /></dd>
             <dt><label for="sub_nickname">ニックネーム</label></dt>
-                <dd><input type="text" id="sub_nickname" name="sub_nickname" value="" /></dd>
+                <dd><input type="text" id="sub_nickname" name="sub_nickname" value="<?php echo $this->escape($this->inputAccountNickName) ?>" /></dd>
             <dt><label for="user_pass">パスワード</label></dt>
                 <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
             <dt><label for="pass_check">パスワード確認</label></dt>

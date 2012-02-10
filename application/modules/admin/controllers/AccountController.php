@@ -122,11 +122,14 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
 
         //フォームから値を送信されなかったら、エラーページに遷移する
         if (!$this->_request->isPost()) {
+
             throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
-
+        
         if(!$this->_newAccountFormValidator->isValid($this->_getAllParams())) {
             $this->_setParam('errorForm', $this->_newAccountFormValidator);
+            $this->view->assign('inputAccountId', $this->_getParam('sub_account'));
+            $this->view->assign('inputAccountNickName', $this->_getParam('sub_nickname'));
             return $this->_forward('form');
         }
 
@@ -139,7 +142,9 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         } catch (Zend_Exception $e) {
             throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
         }
-        $this->_helper->flashMessenger("「{$registData['login_id']}」を作成しました");
+
+
+        $this->_helper->flashMessenger("「{$registData['nickname']}」を作成しました");
         $this->_helper->redirector('form');
     }
 
