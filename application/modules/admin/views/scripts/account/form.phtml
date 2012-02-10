@@ -32,7 +32,6 @@
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
     <form action="<?php echo $this->baseUrl('/admin/account/create') ?>" method="post" class="accountEdit">
-        <?php print_r($this->inputAccountId);  ?>
         <dl class="editArea">
             <dt><label for="sub_account">ログインID</label></dt>
                 <dd><input type="text" id="sub_account" name="sub_account" value="<?php echo $this->escape($this->inputAccountId) ?>" /></dd>
