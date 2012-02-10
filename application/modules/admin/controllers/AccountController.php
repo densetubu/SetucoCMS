@@ -142,13 +142,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         } catch (Zend_Exception $e) {
             throw new Setuco_Exception('insert文の実行に失敗しました。' . $e->getMessage());
         }
-<<<<<<< HEAD
-
-
         $this->_helper->flashMessenger("「{$registData['nickname']}」を作成しました");
-=======
-        $this->_helper->flashMessenger("「{$registData['login_id']}」を作成しました。");
->>>>>>> 1f4e66142cd09fe2b406ddf90c1c6fd079336851
         $this->_helper->redirector('form');
     }
 
