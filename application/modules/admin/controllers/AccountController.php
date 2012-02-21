@@ -87,11 +87,18 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      * サブアカウント一覧表示のアクションです
      *
      * @return void
-     * @author suzuki-mar
+     * @author suzuki-mar kkyouhei
      */
     public function subindexAction()
     {
-    }
+        $selectColumns = array('id', 'login_id', 'nickname');
+       	$this->view->accounts = $this->_accountService->findSortAllAcounts($selectColumns,
+                                                                           $this->_getParam('field', 'login_id'),
+                                                                           $this->_getParam('order', 'asc'),
+                                                                           $this->_getPageNumber(),
+                                                                           $this->_getPageLimit()
+                                                                          );
+	}
 
     /**
      * パスワード情報を変更するアクションです

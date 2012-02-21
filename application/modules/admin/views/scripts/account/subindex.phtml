@@ -41,55 +41,31 @@
             <tr>
                 <th scope="col" id="tableFirst">
                     ログインID
-                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/desc') ?>">
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                     </a>
-                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/asc') ?>">
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                     </a>
                 </th>
                 <th scope="col">
                     ニックネーム
-                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/desc') ?>">
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
                     </a>
-                    <a href="<?php echo $this->baseUrl('/admin/tag/index/page/1/order/asc') ?>">
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
                         <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
                     </a>
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    <span>account_id</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-                <td>
-                    <span>ニックネーム</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
+            <?php foreach($this->accounts as $index => $account): ?>
+            
+            <tr<?php echo $this->cycle(array('', 'class="check"'))->next() ?>>
+                <?php echo $this->partial('account-row.phtml', array('account'=> $account)); ?>
             </tr>
-            <tr class="check">
-                <td>
-                    <span>account_id</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-                <td>
-                    <span>ニックネーム</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>account_id</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-                <td>
-                    <span>ニックネーム</span>
-                    <div class="rowEdit"><?php echo $form ?></div>
-                </td>
-            </tr>
+            <?php endforeach ?>
         </tbody>
     </table>
     <?php echo $this->paginator //ページャーの表示 ?>

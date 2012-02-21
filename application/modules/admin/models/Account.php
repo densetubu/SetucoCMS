@@ -100,6 +100,21 @@ class Admin_Model_Account
     }
 
     /**
+    * アカウントレコードを必要があればソートして結果を返す
+    *
+	* @param string array どのカラムを取得するか
+    * @param string array $order 並び順 
+    * @param string $pageNumber 取得するページ番号 
+    * @param string $order 1ページあたり何件のデータを取得するのか 
+    * @return array アカウント情報の一覧
+    * @author kkyouhei
+    */
+    public function findSortAllAcounts($selectColumns, $sortColumn, $order, $pageNumber, $limit)
+    {
+        return $this->_accountDao->loadAccounts4Pager($selectColumns, $sortColumn, $order, $pageNumber, $limit);
+    }
+
+    /**
      * パスワード情報を変更する
      *
      * @param string $password 変更するパスワード
