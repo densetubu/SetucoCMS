@@ -98,7 +98,8 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
                                                                            $this->_getPageNumber(),
                                                                            $this->_getPageLimit()
                                                                           );
-	}
+        $this->setPagerForView($this->_accountService->countAllAccounts());
+    }
 
     /**
      * パスワード情報を変更するアクションです
