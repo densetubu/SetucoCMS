@@ -1,5 +1,5 @@
 <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : ''     ?>
-<form method="post" action="<?php echo $this->baseUrl('install/install/confirm') ?>">
+<form method="post">
     <dl>
         <dt>
             <span class="required">[必須]</span>

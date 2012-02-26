@@ -36,71 +36,48 @@ class Install_InstallController
 
     public function indexAction()
     {
-        foreach ($this->_session as $key => $value) {
-            if (empty($inputValues[$key])) {
-                $inputValues[$key] = $value;
+        $inputValues = $this->_getAllParams();
+
+        if ($this->_request->isPost()) {
+            $this->_setSession($inputValues);
+            if (!$this->_initializeFormValidator->isValid($inputValues)) {
+                $template = 'index';
+            } else {
+                if ($this->_getParam('submit')) {
+                    $template = 'confirm';
+                } else if ($this->_getParam('commit')) {
+                    $this->_initialize($inputValues);
+                    $this->_helper->redirector('finish', 'install', null); 
+                }
             }
+            $inputValues = $this->_initializeFormValidator->getValues();
+            $this->view->errorForm = $this->_initializeFormValidator;
+        } else {
+            $template = 'index';
         }
 
-        $defaultValues = $this->_getDefaultValues();
-        foreach ($defaultValues as $key => $value) {
-            if (empty($inputValues[$key])) {
-                $inputValues[$key] = $defaultValues[$key];
+        if ($template == 'index') {
+            $defaultValues = $this->_getDefaultValues();
+            foreach ($defaultValues as $key => $value) {
+                if (empty($inputValues[$key])) {
+                    $inputValues[$key] = $defaultValues[$key];
+                }
             }
+            unset($defaultValues);
         }
-        unset($defaultValues);
 
         $this->view->inputValues = $inputValues;
-        if ($this->_hasParam('errorForm')) {
-            $this->view->errorForm = $this->_getParam('errorForm');
-        }
-    }
+        return $this->render($template);
 
-    /*
-     * 入力内容の確認
-     *
-     * @author Takayuki Otake
-     * @todo エラーパラメータが送れないのをなんとかする
-     */
-    public function confirmAction()
-    {
-        if (!$this->_request->isPost()) {
-            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
-        }
-
-        if (!$this->_initializeFormValidator->isValid($this->_getAllParams())) {
-            $this->_setParam('inputValues', $this->_initializeFormValidator->getValues());
-            $this->_setParam('errorForm', $this->_initializeFormValidator);
-            return $this->_helper->redirector('index', 'install');
-            // @todo エラーパラメータが送れないのをなんとかする
-        /*
-            , 'install',array(
-            'errorForm' => $this->_initializeFormValidator,
-        ));
-         */
-        }
-
-        $validData = $this->_initializeFormValidator->getValues();
-        $this->_setSession($validData);
-        $this->view->inputValues = $validData;
     }
 
     /**
-     * SetucoCMSのセットアップ実行
+     * データベースとの初期化
      *
      * @author Takayuki Otake
-     * @todo   再実行防止
      */
-    public function actionAction()
+    public function _initialize($validData)
     {
-        if (!$this->_request->isPost()) {
-            throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
-        }
-        if (!$this->_initializeFormValidator->isValid($this->_getAllParams())) {
-            $this->_setParam('inputValues', $this->_initializeFormValidator->getValues());
-            $this->_setParam('errorForm', $this->_initializeFormValidator);
-            return $this->_forward('index');
-        }
         $validData = $this->_initializeFormValidator->getValues();
         if (preg_match("/^http(s):\/\//", $validData['site_url']) === false) {
             $validData['site_url'] .= 'http://';
@@ -178,7 +155,7 @@ class Install_InstallController
     {
         try {
             $this->dbh = new PDO("mysql:host={$params['db_host']}; dbname={$params['db_name']}",
-                $params['db_user'], $params['db_pass']);
+                    $params['db_user'], $params['db_pass']);
         } catch (PDOException $e) {
             return false;
         }
@@ -192,16 +169,21 @@ class Install_InstallController
      */
     private function _getDefaultValues()
     {
+        if ($_SERVER['SERVER_ADDR'] == '::1') {
+            $addr = 'localhost';
+        } else {
+            $addr = $_SERVER['SERVER_ADDR'];
+        }
         return array(
-            'account_id' => '',
-            'site_url' => 'http://'.$_SERVER['SERVER_ADDR'].$this->view->baseUrl('/'),
-            'site_name' => 'サイト名を設定してください',
-            'site_comment' => 'サイトの説明を設定してください。',
-            'db_host' => '',
-            'db_name' => '',
-            'db_user' => '',
-            'db_pass' => ''
-        );
+                'account_id' => '',
+                'site_url' => 'http://' . $addr . $this->view->baseUrl('/'),
+                'site_name' => 'サイト名を設定してください',
+                'site_comment' => 'サイトの説明を設定してください。',
+                'db_host' => 'localhost',
+                'db_name' => '',
+                'db_user' => '',
+                'db_pass' => ''
+                );
     }
 
     /*
@@ -243,83 +225,83 @@ class Install_InstallController
         $form = new Setuco_Form();
 
         $adminAccountIdElement = new Zend_Form_Element_Text('account_id', array(
-            'id' => 'account_id',
-            'required' => 'true',
-            'validators' => $this->_makeAdminAccountIdValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'account_id',
+                    'required' => 'true',
+                    'validators' => $this->_makeAdminAccountIdValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($adminAccountIdElement);
 
         $adminAccountPassElement = new Zend_Form_Element_Text('account_pass', array(
-            'id' => 'account_pass',
-            'required' => 'true',
-            'validators' => $this->_makeAdminAccountPasswordValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'account_pass',
+                    'required' => 'true',
+                    'validators' => $this->_makeAdminAccountPasswordValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($adminAccountPassElement);
 
         $adminAccountPassCheckElement = new Zend_Form_Element_Text('account_pass_check', array(
-            'id' => 'account_pass_check',
-            'required' => 'true',
-            'validators' => $this->_makeAdminAccountPasswordValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'account_pass_check',
+                    'required' => 'true',
+                    'validators' => $this->_makeAdminAccountPasswordValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($adminAccountPassCheckElement);
 
         $siteNameElement = new Zend_Form_Element_Text('site_name', array(
-            'id' => 'site_name',
-            'required' => 'true',
-            'validators' => $this->_makeSiteNameValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'site_name',
+                    'required' => 'true',
+                    'validators' => $this->_makeSiteNameValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($siteNameElement);
 
         $siteCommentElement = new Zend_Form_Element_Text('site_comment', array(
-            'id' => 'site_comment',
-            'required' => 'true',
-            'validators' => $this->_makeSiteCommentValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'site_comment',
+                    'required' => 'true',
+                    'validators' => $this->_makeSiteCommentValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($siteCommentElement);
 
         $siteUrlElement = new Zend_Form_Element_Text('site_url', array(
-            'id' => 'site_url',
-            'required' => 'true',
-            'validators' => $this->_makeSiteUrlValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'site_url',
+                    'required' => 'true',
+                    'validators' => $this->_makeSiteUrlValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($siteUrlElement);
 
         $dbHostElement = new Zend_Form_Element_Text('db_host', array(
-            'id' => 'db_host',
-            'required' => 'true',
-            'validators' => $this->_makeDbHostValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'db_host',
+                    'required' => 'true',
+                    'validators' => $this->_makeDbHostValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($dbHostElement);
 
         $dbNameElement = new Zend_Form_Element_Text('db_name', array(
-            'id' => 'db_name',
-            'required' => 'true',
-            'validators' => $this->_makeDbNameValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'db_name',
+                    'required' => 'true',
+                    'validators' => $this->_makeDbNameValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($dbNameElement);
 
         $dbUserElement = new Zend_Form_Element_Text('db_user', array(
-            'id' => 'db_user',
-            'required' => 'true',
-            'validators' => $this->_makeDbUserValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'db_user',
+                    'required' => 'true',
+                    'validators' => $this->_makeDbUserValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($dbUserElement);
 
         $dbPassElement = new Zend_Form_Element_Text('db_pass', array(
-            'id' => 'db_pass',
-            'required' => 'true',
-            'validators' => $this->_makeDbPassValidators(),
-            'filters' => array('StringTrim')
-        ));
+                    'id' => 'db_pass',
+                    'required' => 'true',
+                    'validators' => $this->_makeDbPassValidators(),
+                    'filters' => array('StringTrim')
+                    ));
         $form->addElement($dbPassElement);
 
         return $form;
@@ -337,10 +319,10 @@ class Install_InstallController
         $siteNameValidators[] = array($notEmpty, true);
 
         $stringLength = new Zend_Validate_StringLength(
-            array(
-                'max' => 100
-            )
-        );
+                array(
+                    'max' => 100
+                    )
+                );
         $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
         $siteNameValidators[] = array($stringLength, true);
@@ -356,10 +338,10 @@ class Install_InstallController
     private function _makeSiteCommentValidators()
     {
         $stringLength = new Zend_Validate_StringLength(
-            array(
-                'max' => 300
-            )
-        );
+                array(
+                    'max' => 300
+                    )
+                );
         $stringLength->setEncoding("UTF-8");
         $stringLength->setMessage('サイトの説明は%max%文字以下で入力しだください。');
         $commentValidators[] = array($stringLength, true);
@@ -393,19 +375,19 @@ class Install_InstallController
         $passValidators[] = array($notEmpty);
 
         $stringLength = new Zend_Validate_StringLength(
-            array(
-                'min' => 6,
-                'max' => 30
-            )
-        );
+                array(
+                    'min' => 6,
+                    'max' => 30
+                    )
+                );
         $stringLength->setMessage('パスワードは%min%文字以上%max%文字以下で入力してください。');
         $passValidators[] = array($stringLength);
 
         $confirmCheck = new Setuco_Validate_Match(
-            array(
-                'check_key' => 'account_pass_check'
-            )
-        );
+                array(
+                    'check_key' => 'account_pass_check'
+                    )
+                );
         $confirmCheck->setMessage('パスワードとパスワード確認が一致しません。');
         $passValidators[] = $confirmCheck;
 
