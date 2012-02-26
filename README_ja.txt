@@ -5,14 +5,14 @@ README
 --------------------------------------------
 リリース情報
 --------------------------------------------
-SetucoCMS バージョン 1 リリース
-2011/03/04 リリース
+SetucoCMS バージョン 1.2.0
+2012/02/** リリース
 
 詳細な変更履歴は下記のファイルをご覧ください。
-/CHANGELOG.txt
+/CHANGELOG_ja.txt
 
 --------------------------------------------
-SETTING
+設定
 --------------------------------------------
 This directory should be used to place project specfic documentation including
 but not limited to project notes, generated API/phpdoc documentation, or
@@ -20,17 +20,17 @@ manual files generated or hand written.  Ideally, this directory would remain
 in your development environment only and should not be deployed with your
 application to it's final production location.
 
-Setting Up Your VHOST
+VHOSTの設定
 ---------------------
 
-The following is a sample VHOST you might want to consider for your project.
+下記はVHOSTへの記述サンプルです。.
 
 <VirtualHost *:80>
    DocumentRoot "/path/to/SetucoCMS/public"
    ServerName localhost
 
    <Directory "/path/to/SetucoCMS/public">
-       Options Indexes MultiViews FollowSymLinks
+       Options FollowSymLinks
        AllowOverride All
        Order allow,deny
        Allow from all
