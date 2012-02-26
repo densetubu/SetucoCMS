@@ -37,6 +37,7 @@
  * @subpackage Controller
  * @author     charlesvineyard
  */
+
 class Admin_NavigationController extends Setuco_Controller_Action_AdminAbstract
 {
     /**

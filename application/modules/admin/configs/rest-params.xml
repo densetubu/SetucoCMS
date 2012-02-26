@@ -15,6 +15,9 @@
             <query value="query">
                 <required value="true" />
             </query>
+            <query value="search_type">
+                <required value="true" />
+            </query>
             <query value="targets">
                 <required value="false" />
             </query>

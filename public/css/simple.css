@@ -505,6 +505,33 @@ p#copyright {
 }
 
 /*---------------------------------------------------------------*/
+/*-- installPage style --------------------------------------------*/
+/*---------------------------------------------------------------*/
+body#installPage div#content div#mainContent {
+    width: 600px;
+    max-width: 100%;
+    float: none;
+    margin:0 auto;
+}
+body#installPage div#content div#mainContent div.entry {
+    min-height: 150px;
+    padding: 30px;
+}
+body#installPage h1 {
+    margin-bottom: 20px;
+}
+body#installPage h2,
+body#installPage p,
+body#installPage dd {
+    margin-bottom: 10px;
+}
+body#installPage span.required {
+    color: #dd0000;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+/*---------------------------------------------------------------*/
 /*-- errorPage style --------------------------------------------*/
 /*---------------------------------------------------------------*/
 body#errorPage div#content div#mainContent {

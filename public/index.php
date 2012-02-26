@@ -34,9 +34,13 @@ require_once 'Zend/Application.php';
 
 
 // Create application, bootstrap, and run
+$app_ini = APPLICATION_PATH . '/configs/application.ini';
+if (!file_exists($app_ini)) {
+    $app_ini = APPLICATION_PATH . '/configs/application-sample.ini';
+}
 $application = new Zend_Application(
     APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
+    $app_ini
 );
 $application->bootstrap()
             ->run();
