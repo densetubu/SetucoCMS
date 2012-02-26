@@ -38,6 +38,7 @@ class Install_InstallController
     {
         $inputValues = $this->_getAllParams();
 
+        $template = 'index';
         if ($this->_request->isPost()) {
             $this->_setSession($inputValues);
             if (!$this->_initializeFormValidator->isValid($inputValues)) {
