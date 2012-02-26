@@ -143,7 +143,11 @@ class Install_InstallController
     public function finishAction()
     {
         $_siteService = new Admin_Model_Site();
-        $this->view->siteInfos = $_siteService->getSiteInfo();
+        $siteInfos = $_siteService->getSiteInfo();
+
+        $siteInfos['url'] = preg_replace('/\/$/', '', $siteInfos['url']);
+
+        $this->view->siteInfos = $siteInfos;
         Zend_Session::destroy();
     }
 
