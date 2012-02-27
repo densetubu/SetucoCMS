@@ -12,7 +12,14 @@ SetucoCMS バージョン 1.2.0
 /CHANGELOG_ja.txt
 
 --------------------------------------------
-設定
+システム要件
+--------------------------------------------
+SetutcoCMS 要件:
+PHP 5.2.4 以降
+MySQL Server 5.1 以降
+
+--------------------------------------------
+SETTING
 --------------------------------------------
 This directory should be used to place project specfic documentation including
 but not limited to project notes, generated API/phpdoc documentation, or
@@ -20,17 +27,17 @@ manual files generated or hand written.  Ideally, this directory would remain
 in your development environment only and should not be deployed with your
 application to it's final production location.
 
-VHOSTの設定
+Setting Up Your VHOST
 ---------------------
 
-下記はVHOSTへの記述サンプルです。.
+The following is a sample VHOST you might want to consider for your project.
 
 <VirtualHost *:80>
    DocumentRoot "/path/to/SetucoCMS/public"
    ServerName localhost
 
    <Directory "/path/to/SetucoCMS/public">
-       Options FollowSymLinks
+       Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny
        Allow from all
@@ -38,12 +45,33 @@ VHOSTの設定
 
 </VirtualHost>
 
---------------------------------------------
-システム要件
---------------------------------------------
-SetutcoCMS 要件:
-PHP 5.2.4 以降
-MySQL Server 5.1 以降
+
+.htaccessの設定
+---------------------
+public/ディレクトリにある「.htaccess.sample」を「.htaccess」にファイル名を変えてコピーします
+VirtualHostの設定をした場合は「.htaccess」の設定はここで終わりです
+
+そうでない場合は.htaccessの編集をします
+「#RewriteBase」の行頭の「#」を取り除いて、パラメーターをアプリケーションのパスに書き換えてください
+public/
+
+
+設置するアドレスが http://example.com/setucocms/ の場合の例
+
+public/ディレクトリがwebルートになるように設定をします
+
+    RewriteBase /setucocms/public
+
+
+ディレクトリの権限
+---------------------
+一部のディレクトリは、画像などのファイルアップロードやインストーラー用に書き込み権限が必要になります
+WEBサーバーに書き込み権限を与えるようにパーミッションの設定をします
+パーミッションについてよくわからない場合は権限を「777」 に設定してください
+
+コマンドの場合は以下のように設定します
+$ chmod 777 public/media application/configs/
+
 
 --------------------------------------------
 お問い合わせ／フィードバック
