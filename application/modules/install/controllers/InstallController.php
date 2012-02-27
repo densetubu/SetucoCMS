@@ -1,12 +1,12 @@
 <?php
 
 /**
- * 初期設定をするコントローラ
+ * インストーラのコントローラ
  *
  * LICENSE: ライセンスに関する情報
  *
  * @category   Setuco
- * @package    Admin
+ * @package    Install
  * @subpackage Controller
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -25,8 +25,17 @@ class Install_InstallController
     extends Setuco_Controller_Action_InstallAbstract
 {
 
+    /**
+     *データベースハンドラ
+     *
+     * @var 
+     */
     protected $dbh;
 
+    /**
+     * アクションの共通設定
+     * @author Takayuki Otake
+     */
     function init()
     {
         parent::init();
@@ -34,6 +43,12 @@ class Install_InstallController
         $this->_initializeFormValidator = $this->_createInitializeFormValidator();
     }
 
+    /**
+     * 入力フォームから初期設定をするアクション
+     *
+     * @author Takayuki Otake
+     * @return void
+     */
     public function indexAction()
     {
         $inputValues = $this->_getAllParams();
@@ -73,9 +88,11 @@ class Install_InstallController
     }
 
     /**
-     * データベースとの初期化
+     * データベースと設定ファイルの初期化
      *
+     * @param array $validData 設定ファイルとデータベースの設定パラメータ
      * @author Takayuki Otake
+     * @return void
      */
     public function _initialize($validData)
     {
@@ -136,9 +153,10 @@ class Install_InstallController
     }
 
     /**
-     * SetucoCMSのセットアップ終了ページ
+     * セットアップ終了アクション
      *
      * @author Takayuki Otake
+     * @return void
      */
     public function finishAction()
     {
@@ -152,9 +170,10 @@ class Install_InstallController
     }
 
     /**
-     * 
+     * データベースに接続する関数
      *
      * @author Takayuki Otake
+     * @return boolean
      */
     private function _dbConnect($params)
     {
@@ -168,9 +187,10 @@ class Install_InstallController
     }
 
     /**
-     *
+     * 入力フォームのデフォルト値を取得する関数
      *
      * @author Takayuki Otake
+     * @return array String
      */
     private function _getDefaultValues()
     {
@@ -191,9 +211,11 @@ class Install_InstallController
                 );
     }
 
-    /*
+    /**
+     * セッションに値をセットする関数
      *
      * @author Takayuki Otake
+     * @return void
      **/
     private function _setSession($values)
     {
@@ -207,9 +229,10 @@ class Install_InstallController
     }
 
     /**
+     * セッションの値を取得する関数
      *
-     * @return array String
      * @author Takayuki Otake
+     * @return array String
      */
     private function _getSession()
     {
@@ -221,9 +244,10 @@ class Install_InstallController
     }
 
     /**
+     * インストーラのZend_Form
      *
-     * @return Setuco_Form
      * @author Takayuki Otake
+     * @return Setuco_Form
      */
     private function _createInitializeFormValidator()
     {
@@ -313,9 +337,10 @@ class Install_InstallController
     }
 
     /**
+     * サイト名のバリデータ
      * 
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeSiteNameValidators()
     {
@@ -336,9 +361,10 @@ class Install_InstallController
     }
 
     /**
+     * サイト説明のバリデータ
      * 
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeSiteCommentValidators()
     {
@@ -355,9 +381,10 @@ class Install_InstallController
     }
 
     /**
+     * 管理者のログインIDのバリデータ
      * 
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeAdminAccountIdValidators()
     {
@@ -369,9 +396,10 @@ class Install_InstallController
     }
 
     /**
+     * 管理者のログインパスワードのバリデータ
      * 
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeAdminAccountPasswordValidators()
     {
@@ -403,9 +431,10 @@ class Install_InstallController
     }
 
     /**
+     * サイトURLのバリデータ
      *
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeSiteUrlValidators()
     {
@@ -417,9 +446,10 @@ class Install_InstallController
     }
 
     /**
+     * データベースホストのバリデータ
      *
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeDbHostValidators()
     {
@@ -431,9 +461,10 @@ class Install_InstallController
     }
 
     /**
+     * データベース名のバリデータ
      *
-     * @return Zend_From
      * @author Takayuki Otake
+     * @return Zend_From
      */
     private function _makeDbNameValidators()
     {
@@ -445,9 +476,10 @@ class Install_InstallController
     }
 
     /**
+     * データベースの接続ユーザー名のバリデータ
      *
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeDbUserValidators()
     {
@@ -459,9 +491,10 @@ class Install_InstallController
     }
 
     /**
+     * データベース接続パスワードのバリデータ
      *
-     * @return Zend_Form
      * @author Takayuki Otake
+     * @return Zend_Form
      */
     private function _makeDbPassValidators()
     {
@@ -473,10 +506,10 @@ class Install_InstallController
     }
 
     /**
-     * SetucoCMSのデータベーススキーマ取得
+     * データベーススキーマ取得
      * 
-     * @return String
      * @author Takayuki Otake
+     * @return String
      */
     function _getInitializeTablesSql()
     {
