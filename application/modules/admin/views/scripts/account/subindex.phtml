@@ -62,7 +62,7 @@
         <tbody>
             <?php foreach($this->accounts as $index => $account): ?>
             
-            <tr<?php echo $this->cycle(array('', 'class="check"'))->next() ?>>
+            <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
                 <?php echo $this->partial('account-row.phtml', array('account'=> $account)); ?>
             </tr>
             <?php endforeach ?>
