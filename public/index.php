@@ -37,6 +37,19 @@ require_once 'Zend/Application.php';
 $app_ini = APPLICATION_PATH . '/configs/application.ini';
 if (!file_exists($app_ini)) {
     $app_ini = APPLICATION_PATH . '/configs/application-sample.ini';
+
+    //設定ファイルがなければインストーラへ飛ばす
+    require('Zend/Controller/Router/Rewrite.php');
+    require('Zend/Controller/Request/Http.php');
+    $router = new Zend_Controller_Router_Rewrite();
+    $req = $router->route(new Zend_Controller_Request_Http());
+
+    $baseUrl = $req->getBaseUrl();
+    $controller = $req->getControllerName();
+    if ($controller != 'install') {
+        echo "<meta http-equiv=\"Refresh\" content=\"0; URL={$baseUrl}/install\">";
+        return true;
+    }
 }
 $application = new Zend_Application(
     APPLICATION_ENV,
