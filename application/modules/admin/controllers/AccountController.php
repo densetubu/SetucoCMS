@@ -244,7 +244,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $noRecordExists->setMessage( '「%value%」は既に登録されています。' );
         $validators[] = array($noRecordExists, true);
 
-		$stringAlpha = new Zend_Validate_Alpha();
+		$stringAlpha = new Zend_Validate_Alnum();
 		$stringAlpha->setMessage('アカウントIDは半角英数で入力してください');
         $validators[] = array($stringAlpha, true);
 
