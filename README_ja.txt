@@ -49,12 +49,10 @@ The following is a sample VHOST you might want to consider for your project.
 .htaccessの設定
 ---------------------
 public/ディレクトリにある「.htaccess.sample」を「.htaccess」にファイル名を変えてコピーします
-VirtualHostの設定をした場合は「.htaccess」の設定はここで終わりです
+VirtualHostの設定をした場合は.htaccessの設定はここで終わりです
 
 そうでない場合は.htaccessの編集をします
 「#RewriteBase」の行頭の「#」を取り除いて、パラメーターをアプリケーションのパスに書き換えてください
-public/
-
 
 設置するアドレスが http://example.com/setucocms/ の場合の例
 
@@ -71,6 +69,16 @@ WEBサーバーに書き込み権限を与えるようにパーミッション�
 
 コマンドの場合は以下のように設定します
 $ chmod 777 public/media application/configs/
+
+
+インストーラへアクセス
+---------------------
+設定が完了したらインストーラへアクセスしましょう
+設置したURLの末尾に install/ をつけてアクセスします
+
+    http://example.com/install/
+
+データベースやサイト情報に関する設定はここから始まります
 
 
 --------------------------------------------
