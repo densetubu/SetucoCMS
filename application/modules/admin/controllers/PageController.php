@@ -106,6 +106,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      */
     const DEFAULT_ORDER = 'desc';
 
+
+    /**
+     * 標準の検索タイプ ANDなのかORなのか
+     *
+     * @var string
+     */
+    const DEFAULT_SEARCH_TYPE = 'AND';
+
     /**
      * 初期処理
      *
@@ -149,6 +157,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         if (!$orderValidator->isValid($order)) {
             $order = self::DEFAULT_ORDER;
         }
+
         $pages = $this->_pageService->findPages($sortColumn, $order, $this->_getPageNumber(), $this->_getPageLimit());
         $pages = self::adjustPages($pages);
 
@@ -216,6 +225,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $keyword = $searchForm->getValue('query');
         $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
         $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
+        $searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
 
         //検索パラメーターの引数オブジェクトを生成する
         $keyword = $searchForm->getValue('query');
@@ -228,7 +238,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $targets,
             $refinements,
             $sortColumn,
-            $sortOrder
+            $sortOrder,
+            $searchType
         );
 
         $pages = $this->_pageService->searchPages($pageParamIns);
@@ -382,6 +393,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'contents' => '本文',
             'outline' => '概要',
             'tag' => 'タグ',
+
         );
 
         $categories = $this->_categoryService->findAllCategoryIdAndNameSet();

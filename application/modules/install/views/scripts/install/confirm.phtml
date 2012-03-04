@@ -1,0 +1,39 @@
+<h2>入力情報確認</h2>
+<p>以下の情報で登録して、よろしいでしょうか？</p>
+<dl>
+  <dt>管理者アカウントID</dt>
+    <dd><?php echo $this->inputValues['account_id'] ?></dd>
+  <dt>管理者パスワード</dt>
+    <dd>****(入力OK)</dd>
+  <dt>サイト名</dt>
+    <dd><?php echo $this->inputValues['site_name'] ?></dd>
+  <dt>サイトURL</dt>
+    <dd><?php echo $this->inputValues['site_url'] ?></dd>
+  <dt>サイトの説明</dt>
+    <dd><?php echo $this->inputValues['site_comment'] ?></dd>
+  <dt>データベース名</dt>
+    <dd><?php echo $this->inputValues['db_host'] ?></dd>
+  <dt>データベース名</dt>
+    <dd><?php echo $this->inputValues['db_name'] ?></dd>
+  <dt>接続ユーザー名</dt>
+    <dd><?php echo $this->inputValues['db_user'] ?></dd>
+  <dt>パスワード</dt>
+    <dd>****(入力OK)</dd>
+</dl>
+
+<form method="post">
+  <input type="hidden" name="account_id" value="<?php echo $this->inputValues['account_id'] ?>">
+  <input type="hidden" name="account_pass" value="<?php echo $this->inputValues['account_pass'] ?>">
+  <input type="hidden" name="account_pass_check" value="<?php echo $this->inputValues['account_pass_check'] ?>">
+  <input type="hidden" name="site_name" value="<?php echo $this->inputValues['site_name'] ?>">
+  <input type="hidden" name="site_comment" value="<?php echo $this->inputValues['site_comment'] ?>">
+  <input type="hidden" name="site_url" value="<?php echo $this->inputValues['site_url'] ?>">
+  <input type="hidden" name="db_host" value="<?php echo $this->inputValues['db_host'] ?>">
+  <input type="hidden" name="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
+  <input type="hidden" name="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
+  <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
+
+  <input type="submit" name="commit" value="送信">
+  <input type="submit" value="戻る">
+</form>
+

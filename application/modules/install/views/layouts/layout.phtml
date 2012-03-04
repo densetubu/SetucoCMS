@@ -1,0 +1,77 @@
+<?php
+/**
+ * 閲覧側のレイアウトファイル
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Layout
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       String  $pageTitle  ページのタイトル $pageTitleはアクションごとに定義する
+ * @param       array   $siteInfos  サイト情報
+ * @author      suzuki-mar
+ */
+
+
+//ページタイトルがある場合とない場合でページタイトルの形式を変更する
+if (empty($this->pageTitle)) {
+    $this->headTitle($this->escape($this->siteInfos['name']));
+} else {
+    $this->headTitle($this->pageTitle)->setSeparator(' | ')->headTitle($this->escape($this->siteInfos['name']));
+}
+
+?>
+<?php echo $this->doctype() . "\n" ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta http-equiv="content-script-type" content="text/javascript" />
+
+        <meta name="author" content="" />
+        <meta name="copyright" content="<?php echo $this->escape($this->siteInfos['name']) ?>" />
+        <meta name="generator" content="SetucoCMS <?php echo APPLICATION_VERSION ?>" />
+        <meta http-equiv="imagetoolbar" content="no" />
+
+        <meta name="description" content="<?php echo $this->escape($this->siteInfos['comment']) ?>" />
+        <meta name="keywords" content="<?php echo $this->escape($this->siteInfos['keyword']) ?>" />
+
+        <link rel="start" href="<?php echo $this->escape($this->siteInfos['url']) ?>" title="このサイトのトップページ" />
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('/css/style.css') ?>" media="screen" />
+
+        <title>インストール画面 | SetucoCMS</title>
+    </head>
+    <body id="installPage">
+
+        <!-- wrapper START -->
+        <div id="wrapper">
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+                    <div class="entry">
+                        <h1>
+                            <img src="<?php echo $this->baseUrl('/images/admin/login/loginLogo.gif') ?>" width="245" height="69" alt="せつこCMS  サイト制作に自由さと楽しさを" />
+                        </h1>
+
+                        <?php echo $this->layout()->content . "\n" ?>
+                    </div>
+                </div>
+                <!-- mainContent END -->
+
+            </div>
+            <!-- content END -->
+
+        </div>
+        <!-- container END -->
+
+    </body>
+</html>

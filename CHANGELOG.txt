@@ -3,7 +3,7 @@ CHANGELOG
 ============
 
 --------------------------------------------
-Version 1.2.0 (2012/02/**)
+Version 1.2.0 (2012/02/26)
 --------------------------------------------
 - Initial setup
     - Add an installer. SetucoCMS can be installed now from on a browser.
