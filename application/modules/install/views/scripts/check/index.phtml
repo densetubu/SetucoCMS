@@ -1,0 +1,99 @@
+<h1>インストール環境のチェック</h1>
+
+<?php if ($this->all_ok) { ?>
+<p>
+動作に必要な環境が揃っています！
+</p>
+<a href="<?php echo $this->baseUrl('/install/install') ?>">インストーラへ進む</a>
+
+<?php } elseif ($this->required_ok) { ?>
+
+<p>
+最低限の動作に必要な環境が揃っていません。設定の仕方がわからない場合はサーバ管理者へ問い合わせてください
+</p>
+<a href="<?php echo $this->baseUrl('/install/install') ?>">インストーラへ進む</a>
+
+<?php } else { ?>
+
+<p>
+全ての機能の動作に必要な環境が揃っていません。設定の仕方がわからない場合はサーバ管理者へ問い合わせてください
+</p>
+<?php } ?>
+
+<?php if (in_array(false, $this->isWritable)) { ?>
+<div class="notice">
+    <ul>
+        <?php if (!$this->isWritable['media']) { ?>
+        <li><code>public/media/</code>ディレクトリに書き込み権限がありません。管理画面でファイルをアップロードができません</li>
+        <?php } ?>
+        <?php if (!$this->isWritable['configs']) { ?>
+        <li><code>application/configs/</code>ディレクトリに書き込み権限がありません。インストーラで設定ファイルの生成ができません</li>
+        <?php } ?>
+    </ul>
+</div>
+
+<?php } ?>
+<div id="env_required">
+    <h2>最低限の動作に必要な環境</h2>
+
+    <h3>PHP</h3>
+    インストールされているバージョン：<?php echo PHP_VERSION ?>
+    <?php if ('5.2.6' <= PHP_VERSION) { ?>
+    <p class="">動作に必要なバージョンを満たしています</p>
+    <?php } else { ?>
+    <p class="">動作には5.2.6以上のバージョンが必要です</p>
+    <?php } ?>
+
+    <h3>PHP拡張</h3>
+    <dl>
+        <dt>
+        php-pdo,php-mysql : データベースの接続に利用します
+        </dt>
+            <dd>
+            <?php if ($this->extensions['pdo'] && $this->extensions['mysql']) { ?>
+            ○インストールされています
+            <?php } else { ?>
+            ×インストールされていません
+            <?php } ?>
+            </dd>
+
+        <dt>
+        php-mbstring : 日本語等のマルチバイト文字の処理に利用します
+        </dt>
+            <dd>
+            <?php if ($this->extensions['mbstring']) { ?>
+            ○インストールされています
+            <?php } else { ?>
+            ×インストールされていません
+            <?php } ?>
+            </dd>
+    </dl>
+
+
+    <h2>Apacheモジュール</h2>
+    
+    <h3>mod_rewrite</h3>
+    <?php if ($this->apache_modules['mod_rewrite']) { ?>
+    ○ロードされています
+    <?php } else { ?>
+    ×ロードされていません
+    <?php } ?>
+
+</div>
+
+<div id="env_recommand">
+    <h2>推奨される動作環境</h2>
+    <p>最低限の動作には必要ありませんが、より便利な機能が使えるようになります</p>
+
+    <h3>PHP拡張</h3>
+    <dl>
+        <dt>php-gd : 管理画面で画像のアップロードをするのに必要です</dt>
+            <dd>
+            <?php if ($this->extensions['gd']) { ?>
+            ○インストールされています
+            <?php } else { ?>
+            ×インストールされていません
+            <?php } ?>
+            </dd>
+</div>
+
