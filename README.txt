@@ -5,8 +5,8 @@ README
 --------------------------------------------
 RELEASE INFORMATION
 --------------------------------------------
-SetucoCMS version 1 Release
-Released on 2011/03/04
+SetucoCMS version 1.2.0
+Released on 2012/02/**
 
 You can see CHANGELOG.txt to see detailed change history.
 
@@ -29,7 +29,7 @@ The following is a sample VHOST you might want to consider for your project.
    ServerName localhost
 
    <Directory "/path/to/SetucoCMS/public">
-       Options Indexes MultiViews FollowSymLinks
+       Options FollowSymLinks
        AllowOverride All
        Order allow,deny
        Allow from all

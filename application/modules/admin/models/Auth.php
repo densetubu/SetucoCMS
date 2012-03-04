@@ -3,7 +3,22 @@
 /**
  * 認証サービスです。
  *
- * LICENSE: ライセンスに関する情報
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
  * @package    Admin
@@ -33,19 +48,21 @@ class Admin_Model_Auth
      * @var Zend_Auth
      */
     private $_authInstance;
+
     /**
-     * ユーザー認証の実行結果
-     *
-     * @var Zend_Auth_Result
-     */
-    private $_authResult;
-    /**
-     * ユーザー認証アダプタークラス　
+     * ユーザー認証アダプタークラス
      * DBにアクセスするクラス
      *
      * @var Zend_Auth_Adapter_DbTable
      */
     private $_authAdapter;
+
+    /**
+     * アカウント情報のうち、セッションに保存する項目
+     *
+     * @var array
+     */
+    private static $_RETURN_COLUMNS = array('id', 'login_id', 'nickname');
 
     /**
      * 変数の初期設定をする
@@ -59,10 +76,10 @@ class Admin_Model_Auth
 
     /**
      * ログイン処理を行う
-     * 
+     *
      * @param  string $loginId  ログインID
      * @param  string $password ログインパスワード
-     * @return void
+     * @return bool ログインできたら true
      * @author suzuki-mar
      */
     public function login($loginId, $password)
@@ -75,30 +92,30 @@ class Admin_Model_Auth
         $this->_authAdapter->setIdentity($loginId)
                 ->setCredential($password);
 
-        $this->_authResult = $this->_authInstance->authenticate($this->_authAdapter);
+        // DBと照合
+        $result = $this->_authInstance->authenticate($this->_authAdapter);
+
+        if (!$result->isValid()) {
+            return false;
+        }
+
+        $loginAccountData = $this->_authAdapter->getResultRowObject(self::$_RETURN_COLUMNS);
+        $this->saveLoginAccount($loginAccountData);
+
+        return true;
     }
 
     /**
-     * ログインに成功したか
+     * セッションにログインユーザー情報を書き込む
      *
-     * @return boolean ログイン認証に成功したか
-     * @author suzuki-mar
-     */
-    public function isLoginSuccess()
-    {
-        return $this->_authResult->isValid();
-    }
-
-    /**
-     * ユーザー情報を書き込む
-     *
+     * @param mixed $loginAccountData ログインするアカウントデータ
      * @return void
      * @author suzuki-mar
      */
-    public function setAccountInfos()
+    public function saveLoginAccount($loginAccountData)
     {
         $storage = $this->_authInstance->getStorage();
-        $storage->write($this->_authAdapter->getResultRowObject(null, 'password'));
+        $storage->write($loginAccountData);
     }
 
     /**
@@ -110,8 +127,13 @@ class Admin_Model_Auth
     public function getAccountInfos()
     {
         $storage = $this->_authInstance->getStorage();
-        $userInfoInstance = $storage->read();
-        return get_object_vars($userInfoInstance);
+        $result = $storage->read();
+
+        if (is_object($result)) {
+           $result = get_object_vars($result);
+        }
+
+        return $result;
     }
 
     /**
@@ -127,7 +149,7 @@ class Admin_Model_Auth
 
     /**
      * ログアウト処理を行う
-     * 
+     *
      * @return void
      */
     public function logout()

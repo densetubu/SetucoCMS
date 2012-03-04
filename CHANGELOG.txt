@@ -3,6 +3,10 @@ CHANGELOG
 ============
 
 --------------------------------------------
-Version 1.0.0 (04 Mar 2011)
+Version 1.2.0 (2012/02/26)
 --------------------------------------------
-- initial release
+- Initial setup
+    - Add an installer. SetucoCMS can be installed now from on a browser.
+
+- Other
+    - Transpose dojo to jQuery in the library use part of Javascript (except for a part). 

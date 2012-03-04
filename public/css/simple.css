@@ -76,6 +76,7 @@ div#header_innerL{
     background: url(../images/front/simple/bg_headerL.jpg) no-repeat left top;
     padding-left: 20px;
     margin-bottom: 20px;
+    min-height: 100px;
     zoom: 100%;
 }
 div#header_innerL:after {
@@ -90,14 +91,12 @@ div#header_innerL:after {
 div#header_innerL div#header_innerR {
     background: url(../images/front/simple/bg_headerR.jpg) no-repeat right top;
     padding-right: 20px;
+    min-height: 100px;
 }
 div#header_innerL div#header_innerR div#header_inner {
     background: url(../images/front/simple/bg_header.jpg) repeat-x;
+    min-height: 100px;
 }
-
-/*---------------------------------------------------------------*/
-/*-- discription style（サイトロゴ、説明） ----------------------*/
-/*---------------------------------------------------------------*/
 div#header_inner h1 {
     float: left;
     width:490px;
@@ -105,7 +104,7 @@ div#header_inner h1 {
     margin-top: 15px;
     margin-bottom:6px;
 }
-div#header_inner p#discript {
+div#header_inner p#description {
     clear:both;
     margin-top: 15px;
 }
@@ -503,6 +502,33 @@ p#copyright {
     color: #fff;
     background-color: #3399cc;
     padding: 0.8em 1em;
+}
+
+/*---------------------------------------------------------------*/
+/*-- installPage style --------------------------------------------*/
+/*---------------------------------------------------------------*/
+body#installPage div#content div#mainContent {
+    width: 600px;
+    max-width: 100%;
+    float: none;
+    margin:0 auto;
+}
+body#installPage div#content div#mainContent div.entry {
+    min-height: 150px;
+    padding: 30px;
+}
+body#installPage h1 {
+    margin-bottom: 20px;
+}
+body#installPage h2,
+body#installPage p,
+body#installPage dd {
+    margin-bottom: 10px;
+}
+body#installPage span.required {
+    color: #dd0000;
+    padding-right: 5px;
+    font-weight: bold;
 }
 
 /*---------------------------------------------------------------*/

@@ -3,7 +3,22 @@
 /**
  * ログイン処理をするコントローラ
  *
- * LICENSE: ライセンスに関する情報
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
  * @package    Admin
@@ -25,6 +40,13 @@
  */
 class Admin_LoginController extends Setuco_Controller_Action_Abstract
 {
+    /**
+     * 認証サービス
+     *
+     * @var Admin_Model_Auth
+     */
+    private $_authService;
+
 
     /**
      * 初期化処理
@@ -36,6 +58,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     {
         parent::init();
         $this->_setLayoutName('layout-login');
+        $this->_authService = new Admin_Model_Auth();
     }
 
     /**
@@ -67,17 +90,13 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
             return $this->_forward('index');
         }
 
-        $authModel = new Admin_Model_Auth();
+        $this->_authService->login($form->getValue('login_id'), $form->getValue('password'));
 
-        $authModel->login($form->getValue('login_id'), $form->getValue('password'));
-        
-        if (!$authModel->isLoginSuccess()) {
+        if (!$this->_authService->isLoggedIn()) {
             $this->_setParam('form', $form);
             $form->addError('アカウントIDまたはパスワードが間違っています。');
             return $this->_forward('index');
         }
-
-        $authModel->setAccountInfos();
 
         $this->_helper->redirector('index', 'index');
     }
@@ -91,7 +110,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
      */
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        $this->_authService->logout();
         $this->_helper->flashMessenger('ログアウトしました。');
         $this->_helper->redirector('index');
     }
