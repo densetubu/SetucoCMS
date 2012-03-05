@@ -244,8 +244,8 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $noRecordExists->setMessage( '「%value%」は既に登録されています。' );
         $validators[] = array($noRecordExists, true);
 
-		$stringAlpha = new Zend_Validate_Alnum();
-		$stringAlpha->setMessage('アカウントIDは半角英数で入力してください');
+        $stringAlpha = new Zend_Validate_Alnum();
+        $stringAlpha->setMessage('アカウントIDは半角英数で入力してください');
         $validators[] = array($stringAlpha, true);
 
         return $validators;
@@ -312,6 +312,13 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         );
         $confirmCheck->setMessage('パスワードとパスワード確認が一致しません。');
         $validators[] = $confirmCheck;
+
+        $allowSymbol = '!"#$%&\'()=~|\-^@\[;:\],.\/`{+*}<>?';
+        $pattern = "/^[a-zA-Z0-9{$allowSymbol}]+$/";
+        $stringRegex = new Zend_Validate_Regex(array('pattern'=>$pattern));
+        $stringRegex->setMessage('パスワードに使用できる文字は半角英数字[0-9][a-z][A-Z]と
+                                  一部の半角記号[! " # - $ % & \' ( ) = ~ | ^ @ [ ; : ] , . / ` { + * } < > ?]のみです。');
+        $validators[] = $stringRegex;
 
         return $validators;
 
