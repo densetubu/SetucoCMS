@@ -103,9 +103,10 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('nicknameForm', $form);
             return $this->_forward('index');
         }
-        $this->_accountService->updateNickname($this->_getAccountInfos('login_id'), $form->getValue('user_nickname'));
+        $accountInfo = $this->_getAccountInfos();
+        $accountInfo['nickname'] = $form->getValue('user_nickname');
+        $this->_accountService->updateMyAccount($accountInfo);
         $this->_helper->flashMessenger('ニックネームを変更しました。');
-//         $authModel->setAccountInfos();
 
         $this->_helper->redirector('index');
     }
