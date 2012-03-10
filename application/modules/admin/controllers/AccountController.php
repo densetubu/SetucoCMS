@@ -163,30 +163,23 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+            array(
+                'table' => 'account',
+                'field' => 'nickname'
+            )
+        );
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
         if ($isEditing) {
             $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
-            $user_id = $account['id'];
-            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+            $noRecordExists->setExclude(
                 array(
-                    'table' => 'account',
-                    'field' => 'nickname',
-                    'exclude' => array(
-                        'field' => 'id',
-                        'value' => $user_id
-                    )
+                    'field' => 'id',
+                    'value' => $account['id']
                 )
             );
-            $noRecordExists->setMessage('「%value%」は既に登録されています。');
-            $validators[] = array($noRecordExists, true);
-        } else {
-            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
-                array(
-                    'table' => 'account',
-                    'field' => 'nickname'
-                )
-            );
-            $noRecordExists->setMessage('「%value%」は既に登録されています。');
-            $validators[] = array($noRecordExists, true);
         }
 
         return $validators;
