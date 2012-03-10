@@ -5,17 +5,17 @@
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -98,7 +98,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
      */
     public function updateNicknameAction()
     {
-        $form = $this->_createNicknameForm();
+        $form = $this->_createNicknameForm(true);
         if (!$form->isValid($_POST)) {
             $this->_setParam('nicknameForm', $form);
             return $this->_forward('index');
@@ -113,10 +113,11 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     /**
      * ニックネームのフォームを作成します。
      *
+     * @param  bool  $isEditing 編集用のバリデータなら true。デフォルトはfalse。
      * @return Setuco_Form ニックネームフォーム
      * @author ErinaMikami
      */
-    private function _createNicknameForm()
+    private function _createNicknameForm($isEditing = false)
     {
         $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
         $form = new Setuco_Form();
@@ -128,7 +129,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
             'required'   => true,
             'value'      => $account['nickname'],
             'filters'    => array('StringTrim'),
-            'validators' => $this->_makeNicknameValidators()
+            'validators' => $this->_makeNicknameValidators($isEditing)
         ));
         $form->addElement('submit', 'submit', array(
             'id'    => 'sub_nickname',
@@ -162,7 +163,22 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
-        if ($isEditing != true) {
+        if ($isEditing) {
+            $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
+            $user_id = $account['id'];
+            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+                array(
+                    'table' => 'account',
+                    'field' => 'nickname',
+                    'exclude' => array(
+                        'field' => 'id',
+                        'value' => $user_id
+                    )
+                )
+            );
+            $noRecordExists->setMessage('「%value%」は既に登録されています。');
+            $validators[] = array($noRecordExists, true);
+        } else {
             $noRecordExists = new Zend_Validate_Db_NoRecordExists(
                 array(
                     'table' => 'account',
@@ -170,7 +186,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
                 )
             );
             $noRecordExists->setMessage('「%value%」は既に登録されています。');
-            $validators[] = array($noRecordExists, true); //TODO 同IDなら同ニックネームでも通すようにする
+            $validators[] = array($noRecordExists, true);
         }
 
         return $validators;
