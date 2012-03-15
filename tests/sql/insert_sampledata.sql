@@ -26,7 +26,8 @@ DELETE FROM page;
 INSERT INTO page
 (id, title, contents, outline, status, category_id, account_id, create_date, update_date) VALUES 
 (1, 'サンプルページ１', '<p>サンプルコンテンツ１（公開）</p>', 'アウトライン１', 1, 1, 1, now(), now()),
-(2, 'サンプルページ２', '<p>サンプルコンテンツ１（下書き）</p>', 'アウトライン２', 0, 1, 1, now(), now())
+(2, 'サンプルページ２', '<p>サンプルコンテンツ１（下書き）</p>', 'アウトライン２', 0, 1, 1, now(), now()),
+(3, 'サンプルページ１ 続き', '<p>サンプルコンテンツ１（公開）</p>', 'アウトライン１', 1, 1, 1, now(), now())
 ;
 
 
