@@ -1,9 +1,36 @@
 <?php
 /**
- * サブアカウントの一覧表示画面
+ * アカウント情報更新画面
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Account
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      array            $account   アカウント情報データ
+ * @param      array[option]    $flashMessages アクションの実行結果
+ * @param      Setuco_Form      $errorForm エラーメッセージを表示するフォームクラス
+ * @author     suzuki-mar
  */
 ?>
 
@@ -13,7 +40,7 @@
         <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
         <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
     </p>
-    <p>サブアカウントの一覧</p>
+    <p>マイアカウントの編集</p>
 </div>
 <!-- topicpath END -->
 
@@ -23,7 +50,7 @@
         <div class="hAreaR">
             <div class="hArea">
                 <h3>
-                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountIndex.jpg') ?>" width="193" height="18" alt="サブアカウントの一覧" />
+                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_myaccount.jpg') ?>" width="149" height="18" alt="マイアカウントの編集" />
                 </h3>
             </div>
         </div>
@@ -32,43 +59,23 @@
     <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
     <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
 
-    <table summary="サブアカウントの一覧の表です。" cellpadding="0" cellspacing="0">
-        <colgroup>
-            <col width="50%" />
-            <col width="50%" />
-        </colgroup>
-        <thead>
-            <tr>
-                <th scope="col" id="tableFirst">
-                    ログインID
-                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
-                    </a>
-                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
-                    </a>
-                </th>
-                <th scope="col">
-                    ニックネーム
-                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
-                    </a>
-                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
-                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
-                    </a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($this->accounts as $index => $account): ?>
-            
-            <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
-                <?php echo $this->partial('account-row.phtml', array('account'=> $account)); ?>
-            </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
-    <?php echo $this->paginator //ページャーの表示 ?>
+    <form action="<?php echo $this->baseUrl('/admin/account/update') ?>" method="post" class="accountEdit">
+        
+        <input type="hidden" id="edit_type" name="edit_type" value="pass" />
+        
+        <dl class="editArea">
+            <dt><label for="pass_old">現在のパスワード</label></dt>
+                <dd><input type="password" id="pass_old" name="pass_old" value="" /></dd>
+            <dt><label for="user_pass">新しいパスワード</label></dt>
+                <dd><input type="password" id="user_pass" name="user_pass" value="" /></dd>
+            <dt><label for="pass_check">パスワード確認</label></dt>
+                <dd><input type="password" id="pass_check" name="pass_check" value="" /></dd>
+        </dl>
+        
+        <p class="defaultOver"><input type="submit" id="sub" name="sub" value="パスワードを変更" /></p>
+    
+    </form>
+
 </div>
 <!-- section END -->
 

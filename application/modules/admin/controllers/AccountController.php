@@ -67,30 +67,12 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * サブアカウント一覧表示のアクションです
-     *
-     * @return void
-     * @author suzuki-mar kkyouhei
-     */
-    public function indexAction()
-    {
-        $selectColumns = array('id', 'login_id', 'nickname');
-        $this->view->accounts = $this->_accountService->findSortAllAcounts($selectColumns,
-                                                                           $this->_getParam('field', 'login_id'),
-                                                                           $this->_getParam('order', 'asc'),
-                                                                           $this->_getPageNumber(),
-                                                                           $this->_getPageLimit()
-                                                                          );
-        $this->setPagerForView($this->_accountService->countAllAccounts());
-    }
-
-    /**
      * アカウント情報を表示するアクションです
      *
      * @return void
      * @author suzuki-mar
      */
-    public function formAction()
+    public function indexAction()
     {
         // フラッシュメッセージ設定
         $this->_showFlashMessages();
@@ -101,6 +83,23 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         }
     }
 
+    /**
+     * サブアカウント一覧表示のアクションです
+     *
+     * @return void
+     * @author suzuki-mar kkyouhei
+     */
+    public function subindexAction()
+    {
+        $selectColumns = array('id', 'login_id', 'nickname');
+        $this->view->accounts = $this->_accountService->findSortAllAcounts($selectColumns,
+                                                                           $this->_getParam('field', 'login_id'),
+                                                                           $this->_getParam('order', 'asc'),
+                                                                           $this->_getPageNumber(),
+                                                                           $this->_getPageLimit()
+                                                                          );
+        $this->setPagerForView($this->_accountService->countAllAccounts());
+    }
 
     /**
      * パスワード情報を変更するアクションです
