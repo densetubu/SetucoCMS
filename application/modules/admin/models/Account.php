@@ -136,6 +136,21 @@ class Admin_Model_Account
         return $this->_accountDao->countAll();
     }
 
+    /* 
+    * ニックネーム情報を変更する
+    *
+    * @param string $loginId ニックネームを変更するログインID
+    * @param string $nickname 変更するニックネーム
+    * @return int 変更した件数
+    * @author ErinaMikami
+    */
+    public function updateNickname($loginId, $nickname)
+    {
+      $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
+      $updateParams['nickname'] = $nickname;
+      return $this->_accountDao->update($updateParams, $where);
+    }
+
     /**
      * パスワード情報を変更する
      *
