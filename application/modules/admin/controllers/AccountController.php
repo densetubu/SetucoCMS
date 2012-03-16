@@ -179,14 +179,15 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     */
     public function updateNicknameAction()
     {
-        $form = $this->_createNicknameForm();
+        $form = $this->_createNicknameForm(true);
         if (!$form->isValid($_POST)) {
             $this->_setParam('nicknameForm', $form);
             return $this->_forward('index');
         }
-        $this->_accountService->updateNickname($this->_getAccountInfos('login_id'), $form->getValue('user_nickname'));
+        $accountInfo = $this->_getAccountInfos();
+        $accountInfo['nickname'] = $form->getValue('user_nickname');
+        $this->_accountService->updateMyAccount($accountInfo);
         $this->_helper->flashMessenger('ニックネームを変更しました。');
-//         $authModel->setAccountInfos();
 
         $this->_helper->redirector('index');
     }
@@ -194,10 +195,11 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
     /**
      * ニックネームのフォームを作成します。
      *
+     * @param  bool  $isEditing 編集用のバリデータなら true。デフォルトはfalse。
      * @return Setuco_Form ニックネームフォーム
      * @author ErinaMikami
      */
-    private function _createNicknameForm()
+    private function _createNicknameForm($isEditing = false)
     {
         $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
         $form = new Setuco_Form();
@@ -209,7 +211,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
             'required'   => true,
             'value'      => $account['nickname'],
             'filters'    => array('StringTrim'),
-            'validators' => $this->_makeNicknameValidators()
+            'validators' => $this->_makeNicknameValidators($isEditing)
         ));
         $form->addElement('submit', 'submit', array(
             'id'    => 'sub_nickname',
@@ -243,15 +245,23 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
-        if ($isEditing != true) {
-            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists(
+            array(
+                'table' => 'account',
+                'field' => 'nickname'
+            )
+        );
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
+        if ($isEditing) {
+            $account = $this->_accountService->findAccountByLoginId($this->_getAccountInfos('login_id'));
+            $noRecordExists->setExclude(
                 array(
-                    'table' => 'account',
-                    'field' => 'nickname'
+                    'field' => 'id',
+                    'value' => $account['id']
                 )
             );
-            $noRecordExists->setMessage('「%value%」は既に登録されています。');
-            $validators[] = array($noRecordExists, true); //TODO 同IDなら同ニックネームでも通すようにする
         }
 
         return $validators;

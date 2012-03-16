@@ -58,13 +58,6 @@ class Admin_Model_Auth
     private $_authAdapter;
 
     /**
-     * アカウント情報のうち、セッションに保存する項目
-     *
-     * @var array
-     */
-    private static $_RETURN_COLUMNS = array('id', 'login_id', 'nickname');
-
-    /**
      * 変数の初期設定をする
      *
      * @author suzuki-mar
@@ -72,6 +65,16 @@ class Admin_Model_Auth
     public function  __construct()
     {
         $this->_authInstance = Zend_Auth::getInstance();
+    }
+    
+    /**
+     * アカウント情報のうち、セッションに保存する項目
+     *
+     * @return array
+     */
+    public static function RETURN_COLUMNS()
+    {
+        return array ('id', 'login_id', 'nickname');
     }
 
     /**
@@ -99,7 +102,7 @@ class Admin_Model_Auth
             return false;
         }
 
-        $loginAccountData = $this->_authAdapter->getResultRowObject(self::$_RETURN_COLUMNS);
+        $loginAccountData = $this->_authAdapter->getResultRowObject(self::RETURN_COLUMNS());
         $this->saveLoginAccount($loginAccountData);
 
         return true;

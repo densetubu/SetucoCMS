@@ -48,6 +48,13 @@ class Admin_Model_Account
     private $_accountDao;
 
     /**
+     * 認証サービス
+     * 
+     * @var Admin_Model_Auth
+     */
+    private $_authSearvice;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -55,6 +62,7 @@ class Admin_Model_Account
     public function __construct()
     {
         $this->_accountDao = new Common_Model_DbTable_Account();
+        $this->_authSearvice = new Admin_Model_Auth();
     }
     
     /**
@@ -146,9 +154,37 @@ class Admin_Model_Account
     */
     public function updateNickname($loginId, $nickname)
     {
-      $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
-      $updateParams['nickname'] = $nickname;
-      return $this->_accountDao->update($updateParams, $where);
+        $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
+        $updateParams['nickname'] = $nickname;
+        return $this->_accountDao->update($updateParams, $where);
+    }
+    
+    /**
+     * ログイン中の自分のアカウント情報を変更し、セッション情報を更新します。
+     * 
+     * @param  $accountInfo　更新するアカウント情報（セッションに保存するカラムは必ず含めること）
+     * @return bool 変更できたら true
+     * @author ErinaMikami
+     */
+    public function updateMyAccount($accountInfo)
+    {
+        // セッションに保存するカラムが全てあるかチェック
+        foreach (Admin_Model_Auth::RETURN_COLUMNS() as $col) {
+            if (!isset($accountInfo[$col])) {
+                return false;
+            }
+        }
+        
+        $id = $accountInfo['id'];
+        $updateData = $accountInfo;
+        unset($updateData['id']);        
+        $this->_accountDao->updateByPrimary($updateData, $id);
+        
+        $loginAccountData = array();
+        foreach (Admin_Model_Auth::RETURN_COLUMNS() as $col) {
+            $loginAccountData[$col] = $accountInfo[$col];
+        }
+        $this->_authSearvice->saveLoginAccount($loginAccountData);
     }
 
     /**
