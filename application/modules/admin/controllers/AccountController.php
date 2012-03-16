@@ -366,7 +366,7 @@ class Admin_AccountController extends Setuco_Controller_Action_AdminAbstract
         $validators[] = array($noRecordExists, true);
 
         $stringAlpha = new Zend_Validate_Alnum();
-        $stringAlpha->setMessage('アカウントIDは半角英数で入力してください');
+        $stringAlpha->setMessage('ログインIDは半角英数で入力してください。');
         $validators[] = array($stringAlpha, true);
 
         return $validators;
