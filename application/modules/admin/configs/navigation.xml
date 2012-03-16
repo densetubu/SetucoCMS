@@ -191,6 +191,14 @@
                     <controller>account</controller>
                     <action>subindex</action>
                 </sub_account_index>
+                <account_form>
+                    <id>account_form</id>
+                    <title>サブアカウントの追加</title>
+                    <label>サブアカウントの追加</label>
+                    <module>admin</module>
+                    <controller>account</controller>
+                    <action>form</action>
+                </account_form>
             </pages>
         </account>
     </nav>

@@ -4,17 +4,17 @@
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -56,6 +56,17 @@ class Admin_Model_Account
     {
         $this->_accountDao = new Common_Model_DbTable_Account();
     }
+    
+    /**
+    * アカウントを新規追加する
+    *
+    * @author kkyouhei 
+    */
+    public function registAccount($registData)
+    {
+        $registData['password'] = hash('sha1', $registData['password']);
+        return $this->_accountDao->insert($registData);
+    }
 
     /**
      * アカウント情報をロードします。
@@ -69,9 +80,9 @@ class Admin_Model_Account
     }
 
     /**
-     * アカウントIDとニックネームのセットを取得する。
+     * ログインIDとニックネームのセットを取得する。
      *
-     * @return array キー:アカウントID、値:ニックネームの配列
+     * @return array キー:ログインID、値:ニックネームの配列
      * @author charlesvineyard
      */
     public function findAllAccountIdAndNicknameSet()
@@ -95,7 +106,7 @@ class Admin_Model_Account
     {
         $accountInfos = $this->findAccountByLoginId($loginId);
         $hashPassword = hash('sha1', $password);
-        
+
         return ($hashPassword === $accountInfos['password']);
     }
 
@@ -138,7 +149,7 @@ class Admin_Model_Account
       $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
       $updateParams['password'] = sha1($password);
       return $this->_accountDao->update($updateParams, $where);
-      
+
     }
 }
 
