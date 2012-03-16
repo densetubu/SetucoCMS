@@ -183,6 +183,14 @@
                     <controller>account</controller>
                     <action>index</action>
                 </account_index>
+                <sub_account_index>
+                    <id>sub_account_index</id>
+                    <title>サブアカウントの一覧</title>
+                    <label>サブアカウントの一覧</label>
+                    <module>admin</module>
+                    <controller>account</controller>
+                    <action>subindex</action>
+                </sub_account_index>
             </pages>
         </account>
     </nav>

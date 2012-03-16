@@ -1,0 +1,74 @@
+<?php
+/**
+ * サブアカウントの一覧表示画面
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>サブアカウントの一覧</p>
+</div>
+<!-- topicpath END -->
+
+<!-- section START -->
+<div class="section">
+    <div class="hAreaL">
+        <div class="hAreaR">
+            <div class="hArea">
+                <h3>
+                    <img src="<?php echo $this->baseUrl('/images/admin/account/h_subaccountIndex.jpg') ?>" width="155" height="18" alt="サブアカウントの一覧" />
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+    <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+
+    <table summary="サブアカウントの一覧の表です。" cellpadding="0" cellspacing="0">
+        <colgroup>
+            <col width="50%" />
+            <col width="50%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th scope="col" id="tableFirst">
+                    ログインID
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                    </a>
+                </th>
+                <th scope="col">
+                    ニックネーム
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/desc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_descending.gif') ?>" width="15" height="15" alt="降順に並び替え" />
+                    </a>
+                    <a href="<?php echo $this->baseUrl('/admin/account/subindex/page/1/field/login_id/order/asc') ?>">
+                        <img src="<?php echo $this->baseUrl('/images/admin/share/btn_sort_ascending.gif') ?>" width="15" height="15" alt="昇順に並び替え" />
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($this->accounts as $index => $account): ?>
+            
+            <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
+                <?php echo $this->partial('account-row.phtml', array('account'=> $account)); ?>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+    <?php echo $this->paginator //ページャーの表示 ?>
+</div>
+<!-- section END -->
+
