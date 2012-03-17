@@ -3,6 +3,26 @@ CHANGELOG
 ============
 
 --------------------------------------------
+Version 1.0.0 (2011/03/04)
+--------------------------------------------
+- initial release
+
+--------------------------------------------
+Version 1.1.0 (2011/12/30)
+--------------------------------------------
+- Page management function
+    - Correspond to search by two or more keywords by the search service by the side of management and an inspection.
+    - Correct so that a sort function may become effective also on the screen after search.
+
+- Inspection side (theme: simple)
+    - Attach a list mark and space to a list tag, and adjust appearance to it.
+    - A continuous long alphanumeric character corrects the problem overflowing on the screen.
+
+- Other
+    - Correct so that session data can be updated by arbitrary data.
+    - Correct license information.
+
+--------------------------------------------
 Version 1.2.0 (2012/02/26)
 --------------------------------------------
 - Initial setup
@@ -10,3 +30,11 @@ Version 1.2.0 (2012/02/26)
 
 - Other
     - Transpose dojo to jQuery in the library use part of Javascript (except for a part). 
+
+--------------------------------------------
+Version 1.3.0 (2012/03/17)
+--------------------------------------------
+- Account management function
+    - Change of nickname, Change of nickname (name displayed as a producer) can be performed.
+    - Creation of subaccount, New account can be created.
+    - Inspection of subaccount, The list of the created subaccount can be displayed. 
