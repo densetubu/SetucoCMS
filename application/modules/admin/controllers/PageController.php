@@ -225,7 +225,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $keyword = $searchForm->getValue('query');
         $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
         $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
-        $searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
+        //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
 
         //検索パラメーターの引数オブジェクトを生成する
         $keyword = $searchForm->getValue('query');
@@ -238,8 +238,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $targets,
             $refinements,
             $sortColumn,
-            $sortOrder,
-            $searchType
+            $sortOrder/*,
+            $searchType*/
         );
 
         $pages = $this->_pageService->searchPages($pageParamIns);
