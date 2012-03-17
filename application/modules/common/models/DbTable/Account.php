@@ -86,6 +86,19 @@ class Common_Model_DbTable_Account extends Setuco_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
-    
+   /**
+    * @param string array どのカラムを取得するか
+    * @param string $column どのカラムをソートするか
+    * @param string array $order 並び順
+    * @param int $pageNumer 取得するページ番号
+    * @param int $limit 1ページあたり何件のデータを取得するのか
+    * @return array アカウント情報の配列
+    *
+    * @author kkyouhei
+    */
+    public function loadAccounts4Pager($selectColumns, $sortColumn, $order, $pageNumber, $limit){
+        $select = $this->select()->from($this->_name, $selectColumns)->limitPage($pageNumber, $limit)->order("{$sortColumn} {$order}");
+        return $this->fetchAll($select)->toArray();
+    }
 
 }

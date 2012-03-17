@@ -1,6 +1,6 @@
 <?php
 /**
- * フォームのエラーメッセージを表示します。
+ * アカウント情報の一覧表示
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
@@ -27,23 +27,13 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      Setuco_Form errorForm エラーとなったフォーム
- * @author     suzuki-mar
+ * @param      array       $account         アカウント情報の配列
+ * @author     kkyouhei 
  */
 ?>
-<?php if ($this->errorForm->isErrors()): ?>
-<div class="errorMessageArea">
-<?php foreach ($this->errorForm->getMessages() as $messages): ?>
-    <?php if (!is_array($messages)):?>
-    <p class="clear"><?php echo $this->escape($messages) ?></p>
-    <?php else: ?>
-        <?php foreach ($messages as $message):?>
-    <p class="clear"><?php echo $this->escape($message) ?></p>
-        <?php endforeach ?>
-    <?php endif ?>
-<?php endforeach ?>
-    <p>
-        <a href="javascript:void(0)" onclick="hideErrorMessageArea()">OK</a>
-    </p>
-</div>
-<?php endif ?>
+<td>
+    <span><?php echo $this->escape($this->account['login_id']); ?></span>
+</td>
+<td>
+    <span><?php echo $this->escape($this->account['nickname']); ?></span>
+</td>

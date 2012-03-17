@@ -4,17 +4,17 @@
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -48,6 +48,13 @@ class Admin_Model_Account
     private $_accountDao;
 
     /**
+     * 認証サービス
+     * 
+     * @var Admin_Model_Auth
+     */
+    private $_authSearvice;
+    
+    /**
      * コンストラクター
      *
      * @author charlesvineyard
@@ -55,6 +62,18 @@ class Admin_Model_Account
     public function __construct()
     {
         $this->_accountDao = new Common_Model_DbTable_Account();
+        $this->_authSearvice = new Admin_Model_Auth();
+    }
+    
+    /**
+    * アカウントを新規追加する
+    *
+    * @author kkyouhei 
+    */
+    public function registAccount($registData)
+    {
+        $registData['password'] = hash('sha1', $registData['password']);
+        return $this->_accountDao->insert($registData);
     }
 
     /**
@@ -69,9 +88,9 @@ class Admin_Model_Account
     }
 
     /**
-     * アカウントIDとニックネームのセットを取得する。
+     * ログインIDとニックネームのセットを取得する。
      *
-     * @return array キー:アカウントID、値:ニックネームの配列
+     * @return array キー:ログインID、値:ニックネームの配列
      * @author charlesvineyard
      */
     public function findAllAccountIdAndNicknameSet()
@@ -95,8 +114,77 @@ class Admin_Model_Account
     {
         $accountInfos = $this->findAccountByLoginId($loginId);
         $hashPassword = hash('sha1', $password);
-        
+
         return ($hashPassword === $accountInfos['password']);
+    }
+
+    /**
+    * アカウントレコードを必要があればソートして結果を返す
+    *
+    * @param string array どのカラムを取得するか
+    * @param string array $order 並び順 
+    * @param string $pageNumber 取得するページ番号 
+    * @param string $order 1ページあたり何件のデータを取得するのか 
+    * @return array アカウント情報の一覧
+    * @author kkyouhei
+    */
+    public function findSortAllAcounts($selectColumns, $sortColumn, $order, $pageNumber, $limit)
+    {
+        return $this->_accountDao->loadAccounts4Pager($selectColumns, $sortColumn, $order, $pageNumber, $limit);
+    }
+
+    /**
+    * アカウント数を取得するメソッド
+    *
+    * @return int 全てのアカウント個数
+    * @author kkyouhei
+    */
+    public function countAllAccounts()
+    {
+        return $this->_accountDao->countAll();
+    }
+
+    /* 
+    * ニックネーム情報を変更する
+    *
+    * @param string $loginId ニックネームを変更するログインID
+    * @param string $nickname 変更するニックネーム
+    * @return int 変更した件数
+    * @author ErinaMikami
+    */
+    public function updateNickname($loginId, $nickname)
+    {
+        $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
+        $updateParams['nickname'] = $nickname;
+        return $this->_accountDao->update($updateParams, $where);
+    }
+    
+    /**
+     * ログイン中の自分のアカウント情報を変更し、セッション情報を更新します。
+     * 
+     * @param  $accountInfo　更新するアカウント情報（セッションに保存するカラムは必ず含めること）
+     * @return bool 変更できたら true
+     * @author ErinaMikami
+     */
+    public function updateMyAccount($accountInfo)
+    {
+        // セッションに保存するカラムが全てあるかチェック
+        foreach (Admin_Model_Auth::RETURN_COLUMNS() as $col) {
+            if (!isset($accountInfo[$col])) {
+                return false;
+            }
+        }
+        
+        $id = $accountInfo['id'];
+        $updateData = $accountInfo;
+        unset($updateData['id']);        
+        $this->_accountDao->updateByPrimary($updateData, $id);
+        
+        $loginAccountData = array();
+        foreach (Admin_Model_Auth::RETURN_COLUMNS() as $col) {
+            $loginAccountData[$col] = $accountInfo[$col];
+        }
+        $this->_authSearvice->saveLoginAccount($loginAccountData);
     }
 
     /**
@@ -112,7 +200,7 @@ class Admin_Model_Account
       $where = $this->_accountDao->getAdapter()->quoteInto('login_id = ?', $loginId);
       $updateParams['password'] = sha1($password);
       return $this->_accountDao->update($updateParams, $where);
-      
+
     }
 }
 

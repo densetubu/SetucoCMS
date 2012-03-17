@@ -5,17 +5,17 @@
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -94,7 +94,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
 
         if (!$this->_authService->isLoggedIn()) {
             $this->_setParam('form', $form);
-            $form->addError('アカウントIDまたはパスワードが間違っています。');
+            $form->addError('ログインIDまたはパスワードが間違っています。');
             return $this->_forward('index');
         }
 
@@ -129,7 +129,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
                 ->setAction($this->_helper->url('auth'))
                 ->addDecorator('FormElements')
                 ->addDecorator('Form');
-        $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'アカウントID'));
+        $accountId = new Zend_Form_Element_Text('login_id', array('label' => 'ログインID'));
         $accountId->setRequired(true)
                 ->setValidators($this->_makeLoginIdValidators())
                 ->setFilters(array('StringTrim'))
@@ -161,7 +161,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
     }
 
     /**
-     * アカウントID用のバリデーターを作成する。
+     * ログインID用のバリデーターを作成する。
      *
      * @return array Zend_Validate インターフェースの配列
      * @author charlesvineyard
@@ -171,7 +171,7 @@ class Admin_LoginController extends Setuco_Controller_Action_Abstract
         $validators[] = array();
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('アカウントIDを入力してください。');
+        $notEmpty->setMessage('ログインIDを入力してください。');
         $validators[] = $notEmpty;
 
         return $validators;
