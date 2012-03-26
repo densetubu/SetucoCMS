@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://setucocms.localdomain/" />
+<title>tag_edit</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">tag_edit</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/admin/tag</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=sub_create</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=p.clear</td>
+	<td>「新規タグ」を作成しました。</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;編集&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tag0</td>
+	<td>新規タグを編集した</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=sub0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=td &gt; span</td>
+	<td>新規タグを編集した</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;削除&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForConfirmation</td>
+	<td>「新規タグを編集した」を本当に削除してよろしいですか？</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

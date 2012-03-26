@@ -8,8 +8,8 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
-<tr><td><a href="Setuco_Install">Install</a></td></tr>
-<tr><td><a href="Setuco_Login">Login</a></td></tr>
+<tr><td><a href="install">install</a></td></tr>
+<tr><td><a href="login">login</a></td></tr>
 <tr><td><a href="ambitious">ambitious</a></td></tr>
 <tr><td><a href="ambitious_empty">ambitious_empty</a></td></tr>
 <tr><td><a href="destination">destination</a></td></tr>
@@ -20,6 +20,12 @@
 <tr><td><a href="category_empty">category_empty</a></td></tr>
 <tr><td><a href="category_not_same">category_not_same</a></td></tr>
 <tr><td><a href="category_over_string">category_over_string</a></td></tr>
+<tr><td><a href="tag_add">tag_add</a></td></tr>
+<tr><td><a href="tag_delete">tag_delete</a></td></tr>
+<tr><td><a href="tag_edit">tag_edit</a></td></tr>
+<tr><td><a href="tag_same">tag_same</a></td></tr>
+<tr><td><a href="tag_empty">tag_empty</a></td></tr>
+<tr><td><a href="tag_over_string">tag_over_string</a></td></tr>
 <tr><td><a href="login_failure">login_failure</a></td></tr>
 <tr><td><a href="login_not_input_loginid">login_not_input_loginid</a></td></tr>
 <tr><td><a href="login_not_input_password">login_not_input_password</a></td></tr>

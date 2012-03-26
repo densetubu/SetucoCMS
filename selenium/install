@@ -24,8 +24,8 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=account_pass</td>
-	<td></td>
+	<td>id=account_id</td>
+	<td>admin</td>
 </tr>
 <tr>
 	<td>type</td>
