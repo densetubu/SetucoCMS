@@ -32,11 +32,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>assertLocation</td>
-	<td>http://setucocms.localdomain/admin</td>
-	<td></td>
-</tr>
-<tr>
 	<td>assertText</td>
 	<td>css=p.clear</td>
 	<td>ログインIDまたはパスワードが間違っています。</td>
