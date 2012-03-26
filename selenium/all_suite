@@ -14,6 +14,12 @@
 <tr><td><a href="ambitious_empty">ambitious_empty</a></td></tr>
 <tr><td><a href="destination">destination</a></td></tr>
 <tr><td><a href="destination_empty">destination_empty</a></td></tr>
+<tr><td><a href="category">category_add</a></td></tr>
+<tr><td><a href="category_delete">category_delete</a></td></tr>
+<tr><td><a href="category_edit">category_edit</a></td></tr>
+<tr><td><a href="category_empty">category_empty</a></td></tr>
+<tr><td><a href="category_not_same">category_not_same</a></td></tr>
+<tr><td><a href="category_over_string">category_over_string</a></td></tr>
 <tr><td><a href="login_failure">login_failure</a></td></tr>
 <tr><td><a href="login_not_input_loginid">login_not_input_loginid</a></td></tr>
 <tr><td><a href="login_not_input_password">login_not_input_password</a></td></tr>
