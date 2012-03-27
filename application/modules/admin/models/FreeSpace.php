@@ -1,6 +1,6 @@
 <?php
 /**
- * 閲覧側のフリースペース管理用のサービス
+ * 管理側のフリースペース管理用のサービス
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
- * @package    Default
+ * @package    Admin
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -33,11 +33,11 @@
 /**
  * フリースペース管理クラス
  *
- * @package    Default
+ * @package    Admin
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Default_Model_FreeSpace extends Common_Model_FreeSpaceAbstract
+class Admin_Model_FreeSpace extends Common_Model_FreeSpaceAbstract
 {
 
 

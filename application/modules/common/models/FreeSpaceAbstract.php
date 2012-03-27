@@ -40,34 +40,34 @@
 abstract class Common_Model_FreeSpaceAbstract
 {
     /**
-     * タグDAO
+     * フリースペースDAO
      *
      * @var Common_Model_DbTable_FreeSpace
      */
     protected $_freeSpaceDao;
 
     /**
-     * 指定したIDのタグ情報を取得する
+     * 初期設定をする
      *
-     * @param  int $id タグID
-     * @return array タグ情報
-     * @author charlesvineyard
+     * @author suzuki_mar
      */
-    public function findTag($id)
+    public function __construct()
     {
-        return $this->_tagDao->loadByPrimary($id);
+        $this->_freeSpaceDao = new Common_Model_DbTable_FreeSpace();
     }
 
     /**
-     * ページIDで指定されたページにつけられたタグの情報を返す。
+     * フリースペースの内容を取得する
      *
-     * @param int $pageId タグを取得したいページのID
-     * @return array 取得したタグ情報を格納した配列
-     * @author akitsukada
+     * @return string フリースペースの内容
+     * @author suzuki-mar
      */
-    public function findTagsByPageId($pageId)
+    public function findContent()
     {
-        return $this->_tagDao->loadTagByPageId($pageId);
+        $result = $this->_freeSpaceDao->loadNewContent();
+
+        return $result;
+
     }
 
 }
