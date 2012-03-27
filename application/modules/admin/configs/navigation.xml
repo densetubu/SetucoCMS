@@ -201,6 +201,26 @@
                 </account_form>
             </pages>
         </account>
+        <free-space>
+            <id>free-space</id>
+            <title>フリースペースの編集</title>
+            <label>フリースペース</label>
+            <module>admin</module>
+            <controller>free-space</controller>
+            <action>index</action>
+            <order>70</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/admin/gNav/h_menu_account.jpg</src>
+            <pages>
+                <free-space_index>
+                    <id>free-space_index</id>
+                    <title>フリースペースの編集</title>
+                    <label>フリースペースの編集</label>
+                    <module>admin</module>
+                    <controller>free-space</controller>
+                    <action>index</action>
+                </free-space_index>
+            </pages>
+        </free-space>
     </nav>
-
 </config>
