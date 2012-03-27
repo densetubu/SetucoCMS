@@ -1,6 +1,6 @@
 <?php
 /**
- * 管理側のフリースペース管理用のサービス
+ * フリースペースに関する定数
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
@@ -20,37 +20,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
- * @package    Admin
- * @subpackage Model
+ * @package    Setuco
+ * @subpackage Data_Constant
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     suzuki-mar
+ * @author     charlesvineyard
  */
 
 /**
- * フリースペース管理クラス
- *
- * @package    Admin
- * @subpackage Model
- * @author     suzuki-mar
+ * @package    Setuco
+ * @subpackage Data_Constant
+ * @author     suzuki_mar
  */
-class Admin_Model_FreeSpace extends Common_Model_FreeSpaceAbstract
+class Setuco_Data_Constant_FreeSpace
 {
     /**
-     * フリースペースの情報を更新する
+     * コンテンツの最大文字数
      *
-     * @param array 更新するデータ
-     * @return int 何件更新したのか
-     * @throws update文に失敗したら例外を発生させる
-     * @author suzuki-mar
+     * @var string
      */
-    public function updateFreeSpace($updateData)
-    {
-        //データは1件しかないないので、whereはいらない
-        return $this->_freeSpaceDao->update($updateData, null);
-    }
+    const MAX_STRING_LENGTH = 500;
 
 }

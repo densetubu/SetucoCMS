@@ -60,7 +60,7 @@
         <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
         <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
 
-        <form action="<?php echo $this->baseUrl('/admin/site/update') ?>" method="post">
+        <form action="<?php echo $this->baseUrl('/admin/free-space/update') ?>" method="post">
             <dl id="siteForm" class="editArea">
                 <dt>
                     <label for="content">
