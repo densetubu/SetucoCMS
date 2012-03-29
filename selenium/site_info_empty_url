@@ -18,23 +18,13 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=name</td>
-	<td>SetucoTEST</td>
-</tr>
-<tr>
-	<td>type</td>
 	<td>id=url</td>
-	<td></td>
+	<td> </td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=comment</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>id=keyword</td>
-	<td></td>
+	<td>id=name</td>
+	<td>0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
