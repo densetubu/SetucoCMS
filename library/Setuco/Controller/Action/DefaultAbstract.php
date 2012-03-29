@@ -61,8 +61,6 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     protected $_pageLimit = 10;
 
 
-
-
     /**
      * defaultモジュールコントローラの初期処理です。
      *
@@ -84,8 +82,10 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     private function _setFrontViewScriptPath()
     {
+        
+        $designService = new Default_Model_Design();
 
-        $designName = 'defaults';
+        $designName = $designService->findSelectedDesignName();
 
         $basePath = "{$this->_getModulePath()}views/{$designName}";
 

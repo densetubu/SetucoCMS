@@ -59,6 +59,12 @@ CREATE TABLE page (
     FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
+CREATE TABLE design (
+    id INT NOT NULL AUTO_INCREMENT,
+    design_name VARCHAR( 255 ) NOT NULL,
+    PRIMARY KEY ( `id` )
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- page_media table 
 CREATE TABLE page_media (
     page_id INT NOT NULL,
@@ -146,5 +152,10 @@ INSERT INTO goal
     (page_count, target_month)
 VALUES
     (10, cast(date_format(now(), '%Y-%m-1') as date));
+
+INSERT INTO design
+    (id, design_name)
+VALUES
+    (NULL , 'defaults');
 
 commit;
