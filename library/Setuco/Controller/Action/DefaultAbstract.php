@@ -60,6 +60,9 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
      */
     protected $_pageLimit = 10;
 
+
+
+
     /**
      * defaultモジュールコントローラの初期処理です。
      *
@@ -69,7 +72,32 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
     public function init()
     {
         parent::init();
+
+        $this->_setFrontViewScriptPath();
     }
+
+    /**
+     * 選択したデザインのviewファイルを使用できるようにパスを通す
+     *
+     * @author suzuki-mar
+     * @todo デザイン名をDBから取得できるようにする
+     */
+    private function _setFrontViewScriptPath()
+    {
+
+        $designName = 'defaults';
+
+        $basePath = "{$this->_getModulePath()}views/{$designName}";
+
+        $this->view->addScriptPath("{$basePath}/scripts/");
+        $this->view->addScriptPath("{$basePath}/partials/");
+        $this->view->addScriptPath("{$basePath}/layouts/");
+
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
+        $viewRenderer->setView($this->view);
+
+    }
+
 
     /**
      * defaultモジュール共通でviewに変数を渡す処理をします。
@@ -96,6 +124,20 @@ abstract class Setuco_Controller_Action_DefaultAbstract extends Setuco_Controlle
             $this->view->pageTitle = $this->_pageTitle;
         }
     }
+
+    /**
+     * mdouleのベースパスを取得する
+     *
+     * @return string モジュールのベースパス
+     * @author suzuki-mar
+     */
+    protected  function getModuleBasePath()
+    {
+        $params = $this->getInvokeArgs();
+        $options = $params['bootstrap']->getOptions();
+        return $options['resources']['frontController']['moduleDirectory'];
+    }
+
 
     /**
      * カテゴリー一覧を取得する

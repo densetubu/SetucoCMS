@@ -103,39 +103,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $doctypeHelper = new Zend_View_Helper_Doctype();
         $doctypeHelper->doctype('XHTML1_STRICT');
 
-        $this->_addFrontViewScriptPath($view);
-
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer');
         $viewRenderer->setView($view);
 
         return $view;
     }
-
-    /**
-     * 閲覧画面のデザインのスクリプトパスを追加する
-     *
-     * 破壊的メソッド
-     * 渡したviewのインスタンスにスクリプトのパスを追加する
-     *
-     * @param $viewIns ビューのインスタンス
-     * @todo コントローラー(DefaultAbstract)に移したい
-     * @todo デザイン名をDBから取得できるようにする
-     */
-    private function _addFrontViewScriptPath(&$viewIns)
-    {
-
-        $options = $this->getOptions();
-        $moduleDirectory = $options['resources']['frontController']['moduleDirectory'];
-        
-        $designName = 'default';
-
-        $basePath = "{$moduleDirectory}/default/views/{$designName}";
-
-        $viewIns->addScriptPath("{$basePath}/scripts/");
-        $viewIns->addScriptPath("{$basePath}/partials/");
-        $viewIns->addScriptPath("{$basePath}/layouts/");
-    }
-
 
 
 }
