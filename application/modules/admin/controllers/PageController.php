@@ -728,7 +728,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $form->addElement(
-            'DateTextBox',
+            'Text',
             'create_date',
             array(
                 'id' => 'create_date',
