@@ -669,7 +669,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
         $form->addElement(
-            'Editor',
+            'Textarea',
             'page_contents',
             array(
                 'id' => 'page_contents',
