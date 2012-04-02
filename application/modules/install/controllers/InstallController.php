@@ -137,9 +137,12 @@ class Install_InstallController
 
             $sth = $this->dbh->prepare('UPDATE site SET name = ?, url = ?, comment = ? WHERE id = ?');
             $sth->execute(array($validData['site_name'], $validData['site_url'], $validData['site_comment'], 1));
+            
+            $sth = null;
 
-            $sql = "UPDATE account set login_id = '{$validData['account_id']}', password = SHA1('{$validData['account_pass']}')";
-            $this->dbh->query($sql);
+            $sth = $this->dbh->prepare("UPDATE account set login_id = ?, password = SHA1(?)");
+            $sth->execute(array($validData['account_id'], $validData['account_pass']));
+
         } catch (Zend_Exception $pe) {
             $dbh = null;
             throw new Setuco_Exception('update文の実行に失敗しました。' . $pe->getMessage());
