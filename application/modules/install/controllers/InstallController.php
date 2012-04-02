@@ -68,8 +68,6 @@ class Install_InstallController
             }
             $inputValues = $this->_initializeFormValidator->getValues();
             $this->view->errorForm = $this->_initializeFormValidator;
-        } else {
-            $template = 'index';
         }
 
         if ($template == 'index') {
@@ -225,9 +223,10 @@ class Install_InstallController
         foreach ($values as $key => $value) {
             if (preg_match("/pass/", $key)) {
                 unset($this->_session->$key);
-            } else {
-                $this->_session->$key = $values[$key];
+                continue;
             }
+
+            $this->_session->$key = $values[$key];
         }
     }
 
@@ -520,21 +519,27 @@ class Install_InstallController
         $query = '';
         $comment_flg = false;
         $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
+        // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
         while ( $line = fgets($fp) ){
-            // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
+            // コメント行は無視する
+            if ( preg_match("/\/\*/", $line) ){
+                $comment_flg = true;
+                continue;
+            }
             if ( $comment_flg === true ){
                 if ( preg_match("/\*\//", $line) ){
                     $comment_flg = false;
                 }
-            } else {
-                if ( preg_match("/\/\*/", $line) ){
-                    $comment_flg = true;
-                } elseif ( preg_match("/^\-\-/", $line) ){
-                    // コメント行は無視する
-                } else {
-                    $query .= $line;
-                }
+                continue;
             }
+
+            if ( preg_match("/^\-\-/", $line) ){
+                continue;
+            }
+
+
+            $query .= $line;
+            
         }
         fclose($fp);
 
