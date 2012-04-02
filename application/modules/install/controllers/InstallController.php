@@ -103,7 +103,10 @@ class Install_InstallController
         $fhw = fopen(APPLICATION_PATH . '/configs/application.ini', 'w');
         while ($line = fgets($fhr)){
             $key = '';
-            if (preg_match("/resources\.db\.params\.(.*?)(\s+)?\=(\s+)?\"(.*?)\"/", $line, $matches)){
+            if (preg_match(
+                    "/resources\.db\.params\.(.*?)(\s+)?\=(\s+)?\"(.*?)\"/", 
+                    $line, $matches)){
+
                 if ($matches[1] === 'host'){
                     $key = 'db_host';
                 } elseif ($matches[1] === 'username') {
@@ -117,6 +120,7 @@ class Install_InstallController
                 if (!empty($key)){
                     $line = str_replace($matches[4], $validData[$key], $line);
                 }
+
             }
             fwrite($fhw, $line);
         }
@@ -133,19 +137,34 @@ class Install_InstallController
                 }
             }
 
-            $sth = $this->dbh->prepare('UPDATE site SET name = ?, url = ?, comment = ? WHERE id = ?');
-            $sth->execute(array($validData['site_name'], $validData['site_url'], $validData['site_comment'], 1));
+            $sth = $this->dbh->prepare('
+                UPDATE site SET name = ?, url = ?, comment = ? WHERE id = ?
+                ');
+            $sth->execute(array(
+                $validData['site_name'], 
+                $validData['site_url'], 
+                $validData['site_comment'],
+                1
+            ));
             
             $sth = null;
 
-            $sth = $this->dbh->prepare("UPDATE account set login_id = ?, password = SHA1(?)");
-            $sth->execute(array($validData['account_id'], $validData['account_pass']));
+            $sth = $this->dbh->prepare('
+                UPDATE account set login_id = ?, password = SHA1(?)
+                ');
+            $sth->execute(array(
+                $validData['account_id'], 
+                $validData['account_pass']));
 
         } catch (Zend_Exception $pe) {
             $dbh = null;
-            throw new Setuco_Exception('update文の実行に失敗しました。' . $pe->getMessage());
+            throw new Setuco_Exception(
+                'update文の実行に失敗しました。' . $pe->getMessage()
+            );
         } catch (Exception $e) {
-            throw new Setuco_Exception('エラーが発生しました。', $e->getMessage());
+            throw new Setuco_Exception(
+                'エラーが発生しました。', $e->getMessage()
+            );
         }
         $dbh = null;
 
@@ -179,8 +198,11 @@ class Install_InstallController
     private function _dbConnect($params)
     {
         try {
-            $this->dbh = new PDO("mysql:host={$params['db_host']}; dbname={$params['db_name']}",
-                    $params['db_user'], $params['db_pass']);
+            $this->dbh = new PDO(
+                "mysql:host={$params['db_host']}; dbname={$params['db_name']}",
+                $params['db_user'],
+                $params['db_pass']
+            );
         } catch (PDOException $e) {
             return false;
         }
@@ -255,15 +277,19 @@ class Install_InstallController
     {
         $form = new Setuco_Form();
 
-        $adminAccountIdElement = new Zend_Form_Element_Text('account_id', array(
+        $adminAccountIdElement = new Zend_Form_Element_Text(
+            'account_id',
+            array(
                     'id' => 'account_id',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountIdValidators(),
                     'filters' => array('StringTrim')
-                    ));
+                ));
         $form->addElement($adminAccountIdElement);
 
-        $adminAccountPassElement = new Zend_Form_Element_Text('account_pass', array(
+        $adminAccountPassElement = new Zend_Form_Element_Text(
+            'account_pass',
+            array(
                     'id' => 'account_pass',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountPasswordValidators(),
@@ -271,7 +297,9 @@ class Install_InstallController
                     ));
         $form->addElement($adminAccountPassElement);
 
-        $adminAccountPassCheckElement = new Zend_Form_Element_Text('account_pass_check', array(
+        $adminAccountPassCheckElement = new Zend_Form_Element_Text(
+            'account_pass_check', 
+            array(
                     'id' => 'account_pass_check',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountPasswordValidators(),
@@ -279,7 +307,9 @@ class Install_InstallController
                     ));
         $form->addElement($adminAccountPassCheckElement);
 
-        $siteNameElement = new Zend_Form_Element_Text('site_name', array(
+        $siteNameElement = new Zend_Form_Element_Text(
+            'site_name',
+            array(
                     'id' => 'site_name',
                     'required' => 'true',
                     'validators' => $this->_makeSiteNameValidators(),
@@ -287,7 +317,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteNameElement);
 
-        $siteCommentElement = new Zend_Form_Element_Text('site_comment', array(
+        $siteCommentElement = new Zend_Form_Element_Text(
+            'site_comment', 
+            array(
                     'id' => 'site_comment',
                     'required' => 'true',
                     'validators' => $this->_makeSiteCommentValidators(),
@@ -295,7 +327,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteCommentElement);
 
-        $siteUrlElement = new Zend_Form_Element_Text('site_url', array(
+        $siteUrlElement = new Zend_Form_Element_Text(
+            'site_url', 
+            array(
                     'id' => 'site_url',
                     'required' => 'true',
                     'validators' => $this->_makeSiteUrlValidators(),
@@ -303,7 +337,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteUrlElement);
 
-        $dbHostElement = new Zend_Form_Element_Text('db_host', array(
+        $dbHostElement = new Zend_Form_Element_Text(
+            'db_host', 
+            array(
                     'id' => 'db_host',
                     'required' => 'true',
                     'validators' => $this->_makeDbHostValidators(),
@@ -311,7 +347,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbHostElement);
 
-        $dbNameElement = new Zend_Form_Element_Text('db_name', array(
+        $dbNameElement = new Zend_Form_Element_Text(
+            'db_name', 
+            array(
                     'id' => 'db_name',
                     'required' => 'true',
                     'validators' => $this->_makeDbNameValidators(),
@@ -319,7 +357,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbNameElement);
 
-        $dbUserElement = new Zend_Form_Element_Text('db_user', array(
+        $dbUserElement = new Zend_Form_Element_Text(
+            'db_user', 
+            array(
                     'id' => 'db_user',
                     'required' => 'true',
                     'validators' => $this->_makeDbUserValidators(),
@@ -327,7 +367,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbUserElement);
 
-        $dbPassElement = new Zend_Form_Element_Text('db_pass', array(
+        $dbPassElement = new Zend_Form_Element_Text(
+            'db_pass', 
+            array(
                     'id' => 'db_pass',
                     'required' => 'true',
                     'validators' => $this->_makeDbPassValidators(),
@@ -356,7 +398,9 @@ class Install_InstallController
                     )
                 );
         $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
+        $stringLength->setMessage(
+            'サイト名は%max%文字以下で入力してください。'
+        );
         $siteNameValidators[] = array($stringLength, true);
 
         return $siteNameValidators;
@@ -376,7 +420,9 @@ class Install_InstallController
                     )
                 );
         $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイトの説明は%max%文字以下で入力しだください。');
+        $stringLength->setMessage(
+            'サイトの説明は%max%文字以下で入力しだください。'
+        );
         $commentValidators[] = array($stringLength, true);
 
         return $commentValidators;
@@ -391,7 +437,9 @@ class Install_InstallController
     private function _makeAdminAccountIdValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('管理者アカウントのログインIDを入力してください');
+        $notEmpty->setMessage(
+            '管理者アカウントのログインIDを入力してください'
+        );
         $idValidators[] = array($notEmpty, true);
 
         return $idValidators;
@@ -406,7 +454,9 @@ class Install_InstallController
     private function _makeAdminAccountPasswordValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('管理者アカウントのパスワードを入力してください。');
+        $notEmpty->setMessage(
+            '管理者アカウントのパスワードを入力してください。'
+        );
         $passValidators[] = array($notEmpty);
 
         $stringLength = new Zend_Validate_StringLength(
@@ -415,7 +465,9 @@ class Install_InstallController
                     'max' => 30
                     )
                 );
-        $stringLength->setMessage('パスワードは%min%文字以上%max%文字以下で入力してください。');
+        $stringLength->setMessage(
+            'パスワードは%min%文字以上%max%文字以下で入力してください。'
+        );
         $passValidators[] = array($stringLength);
 
         $confirmCheck = new Setuco_Validate_Match(
@@ -423,7 +475,9 @@ class Install_InstallController
                     'check_key' => 'account_pass_check'
                     )
                 );
-        $confirmCheck->setMessage('パスワードとパスワード確認が一致しません。');
+        $confirmCheck->setMessage(
+            'パスワードとパスワード確認が一致しません。'
+        );
         $passValidators[] = $confirmCheck;
 
         $passwordCheck = new Setuco_Validate_Password();
@@ -441,7 +495,9 @@ class Install_InstallController
     private function _makeSiteUrlValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('接続するデータベースのアドレスを入力してください。');
+        $notEmpty->setMessage(
+            '接続するデータベースのアドレスを入力してください。'
+        );
         $urlValidators[] = array($notEmpty, true);
 
         return $urlValidators;
@@ -456,7 +512,9 @@ class Install_InstallController
     private function _makeDbHostValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('接続するデータベースのアドレスを入力してください。');
+        $notEmpty->setMessage(
+            '接続するデータベースのアドレスを入力してください。'
+        );
         $hostValidators[] = array($notEmpty, true);
 
         return $hostValidators;
