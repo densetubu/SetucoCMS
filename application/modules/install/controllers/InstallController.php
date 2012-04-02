@@ -101,8 +101,8 @@ class Install_InstallController
             $validData['site_url'] .= 'http://';
         }
 
-        $fhr = fopen('../application/configs/application-sample.ini', 'r');
-        $fhw = fopen('../application/configs/application.ini', 'w');
+        $fhr = fopen(APPLICATION_PATH . '/configs/application-sample.ini', 'r');
+        $fhw = fopen(APPLICATION_PATH . '/configs/application.ini', 'w');
         while ($line = fgets($fhr)){
             $key = '';
             if (preg_match("/resources\.db\.params\.(.*?)(\s+)?\=(\s+)?\"(.*?)\"/", $line, $matches)){
@@ -522,7 +522,7 @@ class Install_InstallController
 
         $query = '';
         $comment_flg = false;
-        $fp = fopen('../sql/initialize_tables.sql', 'r');
+        $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
         while ( $line = fgets($fp) ){
             // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
             if ( $comment_flg === true ){
