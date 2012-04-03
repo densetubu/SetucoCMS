@@ -220,16 +220,44 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
     /**
      * レイアウトを設定します。
      *
+     * レイアウトをオフにするにはsetLayoutを実行しないようにする必要がある
+     *
      * @return void
      * @author suzuki_mar charlesvineyard
      */
     protected function _initLayout()
     {
-        $layout = $this->_helper->layout();
-        $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
-        $layout->setLayout('layout');
+        if ($this->_isHTMLRequest()) {
+            $layout = $this->_helper->layout();
+            $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
+            $layout->setLayout('layout');
+        }
+        
     }
 
+    /**
+     * HTMLのリクエストか
+     *
+     * @return boolean HTMLのリクエストか
+     * @author suzuki_mar
+     */
+     protected function _isHTMLRequest()
+     {
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return false;
+        }
+
+        if ($this->getRequest()->getParam('format') === 'json') {
+            return false;
+        }
+
+        if ($this->getRequest()->getParam('format') === 'xml') {
+            return false;
+        }
+
+        return true;
+
+     }
 
     /**
      * レイアウト名を設定します。
