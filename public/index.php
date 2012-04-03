@@ -47,7 +47,7 @@ if (!file_exists($appIni)) {
     $baseUrl = $req->getBaseUrl();
     $controller = $req->getControllerName();
     if ($controller != 'install') {
-        echo "<meta http-equiv=\"Refresh\" content=\"0; URL={$baseUrl}/install\">";
+        header("Location: {$baseUrl}/install");
         return true;
     }
 }
