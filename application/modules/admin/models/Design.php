@@ -58,7 +58,25 @@ class Admin_Model_Design extends Common_Model_DesignAbstract
     }
 
     /**
-     * 使用できるデザイン情報ファイルを取得する
+     * 全てのデザイン名を取得する
+     *
+     * DBではなくて、デザイン情報ファイルからそれぞれデータを取得する
+     *
+     * @return array デザイン名リスト
+     * @author suzuki-mar
+     */
+    public function findAllDesignNames()
+    {
+        foreach ($this->findAllDesignInfos() as $info) {
+            $names[] = $info['name'];
+        }
+
+        return $names;
+    }
+
+
+    /**
+     * 全てのデザイン情報ファイルを取得する
      *
      * DBではなくて、デザイン情報ファイルからそれぞれデータを取得する
      *

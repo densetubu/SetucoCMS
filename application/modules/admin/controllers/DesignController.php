@@ -102,7 +102,6 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
             throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
-
         //入力したデータをバリデートチェックをする
         if (!$this->_updateFormValidator->isValid($this->_getAllParams())) {
             $this->_setParam('inputValues', $this->_updateFormValidator->getValues());
@@ -158,6 +157,10 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
         $notEmpty->setMessage('デザインを選択してください。');
         $nameValidators[] = array($notEmpty, true);
 
+        #不正入力をされないようにする
+        $inArray = new Zend_Validate_InArray($this->_designService->findAllDesignNames());
+        $inArray->setMessage('正しくデザインを選択してください。');
+        $nameValidators[] = array($inArray, true);
 
         return $nameValidators;
     }
