@@ -101,11 +101,20 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
+
         for ($inputID = 1; $inputID <= self::FILE_COUNT_MAX; $inputID++) {
             $this->_fileInputIDs[] = $this->_fileInputID_base . (string) $inputID;
         }
         $this->_media = new Admin_Model_Media();
         $this->_setPageLimit(self::PAGE_LIMIT);
+
+        $contextSwitch = $this->_helper->getHelper('contextSwitch');
+        $contextSwitch->addActionContext('response', 'json')
+                ->addActionContext('response', 'xml')
+                ->initContext();
+
+        
+
     }
 
     /**
@@ -152,7 +161,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル情報の取得とファイルの存在確認
         $medias = $this->_media->findMedias(
                         $sortColumn, $order, $currentPage, $this->_getPageLimit(), $fileType);
-        #var_dump($medias); exit;
+        
         $this->view->medias = $medias;
 
         // アップロードできる最大サイズをviewに教える
@@ -558,6 +567,17 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 )
         );
     }
+
+    /**
+     * メディアのデータをJSON形式で表示する
+     *
+     * @author suzuki-mar
+     */
+    public function responseAction()
+    {
+        
+    }
+
 
     /**
      * ファイルの絞込み・ソート用フォームを作成する
