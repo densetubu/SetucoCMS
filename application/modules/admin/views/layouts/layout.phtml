@@ -61,12 +61,10 @@ $this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
          <script>
 
         $(function(){
-            $('#create_date').datetimepicker({
-             timeFormat: 'h:m',
-             //separator: ' @ '
-
-            });
-});
+            jQuery( '#create_date' ) . datetimepicker();
+            jQuery( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+        });
+        
 tinyMCE.init({
 		// General options
 		mode : "textareas",

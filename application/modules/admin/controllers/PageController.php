@@ -75,15 +75,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @var string
      */
-    const FORMAT_DATE_TEXT_BOX = 'YYYY-MM-dd';
-
-    /**
-     * 時刻テキストボックスのvalue属性のフォーマット
-     * (画面に表示されるものではない)
-     *
-     * @var string
-     */
-    const FORMAT_TIME_TEXT_BOX = 'THH:mm:ss';
+    const FORMAT_DATE_TEXT_BOX = 'YYYY-MM-dd THH:mm:ss hh:MM';
 
     /**
      * 指定なしのvalue属性
@@ -195,7 +187,6 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'page_outline'  => $page['outline'],
             'tag'           => $this->_createCSTagNames($id),
             'create_date'   => $createDate->toString(self::FORMAT_DATE_TEXT_BOX),
-            'create_time'   => $createDate->toString(self::FORMAT_TIME_TEXT_BOX),
             'hidden_id'     => $id,
         );
 
@@ -736,22 +727,10 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                'validators' => $this->_makeCreateDateValidators(),
+                #'validators' => $this->_makeCreateDateValidators(),
             )
         );
-        $form->addElement(
-            'TimeTextBox',
-            'create_time',
-            array(
-                'id' => 'create_time',
-                'value' => $nowDate->toString(self::FORMAT_TIME_TEXT_BOX),
-                'TimePattern' => 'HH:mm:ss',    // 表示用フォーマット
-                'filters' => array(
-                    'StringTrim'
-                ),
-                'validators' => $this->_makeCreateTimeValidators(),
-            )
-        );
+        
         $form->setMinimalDecoratorElements(array(
             'sub_open1',
             'sub_draft1',
@@ -771,8 +750,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             ),
             array(
                 'page_contents',
-                'create_date',
-                'create_time'
+                'create_date'                
             )
         );
         return $form;
@@ -883,6 +861,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      *
      * @return array Zend_Validateインターフェースとオプションの配列の配列
      * @author charlesvineyard
+     * @todo JSの実装を優先させるためにバリデートを一旦無効にしている
      */
     private function _makeCreateDateValidators()
     {
@@ -894,28 +873,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'format' => self::FORMAT_DATE_TEXT_BOX
             )
         );
-        $date->setMessage($name . 'の形式が正しくありません。');
-        $validators[] = array($date, true);
 
-        return $validators;
-    }
-
-    /**
-     * 作成時刻用のバリデーターを作成する。
-     *
-     * @return array Zend_Validateインターフェースとオプションの配列の配列
-     * @author charlesvineyard
-     */
-    private function _makeCreateTimeValidators()
-    {
-        $name = '作成時刻';
-        $validators = array();
-
-        $date = new Zend_Validate_Date(
-            array(
-                'format' => self::FORMAT_TIME_TEXT_BOX
-            )
-        );
         $date->setMessage($name . 'の形式が正しくありません。');
         $validators[] = array($date, true);
 
@@ -934,11 +892,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $form = $this->_createForm();
         $post = $_POST;
 
-        $nowDate = Zend_Date::now();
-        $post['create_date'] = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
-        $post['create_time'] = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+        $post['create_date'] = $this->_formatCreateDate4Db($post['create_date']);
 
         if (! $this->_isValidPageForm($form, $post)) {
             $this->_setParam('form', $form);
@@ -950,10 +904,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $form->getValue('page_contents'),
             $form->getValue('page_outline'),
             array_unique($this->_splitTagValue($form->getValue('tag'))),
-            new Zend_Date(
-                $post['create_date'] . $post['create_time'],
-                self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
-            ),
+            $form->getValue('create_date'),
             $this->_getInputStatus(),
             Setuco_Data_Converter_CategoryInfo::convertCategoryId4Data($form->getValue('category_id')),
             $this->_getAccountInfos('id')
@@ -978,8 +929,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $form->isValid($values);
 
         // 作成日時の未来日付チェック
-        $createDateTime = new Zend_Date($values['create_date'] . $values['create_time'],
-            self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX);
+        $createDateTime = new Zend_Date($values['create_date'], self::FORMAT_DATE_TEXT_BOX);
+        
         if ($createDateTime->compare(Zend_Date::now()) > 0) {
             $form->getElement('create_date')->addError('未来の日時は指定できません。');
             $form->markAsError();
@@ -1033,18 +984,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページを更新するアクション
      *
      * @return void
-     * @author akitsukada charlesvineyard
+     * @author akitsukada charlesvineyard suzuki-mar
      */
     public function updateAction()
     {
         $form = $this->_createUpdateForm();
         $post = $_POST;
-
-        $nowDate = Zend_Date::now();
-        $post['create_date'] = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_date'), $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
-        $post['create_time'] = Setuco_Util_String::getDefaultIfEmpty(
-            $this->_getParam('create_time'), $nowDate->toString(self::FORMAT_TIME_TEXT_BOX));
+        
+        $post['create_date'] = $this->_formatCreateDate4Db($post['create_date']);
 
         if (! $this->_isValidPageForm($form, $post)) {
             $this->_setParam('form', $form);
@@ -1057,17 +1004,32 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'contents'    => $form->getValue('page_contents'),
             'outline'     => $form->getValue('page_outline'),
             'tag'         => array_unique($this->_splitTagValue($form->getValue('tag'))),
-            'create_date' => new Zend_Date(
-                $post['create_date'] . $post['create_time'],
-                self::FORMAT_DATE_TEXT_BOX . self::FORMAT_TIME_TEXT_BOX
-            ),
+            'create_date' => $form->getValue('create_date'),
             'status'      => $this->_getInputStatus(),
         );
+
         $id = $form->getValue('hidden_id');
         $this->_pageService->updatePage($id, $updatePageInfo);
 
         $this->_helper->flashMessenger('ページを更新しました。');
         $this->_helper->redirector('index', null, null, array('id' => $id));
+    }
+
+    /**
+     * ページを作成した日付をDBに保存する形式に変更する
+     *
+     * @param string $createDate ページを編集した日付 (フォームに送信されたデータ)
+     * @return string DBに保存する形式に変更した物
+     * @author suzuki-mar
+     */
+    private function _formatCreateDate4Db($createDate)
+    {
+        $nowDate = Zend_Date::now();
+
+        $createDate = Setuco_Util_String::getDefaultIfEmpty(
+            $createDate, $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
+
+        return new Zend_Date($createDate . '00', self::FORMAT_DATE_TEXT_BOX);
     }
 
     /**
