@@ -165,7 +165,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページ編集フォームの処理
      *
      * @return void
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
      */
     protected function _editFormOperation()
     {
@@ -196,6 +196,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->pageTitle = "「{$page['title']}」の編集";
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
+
+        $this->view->createDate = $page['create_date'];
+
         $this->_showFlashMessages();
     }
 
@@ -375,7 +378,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * 検索フォームを作成します。
      *
      * @return Setuco_Form フォーム
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
      */
     private function _createSearchForm()
     {
@@ -558,6 +561,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $this->view->form = $this->_getParam('form', $this->_createForm());
 
+        $this->view->createDate = Zend_Date::now()->toString();
+
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
     }
@@ -599,7 +604,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページ編集フォームを作成します。
      *
      * @return Setuco_Form フォーム
-     * @author akitsukda charlesvineyard
+     * @author akitsukda charlesvineyard suzuki-mar
      */
     private function _createForm()
     {
@@ -727,7 +732,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
                 'filters' => array(
                     'StringTrim'
                 ),
-                #'validators' => $this->_makeCreateDateValidators(),
+                'validators' => $this->_makeCreateDateValidators(),
             )
         );
         
