@@ -201,6 +201,27 @@
                 </account_form>
             </pages>
         </account>
+        <design>
+            <id>design</id>
+            <title>デザインの変更</title>
+            <label>デザイン</label>
+            <module>admin</module>
+            <controller>design</controller>
+            <action>index</action>
+            <order>70</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/admin/gNav/h_menu_account.jpg</src>
+            <pages>
+                <design_index>
+                    <id>account_index</id>
+                    <title>デザインの変更</title>
+                    <label>デザインの変更</label>
+                    <module>admin</module>
+                    <controller>design</controller>
+                    <action>index</action>
+                </design_index>
+            </pages>
+        </design>
     </nav>
 
 </config>
