@@ -37,6 +37,7 @@
  * @package    Admin
  * @subpackage Model
  * @author     suzuki-mar
+ * @todo デザイン情報を取得するDAOクラスを作成した方がいいのかな
  */
 class Admin_Model_Design extends Common_Model_DesignAbstract
 {
@@ -51,6 +52,7 @@ class Admin_Model_Design extends Common_Model_DesignAbstract
      */
     public function updateDesign($updateData)
     {
+
         //データは1件しかないないので、whereはいらない
         return $this->_designDao->update($updateData);
     }
@@ -63,7 +65,7 @@ class Admin_Model_Design extends Common_Model_DesignAbstract
      * @return array デザイン情報リスト
      * @author suzuki_mar
      */
-    public function getDesignInfos()
+    public function findAllDesignInfos()
     {
 
         $designInfos = array();

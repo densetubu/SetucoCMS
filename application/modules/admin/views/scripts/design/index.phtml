@@ -67,13 +67,14 @@
                     </label>
                 </dt>
                 <dd>
-
-                    <select id="design_name" name="design_name">
-                        
-                    <?php foreach($this->designInfos as $info): ?>    
-                        <option value="<?php echo $this->escape($info['name']) ?>"><?php echo $this->escape($info['label']) ?></option>
+                    <select id="design_name" name="design_name">                        
+                        <?php foreach($this->designInfos as $info): ?>
+                            <?php if ($this->currentDesignName === $info['name']): ?>
+                                <option value="<?php echo $this->escape($info['name']) ?>" selected="selected"><?php echo $this->escape($info['label']) ?></option>
+                            <?php else: ?>
+                                <option value="<?php echo $this->escape($info['name']) ?>"><?php echo $this->escape($info['label']) ?></option>
+                            <?php endif; ?>
                     <?php endforeach; ?>
-
                     </select><br />
 
                     <span>デザインの名前です。</span>

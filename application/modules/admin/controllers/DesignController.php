@@ -76,9 +76,8 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $this->view->designInfos = $this->_designService->getDesignInfos();
-
-
+        $this->view->designInfos = $this->_designService->findAllDesignInfos();
+        $this->view->currentDesignName = $this->_designService->findSelectedDesignName();
 
         //バリデートに失敗したエラーフォームがあればセットする
         if ($this->_hasParam('errorForm')) {
@@ -87,28 +86,6 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
-    }
-
-    /**
-     * 入力した項目かを調べる
-     *
-     * @param string $filedName 入力した項目の名前
-     * @param string $filedValue　入力した項目の値
-     * @return boolean 入力した項目か
-     * @author suzuki-mar
-     */
-    private function _isInputFiled($filedName, $filedValue)
-    {
-
-        if (empty($filedValue)) {
-            return false;
-        }
-
-        if ($filedName === 'url' && $filedValue === 'http://') {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -125,6 +102,7 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
             throw new Setuco_Controller_IllegalAccessException('POSTメソッドではありません。');
         }
 
+
         //入力したデータをバリデートチェックをする
         if (!$this->_updateFormValidator->isValid($this->_getAllParams())) {
             $this->_setParam('inputValues', $this->_updateFormValidator->getValues());
@@ -136,7 +114,7 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
 
         //サイト情報を編集する
         try {
-            $this->_siteService->updateSite($validData, $this->_getParam('id'));
+            $this->_designService->updateDesign($validData);
         } catch (Zend_Exception $e) {
             throw new Setuco_Exception('update文の実行に失敗しました。' . $e->getMessage());
         }
@@ -156,135 +134,34 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = new Setuco_Form();
 
-        $nameElement = new Zend_Form_Element_Text('name', array(
-                    'id' => 'name',
+        $nameElement = new Zend_Form_Element_Text('design_name', array(
+                    'id' => 'design_name',
                     'required' => true,
-                    'validators' => $this->_makeSiteNameValiDators(),
+                    'validators' => $this->_makeDesignNameValiDators(),
                     'filters' => array('StringTrim')
                 ));
         $form->addElement($nameElement);
-
-        $urlElement = new Zend_Form_Element_Text('url', array(
-                    'id' => 'url',
-                    'required' => true,
-                    'validators' => $this->_makeSiteUrlValiDators(),
-                    'filters' => array('StringTrim', 'fullUrl', 'removeSpace')
-                ));
-        $form->addElement($urlElement);
-
-        $commentElement = new Zend_Form_Element_Text('comment', array(
-                    'id' => 'comment',
-                    'required' => false,
-                    'validators' => $this->_makeCommentValiDators(),
-                    'filters' => array('StringTrim')
-                ));
-        $form->addElement($commentElement);
-
-        $keywordElement = new Zend_Form_Element_Text('keyword', array(
-                    'id' => 'keyword',
-                    'required' => false,
-                    'validators' => $this->_makeKeywordValiDators(),
-                    'filters' => array('StringTrim', 'deselectSameKeyword', 'trimKeywords')
-                ));
-
-        $form->addElement($keywordElement);
 
         return $form;
     }
 
     /**
-     * サイト名のバリデートルールを生成する
+     * デザイン名のバリデートルールを生成する
      *
      * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
      * @author suzuki-mar
      */
-    private function _makeSiteNameValiDators()
+    private function _makeDesignNameValiDators()
     {
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('サイト名を入力してください。');
+        $notEmpty->setMessage('デザインを選択してください。');
         $nameValidators[] = array($notEmpty, true);
 
-        $stringLength = new Zend_Validate_StringLength(
-                        array(
-                            'max' => 100
-                        )
-        );
-        $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
-        $nameValidators[] = array($stringLength, true);
 
         return $nameValidators;
     }
 
-    /**
-     * サイトのURLのバリデートルールを生成する
-     *
-     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
-     * @author suzuki-mar
-     */
-    private function _makeSiteUrlValiDators()
-    {
-        $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('サイトURLを入力してください。');
-        $urlValidators[] = array($notEmpty, true);
-
-        $urlCheck = new Setuco_Validate_Url();
-        $urlCheck->setMessage('サイトURLの形式が正しくありません。');
-        $urlValidators[] = array($urlCheck, true);
-
-        $stringLength = new Zend_Validate_StringLength(
-                        array(
-                            'max' => 50
-                        )
-        );
-        $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイトURLは%max%文字以下で入力してください。');
-        $urlValidators[] = array($stringLength, true);
-
-        return $urlValidators;
-    }
-
-    /**
-     * コメントのバリデートルールを生成する
-     *
-     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
-     * @author suzuki-mar
-     */
-    private function _makeCommentValiDators()
-    {
-
-        $stringLength = new Zend_Validate_StringLength(
-                        array(
-                            'max' => 300
-                        )
-        );
-        $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイトの説明は%max%文字以下で入力してください。');
-        $commentValidators[] = array($stringLength, true);
-
-        return $commentValidators;
-    }
-
-    /**
-     * キーワード用のバリデートルールを生成する
-     *
-     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
-     * @author suzuki-mar
-     */
-    private function _makeKeywordValiDators()
-    {
-        $stringLength = new Setuco_Validate_KeywordLength(
-                        array(
-                            'max' => 50,
-                            'count_max' => 15
-                        )
-        );
-
-        $keywordValidators[] = array($stringLength, true);
-
-        return $keywordValidators;
-    }
 
 }
 
