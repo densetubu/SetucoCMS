@@ -27,7 +27,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param      array            $sites   サイト情報データ
+ * @param      array            $designs   デザイン情報データ
  * @param      array[option]    $flashMessages アクションの実行結果
  * @param      Setuco_Form      $errorForm エラーメッセージを表示するフォームクラス
  * @author     suzuki-mar
@@ -67,8 +67,13 @@
                     </label>
                 </dt>
                 <dd>
+
                     <select id="design_name" name="design_name">
-                        <option value="defaults">デフォルト</option>
+                        
+                    <?php foreach($this->designInfos as $info): ?>    
+                        <option value="<?php echo $this->escape($info['name']) ?>"><?php echo $this->escape($info['label']) ?></option>
+                    <?php endforeach; ?>
+
                     </select><br />
 
                     <span>デザインの名前です。</span>

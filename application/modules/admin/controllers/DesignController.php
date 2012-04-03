@@ -45,9 +45,9 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
     /**
      * Designのサービスクラス
      *
-     * @var Admin_Model_Site
+     * @var Admin_Model_Design
      */
-    private $_siteService;
+    private $_designService;
 
     /**
      * 編集のバリデートフォーム
@@ -64,7 +64,7 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
-        $this->_siteService = new Admin_Model_Site();
+        $this->_designService = new Admin_Model_Design();
         $this->_updateFormValidator = $this->_createUpdateFormValidator();
     }
 
@@ -76,21 +76,8 @@ class Admin_DesignController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $siteInfos = $this->_siteService->getSiteInfo();
+        $this->view->designInfos = $this->_designService->getDesignInfos();
 
-        //空文字以外の入力したものは、入力したものをデフォルト値にする
-        if ($this->_hasParam('inputValues')) {
-            foreach ($this->_getParam('inputValues') as $key => $value) {
-                if ($this->_isInputFiled($key, $value)) {
-                    $siteInfos[$key] = $value;
-                }
-            }
-        }
-
-        //blur属性に戻したときに\がエスケープされるので、2重に挿入する
-        $siteInfos['name_blur'] = str_replace('\\', '\\\\', $siteInfos['name']);
-        $siteInfos['url_blur'] = str_replace('\\', '\\\\', $siteInfos['url']);
-        $this->view->sites = $siteInfos;
 
 
         //バリデートに失敗したエラーフォームがあればセットする

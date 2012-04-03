@@ -1,0 +1,63 @@
+<?php
+/**
+ * ページャー用のパーシャルファイル
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category   Setuco
+ * @package    Default
+ * @package    View_Partial
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @author     suzuki-mar
+ */
+?>
+<?php if ($this->pageCount): ?>
+
+<div id="pageNav">
+    <ul>
+        <?php if (isset($this->previous)): ?>
+        <!-- 前のページへのリンク -->
+        <li>
+            <a href="<?php echo $this->url(array('page' => $this->previous)) ?>">前へ</a>
+        </li>
+        <?php endif ?>
+        <!-- ページ番号へのリンク -->
+    <?php foreach ($this->pagesInRange as $page): ?>
+        <?php if ($page != $this->current): ?>
+        <li class="navNumber">
+            <a href="<?php echo $this->url(array('page' => $page)) ?>"><?php echo $page ?></a>
+        </li>
+        <?php else: ?>
+        <li class="navNumber current">
+            <span><?php echo $page ?></span>
+        </li>
+        <?php endif ?>
+    <?php endforeach ?>
+        <?php if (isset($this->next)): ?>
+        <!-- 次のページへのリンク -->
+        <li>
+            <a href="<?php echo $this->url(array('page' => $this->next)) ?>">次へ</a>
+        </li>
+        <?php endif ?>
+    </ul>
+</div>
+<?php endif ?>

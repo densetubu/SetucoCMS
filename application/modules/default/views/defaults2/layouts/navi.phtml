@@ -1,0 +1,78 @@
+<?php
+/**
+ * 閲覧側のナビゲーションメニュー
+ * カテゴリー一覧と、タグクラウド
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Layout
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       array   $categoryLists  カテゴリー一覧の配列       
+ * @param       array   $tagClouds タグクラウドが入っている配列
+ * @author      suzuki-mar
+ */
+?>
+
+<!-- navArea START --> 
+<div id="navArea">
+
+    <!-- navList START -->
+    <div class="navList">
+
+        <h3>カテゴリー</h3>
+        <ul>
+            <?php foreach ($this->categoryLists as $category): ?>
+            <li>
+                <?php if ($category['is_used']): //カテゴリーを使用しているページがあるか?>
+                <a href='<?php echo $this->baseUrl("/page/category/id/{$category['id']}") ?>'><?php echo $this->escape($category['name']) ?></a>
+                <?php else: //使用していない場合はリンクしない?>
+                <span><?php echo $this->escape($category['name']) ?></span>
+                <?php endif; ?>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <!-- navList END -->
+
+    <!-- navList START -->
+    <div class="navList">
+        <h3>タグクラウド</h3>
+                         
+        <?php if ($this->tagClouds !== false): //タグがなかったら表示しない?>
+        <ul id="tagCloud">
+            <?php foreach ($this->tagClouds as $tag): ?>
+            <li class="level<?php echo $tag['level'] ?>">
+                <a href="<?php echo $this->baseUrl("/page/tag/id/{$tag['id']}") ?>"><?php  echo $this->escape($tag['name']) ?></a>
+            </li>
+           <?php endforeach;?>
+       </ul>
+       <?php else: ?>
+       <p>タグは登録されていません。</p>
+       <?php endif;?>
+    </div>
+     <!-- navList END -->
+     
+ </div>
+<!-- navArea END -->
+

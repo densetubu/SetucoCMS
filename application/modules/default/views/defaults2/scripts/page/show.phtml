@@ -1,0 +1,63 @@
+<?php
+/**
+ * ページを表示するページ
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category   Setuco
+ * @package    Default
+ * @subpackage View_Script_Page
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      page 表示すべきページのデータ
+ * @param      category ページが属するカテゴリのデータ
+ * @param      tags ページにつけられたタグのデータ
+ * @author     akitsukada
+ */
+?>
+<!-- entry START -->
+<div class="entry">
+    <div class="entryHead">
+        <h2><span><?php echo $this->escape($this->page['title']) ?></span></h2>
+        <p><?php echo $this->page['update_date'] ?></p>
+    </div>
+    <dl class="category">
+        <dt>カテゴリー：</dt>
+        <dd>
+            <a href="<?php echo $this->baseUrl('page/category/id/') . $this->category['id'] ?>"><?php echo $this->escape($this->category['name']) ?></a>
+        </dd>
+    </dl>
+    <div class="entryBody">
+        <?php echo $this->page['contents'] . "\n" ?>
+        <dl class="entryTag">
+            <dt>タグ：</dt>
+            <?php if (count($this->tags) > 0): ?>
+                <?php foreach ($this->tags as $cnt => $tag): ?>
+                <dd><a href="<?php echo $this->baseUrl('page/tag/id/') . $tag['id'] ?>"><?php echo $this->escape($tag['name']) ?></a></dd>
+                <?php endforeach ?>
+            <?php else: ?>
+                <dd>なし</dd>
+            <?php endif; ?>
+        </dl>
+    </div>
+    <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
+</div>
+<!-- entry END -->

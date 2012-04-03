@@ -1,0 +1,73 @@
+<?php
+/**
+ * 閲覧側のTOPページ
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category    Setuco
+ * @package     Default
+ * @subpackage  View_Script_Index
+ * @license     http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright   Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since       File available since Release 0.1.0
+ * @param       array   $newPages     ページ一覧ページに表示させるページデータ       
+ * @author      suzuki-mar
+ */
+?>
+
+<!-- entry START -->
+<div class="entry">
+
+    <div class="entryHead">
+        <h2><span>フリースペース</span></h2>
+    </div>
+
+    <div class="entryBody">
+        <p>テスト運用中。フリーエリアです。</p>
+    </div>
+
+</div>
+<!-- entry END -->
+
+<!-- entry START -->
+
+<div class="entry">
+
+    <div class="entryHead">
+        <h2><span>新着ページ（10件）</span></h2>
+    </div>
+
+    <div class="entryBody">
+        <?php if($this->newPages !== false): //ページが公開されている場合のみ表示する ?>
+        <ul class="tipics">
+            <?php foreach ($this->newPages as $value): ?>
+            <li><a href='<?php echo $this->baseUrl("/page/show/id/{$value['id']}") ?>'><?php echo $this->escape($value['title']) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+        <?php else: //ページが公開されていない場合 ?>
+        <p>ページが公開されていません。</p>
+        <?php endif; ?>
+
+    </div>
+    <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
+    <?php echo $this->paginator; ?>
+
+</div>
+<!-- entry END -->
