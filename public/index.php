@@ -34,9 +34,9 @@ require_once 'Zend/Application.php';
 
 
 // Create application, bootstrap, and run
-$app_ini = APPLICATION_PATH . '/configs/application.ini';
-if (!file_exists($app_ini)) {
-    $app_ini = APPLICATION_PATH . '/configs/application-sample.ini';
+$appIni = APPLICATION_PATH . '/configs/application.ini';
+if (!file_exists($appIni)) {
+    $appIni = APPLICATION_PATH . '/configs/application-sample.ini';
 
     //設定ファイルがなければインストーラへ飛ばす
     require('Zend/Controller/Router/Rewrite.php');
@@ -53,7 +53,7 @@ if (!file_exists($app_ini)) {
 }
 $application = new Zend_Application(
     APPLICATION_ENV,
-    $app_ini
+    $appIni
 );
 $application->bootstrap()
             ->run();
