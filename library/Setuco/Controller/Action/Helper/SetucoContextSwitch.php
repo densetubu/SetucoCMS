@@ -58,6 +58,7 @@ class Setuco_Controller_Action_Helper_SetucoContextSwitch extends Zend_Controlle
 
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $view = $viewRenderer->view;
+
         if ($view instanceof Zend_View_Interface) {
             /**
              * @see Zend_Json
@@ -65,7 +66,7 @@ class Setuco_Controller_Action_Helper_SetucoContextSwitch extends Zend_Controlle
             if(method_exists($view, 'getVars')) {
 
                 #変数がひとつだけの場合は配列にしない
-                if (count($view->getVars()) === 1) {
+                if (count($view->getVars()) === 1 ) {
                     $viewData = array_shift($view->getVars());
                     $vars = Zend_Json::encode($viewData);
                 } else {

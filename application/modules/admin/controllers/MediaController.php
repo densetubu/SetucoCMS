@@ -108,17 +108,8 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->_media = new Admin_Model_Media();
         $this->_setPageLimit(self::PAGE_LIMIT);
 
-        $this->_helper->addHelper(new Setuco_Controller_Action_Helper_SetucoContextSwitch());
-        $contextSwitch = $this->_helper->getHelper('setucoContextSwitch');
-        
-        $contextSwitch->addActionContext('infos', 'json')
-                ->initContext('json');
-
-        
-
-        
-
     }
+
 
     /**
      * ファイルのアップロードフォームやアップロードしてあるファイルの一覧を表示するページ
@@ -570,17 +561,6 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
                 )
         );
     }
-
-    /**
-     * メディア情報のリストをJSON形式で表示する
-     *
-     * @author suzuki-mar
-     */
-    public function infosAction()
-    {
-       $this->view->infos = $this->_media->findAllMedias();
-    }
-
 
     /**
      * ファイルの絞込み・ソート用フォームを作成する
