@@ -83,8 +83,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $frontController->registerPlugin(new Setuco_Controller_Plugin());
         //エラーコントローラーを制御するプラグインを登録する
         $frontController->registerPlugin(new Setuco_Controller_Plugin_ErrorHandler());
-
     }
+
 
     /**
      * ビューを初期化

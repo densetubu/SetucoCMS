@@ -316,4 +316,21 @@ class Admin_Model_Media
         return $result;
     }
 
+    /**
+     * 全てのメディアデータを取得する
+     *
+     * @return array メディアデータのリスト
+     * @author suzuki-mar
+     */
+    public function findAllMedias()
+    {
+        $medias = $this->_mediaDao->loadAllMedias();
+
+        foreach ($medias as $cnt => $media) {
+            $media = $this->_addThumbPathInfo($media);
+            $medias[$cnt] = $media;
+        }
+        return $medias; // サムネイルのパス情報を追加した配列をreturn
+    }
+
 }
