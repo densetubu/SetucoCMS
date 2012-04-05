@@ -108,10 +108,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         $this->_media = new Admin_Model_Media();
         $this->_setPageLimit(self::PAGE_LIMIT);
 
-        $contextSwitch = $this->_helper->getHelper('contextSwitch');
-        $contextSwitch->addActionContext('response', 'json')
-                ->addActionContext('response', 'xml')
-                ->initContext();
+        $this->_helper->addHelper(new Setuco_Controller_Action_Helper_SetucoContextSwitch());
+        $contextSwitch = $this->_helper->getHelper('setucoContextSwitch');
+        
+        $contextSwitch->addActionContext('infos', 'json')
+                ->initContext('json');
+
+        
 
         
 
@@ -569,13 +572,13 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * メディアのデータをJSON形式で表示する
+     * メディア情報のリストをJSON形式で表示する
      *
      * @author suzuki-mar
      */
-    public function responseAction()
+    public function infosAction()
     {
-        
+       $this->view->infos = $this->_media->findAllMedias();
     }
 
 
