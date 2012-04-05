@@ -1,0 +1,119 @@
+<?php
+/**
+ * APIの development 用エラーページ
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category   Setuco
+ * @package    Api
+ * @subpackage View_Script_Error
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      string    $message       メッセージ
+ * @param      Exception $exception     例外
+ * @param      array     $requestParams 全てのリクエストパラメータ
+ * @author     suzuki-mar 
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-script-type" content="text/jascript" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta name="author" content="ErinaMikami with SetucoCMS Project" />
+        <meta name="copyright" content="SetucoCMS" />
+        <meta http-equiv="imagetoolbar" content="no" />
+        <title>エラーページ:SetucoCMS</title>
+        <link href="<?php echo $this->baseUrl('/css/base.css') ?>" media="screen" rel="stylesheet" type="text/css" />
+    </head>
+    <body id="errorPage">
+
+        <!-- container START -->
+        <div id="container">
+
+            <!-- header START -->
+            <div id="header">
+
+                <div>
+                    <h1>
+                        <a href="<?php echo $this->baseUrl('/admin') ?>" title="管理画面のトップに戻ります">
+                            <img src="<?php echo $this->baseUrl('/images/admin/header/logo.gif') ?>" alt="せつこCMS"  width="136" height="33" />
+                        </a>
+                    </h1>
+                </div>
+
+            </div>
+            <!-- header END -->
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+
+                    <!-- mainContentInner START -->
+                    <div id="mainContentInner">
+
+                        <!-- section START -->
+                        <div class="section">
+
+                            <div class="hAreaText">
+                                <h3 id="textType">An error occurred</h3>
+                            </div>
+
+                            <div class="default">
+                                  <h3><?php echo $this->message ?></h3>
+
+                                  <?php if (isset($this->exception)): ?>
+
+                                  <h4>Exception information:</h4>
+                                  <p>
+                                      Message: <?php echo $this->exception->getMessage() ?>
+                                  </p>
+
+                                  <h4>Stack trace:</h4>
+                                  <pre><?php echo $this->exception->getTraceAsString() ?></pre>
+
+                                  <h4>Request Parameters:</h4>
+                                  <p><?php echo var_export($this->requestParams, true) ?></p>
+                                  <?php endif ?>
+                            </div>
+
+                        </div>
+                        <!-- section END -->
+
+                    </div>
+                    <!-- mainContentInner END -->
+
+                </div>
+                <!-- mainContent END -->
+
+            </div>
+            <!-- content END -->
+
+            <p id="copyright">Copyright &copy; 2010 <a href="http://sourceforge.jp/projects/setucocms/simple/">SetucoCMS</a>.AllRights reserved.</p>
+
+        </div>
+        <!-- container END -->
+
+    </body>
+</html>

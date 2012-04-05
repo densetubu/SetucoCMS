@@ -69,7 +69,10 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         $redirectParams = $this->_loadRedirectParams();
         $this->_restRedirectIfNeeded($redirectParams);
 
-        $this->_initLayout();
+        if ($this->_isHTMLRequest()) {
+            $this->_initLayout();
+        }
+        
 
         $this->view->addScriptPath($this->_getModulePath() . 'views/partials');
     }
@@ -227,12 +230,9 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
      */
     protected function _initLayout()
     {
-        if ($this->_isHTMLRequest()) {
-            $layout = $this->_helper->layout();
-            $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
-            $layout->setLayout('layout');
-        }
-        
+        $layout = $this->_helper->layout();
+        $layout->setLayoutPath($this->_getModulePath() . 'views/layouts/');
+        $layout->setLayout('layout');
     }
 
     /**
