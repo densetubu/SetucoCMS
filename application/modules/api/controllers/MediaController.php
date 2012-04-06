@@ -37,7 +37,7 @@
  * @subpackage Controller
  * @author     suzuki-mar
  */
-class Api_MediaController extends Setuco_Controller_Action_Abstract
+class Api_MediaController extends Setuco_Controller_Action_ApiAbstract
 {
 
     /**
@@ -58,13 +58,6 @@ class Api_MediaController extends Setuco_Controller_Action_Abstract
 
         $this->_media = new Api_Model_Media();
 
-        $this->_helper->addHelper(new Setuco_Controller_Action_Helper_SetucoContextSwitch());
-        $contextSwitch = $this->_helper->getHelper('setucoContextSwitch');
-        
-        $contextSwitch->addActionContext('index', 'json')
-                ->initContext('json');
-
-        
     }
 
 
