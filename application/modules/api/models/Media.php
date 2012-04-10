@@ -37,7 +37,39 @@
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Api_Model_Media extends Common_Model_Media
+class Api_Model_Media extends Common_Model_MediaAbstract
 {
+    /**
+     * 全てのメディアデータの情報を取得する
+     *
+     * ファイルパスはフルパス(URL)
+     *
+     * @author suzuki-mar
+     * @return array 全てのメディアデータ情報
+     * @todo httpsに対応させる
+     */
+    public function findAllMediaInfos()
+    {
+        $medias = $this->findAllMedias();
+
+        foreach($medias as &$media) {
+          $media['uploadUrl'] = $this->_fixUrlPath($media['uploadUrl']);
+          $media['thumbUrl'] = $this->_fixUrlPath($media['thumbUrl']);
+        }
+        unset($media);
+
+        return $medias;
+    }
+
+    /**
+     * 画像のパスをフルパス(URL）にする
+     *
+     * @param string $filePath 画像のファイルパス
+     * @author suzuki-mar
+     */
+    private function  _fixUrlPath($filePath)
+    {
+       return "http://{$_SERVER['HTTP_HOST']}{$filePath}";
+    }
 
 }
