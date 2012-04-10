@@ -48,17 +48,18 @@ class Api_ErrorController extends Setuco_Controller_Action_ErrorAbstract
      */
     public function errorAction()
     {
+        $this->_helper->addHelper(new Setuco_Controller_Action_Helper_SetucoContextSwitch());
+        $contextSwitch = $this->_helper->getHelper('setucoContextSwitch');
+
+        $contextSwitch->setCurrentActionContext('json');
+
+
         // URL(admin/error/error)で直接アクセスの対策
         if (is_null($this->_getParam('error_handler'))) {
             throw new Setuco_Controller_IllegalAccessException('ページがありません。', 404);
         }
 
-        if (APPLICATION_ENV === 'production') {
-            $this->_productionOperation();
-        } else if (APPLICATION_ENV === 'development') {
-            $this->_developmentOperation();
-        } else {
-            $this->_developmentOperation();
-        }
+        $this->_setHttpResponseCode();
+        $this->_helper->viewRenderer->setScriptAction('error');
     }
 }
