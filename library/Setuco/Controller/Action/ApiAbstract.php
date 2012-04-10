@@ -51,8 +51,6 @@ abstract class Setuco_Controller_Action_ApiAbstract extends Setuco_Controller_Ac
         $this->_helper->addHelper(new Setuco_Controller_Action_Helper_SetucoContextSwitch());
         $contextSwitch = $this->_helper->getHelper('setucoContextSwitch');
 
-        //指定がない限り全アクションでJSONを返す
-        $contextSwitch->addActionContext($this->getRequest()->getParam('action'), 'json')
-                ->initContext('json');
+        $contextSwitch->setCurrentActionContext('json');
     }
 }
