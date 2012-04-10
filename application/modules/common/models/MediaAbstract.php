@@ -37,7 +37,7 @@
  * @subpackage Model
  * @author     suzuki-mar
  */
-class Common_Model_Media
+abstract class Common_Model_MediaAbstract
 {
     /**
      * ファイルの新規登録中に作成する一時ファイルの名前

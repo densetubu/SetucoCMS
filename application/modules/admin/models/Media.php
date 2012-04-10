@@ -37,7 +37,7 @@
  * @subpackage Model
  * @author     akitsukada
  */
-class Admin_Model_Media extends Common_Model_Media
+class Admin_Model_Media extends Common_Model_MediaAbstract
 {
 
     /**
