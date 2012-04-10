@@ -69,7 +69,7 @@ class Api_MediaController extends Setuco_Controller_Action_ApiAbstract
      */
     public function indexAction()
     {
-        $this->view->infos = $this->_media->findAllMedias();
+        $this->view->infos = $this->_media->findAllMediaInfos();
     }
    
 }
