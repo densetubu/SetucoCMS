@@ -79,4 +79,17 @@ class Setuco_Controller_Action_Helper_SetucoContextSwitch extends Zend_Controlle
             }
         }
     }
+
+    /**
+     * 現在のアクションを指定したコンテキストにする
+     *
+     * @param string コンテキスト名
+     * @author suzuki-mar
+     */
+    public function setCurrentActionContext($context)
+    {
+        $this->addActionContext($this->getRequest()->getParam('action'), $context)
+                ->initContext($context);
+    }
+
 }
