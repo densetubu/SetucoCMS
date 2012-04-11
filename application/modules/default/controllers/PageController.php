@@ -158,7 +158,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
      * あるカテゴリーに属するページの一覧を表示する、
      *
      * @return void
-     * @author akitsukada
+     * @author akitsukada suzuki-mar
      * @todo 一覧にはコンテンツの頭５行のみ表示する（現在は100文字表示）
      */
     public function categoryAction()
@@ -180,12 +180,22 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $currentPage = $this->_getPageNumber();
         $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
+
+        #foreach ($entries as &$entry) {
+        #    $entry = $this->_convertContents($entry);
+        #}
+        #unset($entry);
+
+        #exit;
+
+
         $date = new Zend_Date();
         foreach ($entries as $cnt => $entry) {
             $entries[$cnt]['contents'] = mb_substr(strip_tags($entry['contents']), 0, 100, 'UTF-8');
             $date->set($entry['update_date'], Zend_Date::ISO_8601);
             $entries[$cnt]['update_date'] = $date->toString('Y/MM/dd HH:mm');
         }
+
         $this->view->entries = $entries;
 
         if (is_null($id)) {
@@ -202,6 +212,20 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $this->setPagerForView($this->_pageService->countPagesByCategoryId($id, Setuco_Data_Constant_Page::STATUS_RELEASE), self::LIMIT_PAGE_CATEGORY);
 
     }
+
+    private function _convertContents($entry)
+    {
+        $entry['contents'] = '<p>hogefuga<!-- pagebreak -->aaaddd</p>';
+
+        if (preg_match("<!-- pagebreak -->", $entry['contents']) !== 0) {
+            $entry['contents'] = preg_replace('/<!-- pagebreak -->.*/', 'replace', $entry['contents']);
+        }
+
+        
+        var_dump($entry);
+        exit;
+    }
+
 
     /**
      * タグ名を検索して、該当するタグがつけられたページの一覧を表示する。
