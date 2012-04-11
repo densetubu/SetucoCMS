@@ -181,6 +181,11 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
 
+        $converter = new Setuco_Contents_Convert();
+
+        var_dump($converter);
+        exit;
+
         #foreach ($entries as &$entry) {
         #    $entry = $this->_convertContents($entry);
         #}

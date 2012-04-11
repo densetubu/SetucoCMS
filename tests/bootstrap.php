@@ -1,6 +1,6 @@
 <?php
 
-define('ROOT_DIR', '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..');
+define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..');
 define('LIB_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR);
 define('APPLICATION_PATH', ROOT_DIR . DIRECTORY_SEPARATOR . 'application');
 
@@ -9,6 +9,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
     realpath(LIB_DIR),
     get_include_path(),
 )));
+
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
