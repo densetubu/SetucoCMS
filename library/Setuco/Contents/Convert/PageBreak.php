@@ -63,8 +63,8 @@ class Setuco_Contents_Convert_PageBreak implements Setuco_Contents_ConvertInterf
 
     
     const DEFAULT_PAGE_BREAK_STRING = 'pagebreak';
-    const DEFAULT_REPLACEMENT_STRING = 'もっと読む';
-    const DEFAULT_REPLACEMENT_STRING_LENGTH = 300;
+    const DEFAULT_REPLACEMENT_STRING = '続きを読む';
+    const DEFAULT_REPLACEMENT_STRING_LENGTH = 200;
 
     public function  __construct()
     {
@@ -109,12 +109,9 @@ class Setuco_Contents_Convert_PageBreak implements Setuco_Contents_ConvertInterf
             return $entry;
         }
 
+        list($beforeString) = explode("<!-- {$this->_pageBreakString} -->", $entry['contents']);
 
-        $pattern = "/\<\!\-\- {$this->_pageBreakString} \-\-\>.*/";
-        $replacement = "<a href=\"{$this->_baseUrl}/id/{$entry['id']}\">{$this->_replacementString}</a>";
-
-        $entry['contents'] = preg_replace($pattern, $replacement, $entry['contents']);
-
+        $entry['contents'] = "{$beforeString}<a href=\"{$this->_baseUrl}/id/{$entry['id']}\">{$this->_replacementString}</a>";
 
         return $entry;
     }

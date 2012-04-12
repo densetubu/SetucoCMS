@@ -34,15 +34,21 @@ class PageBreakTest extends PHPUnit_Framework_TestCase
         $entry = $this->_baseEntry;
 
         #301文字
-        $firstString = 'あいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえ';
-        $lastString = 'おあいうえおあいうえおあいうえおあ';
+        $firstString = <<<EOF
+<p>あいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあい</p>
+    
+EOF;
 
-        $entry['contents'] = "{$firstString}<!-- pagebreak -->{$lastString}";
+        $lastString = <<<EOF
+<p>&nbsp;</p>
+<p>あいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいうえおあいう</p>
+EOF;
+
+        $entry['contents'] = "{$firstString}<p><!-- pagebreak --></p>{$lastString}";
 
         $convertedEntry = $entry;
 
-        $convertedEntry['contents'] = "{$firstString}<a href=\"http://setucocms.localdomain/page/category/id/10\">もっと読む</a>";
-
+        $convertedEntry['contents'] = "{$firstString}<p><a href=\"http://setucocms.localdomain/page/category/id/10\">もっと読む</a>";
 
         $this->assertSame($this->converter->convert($entry), $convertedEntry);
     }

@@ -29,7 +29,7 @@
  * @since      File available since Release 0.1.0
  * @param      entries カテゴリに属するページのデータを収めた配列
  * @param      category カテゴリのデータ
- * @author     akitsukada
+ * @author     akitsukada suzuki-mar
  */
 ?>
 <?php if (count($this->entries) > 0): ?>
@@ -46,8 +46,7 @@
                 <dd><a href="<?php echo $this->baseUrl('page/category/id/' . $this->category['id']) ?>" ><?php echo $this->escape($this->category['name']) ?></a></dd>
         </dl>
         <div class="entryBody">
-            <?php echo $this->escape($entry['contents'] . "\n") ?>
-            <p><a href="<?php  echo $this->baseUrl('page/show/id/' . $entry['id']) ?>">続きを読む</a></p>
+            <?php echo ($entry['contents'] . "\n") ?>
         </div>
         <p class="backTop"><a href="#wrapper">ページの先頭に戻る</a></p>
     </div>

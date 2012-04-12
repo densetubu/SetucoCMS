@@ -51,10 +51,28 @@ class Setuco_Filter_ModifiedUnclosedHtmlTag implements Zend_Filter_Interface
             return $text;
         }
 
-        $dom    = DOMDocument::loadHTML($text);
-        $html   = $dom->saveHTML();
+        $html = $this->_convertTagToHtml($text);
 
-        return  $this->_clipContentTag($html);;
+        $doc    = new DOMDocument();
+        $doc->loadHTML($html);
+        $validityHtml   = $doc->saveHTML();
+
+        return  $this->_clipContentTag($validityHtml);;
+    }
+
+    /**
+     * htmlの断片を完全なHTMLに修正する
+     *
+     * @param string $tag HTMLの断片
+     * @return string 完全なHTML
+     * @author suzuki-mar
+     */
+    private function _convertTagToHtml($tag)
+    {
+       //metaタグがないと文字化けになってしまう
+        $head = '<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /></head>';
+        $html = "<html>{$head}\n<body>{$tag}</body></html>";
+        return $html;
     }
 
     /**
@@ -70,9 +88,27 @@ class Setuco_Filter_ModifiedUnclosedHtmlTag implements Zend_Filter_Interface
                 '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">' . "\n",
                 '',
                 $html);
-        $contentTag = str_replace('<html><body>', '', $contentTag);
-        $contentTag = str_replace("</body></html>\n", '', $contentTag);
 
-        return $contentTag;
+        $contentTag = str_replace(
+                '<html>', '',
+                $contentTag);
+
+        $contentTag = str_replace(
+                '<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"></head>', '',
+                $contentTag);
+
+        $contentTag = str_replace(
+                '<body>', '',
+                $contentTag);
+
+        $contentTag = str_replace(
+                '</body>', '',
+                $contentTag);
+
+        $contentTag = str_replace(
+                '</html>', '',
+                $contentTag);
+
+        return trim($contentTag);
     }
 }

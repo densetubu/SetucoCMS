@@ -6,7 +6,7 @@ require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DI
  *
  * @author suzuki-mar
  */
-class ModifiedUnclosedHtmlTag extends PHPUnit_Framework_TestCase
+class ModifiedUnclosedHtmlTagTest extends PHPUnit_Framework_TestCase
 {
 
     public function setup()
@@ -16,7 +16,7 @@ class ModifiedUnclosedHtmlTag extends PHPUnit_Framework_TestCase
 
     public function testFilter_タグが閉じていないければ閉じていないタグを閉じる()
     {
-        $this->assertSame($this->filter->filter('<div>hoge<p>fuga<!-- hoge --></div>'), '<div>hoge<p>fuga<!-- hoge --></p></div>');
+        $this->assertSame($this->filter->filter('<div>ほげ<p>fuga<!-- hoge --></div>'), '<div>ほげ<p>fuga<!-- hoge --></p></div>');
     }
 
     public function testFilter_タグがひとつだけの場合()

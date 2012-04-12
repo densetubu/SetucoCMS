@@ -181,27 +181,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $entries = $this->_pageService->findPagesByCategoryId(
             $id, Setuco_Data_Constant_Page::STATUS_RELEASE, $currentPage, self::LIMIT_PAGE_CATEGORY);
 
-        $converter = new Setuco_Contents_Convert();
-
-        var_dump($converter);
-        exit;
-
-        #foreach ($entries as &$entry) {
-        #    $entry = $this->_convertContents($entry);
-        #}
-        #unset($entry);
-
-        #exit;
-
-
-        $date = new Zend_Date();
-        foreach ($entries as $cnt => $entry) {
-            $entries[$cnt]['contents'] = mb_substr(strip_tags($entry['contents']), 0, 100, 'UTF-8');
-            $date->set($entry['update_date'], Zend_Date::ISO_8601);
-            $entries[$cnt]['update_date'] = $date->toString('Y/MM/dd HH:mm');
-        }
-
-        $this->view->entries = $entries;
+        $this->view->entries = $this->_convertEntryies($entries, $this->_createConverter());
 
         if (is_null($id)) {
             $category = Setuco_Data_Constant_Category::UNCATEGORIZED_INFO();
@@ -218,19 +198,48 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
 
     }
 
-    private function _convertContents($entry)
+    /**
+     * コンバータークラスのインスタンスを生成する
+     *
+     * @return Setuco_Contents_Convert　使用するエレメントを登録した状態
+     * @author suzuki-mar
+     */
+    private function _createConverter()
     {
-        $entry['contents'] = '<p>hogefuga<!-- pagebreak -->aaaddd</p>';
+        $converter = new Setuco_Contents_Convert();
+        $pageBreak = new Setuco_Contents_Convert_PageBreak();
+        $pageBreak->setBaseUrl("http://setucocms.localdomain/page/show");
+        $converter->addElement($pageBreak);
 
-        if (preg_match("<!-- pagebreak -->", $entry['contents']) !== 0) {
-            $entry['contents'] = preg_replace('/<!-- pagebreak -->.*/', 'replace', $entry['contents']);
-        }
+        return $converter;
 
-        
-        var_dump($entry);
-        exit;
     }
 
+    /**
+     * 記事を閲覧用に変換する
+     *
+     * @param array $entries 閲覧用に変換する記事データ
+     * @param Setuco_Contents_Convert $converter 閲覧用に使用するコンバーター エレメントは登録してある状態
+     * @return array 閲覧用に変換した記事データ
+     * @author suzuki-mar
+     */
+     private function _convertEntryies(array $entries, Setuco_Contents_Convert $converter)
+     {
+        $unclosedFilter = new Setuco_Filter_ModifiedUnclosedHtmlTag();
+        $date = new Zend_Date();
+
+        foreach ($entries as &$entry) {
+            $entry = $converter->convert($entry);
+
+            $entry['contents'] = $unclosedFilter->filter($entry['contents']);
+
+            $date->set($entry['update_date'], Zend_Date::ISO_8601);
+            $entry['update_date'] = $date->toString('Y/MM/dd HH:mm');
+        }
+        unset($entry);
+
+        return $entries;
+     }
 
     /**
      * タグ名を検索して、該当するタグがつけられたページの一覧を表示する。
