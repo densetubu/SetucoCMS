@@ -271,6 +271,8 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      */
     public function loadPagesByKeyword4Pager(Common_Model_Page_Param $paramIns)
     {
+        var_dump($paramIns);
+
         $select = $this->_createSelectByKeyword($paramIns);
         $select->limitPage($paramIns->getPageNumber(), $paramIns->getLimit());
         return $this->fetchAll($select)->toArray();
