@@ -271,12 +271,22 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      */
     public function loadPagesByKeyword4Pager(Common_Model_Page_Param $paramIns)
     {
-        var_dump($paramIns);
-
+        
         $select = $this->_createSelectByKeyword($paramIns);
+
         $select->limitPage($paramIns->getPageNumber(), $paramIns->getLimit());
+
+        
+
         return $this->fetchAll($select)->toArray();
     }
+
+//    public function loadPagesByKeyword4Pager(Common_Model_Page_Param $paramIns)
+//    {
+//        $select = $this->_createSelectByKeyword($paramIns);
+//        $select->limitPage($paramIns->getPageNumber(), $paramIns->getLimit());
+//        return $this->fetchAll($select)->toArray();
+//    }
 
     /**
      * ページをキーワード&タグIDで検索し、該当するページの合計数を求める。
@@ -301,6 +311,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
     private function _createSelectByKeyword(Common_Model_Page_Param $paramIns)
     {
         $select = $this->select();
+
         $select->from(
                 array('p' => $this->_name),
                 array('*')
@@ -308,33 +319,23 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 
         // ORDER BY
         $select->order("{$paramIns->getSortColumn()} {$paramIns->getOrder()}");
-        // JOIN
-        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
-        $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
-        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array(/* 'tag_name' => 't.name' */)); // タグ情報はここではつけない
-        $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
-        $select->setIntegrityCheck(false);
+        $select = $this->_joinTable4KeywordSearch($select, $paramIns);
         // グルーピングの指定
         $select->group('p.id');
 
-        //キーワード検索用のWHERE
-        $pageSearchWhere = $this->_createPageSearchWhere($paramIns);
 
-        if ($pageSearchWhere !== '') {
-            $bind = $this->_createPageSearchBinds($paramIns);
-            $select->where($pageSearchWhere);
+        $bind = array();
+
+        //キーワード検索用のWHERE
+        if ($paramIns->isSearchKeyword()) {
+            $bind = array_merge($bind, $this->_createPageSearchBinds($paramIns));
+            $select = $this->_addKeywordWhere4SearchKeyword($select, $paramIns);
         }
 
         // カテゴリー・制作者・公開状態が指定された場合にWhere句を編集
-        if (is_array($paramIns->getRefinements()) && !$paramIns->isEmpty('refinements')) {
-            foreach ($paramIns->getRefinements() as $column => $value) {
-                if ($column === 'category_id' && $value === null) {
-                    $select->where("category_id IS NULL");
-                    continue;
-                }
-                $select->where("{$column} = :{$column}");
-                $bind[":{$column}"] = $value;
-            }
+        if ($paramIns->isSearchRefinements()) {
+            $select = $this->_addRefinementsWhere4SearchKeyword($select, $paramIns);
+            $bind = array_merge($bind, $this->_createRefinementsBind4SearchKeyword($paramIns));
         }
 
         array_unique($bind);
@@ -342,6 +343,68 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 
         return $select;
     }
+
+    /**
+     * 詳細検索用のwhere句をselectインスタンスに追加する
+     *
+     * @param Zend_Db_Table_Select 詳細検索用のWHERE句を追加するSelectインスタンス
+     * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
+     * @return Zend_Db_Table_Selec 詳細検索用のWHEREを追加した物
+     */
+    private function _addRefinementsWhere4SearchKeyword(Zend_Db_Table_Select $select, Common_Model_Page_Param $paramIns)
+    {
+       foreach ($paramIns->getRefinements() as $column => $value) {
+            if ($column === 'category_id' && $value === null) {
+                $select->where("category_id IS NULL");
+                continue;
+            }
+            $select->where("{$column} = :{$column}");
+       }
+
+       return $select;
+
+    }
+
+    /**
+     * 詳細検索用のbindを作成する
+     *
+     * @param Zend_Db_Table_Select 詳細検索用のWHERE句を追加するSelectインスタンス
+     * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
+     * @return Zend_Db_Table_Selec 詳細検索用のWHEREを追加した物
+     * @author suzuki-mar
+     */
+     private function _createRefinementsBind4SearchKeyword(Common_Model_Page_Param $paramIns)
+     {
+        $bind = array();
+
+        foreach ($paramIns->getRefinements() as $column => $value) {
+            if ($column === 'category_id' && $value === null) {
+                continue;
+            }
+            $bind[":{$column}"] = $value;
+        }
+
+        return $bind;
+     }
+
+    /**
+     * キーワード検索のSelectインスタンスをがテーブル結合する
+     * @param Zend_Db_Table_Select 初期化をするSelectインスタンス
+     * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
+     * @return Zend_Db_Table_Select 初期化をしたSelectインスタンス
+     * @author suzuki_mar
+     */
+    private function _joinTable4KeywordSearch(Zend_Db_Table_Select $select, Common_Model_Page_Param $paramIns)
+    {
+        $select->joinLeft(array('pt' => 'page_tag'), 'pt.page_id = p.id', array());
+        $select->joinLeft(array('c' => 'category'), 'c.id = p.category_id', array('category_name' => 'c.name'));
+        $select->joinLeft(array('t' => 'tag'), 't.id = pt.tag_id', array(/* 'tag_name' => 't.name' */)); // タグ情報はここではつけない
+        $select->join(array('a' => 'account'), 'p.account_id = a.id', array('account_id' => 'a.id', 'a.nickname'));
+        $select->setIntegrityCheck(false);
+        
+        return $select;
+    }
+
 
     /**
      * 検索キーワード用のWhere句にセットするバインド変数をセットする
@@ -352,84 +415,141 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      */
     private function _createPageSearchBinds(Common_Model_Page_Param $paramIns)
     {
+        $result = array();
 
-        if (!$paramIns->isEmpty('targetColumns')) {
-            $result = Setuco_Sql_Generator::createMultiLikeTargets($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_KEYWORD);
+        if ($paramIns->isInTargetColumn('title')) {
+            $result[':keyword_title'] = "%{$paramIns->getKeyword()}%";
         }
 
-        //contentsのみタグが含まれていないかのチェックをする
-        if (in_array('contents', $paramIns->getTargetColumns()) && !$paramIns->isEmpty('keyword')) {
-            $result = array_merge($result,
-                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_START, '<[^>]*', '[^<]*>'),
-                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_END, '>[^<]*', '+'));
+        if ($paramIns->isInTargetColumn('contents')) {
+            $result[':keyword_contents'] = "%{$paramIns->getKeyword()}%";
         }
 
-        if (in_array('tag', $paramIns->getTargetColumns())) {
-            if (is_array($paramIns->getTagIds()) && !$paramIns->isEmpty('tagIds')) {
-                $result[':tagIds'] = implode(",", $paramIns->getTagIds());
-            }
+        if ($paramIns->isInTargetColumn('outline')) {
+            $result[':keyword_outline'] = "%{$paramIns->getKeyword()}%";
+        }
+
+        if ($paramIns->isTargetTag()) {
+            $result[':tagIds'] = implode(",", $paramIns->getTagIds());
         }
 
         return $result;
+
+//        if (!$paramIns->isEmpty('targetColumns')) {
+//            $result = Setuco_Sql_Generator::createMultiLikeTargets($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_KEYWORD);
+//        }
+//
+//        //contentsのみタグが含まれていないかのチェックをする
+//        if (in_array('contents', $paramIns->getTargetColumns()) && !$paramIns->isEmpty('keyword')) {
+//            $result = array_merge($result,
+//                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_START, '<[^>]*', '[^<]*>'),
+//                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_END, '>[^<]*', '+'));
+//        }
+//
+//        if (in_array('tag', $paramIns->getTargetColumns())) {
+//            if (is_array($paramIns->getTagIds()) && !$paramIns->isEmpty('tagIds')) {
+//                $result[':tagIds'] = implode(",", $paramIns->getTagIds());
+//            }
+//        }        
     }
 
     /**
      * ページ検索用のWHERE句を生成する
      *
+     * @param Zend_Db_Table_Select $select 初期化をするSelectインスタンス
      * @param Common_Model_Page_Param $paramIns 検索パラメーターオブジェクト
      * @return string ページ検索用のWHERE句
      * @author suzuki-mar
      */
-    private function _createPageSearchWhere(Common_Model_Page_Param $paramIns)
+    private function _addKeywordWhere4SearchKeyword(Zend_Db_Table_Select $select, Common_Model_Page_Param $paramIns)
     {
-        // WHERE句の生成
-        $result = '';
-        //文字列を置換するので、中間変数を作成する
-        $paramIns->setEscapeKeyword(Setuco_Sql_Generator::escapeLikeString($paramIns->getKeyword()));
+        $where = '';
 
-        if (in_array('title', $paramIns->getTargetColumns())) {
-            //MySQLのreplace関数を使用するので
-            $titleColumnName = Setuco_Sql_Generator::createBsReplacedExpression('p.title');
-            $result .= Setuco_Sql_Generator::createMultiLike($paramIns->getEscapeKeyword(), $titleColumnName, self::PLACE_HOLDER_PREFIX_KEYWORD, $paramIns->getSearchOperator());
+        if ($paramIns->isInTargetColumn('title')) {
+            $where .= 'title LIKE :keyword_title';
         }
 
-        if (in_array('contents', $paramIns->getTargetColumns())) {
-            if ($result !== '') {
-                $result .= ' OR ';
+        if ($paramIns->isInTargetColumn('contents')) {
+
+            if ($where !== '') {
+                $where .= ' OR ';
             }
 
-            //タグを検索しないようにするための条件も合わせて設定する
-            $result .= $this->_createContentsMulitiLike($paramIns);
+            $where .= ' contents LIKE :keyword_contents';
         }
 
+        if ($paramIns->isInTargetColumn('outline')) {
 
-        if (in_array('outline', $paramIns->getTargetColumns())) {
-            if ($result !== '') {
-                $result .= ' OR ';
+            if ($where !== '') {
+                $where .= ' OR ';
             }
-            //MySQLのreplace関数を使用するので
-            $outlineColumnName = Setuco_Sql_Generator::createBsReplacedExpression('p.outline');
-            $result .= Setuco_Sql_Generator::createMultiLike($paramIns->getEscapeKeyword(), $outlineColumnName, self::PLACE_HOLDER_PREFIX_KEYWORD, $paramIns->getSearchOperator());
+
+            $where .= ' outline LIKE :keyword_outline';
         }
 
+        if ($paramIns->isTargetTag()) {
+            if ($where !== '') {
+                $where .= ' OR ';
+            }
 
-        if (in_array('tag', $paramIns->getTargetColumns())) {
-            if ($result !== '') {
-                $result .= ' OR ';
-            }
-            $result .= " (";
-            if (is_array($paramIns->getTagIds()) && !$paramIns->isEmpty('tagIds')) {
-                $result .= ' t.id IN(:tagIds) ';
-                $bind[':tagIds'] = implode(",", $paramIns->getTagIds());
-            } else {
-                // 該当するタグが無かったときは明示的にfalseとする
-                $result .= 't.id <> t.id';
-            }
-            $result .= ")";
+            $where .= " (t.id IN(:tagIds))";
         }
 
-        return $result;
+        $select->where($where);
+
+        return $select;
     }
+
+//    private function _createPageSearchWhere(Common_Model_Page_Param $paramIns)
+//    {
+//        // WHERE句の生成
+//        $result = '';
+//        //文字列を置換するので、中間変数を作成する
+//        $paramIns->setEscapeKeyword(Setuco_Sql_Generator::escapeLikeString($paramIns->getKeyword()));
+//
+//        if (in_array('title', $paramIns->getTargetColumns())) {
+//            //MySQLのreplace関数を使用するので
+//            $titleColumnName = Setuco_Sql_Generator::createBsReplacedExpression('p.title');
+//            $result .= Setuco_Sql_Generator::createMultiLike($paramIns->getEscapeKeyword(), $titleColumnName, self::PLACE_HOLDER_PREFIX_KEYWORD, $paramIns->getSearchOperator());
+//        }
+//
+//        if (in_array('contents', $paramIns->getTargetColumns())) {
+//            if ($result !== '') {
+//                $result .= ' OR ';
+//            }
+//
+//            //タグを検索しないようにするための条件も合わせて設定する
+//            $result .= $this->_createContentsMulitiLike($paramIns);
+//        }
+//
+//
+//        if (in_array('outline', $paramIns->getTargetColumns())) {
+//            if ($result !== '') {
+//                $result .= ' OR ';
+//            }
+//            //MySQLのreplace関数を使用するので
+//            $outlineColumnName = Setuco_Sql_Generator::createBsReplacedExpression('p.outline');
+//            $result .= Setuco_Sql_Generator::createMultiLike($paramIns->getEscapeKeyword(), $outlineColumnName, self::PLACE_HOLDER_PREFIX_KEYWORD, $paramIns->getSearchOperator());
+//        }
+//
+//
+//        if (in_array('tag', $paramIns->getTargetColumns())) {
+//            if ($result !== '') {
+//                $result .= ' OR ';
+//            }
+//            $result .= " (";
+//            if (is_array($paramIns->getTagIds()) && !$paramIns->isEmpty('tagIds')) {
+//                $result .= ' t.id IN(:tagIds) ';
+//                $bind[':tagIds'] = implode(",", $paramIns->getTagIds());
+//            } else {
+//                // 該当するタグが無かったときは明示的にfalseとする
+//                $result .= 't.id <> t.id';
+//            }
+//            $result .= ")";
+//        }
+//
+//        return $result;
+//    }
 
     /**
      * 引数で渡した文字列を分解して複数のLIKE用のSQLを生成する
