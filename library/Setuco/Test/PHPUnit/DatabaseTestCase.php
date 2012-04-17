@@ -38,7 +38,13 @@
 
 class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase
 {
-        protected $_connectionMock = null;
+    protected $_connectionMock = null;
+
+    /**
+     * フィクスチャーのベースパス
+     */
+    const FIXTURE_BASE_PATH = '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/';
+
 
     protected function getConnection()
     {
@@ -65,10 +71,14 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
     protected function getDataSet()
     {
         $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
-        $dataset->addTable('account', '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/accounts.csv');
-        $dataset->addTable('category', '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/categories.csv');
-        $dataset->addTable('tag', '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/tags.csv');
-        $dataset->addTable('page', '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/pages.csv');
+
+        $globPattern = self::FIXTURE_BASE_PATH . '*.csv';
+
+        foreach (glob($globPattern) as $filePath) {
+            $baseFile = basename($filePath);
+            $tableName = str_replace('.csv', '', $baseFile);
+            $dataset->addTable($tableName, $filePath);
+        }
 
         return $dataset;
     }
