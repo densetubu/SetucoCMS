@@ -9,6 +9,7 @@ require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DI
 
 class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
+
     const DATA_TITLE_ID = 1;
     const DAtA_MULTI_KEYWORD_ID = 2;
     const DATA_CONTENTS_ID = 3;
@@ -16,6 +17,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     const DATA_TAG_ID = 5;
     const DATA_ACCOUNT_ID = 6;
     const DATA_ACCOUNT_ONLY_ID = 7;
+    const DATA_NOTAG_ID = 9;
 
 
     public function setup()
@@ -207,9 +209,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
-    /**
-     * @group now
-     */
+
     public function testloadPagesByKeyword4Pager_複数キーワード検索をする_アウトライン()
     {
         $expects = array(
@@ -218,6 +218,19 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 
         $params = $this->_params;
         $params->setDaoParams(array('keyword' => 'アウト ライン　検索'));
+        $params->setDaoParams(array('tagIds' => array()));
+
+        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+    }
+
+    public function testloadPagesByKeyword4Pager_コンテンツの場合タグは検索しないか()
+    {
+        $expects = array(
+            $this->_getExpectsPageData(self::DATA_NOTAG_ID, array('contents' => 'ppp')),
+        );
+
+        $params = $this->_params;
+        $params->setDaoParams(array('keyword' => 'p'));
         $params->setDaoParams(array('tagIds' => array()));
 
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
