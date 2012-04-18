@@ -124,6 +124,28 @@ class Common_Model_Page_Param
     }
 
     /**
+     * キーワード検索をするものを取得するカラム名
+     *
+     * LIKE句で検索するもの
+     *
+     * @return array キーワード検索で検索するカラム名
+     * @author suzuki-mar
+     */
+    public function getKeywordSearchColumns()
+    {
+        $columns = $this->_targetColumns;
+
+        foreach($columns as $key => $name) {
+            if ($name === 'tag') {
+                unset($columns[$key]);
+                break;
+            }
+        }
+        
+        return $columns;
+    }
+
+    /**
      * DAOで使用できるパラメーターを変更できる
      *
      * @param array $params 変更するパラメーター key フィールド名 value フィールドの値
@@ -205,11 +227,7 @@ class Common_Model_Page_Param
      */
     public function isSearchKeyword()
     {
-        if ($this->isTargetTag()) {
-            return true;
-        }
-
-        foreach ($this->_targetColumns as $name) {
+        foreach ($this->getKeywordSearchColumns() as $name) {
             if ($this->isInTargetColumn($name)) {
                 return true;
             }

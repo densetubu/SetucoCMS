@@ -10,6 +10,7 @@ require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DI
 class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
     const DATA_TITLE_ID = 1;
+    const DAtA_MULTI_KEYWORD_ID = 2;
     const DATA_CONTENTS_ID = 3;
     const DATA_OUTLINE_ID = 4;
     const DATA_TAG_ID = 5;
@@ -69,7 +70,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectsPageData(self::DATA_ACCOUNT_ID,
                     array(
                         'nickname'      => '検索する人',
-                        'title'         => 'タイトルで検索して',
+                        'title'         => 'アカウントで検索して',
                         'account_id'    => 3
                         )),
         );
@@ -87,8 +88,6 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'hogefuga'));
         $params->setDaoParams(array('targetColumns' => array('tag')));
 
-        $pageTags = new Common_Model_DbTable_PageTag($this->getAdapter());
-
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
@@ -101,7 +100,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectsPageData(self::DATA_ACCOUNT_ID,
                     array(
                         'nickname'      => '検索する人',
-                        'title'         => 'タイトルで検索して',
+                        'title'         => 'アカウントで検索して',
                         'account_id'    => 3
                         )),
        );
@@ -118,7 +117,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectsPageData(self::DATA_ACCOUNT_ID,
                     array(
                         'nickname'      => '検索する人',
-                        'title'         => 'タイトルで検索して',
+                        'title'         => 'アカウントで検索して',
                         'account_id'    => 3
                         )),
        );
@@ -134,7 +133,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectsPageData(self::DATA_ACCOUNT_ID,
                     array(
                         'nickname'      => '検索する人',
-                        'title'         => 'タイトルで検索して',
+                        'title'         => 'アカウントで検索して',
                         'account_id'    => 3
                         )),
             $this->_getExpectsPageData(self::DATA_ACCOUNT_ONLY_ID,
@@ -180,7 +179,49 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
+    public function testloadPagesByKeyword4Pager_複数キーワード検索をする_タイトル()
+    {
+        $expects = array(
+            $this->_getExpectsPageData(self::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
+            $this->_getExpectsPageData(self::DAtA_MULTI_KEYWORD_ID, array('title' => 'タイトルで検索しないで')),
+        );
 
+        $params = $this->_params;
+        $params->setDaoParams(array('keyword' => 'タイトル　検索'));
+        $params->setDaoParams(array('tagIds' => array()));
+
+        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+    }
+
+
+    public function testloadPagesByKeyword4Pager_複数キーワード検索をする_コンテンツ()
+    {
+        $expects = array(
+            $this->_getExpectsPageData(self::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
+        );
+
+        $params = $this->_params;
+        $params->setDaoParams(array('keyword' => 'コンテンツ　検索'));
+        $params->setDaoParams(array('tagIds' => array()));
+
+        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+    }
+
+    /**
+     * @group now
+     */
+    public function testloadPagesByKeyword4Pager_複数キーワード検索をする_アウトライン()
+    {
+        $expects = array(
+            $this->_getExpectsPageData(self::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
+        );
+
+        $params = $this->_params;
+        $params->setDaoParams(array('keyword' => 'アウト ライン　検索'));
+        $params->setDaoParams(array('tagIds' => array()));
+
+        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+    }
 
 }
 

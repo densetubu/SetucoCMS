@@ -11,19 +11,19 @@ class Setuco_Sql_GeneratorTest extends PHPUnit_Framework_TestCase
     public function testcreateMultiLike4Keyword_複数キーワード検索ようのLike句を作成する_スペースが無い場合()
     {
         $like = Setuco_Sql_Generator::createMultiLike4Keyword('aaa', 'column_name', 'keyword', 'AND');
-        $this->assertSame('( (column_name LIKE %:keyword0%) )', $like);
+        $this->assertSame('( (column_name LIKE :keyword0) )', $like);
     }
 
     public function testCreateMultiLike4Keyword_スペースが１つある場合()
     {
         $like = Setuco_Sql_Generator::createMultiLike4Keyword('aaa　bbb', 'name', 'word', 'AND');
-        $this->assertSame('( (name LIKE %:word0%) AND (name LIKE %:word1%) )', $like);
+        $this->assertSame('( (name LIKE :word0) AND (name LIKE :word1) )', $like);
     }
 
     public function testCreateMultiLike4Keyword_ORにすることもできる()
     {
         $like = Setuco_Sql_Generator::createMultiLike4Keyword('aaa bbb', 'name', 'word', 'OR');
-        $this->assertSame('( (name LIKE %:word0%) OR (name LIKE %:word1%) )', $like);
+        $this->assertSame('( (name LIKE :word0) OR (name LIKE :word1) )', $like);
     }
 
     public function testCreateMulitiLikeBind4Keyword_複数キーワード検索用のLIKE句のbindを作成する()

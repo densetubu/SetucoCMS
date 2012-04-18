@@ -72,7 +72,7 @@ class Setuco_Sql_Generator
         for ($i = 0; $i < count($targetLists); $i++) {
             $result .= "(";
             $target = ":{$placeBaseName}{$i}";
-            $result .= "{$columnName} LIKE %{$target}%";
+            $result .= "{$columnName} LIKE {$target}";
             $result .= ") {$searchOperator} ";
         }
 
