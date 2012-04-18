@@ -63,21 +63,6 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
     const STATUS_DRAFT = 0;
 
     /**
-     * キーワード検索のプレースホルダーのプレフィックス
-     */
-    const PLACE_HOLDER_PREFIX_KEYWORD = 'keyword';
-
-    /**
-     * 開始タグチェックのプレースホルダーのプレフィックス
-     */
-    const PLACE_HOLDER_PREFIX_CHECK_START = 'startExp';
-
-    /**
-     * 終了タグチェックのプレースホルダーのプレフィックス
-     */
-    const PLACE_HOLDER_PREFIX_CHECK_END = 'endExp';
-
-    /**
      * 新着ページを取得する
      *
      * @param int $limit 何件のページを取得するのか
@@ -271,11 +256,8 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
      */
     public function loadPagesByKeyword4Pager(Common_Model_Page_Param $paramIns)
     {
-        
         $select = $this->_createSelectByKeyword($paramIns);
-
         $select->limitPage($paramIns->getPageNumber(), $paramIns->getLimit());
-
         return $this->fetchAll($select)->toArray();
     }
 
@@ -416,7 +398,14 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
         $result = array();
 
         if ($paramIns->isSearchKeyword()) {
-            $result = Setuco_Sql_Generator::createMultiLikeTargets($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_KEYWORD);
+            $result = Setuco_Sql_Generator::createMultiLikeTargets($paramIns->getKeyword());
+
+            if ($paramIns->isInTargetColumn('contents')) {
+                $result = array_merge(
+                            $result,
+                            Setuco_Sql_Generator::createMulitiNoSearchTagBindParams($paramIns->getKeyword())
+                          );
+            }
         }
 
         if ($paramIns->isTargetTag()) {
@@ -429,9 +418,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 //
 //        //contentsのみタグが含まれていないかのチェックをする
 //        if (in_array('contents', $paramIns->getTargetColumns()) && !$paramIns->isEmpty('keyword')) {
-//            $result = array_merge($result,
-//                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_START, '<[^>]*', '[^<]*>'),
-//                            Setuco_Sql_Generator::createMulitiBindParams($paramIns->getKeyword(), self::PLACE_HOLDER_PREFIX_CHECK_END, '>[^<]*', '+'));
+//            
 //        }
 //
        
@@ -457,8 +444,13 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
                     $where .= ' OR ';
                 }
 
-                $searchColumnName = Setuco_Sql_Generator::createBsReplacedExpression($columnName);
-                $where .= Setuco_Sql_Generator::createMultiLike4Keyword($paramIns->getEscapeKeyword(), $searchColumnName, self::PLACE_HOLDER_PREFIX_KEYWORD, $paramIns->getSearchOperator());
+                if ($columnName === 'contents') {
+                    //タグを検索しないようにするための条件も合わせて設定する
+                    $where .= $this->_createContentsMulitiLike($paramIns);
+                } else {
+                    $searchColumnName = Setuco_Sql_Generator::createBsReplacedExpression($columnName);
+                    $where .= Setuco_Sql_Generator::createMultiLike4Keyword($paramIns->getEscapeKeyword(), $searchColumnName, $paramIns->getSearchOperator());
+                }
             }
         }
 
@@ -483,8 +475,7 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 //                $result .= ' OR ';
 //            }
 //
-//            //タグを検索しないようにするための条件も合わせて設定する
-//            $result .= $this->_createContentsMulitiLike($paramIns);
+
 //        }
 //
 //
@@ -508,9 +499,9 @@ class Common_Model_DbTable_Page extends Setuco_Db_Table_Abstract
 
         for ($i = 0; $i < count($targetLists); $i++) {
             $result .= " (";
-            $result .= $columnName . " LIKE :" . self::PLACE_HOLDER_PREFIX_KEYWORD . $i;
+            $result .= $columnName . " LIKE :" . Setuco_Sql_Generator::PLACE_HOLDER_PREFIX_KEYWORD . $i;
             if ($targetLists[$i] !== '' && !is_null($targetLists[$i])) {
-                $result .= " AND (p.contents NOT REGEXP :" . self::PLACE_HOLDER_PREFIX_CHECK_START . "{$i} OR p.contents REGEXP :" . self::PLACE_HOLDER_PREFIX_CHECK_END . "{$i}) ";
+                $result .= " AND (p.contents NOT REGEXP :" . Setuco_Sql_Generator::PLACE_HOLDER_PREFIX_CHECK_TAG_START . "{$i} OR p.contents REGEXP :" . Setuco_Sql_Generator::PLACE_HOLDER_PREFIX_CHECK_TAG_END . "{$i}) ";
             }
             $result .= ") {$paramIns->getSearchOperator()}";
         }

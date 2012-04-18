@@ -33,6 +33,21 @@ class Setuco_Sql_Generator
     const BACKSLASH_REPLACER = '__BS__';
 
     /**
+     * キーワード検索のプレースホルダーのプレフィックス
+     */
+    const PLACE_HOLDER_PREFIX_KEYWORD = 'keyword';
+
+    /**
+     * 開始タグチェックのプレースホルダーのプレフィックス
+     */
+    const PLACE_HOLDER_PREFIX_CHECK_TAG_START = 'startExp';
+
+    /**
+     * 終了タグチェックのプレースホルダーのプレフィックス
+     */
+    const PLACE_HOLDER_PREFIX_CHECK_TAG_END = 'endExp';
+
+    /**
      * 複数LIKE用の検索する文字列のリストを作成する
      *
      * createMultiLikeメソッドを使用してPDOなどのプレスホルダーを使用する場合にセットで使用する
@@ -46,9 +61,9 @@ class Setuco_Sql_Generator
      * @return array 複数LIKEの検索文字列のリスト
      * @author suzuki-mar
      */
-    public static function createMultiLikeTargets($targetString, $placeBaseName)
+    public static function createMultiLikeTargets($targetString)
     {
-        return self::createMulitiBindParams($targetString, $placeBaseName, '%', '%');
+        return self::createMulitiBindParams($targetString, '%', '%');
     }
 
     /**
@@ -58,12 +73,11 @@ class Setuco_Sql_Generator
      *
      * @param string $targetString LIKEで検索する文字列
      * @param string $columnName 検索するカラム名
-     * @param string[option] $placeBaseName プレスホルダーを使用する場合のベース名　これを連番にする
      * @param string[option] $searchOperator ANDかORで検索するか デフォルトはAND
      * @return string 生成されたSQLの文字列
      * @author suzuki-mar
      */
-    public static function createMultiLike4Keyword($targetString, $columnName, $placeBaseName = null, $searchOperator = 'AND')
+    public static function createMultiLike4Keyword($targetString, $columnName, $searchOperator = 'AND')
     {
         $targetLists = Setuco_Util_String::convertArrayByDelimiter($targetString);
 
@@ -71,7 +85,7 @@ class Setuco_Sql_Generator
 
         for ($i = 0; $i < count($targetLists); $i++) {
             $result .= "(";
-            $target = ":{$placeBaseName}{$i}";
+            $target = ":". self::PLACE_HOLDER_PREFIX_KEYWORD . $i;
             $result .= "{$columnName} LIKE {$target}";
             $result .= ") {$searchOperator} ";
         }
@@ -124,18 +138,23 @@ class Setuco_Sql_Generator
      * が戻り値となる
      *
      * @param string $targetString 分割する文字列
-     * @param string $placeBaseName プレースホルダーのベース名 これを連番にする
      * @param string[option] $beginningString 分割した文字列の先頭に追加する文字列
      * @param string[option] $endString 分割した文字列の後に追加する文字列
+     * @param string[option] $placeHolder　使用するプレースホルダー 指定がない場合はkeywordを使用する
+     * @return array bindで使用する配列
+     * @author suzuki-mar
      */
-    public static function createMulitiBindParams($targetString, $placeBaseName, $beginningString = null, $endString = null)
+    public static function createMulitiBindParams($targetString, $beginningString = null, $endString = null, $placeHolder = null)
     {
         $targetLists = Setuco_Util_String::convertArrayByDelimiter($targetString);
+        if (is_null($placeHolder)) {
+            $placeHolder = self::PLACE_HOLDER_PREFIX_KEYWORD;
+        }
 
         $result = '';
 
         for ($i = 0; $i < count($targetLists); $i++) {
-            $key = ":{$placeBaseName}{$i}";
+            $key = ":{$placeHolder}{$i}";
             $value = $targetLists[$i];
             if (!is_null($beginningString)) {
                 $value = $beginningString . $value;
@@ -149,5 +168,23 @@ class Setuco_Sql_Generator
         }
 
         return $result;
+    }
+
+    /**
+     * タグを検索しないようのbindを作成する
+     *
+     * 指定した文字列をスペースで分割する
+     * 開始タグと終了タグ用の2種類を同時に作成する
+     *
+     * @param string $targetString 分割する文字列
+     * @return array bindで使用する配列　開始タグと終了タグのセットずつ
+     * @author suzuki-mar
+     */
+    public static function createMulitiNoSearchTagBindParams($targetString)
+    {
+
+        $binds = self::createMulitiBindParams($targetString, '<[^>]*', '[^<]*>', self::PLACE_HOLDER_PREFIX_CHECK_TAG_START);
+        $binds += self::createMulitiBindParams($targetString, '>[^<]*', '+', self::PLACE_HOLDER_PREFIX_CHECK_TAG_END);
+        return $binds;
     }
 }
