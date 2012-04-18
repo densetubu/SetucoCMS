@@ -58,12 +58,12 @@ class Setuco_Sql_Generator
      *
      * @param string $targetString LIKEで検索する文字列
      * @param string $columnName 検索するカラム名
-     * @param string[default] $placeBaseName プレスホルダーを使用する場合のベース名　これを連番にする
-     * @param string[default] $searchOperator ANDかORで検索するか デフォルトはAND
+     * @param string[option] $placeBaseName プレスホルダーを使用する場合のベース名　これを連番にする
+     * @param string[option] $searchOperator ANDかORで検索するか デフォルトはAND
      * @return string 生成されたSQLの文字列
      * @author suzuki-mar
      */
-    public static function createMultiLike($targetString, $columnName, $placeBaseName = null, $searchOperator = 'AND')
+    public static function createMultiLike4Keyword($targetString, $columnName, $placeBaseName = null, $searchOperator = 'AND')
     {
         $targetLists = Setuco_Util_String::convertArrayByDelimiter($targetString);
 
@@ -71,19 +71,14 @@ class Setuco_Sql_Generator
 
         for ($i = 0; $i < count($targetLists); $i++) {
             $result .= "(";
-
-            if (is_null($placeBaseName)) {
-              $target = "%{$value}%";
-            } else {
-              $target = ":{$placeBaseName}{$i}";
-            }
-
-            $result .= "{$columnName} LIKE {$target}";
+            $target = ":{$placeBaseName}{$i}";
+            $result .= "{$columnName} LIKE %{$target}%";
             $result .= ") {$searchOperator} ";
         }
 
         //最後のAND(OR)を削除するため
-        $result = substr($result, 0, -5);
+        //後ろから削除するので        
+        $result = preg_replace("/ {$searchOperator} $/", '', $result);
         $result .= " )";
 
         return $result;
