@@ -42,9 +42,5 @@ class Fixture_Account extends Setuco_Test_Fixture_Abstract
     {
         return array('id' => self::TARGET_ID, 'login_id' => 'search', 'nickname' => '検索する人');
     }
-
-
- 
-
 }
 
