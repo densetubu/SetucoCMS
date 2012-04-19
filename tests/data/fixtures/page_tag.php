@@ -26,12 +26,12 @@ class Fixture_Page_Tag extends Setuco_Test_Fixture_Abstract
 
     public function getDataOfTest()
     {
-        return array('page_id' => 5, 'tag_id' => 1);
+        return array('page_id' => 5, 'tag_id' => Fixture_Tag::TEST_ID);
     }
     
     public function getDataOfSetuco()
     {
-        return array('page_id' => 5, 'tag_id' => 2);
+        return array('page_id' => 5, 'tag_id' => Fixture_Tag::SETUCO_ID);
     }
 }
 
