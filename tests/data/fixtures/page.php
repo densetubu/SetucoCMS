@@ -41,8 +41,6 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
               'account_id'      => Fixture_Account::ADMIN_ID,
               'create_date'     => '2012-04-03 08:48:44',
               'update_date'     => '2012-04-03 08:48:44',
-              'category_name'   => 'no_parent',
-              'nickname'        => 'setuco',
             );
     }
 
