@@ -47,61 +47,75 @@ class Setuco_Test_PHPUnit_DataSet extends PHPUnit_Extensions_Database_DataSet_Ab
     protected $tables = array();
 
     /**
-     * 指定したテーブルのデータセットを追加する
+     * 指定したテーブルリストのデータセットを追加する
      *
-     * @param string $tableName
+     * requireの関係で配列でいっぺんに渡す
+     *
+     * @param array $tableNames
      * @return array カラムとfixtureのデータセット
      */
-    public function addTable($tableName)
+    public function addTables(array $tableNames)
     {
-        $fixtureIns = $this->_createFixtureInstanceByTableName($tableName);
+        $fixtureInsList = $this->_createFixtureInstanceByTableName($tableNames);
 
-        $columns  = $fixtureIns->getColumns();
-        $metaData = new PHPUnit_Extensions_Database_DataSet_DefaultTableMetaData($tableName, $columns);
+        $fixtureDatas = array();
+        foreach ($fixtureInsList as $tableName => $fixtureIns) {
+            $columns  = $fixtureIns->getColumns();
+            $metaData = new PHPUnit_Extensions_Database_DataSet_DefaultTableMetaData($tableName, $columns);
 
-        $table    = new PHPUnit_Extensions_Database_DataSet_DefaultTable($metaData);
+            $table    = new PHPUnit_Extensions_Database_DataSet_DefaultTable($metaData);
 
-        foreach ($fixtureIns->getDatas() as $fixture)
-        {
-            $table->addRow($fixture);
+            foreach ($fixtureIns->getDatas() as $fixture)
+            {
+                $table->addRow($fixture);
+            }
+
+            $this->tables[$tableName] = $table;
+            $fixtureDatas[$tableName] = array('columns' => $columns, 'fixtures' => $fixtureIns->getDatas());
         }
 
-        $this->tables[$tableName] = $table;
-
-        return array('columns' => $columns, 'fixtures' => $fixtureIns->getDatas());
+        return $fixtureDatas;
     }
 
     /**
      * フィクスチャークラスのインスタンスを生成する
      *
-     * @param string $tableName テーブル名
+     * @param array $tableNames テーブル名のリスト
      * @return Setuco_Test_Fixture_Abstract
      * @author suzuki-mar
      */
-    private function _createFixtureInstanceByTableName($tableName)
+    private function _createFixtureInstanceByTableName(array $tableNames)
     {
-        $fixturePath = $this->_getFixtureBasePath() . $tableName . '.php';
+        foreach ($tableNames as $tableName ) {
+            $fixturePath = $this->_getFixtureBasePath() . $tableName . '.php';
 
-        if (!file_exists($fixturePath)) {
-            throw new InvalidArgumentException("{$fixturePath}というフィクスチャーファイルはありません");
+            if (!file_exists($fixturePath)) {
+                throw new InvalidArgumentException("{$fixturePath}というフィクスチャーファイルはありません");
+            }
+
+            require_once $fixturePath;
         }
 
-        require_once $fixturePath;
+        $fixtureInsList = array();
 
-        $className  = "Fixture_" . ucfirst($tableName);
+        foreach ($tableNames as $tableName) {
+            $className  = "Fixture_" . ucfirst($tableName);
 
-        if (!class_exists($className)) {
-            throw new InvalidArgumentException("{$className}というフィクスチャークラスはありません");
+            if (!class_exists($className)) {
+                throw new InvalidArgumentException("{$className}というフィクスチャークラスはありません");
+            }
+
+            $fixtureIns = new $className();
+
+            if (!is_subclass_of($fixtureIns, 'Setuco_Test_Fixture_Abstract')) {
+                throw new InvalidArgumentException(
+                        "{$className}はフィクスチャークラスではありません Setuco_Test_Fixture_Abstractを継承してください");
+            }
+
+            $fixtureInsList[$tableName] = $fixtureIns;
         }
 
-        $fixtureIns = new $className();
-
-        if (!is_subclass_of($fixtureIns, 'Setuco_Test_Fixture_Abstract')) {
-            throw new InvalidArgumentException(
-                    "{$className}はフィクスチャークラスではありません Setuco_Test_Fixture_Abstractを継承してください");
-        }
-
-        return $fixtureIns;
+        return $fixtureInsList;
     }
 
     /**
