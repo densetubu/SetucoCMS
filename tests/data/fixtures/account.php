@@ -1,0 +1,50 @@
+<?php
+/* 
+ * accountテーブルのフィクスチャークラス
+ */
+
+class Fixture_Account extends Setuco_Test_Fixture_Abstract
+{
+    const ADMIN_ID = 1;
+    const GENERAL_ID = 2;
+    const TARGET_ID = 3;
+
+    public function getColumns()
+    {
+        return array('id', 'login_id', 'nickname', 'password');
+    }
+
+    /**
+     * フィクスチャーのベースを取得する
+     *
+     * @return array フィクスチャーのベース
+     */
+    protected function _getFixtureBase()
+    {
+        return array(
+              'login_id'        => 'setuco',
+              'nickname'        => 'setuco',
+              'password'        => 'pass',
+            );
+    }
+
+    public function getDataOfAdmin()
+    {
+        return array('id' => self::ADMIN_ID, 'login_id' => 'admin', 'nickname' => 'setuco');
+    }
+    
+    public function getDataOfGeneral()
+    {
+        return array('id' => self::GENERAL_ID, 'login_id' => 'user', 'nickname' => 'setuo');
+    }
+
+    public function getDataOfTarget()
+    {
+        return array('id' => self::TARGET_ID, 'login_id' => 'search', 'nickname' => '検索する人');
+    }
+
+
+ 
+
+}
+
