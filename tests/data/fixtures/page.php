@@ -29,7 +29,7 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
      *
      * @return array フィクスチャーのベース
      */
-    protected function _getFixtureBase()
+    public function getFixtureBase()
     {
         return array(
               'id'              => 'id',

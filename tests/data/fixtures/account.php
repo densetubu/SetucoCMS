@@ -19,7 +19,7 @@ class Fixture_Account extends Setuco_Test_Fixture_Abstract
      *
      * @return array フィクスチャーのベース
      */
-    protected function _getFixtureBase()
+    public function getFixtureBase()
     {
         return array(
               'login_id'        => 'setuco',
