@@ -19,11 +19,12 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     const DATA_ACCOUNT_ONLY_ID = 7;
     const DATA_NOTAG_ID = 9;
 
+    
 
     public function setup()
     {
-        parent::setUp();
-
+        parent::setup();
+        
         $this->_dao = new Common_Model_DbTable_Page($this->getAdapter());
 
         $keyword = '検索して';
