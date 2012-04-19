@@ -86,24 +86,16 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
 
     protected function getDataSet()
     {
-        $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
+        $dataset = new Setuco_Test_PHPUnit_DataSet();
 
-        $globPattern = self::FIXTURE_BASE_PATH . '*';
+        $globPattern = self::FIXTURE_BASE_PATH . '*.php';
 
         foreach (glob($globPattern) as $filePath) {
-
-            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            if ($extension === 'csv') {
-                $baseFile = basename($filePath);
-                $tableName = str_replace('.csv', '', $baseFile);
-                $dataset->addTable($tableName, $filePath);
-            } else {
-                require_once $filePath;
-            }
-
+            $baseFile = basename($filePath);
+            $tableName = str_replace('.php', '', $baseFile);
+            $dataset->addTable($tableName);
         }
-
+        
         return $dataset;
     }
 
