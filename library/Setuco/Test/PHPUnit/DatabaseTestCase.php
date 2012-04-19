@@ -88,12 +88,20 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
     {
         $dataset = new PHPUnit_Extensions_Database_DataSet_CsvDataSet();
 
-        $globPattern = self::FIXTURE_BASE_PATH . '*.csv';
+        $globPattern = self::FIXTURE_BASE_PATH . '*';
 
         foreach (glob($globPattern) as $filePath) {
-            $baseFile = basename($filePath);
-            $tableName = str_replace('.csv', '', $baseFile);
-            $dataset->addTable($tableName, $filePath);
+
+            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            if ($extension === 'csv') {
+                $baseFile = basename($filePath);
+                $tableName = str_replace('.csv', '', $baseFile);
+                $dataset->addTable($tableName, $filePath);
+            } else {
+                require_once $filePath;
+            }
+
         }
 
         return $dataset;
