@@ -34,17 +34,11 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_キーワードから記事を検索する_検索するのはすべての項目()
     {
         $expects = array(
-            #Fixture_Page::createFixtureData(Fixture_Page::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TAG_ID),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TITLE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_CONTENTS_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_OUTLINE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TAG_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ID),
         );
 
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($this->_params));
@@ -53,27 +47,16 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_キーワードが空で検索の場合は全件検索する()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_MULTI_KEYWORD_ID, array('title' => 'タイトルで検索しないで')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TAG_ID),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TITLE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_MULTI_KEYWORD_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_CONTENTS_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_OUTLINE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TAG_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ID),
             
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'account_id'    => 3,
-                        'category_name' => 'test',
-                        'category_id'   => 1,
-                        )),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_HTML_TAG_ID, array('contents' => '<p>hoge</p>')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_NOTAG_ID, array('contents' => 'ppp')),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_HTML_TAG_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_NOTAG_ID),
         );
 
         $params = $this->_params;
@@ -87,7 +70,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_タグだけで検索する()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TAG_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TAG_ID),
         );
 
         $params = $this->_params;
@@ -100,15 +83,10 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_タグでは検索しない()
     {
        $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TITLE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_CONTENTS_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_OUTLINE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ID),
        );
 
        $params = $this->_params;
@@ -120,12 +98,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_指定したアカウントの記事だけを検索する()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ID),
        );
  
        $params = $this->_params;
@@ -136,19 +109,8 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_指定したアカウントIDだけで検索する_キーワードはなし()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
-                        )),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'account_id'    => 3,
-                        'category_name' => 'test',
-                        'category_id'   => 1,
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID),
 
        );
 
@@ -165,13 +127,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_指定したアカウントIDとカテゴリーIDで検索する_キーワードはなし()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID,
-                    array(
-                        'nickname'      => '検索する人',
-                        'account_id'    => 3,
-                        'category_name' => 'test',
-                        'category_id'   => 1,
-                        )),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_ACCOUNT_ONLY_ID),
 
        );
 
@@ -188,8 +144,8 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_複数キーワード検索をする_タイトル()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_MULTI_KEYWORD_ID, array('title' => 'タイトルで検索しないで')),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_TITLE_ID),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_MULTI_KEYWORD_ID),
         );
 
         $params = $this->_params;
@@ -203,7 +159,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_複数キーワード検索をする_コンテンツ()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_CONTENTS_ID),
         );
 
         $params = $this->_params;
@@ -217,7 +173,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_複数キーワード検索をする_アウトライン()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_OUTLINE_ID),
         );
 
         $params = $this->_params;
@@ -230,7 +186,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_コンテンツの場合タグは検索しないか()
     {
         $expects = array(
-            Fixture_Page::createFixtureData(Fixture_Page::DATA_NOTAG_ID, array('contents' => 'ppp')),
+            Fixture_Page::getFixtureData(Fixture_Page::DATA_NOTAG_ID),
         );
 
         $params = $this->_params;
