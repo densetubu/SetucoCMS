@@ -18,7 +18,7 @@ class Fixture_Category extends Setuco_Test_Fixture_Abstract
      *
      * @return array フィクスチャーのベース
      */
-    protected function _getFixtureBase()
+    public function getFixtureBase()
     {
         return array(
               'name'            => 'setuco',

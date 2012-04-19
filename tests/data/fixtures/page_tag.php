@@ -15,7 +15,7 @@ class Fixture_Page_Tag extends Setuco_Test_Fixture_Abstract
      *
      * @return array フィクスチャーのベース
      */
-    protected function _getFixtureBase()
+    public function getFixtureBase()
     {
         return array();
     }

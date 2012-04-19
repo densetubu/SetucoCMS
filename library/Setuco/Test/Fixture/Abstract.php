@@ -43,14 +43,14 @@ abstract class Setuco_Test_Fixture_Abstract
      *
      * @return array カラム名の配列
      */
-    public abstract function getColumns();
+    abstract public function getColumns();
 
     /**
      * フィクスチャーのベースとなるデータを定義してください
      *
      * @return array フィクスチャーのベース
      */
-    protected abstract function _getFixtureBase();
+    abstract public function getFixtureBase();
 
 
     /**
@@ -60,7 +60,7 @@ abstract class Setuco_Test_Fixture_Abstract
      */
     protected function _createFixtureData(array $values = array())
     {
-        $expect = $this->_getFixtureBase();
+        $expect = $this->getFixtureBase();
         return array_merge($expect, $values);
     }
 

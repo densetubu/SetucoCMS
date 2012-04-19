@@ -92,9 +92,11 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
 
         foreach (glob($globPattern) as $filePath) {
             $baseFile = basename($filePath);
-            $tableName = str_replace('.php', '', $baseFile);
-            $dataset->addTable($tableName);
+            $tableNames[] = str_replace('.php', '', $baseFile);
         }
+
+        $dataset->addTables($tableNames);
+
         
         return $dataset;
     }
