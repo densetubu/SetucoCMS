@@ -99,5 +99,37 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
         return $dataset;
     }
 
+    /**
+     * DBのレコード配列を比較する
+     *
+     * @param array $expected 期待値
+     * @param array $actual  実際の値
+     */
+    protected function assertRowDatas($expected, $actual)
+    {
+        $expected = $this->_sortRowsById($expected);
+        $actual = $this->_sortRowsById($actual);
+
+        return $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * DBのレコード配列をIDの昇順でソートする
+     *
+     * @param array $rows ソートするID
+     * @return IDの昇順でソートしたデータ
+     * @author suzuki-mar
+     */
+    protected function _sortRowsById($rows)
+    {
+        foreach ($rows as $key => $row) {
+            $ids[$key] = $row['id'];
+        }
+
+        array_multisort($rows, SORT_ASC, $ids);
+
+        return $rows;
+    }
+
 }
 
