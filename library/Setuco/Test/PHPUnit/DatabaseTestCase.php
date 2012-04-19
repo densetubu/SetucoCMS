@@ -39,15 +39,31 @@
 class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     protected $_connectionMock = null;
+    protected $_isDataSetup = false;
 
     /**
      * フィクスチャーのベースパス
      */
     const FIXTURE_BASE_PATH = '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/';
 
+    /**
+     * fixtureを読み込んだか
+     *
+     * @var boolean
+     */
+    protected $_isLoadFixture = false;
+
+    protected function setup()
+    {
+        if (!$this->_isLoadFixture) {
+            parent::setUp();
+            $this->_isLoadFixture = true;
+        }
+    }
 
     protected function getConnection()
     {
+
         if ($this->_connectionMock == null) {
 
             $params = array(
