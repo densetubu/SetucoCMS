@@ -17,10 +17,10 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     const DATA_TAG_ID = 5;
     const DATA_ACCOUNT_ID = 6;
     const DATA_ACCOUNT_ONLY_ID = 7;
+    const DATA_HTML_TAG_ID = 8;
     const DATA_NOTAG_ID = 9;
 
     
-
     public function setup()
     {
         parent::setup();
@@ -81,6 +81,40 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($this->_params));
     }
 
+    public function testloadPagesByKeyword4Pager_キーワードが空で検索の場合は全件検索する()
+    {
+        $expects = array(
+            $this->_getExpectsPageData(self::DATA_TITLE_ID, array('title' => 'タイトルで検索して')),
+            $this->_getExpectsPageData(self::DAtA_MULTI_KEYWORD_ID, array('title' => 'タイトルで検索しないで')),
+            $this->_getExpectsPageData(self::DATA_CONTENTS_ID, array('contents' => 'コンテンツで検索して')),
+            $this->_getExpectsPageData(self::DATA_OUTLINE_ID, array('outline' => 'アウトラインで検索して')),
+            $this->_getExpectsPageData(self::DATA_TAG_ID),
+            $this->_getExpectsPageData(self::DATA_ACCOUNT_ID,
+                    array(
+                        'nickname'      => '検索する人',
+                        'title'         => 'アカウントで検索して',
+                        'account_id'    => 3
+                        )),
+            
+            $this->_getExpectsPageData(self::DATA_ACCOUNT_ONLY_ID,
+                    array(
+                        'nickname'      => '検索する人',
+                        'account_id'    => 3,
+                        'category_name' => 'test',
+                        'category_id'   => 1,
+                        )),
+            $this->_getExpectsPageData(self::DATA_HTML_TAG_ID, array('contents' => '<p>hoge</p>')),
+            $this->_getExpectsPageData(self::DATA_NOTAG_ID, array('contents' => 'ppp')),
+        );
+
+        $params = $this->_params;
+        $params->setDaoParams(array('keyword' => ''));
+        $params->setDaoParams(array('tagIds' => array()));
+        
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+
+    }
+
     public function testloadPagesByKeyword4Pager_タグだけで検索する()
     {
         $expects = array(
@@ -91,7 +125,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'hogefuga'));
         $params->setDaoParams(array('targetColumns' => array('tag')));
 
-        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
     public function testloadPagesByKeyword4Pager_タグでは検索しない()
@@ -110,7 +144,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 
        $params = $this->_params;
        $params->setDaoParams(array('targetColumns' => array('title', 'contents', 'outline')));
-       $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+       $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
 
     }
 
@@ -127,7 +161,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
  
        $params = $this->_params;
        $params->setDaoParams(array('refinements' => array('account_id' => 3)));
-       $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+       $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
     public function testloadPagesByKeyword4Pager_指定したアカウントIDだけで検索する_キーワードはなし()
@@ -156,7 +190,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
                'keyword'        => ''
                ));
        
-       $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+       $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
     
     public function testloadPagesByKeyword4Pager_指定したアカウントIDとカテゴリーIDで検索する_キーワードはなし()
@@ -179,7 +213,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
                'keyword'        => ''
                ));
        
-       $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+       $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
     public function testloadPagesByKeyword4Pager_複数キーワード検索をする_タイトル()
@@ -193,7 +227,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'タイトル　検索'));
         $params->setDaoParams(array('tagIds' => array()));
 
-        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
 
@@ -207,7 +241,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'コンテンツ　検索'));
         $params->setDaoParams(array('tagIds' => array()));
 
-        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
 
@@ -221,7 +255,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'アウト ライン　検索'));
         $params->setDaoParams(array('tagIds' => array()));
 
-        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
     public function testloadPagesByKeyword4Pager_コンテンツの場合タグは検索しないか()
@@ -234,7 +268,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params->setDaoParams(array('keyword' => 'p'));
         $params->setDaoParams(array('tagIds' => array()));
 
-        $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($params));
+        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
 
 }
