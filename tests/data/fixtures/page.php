@@ -36,9 +36,9 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
               'title'           => 'search',
               'contents'        => 'search',
               'outline'         => 'search',
-              'status'          => 1,
-              'category_id'     => -1,
-              'account_id'      => 1,
+              'status'          => Setuco_Data_Constant_Page::STATUS_DRAFT,
+              'category_id'     => Setuco_Data_Constant_Category::NO_PARENT_ID,
+              'account_id'      => Fixture_Account::ADMIN_ID,
               'create_date'     => '2012-04-03 08:48:44',
               'update_date'     => '2012-04-03 08:48:44',
               'category_name'   => 'no_parent',
@@ -77,7 +77,7 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
                         'id'            => self::ACCOUNT_ID,
                         'nickname'      => '検索する人',
                         'title'         => 'アカウントで検索して',
-                        'account_id'    => 3
+                        'account_id'    => Fixture_Account::TARGET_ID
                 );
     }
 
@@ -86,9 +86,9 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
         return array(
                         'id'            => self::ACCOUNT_ONLY_ID,
                         'nickname'      => '検索する人',
-                        'account_id'    => 3,
+                        'account_id'    => Fixture_Account::TARGET_ID,
                         'category_name' => 'test',
-                        'category_id'   => 1,
+                        'category_id'   => Fixture_Category::TEST_ID,
                 );
     }
 

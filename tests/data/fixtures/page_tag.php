@@ -3,10 +3,6 @@
  * tagテーブルのフィクスチャークラス
  */
 
-//page_id,tag_id
-//5,1
-//5,2
-
 class Fixture_Page_Tag extends Setuco_Test_Fixture_Abstract
 {
     public function getColumns()
@@ -26,12 +22,12 @@ class Fixture_Page_Tag extends Setuco_Test_Fixture_Abstract
 
     public function getDataOfTest()
     {
-        return array('page_id' => 5, 'tag_id' => Fixture_Tag::TEST_ID);
+        return array('page_id' => Fixture_Page::TAG_ID, 'tag_id' => Fixture_Tag::TEST_ID);
     }
     
     public function getDataOfSetuco()
     {
-        return array('page_id' => 5, 'tag_id' => Fixture_Tag::SETUCO_ID);
+        return array('page_id' => Fixture_Page::TAG_ID, 'tag_id' => Fixture_Tag::SETUCO_ID);
     }
 }
 

@@ -22,7 +22,7 @@ class Fixture_Category extends Setuco_Test_Fixture_Abstract
     {
         return array(
               'name'            => 'setuco',
-              'parent_id'       =>  -1,
+              'parent_id'       =>  Setuco_Data_Constant_Category::NO_PARENT_ID,
             );
     }
 
