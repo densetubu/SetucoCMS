@@ -267,4 +267,22 @@ class Common_Model_Page_Param
         return $this->$paramName;
     }
 
+    /**
+     * 検索条件を指定してあるか
+     *
+     * @return boolean 検索条件を指定してあるか
+     * @author suzuki-mar
+     */
+    public function isSettingSearchCondition()
+    {
+        if ($this->isSearchRefinements()) {
+            return true;
+        }
+
+        if ($this->isSearchKeyword() && $this->getKeyword() !== '') {
+            return true;
+        }
+
+        return false;
+    }
 }

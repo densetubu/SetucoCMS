@@ -27,9 +27,27 @@ class ParamTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->_params = new Common_Model_Page_Param($keyword, $tagIds, $pageNumber, $limit, $targetColumns, $refinements, $sortColumn, $order, $searchOperator);
     }
 
-    public function testFirst()
+    public function testIsSettingSearchCondition_検索条件を指定してあるか_キーワードが指定してある場合はTRUE()
     {
-        $this->assertTrue(true);
+        $this->assertTrue($this->_params->isSettingSearchCondition());
+    }
+
+    public function testIsSettingSearchCondition_オプションを指定している場合はTrue()
+    {
+        $this->_params->setDaoParams(array('keyword' => '', 'tagIds' => array(), 'refinements' => array('account_id' => 12)));
+        $this->assertTrue($this->_params->isSettingSearchCondition());
+    }
+
+    public function testIsSettingSearchCondition_タグIDを指定している場合はTrue()
+    {
+        $this->_params->setDaoParams(array('keyword' => '', 'refinements' => array('account_id' => 12)));
+        $this->assertTrue($this->_params->isSettingSearchCondition());
+    }
+
+    public function testIsSettingSearchCondition_キーワードとオプションを指定してない場合はFalse()
+    {
+        $this->_params->setDaoParams(array('keyword' => '', 'tagIds' => array()));
+        $this->assertFalse($this->_params->isSettingSearchCondition());
     }
 }
 
