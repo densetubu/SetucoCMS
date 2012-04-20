@@ -51,6 +51,20 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
     }
 
     /**
+     * キーワードからタグIDを検索します
+     *
+     * 空白区切りの複数キーワードに対応
+     *
+     * @param string $keyword タグIDを検索するキーワード
+     * @return array キーワードに対応するタグID
+     * @author suzuki-mar
+     */
+    public function findTagIdsByKeyword($keyword)
+    {
+        return $this->_tagDao->loadTagIdsByKeyword($keyword);
+    }
+
+    /**
      * タグ情報を取得する。タグ名でソートします。
      *
      * @param  string $order       asc か　desc
