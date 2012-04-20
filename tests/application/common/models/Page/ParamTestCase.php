@@ -1,0 +1,37 @@
+<?php
+
+/**
+ *
+ * @author suzuki-mar
+ */
+require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+
+class ParamTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
+{
+
+    public function setup()
+    {
+        parent::setup();
+        
+        $keyword = '検索して';
+        $tagIds = array(1, 2);
+        $pageNumber = 1;
+        $limit = 10;
+        $targetColumns = array('title', 'contents', 'outline', 'tag');
+        $refinements = array();
+        $sortColumn = 'create_date';
+        $order      = 'desc';
+        $searchOperator = 'AND';
+
+        $this->_params = new Common_Model_Page_Param($keyword, $tagIds, $pageNumber, $limit, $targetColumns, $refinements, $sortColumn, $order, $searchOperator);
+    }
+
+    public function testFirst()
+    {
+        $this->assertTrue(true);
+    }
+}
+
+
+
