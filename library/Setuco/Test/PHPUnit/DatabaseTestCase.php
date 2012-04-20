@@ -47,6 +47,14 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
     const FIXTURE_BASE_PATH = '/Users/suzukimasayuki/project/setucodev/tests/data/fixtures/';
 
     /**
+     * フィクスチャーから値を作成するクラス
+     *
+     * @var CreateExpected
+     * @todo 名前を変更したほうがいいかも
+     */
+     protected $_createExpected = null;
+
+    /**
      * fixtureを読み込んだか
      *
      * @var boolean
@@ -59,6 +67,14 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
             parent::setUp();
             $this->_isLoadFixture = true;
         }
+
+        if (is_null($this->_createExpected)) {
+            $createExcepetedPath = self::FIXTURE_BASE_PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'CreateExpected.php';
+            require_once $createExcepetedPath;
+
+            $this->_createExpected = new CreateExpected();
+        }
+        
     }
 
     protected function getConnection()
