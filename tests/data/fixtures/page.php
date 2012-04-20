@@ -33,11 +33,11 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
     {
         return array(
               'id'              => 'id',
-              'title'           => 'search',
-              'contents'        => 'search',
-              'outline'         => 'search',
+              'title'           => 'title',
+              'contents'        => 'contents',
+              'outline'         => 'outline',
               'status'          => Setuco_Data_Constant_Page::STATUS_DRAFT,
-              'category_id'     => Setuco_Data_Constant_Category::NO_PARENT_ID,
+              'category_id'     => null,
               'account_id'      => Fixture_Account::ADMIN_ID,
               'create_date'     => '2012-04-03 08:48:44',
               'update_date'     => '2012-04-03 08:48:44',
