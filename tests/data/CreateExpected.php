@@ -26,11 +26,19 @@ class CreateExpected
      */
     private $_accountFixture;
 
+    /**
+     *
+     * @var Fixture_Tag
+     */
+    private $_tagFixture;
+
+
     public function  __construct()
     {
         $this->_pageFixture = new Fixture_Page();
         $this->_categoryFixture = new Fixture_Category();
         $this->_accountFixture = new Fixture_Account();
+        $this->_tagFixture = new Fixture_Tag();
     }
 
     public function createPageDataByPageId($id)
@@ -77,6 +85,33 @@ class CreateExpected
         }
 
         return array_merge($base, $data);
+    }
+
+    public function createTagIdsByKeyword($keyword)
+    {
+        $words = Setuco_Util_String::convertArrayByDelimiter($keyword);
+
+        $ids = array();
+        foreach ($this->_tagFixture->getDatas() as $data) {
+            if (in_array($data['name'], $words)) {
+                $ids[] = $data['id'];
+            }
+        }
+
+        return $ids;
+    }
+
+    public function createTagNamesByTagIds(array $tagIds)
+    {
+        $names = array();
+
+        foreach ($this->_tagFixture->getDatas() as $data) {
+            if (in_array($data['id'], $tagIds)) {
+                $names[] = $data['name'];
+            }
+        }
+
+        return $names;
     }
 
     public function createCategoryNameByCategoryId($categoryId)
