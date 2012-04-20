@@ -91,6 +91,10 @@ class CreateExpected
                 break;
         }
 
+        if (!isset($categoryData)) {
+            return null;
+        }
+
         return $categoryData['name'];
     }
 
