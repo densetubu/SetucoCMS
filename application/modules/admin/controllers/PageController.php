@@ -223,9 +223,15 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         }
 
         $pageParamIns = $this->_createPageParamInstance($searchForm);
+        
+        //検索条件を指定していない
+        if (!$pageParamIns->isSettingSearchCondition()) {
+            
+        }
+
         $pages = $this->_pageService->searchPages($pageParamIns);
 
-        $this->view->params = $this->_makeQueryString($targets);
+        $this->view->params = $this->_makeQueryString((array) $searchForm->getValue('targets'));
 
         $pages = self::adjustPages($pages);
 
