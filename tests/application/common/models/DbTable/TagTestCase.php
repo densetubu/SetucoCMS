@@ -28,12 +28,22 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 //    }
 
 
-    public function testFirst()
+    public function testloadTagIdsByKeyword_キーワードからタグIDを取得する()
     {
-        $this->assertTrue(true);
+        $expected = $this->_createExpected->createTagIdsByKeyword('test');
+        $this->assertEquals($expected, $this->_dao->loadTagIdsByKeyword('test'));
     }
 
+    public function testloadTagIdsByKeyword_キーワードからタグIDを取得する_複数キーワードに対応している()
+    {
+        $expected = $this->_createExpected->createTagIdsByKeyword('test setuco');
+        $actual = $this->_dao->loadTagIdsByKeyword('test setuco');
 
+        sort($expected);
+        sort($actual);
+
+        $this->assertEquals($expected, $actual);
+    }
 
 }
 
