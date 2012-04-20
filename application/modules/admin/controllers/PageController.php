@@ -221,14 +221,13 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
         //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
 
-        
-
         //検索パラメーターの引数オブジェクトを生成する
         $keyword = $searchForm->getValue('query');
         $targets = (array) $searchForm->getValue('targets');
         $refinements = $this->_makeRefinements($searchForm);
+        $tagIds = $this->_tagService->findTagIdsByKeyword($keyword);
 
-        var_dump($refinements);
+        var_dump($tagIds);
         exit;
 
         $pageParamIns = new Common_Model_Page_Param(

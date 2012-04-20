@@ -42,11 +42,12 @@ class Admin_Model_Tag extends Common_Model_TagAbstract
     /**
      * コンストラクター
      *
-     * @author charlesvineyard
+     * @param Zend_Db_Adapter_Pdo_Abstract[option] $adapter 使用する環境のdbアダプター
+     * @author charlesvineyard suzuki-mar
      */
-    public function __construct()
+    public function __construct(Zend_Db_Adapter_Pdo_Abstract $adapter = null)
     {
-        $this->_tagDao = new Common_Model_DbTable_Tag();
+        $this->_tagDao = new Common_Model_DbTable_Tag($adapter);
     }
 
     /**

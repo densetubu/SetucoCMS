@@ -44,6 +44,17 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
      */
     const BACKSLASH_REPLACER = '__BS__';
 
+    public function  __construct($config = array())
+    {
+        //Zend_Db_Tableと互換性を持つため
+        if (is_null($config)) {
+            $config = array();
+        }
+
+        parent::__construct($config);
+    }
+
+
     /**
      * 全部で何件あるのか取得する
      *

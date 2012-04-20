@@ -14,19 +14,19 @@ class TagTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     {
         parent::setup();
         
-        $this->_dao = new Common_Model_DbTable_Tag($this->getAdapter());
+        $this->_tag = new Admin_Model_Tag($this->getAdapter());
     }
 
-    public function testloadTagIdsByKeyword_キーワードからタグIDを取得する()
+    public function testFindTagIdsByKeyword_キーワードからタグIDを取得する()
     {
         $expected = $this->_createExpected->createTagIdsByKeyword('test');
-        $this->assertEquals($expected, $this->_dao->loadTagIdsByKeyword('test'));
+        $this->assertEquals($expected, $this->_tag->findTagIdsByKeyword('test'));
     }
 
-    public function testloadTagIdsByKeyword_キーワードからタグIDを取得する_複数キーワードに対応している()
+    public function testFindTagIdsByKeyword_キーワードからタグIDを取得する_複数キーワードに対応している()
     {
         $expected = $this->_createExpected->createTagIdsByKeyword('test setuco');
-        $actual = $this->_dao->loadTagIdsByKeyword('test setuco');
+        $actual = $this->_tag->findTagIdsByKeyword('test setuco');
 
         sort($expected);
         sort($actual);
