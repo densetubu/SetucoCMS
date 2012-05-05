@@ -157,33 +157,7 @@ class Install_InstallController
             $validData['site_url'] .= 'http://';
         }
 
-        $fhr = fopen(APPLICATION_PATH . '/configs/application-sample.ini', 'r');
-        $fhw = fopen(APPLICATION_PATH . '/configs/application.ini', 'w');
-        while ($line = fgets($fhr)){
-            $key = '';
-            if (preg_match(
-                    "/resources\.db\.params\.(.*?)(\s+)?\=(\s+)?\"(.*?)\"/", 
-                    $line, $matches)){
-
-                if ($matches[1] === 'host'){
-                    $key = 'db_host';
-                } elseif ($matches[1] === 'username') {
-                    $key = 'db_user';
-                } elseif ($matches[1] === 'password') {
-                    $key = 'db_pass';
-                } elseif ($matches[1] === 'dbname') {
-                    $key = 'db_name';
-                }
-
-                if (!empty($key)){
-                    $line = str_replace($matches[4], $validData[$key], $line);
-                }
-
-            }
-            fwrite($fhw, $line);
-        }
-        fclose($fhr);
-        fclose($fhw);
+        Install_Model_Config::updateApplicationConfig($validData);
 
         try{
             $this->_dbConnect($validData);
