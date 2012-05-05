@@ -530,6 +530,9 @@ body#installPage span.required {
     padding-right: 5px;
     font-weight: bold;
 }
+body#installPage div.form-actions form {
+    display: inline-block;
+}
 
 /*---------------------------------------------------------------*/
 /*-- errorPage style --------------------------------------------*/

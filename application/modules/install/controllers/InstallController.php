@@ -66,38 +66,88 @@ class Install_InstallController
      */
     public function indexAction()
     {
-        $inputValues = $this->_getAllParams();
+        $inputValues = $this->_getSession();
 
-        $template = 'index';
-        if ($this->_request->isPost()) {
-            $this->_setSession($inputValues);
+        if ($inputValues['is_post']) {
+            unset($inputValues['is_post']);
             if (!$this->_initializeFormValidator->isValid($inputValues)) {
-                $template = 'index';
-            } else {
-                if ($this->_getParam('submit')) {
-                    $template = 'confirm';
-                } else if ($this->_getParam('commit')) {
-                    $this->_initialize($inputValues);
-                    $this->_helper->redirector('finish', 'install', null); 
-                }
+                $this->view->errorForm = $this->_initializeFormValidator;
             }
-            $inputValues = $this->_initializeFormValidator->getValues();
-            $this->view->errorForm = $this->_initializeFormValidator;
         }
 
-        if ($template == 'index') {
-            $defaultValues = $this->_getDefaultValues();
-            foreach ($defaultValues as $key => $value) {
-                if (empty($inputValues[$key])) {
-                    $inputValues[$key] = $defaultValues[$key];
-                }
+        $defaultValues = $this->_getDefaultValues();
+        foreach ($defaultValues as $key => $value) {
+            if (empty($inputValues[$key])) {
+                $inputValues[$key] = $defaultValues[$key];
             }
-            unset($defaultValues);
         }
 
         $this->view->inputValues = $inputValues;
-        return $this->render($template);
+    }
 
+    /**
+     * 入力フォームから初期設定をするアクション
+     *
+     * @author Takayuki Otake
+     * @return void
+     */
+    public function confirmAction()
+    {
+        $inputValues = $this->_getAllParams();
+        $inputValues['is_post'] = 1;
+        $this->_setSession($inputValues);
+
+        if (false === $this->_request->isPost()) {
+            return $this->_helper->redirector('index', 'install', null);
+        }
+
+        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+            return $this->_helper->redirector('index', 'install', null);
+        }
+
+        $this->view->inputValues = $inputValues;
+    }
+
+    /**
+     * 入力したデータから初期化の実行をするアクション
+     *
+     * @author Takayuki Otake
+     */
+    public function actionAction()
+    {
+        if (false === $this->_request->isPost()) {
+            return $this->_helper->redirector('index', 'install', null);
+        }
+
+        $inputValues = $this->_getAllParams();
+
+        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+            return $this->_helper->redirector('index', 'install', null);
+        }
+
+        $this->_initialize($inputValues);
+
+        $inputValues = $this->_initializeFormValidator->getValues();
+
+        //二重送信防止
+        return $this->_helper->redirector('finish', 'install', null);
+    }
+
+    /**
+     * セットアップ終了ページ
+     *
+     * @author Takayuki Otake
+     * @return void
+     */
+    public function finishAction()
+    {
+        $_siteService = new Admin_Model_Site();
+        $siteInfos = $_siteService->getSiteInfo();
+
+        $siteInfos['url'] = preg_replace('/\/$/', '', $siteInfos['url']);
+
+        $this->view->siteInfos = $siteInfos;
+        Zend_Session::destroy();
     }
 
     /**
@@ -188,23 +238,6 @@ class Install_InstallController
     }
 
     /**
-     * セットアップ終了アクション
-     *
-     * @author Takayuki Otake
-     * @return void
-     */
-    public function finishAction()
-    {
-        $_siteService = new Admin_Model_Site();
-        $siteInfos = $_siteService->getSiteInfo();
-
-        $siteInfos['url'] = preg_replace('/\/$/', '', $siteInfos['url']);
-
-        $this->view->siteInfos = $siteInfos;
-        Zend_Session::destroy();
-    }
-
-    /**
      * データベースに接続する関数
      *
      * @author Takayuki Otake
@@ -245,13 +278,16 @@ class Install_InstallController
 
         return array(
                 'account_id' => '',
+                'account_pass' => '',
+                'account_pass_check' => '',
                 'site_url' => 'http://' . $addr . $this->view->baseUrl('/'),
                 'site_name' => 'サイト名を設定してください',
                 'site_comment' => 'サイトの説明を設定してください。',
                 'db_host' => 'localhost',
                 'db_name' => '',
                 'db_user' => '',
-                'db_pass' => ''
+                'db_pass' => '',
+                'is_post' => 0,
                 );
     }
 
@@ -264,11 +300,6 @@ class Install_InstallController
     private function _setSession($values)
     {
         foreach ($values as $key => $value) {
-            if (preg_match("/pass/", $key)) {
-                unset($this->_session->$key);
-                continue;
-            }
-
             $this->_session->$key = $values[$key];
         }
     }

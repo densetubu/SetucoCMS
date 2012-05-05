@@ -21,19 +21,34 @@
     <dd>****(入力OK)</dd>
 </dl>
 
-<form method="post">
-  <input type="hidden" name="account_id" value="<?php echo $this->inputValues['account_id'] ?>">
-  <input type="hidden" name="account_pass" value="<?php echo $this->inputValues['account_pass'] ?>">
-  <input type="hidden" name="account_pass_check" value="<?php echo $this->inputValues['account_pass_check'] ?>">
-  <input type="hidden" name="site_name" value="<?php echo $this->inputValues['site_name'] ?>">
-  <input type="hidden" name="site_comment" value="<?php echo $this->inputValues['site_comment'] ?>">
-  <input type="hidden" name="site_url" value="<?php echo $this->inputValues['site_url'] ?>">
-  <input type="hidden" name="db_host" value="<?php echo $this->inputValues['db_host'] ?>">
-  <input type="hidden" name="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
-  <input type="hidden" name="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
-  <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
+<div class="form-actions">
+  <form method="post" action="<?php echo $this->baseUrl('/install/install/action') ?>">
+    <input type="hidden" name="account_id" value="<?php echo $this->inputValues['account_id'] ?>">
+    <input type="hidden" name="account_pass" value="<?php echo $this->inputValues['account_pass'] ?>">
+    <input type="hidden" name="account_pass_check" value="<?php echo $this->inputValues['account_pass_check'] ?>">
+    <input type="hidden" name="site_name" value="<?php echo $this->inputValues['site_name'] ?>">
+    <input type="hidden" name="site_comment" value="<?php echo $this->inputValues['site_comment'] ?>">
+    <input type="hidden" name="site_url" value="<?php echo $this->inputValues['site_url'] ?>">
+    <input type="hidden" name="db_host" value="<?php echo $this->inputValues['db_host'] ?>">
+    <input type="hidden" name="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
+    <input type="hidden" name="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
+    <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
 
-  <input type="submit" name="commit" value="送信">
-  <input type="submit" value="戻る">
-</form>
+    <input type="submit" name="commit" value="送信">
+  </form>
 
+  <form method="post" action="<?php echo $this->baseUrl('/install/install/') ?>">
+    <input type="hidden" name="account_id" value="<?php echo $this->inputValues['account_id'] ?>">
+    <input type="hidden" name="account_pass" value="<?php echo $this->inputValues['account_pass'] ?>">
+    <input type="hidden" name="account_pass_check" value="<?php echo $this->inputValues['account_pass_check'] ?>">
+    <input type="hidden" name="site_name" value="<?php echo $this->inputValues['site_name'] ?>">
+    <input type="hidden" name="site_comment" value="<?php echo $this->inputValues['site_comment'] ?>">
+    <input type="hidden" name="site_url" value="<?php echo $this->inputValues['site_url'] ?>">
+    <input type="hidden" name="db_host" value="<?php echo $this->inputValues['db_host'] ?>">
+    <input type="hidden" name="db_name" value="<?php echo $this->inputValues['db_name'] ?>">
+    <input type="hidden" name="db_user" value="<?php echo $this->inputValues['db_user'] ?>">
+    <input type="hidden" name="db_pass" value="<?php echo $this->inputValues['db_pass'] ?>">
+
+    <input type="submit" value="戻る">
+  </form>
+</div>
