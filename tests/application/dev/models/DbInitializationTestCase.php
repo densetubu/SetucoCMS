@@ -1,0 +1,28 @@
+<?php
+
+require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+class DbInitializationTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
+{
+    public function setup()
+    {
+        parent::setup();
+        $this->_service = new Dev_Model_DbInitialization($this->getAdapter());
+
+    }
+
+    public function test_truncateAllTables_DBを空にできたか()
+    {
+        $categoryDao = new Common_Model_DbTable_Category($this->getAdapter());
+        $pageDao = new Common_Model_DbTable_Page($this->getAdapter());
+
+        $this->_service->truncateAllTables();
+
+        $this->assertSame(0, $categoryDao->fetchAll()->count());
+        $this->assertSame(0, $pageDao->fetchAll()->count());
+    }
+
+    
+
+}
+
