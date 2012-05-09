@@ -51,6 +51,8 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
             $config = array();
         }
 
+        
+
         parent::__construct($config);
     }
 
@@ -64,6 +66,7 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
     public function countAll()
     {
         $select = $this->select($this->_name);
+
         return $this->fetchAll($select)->count();
     }
 
