@@ -101,12 +101,14 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
         $configPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'application.ini';
         $applicationConfig = new Zend_Config_Ini($configPath);
         $dbConfig = $applicationConfig->testing->resources->db;
+        $dbName   = $dbConfig->params->dbname . '_test';
+
 
         $params = array(
             'host'      => $dbConfig->params->host,
             'username'  => $dbConfig->params->username,
             'password'  => $dbConfig->params->password,
-            'dbname'    => $dbConfig->params->dbname,
+            'dbname'    => $dbName,
 
         );
 
