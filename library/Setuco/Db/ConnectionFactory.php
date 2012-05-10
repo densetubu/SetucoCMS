@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Setucoのモデルの最基底クラス
+ * connectionインスタンスを作成するクラスです。
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
@@ -22,59 +21,47 @@
  *
  * @category   Setuco
  * @package    Setuco
- * @subpackage Model
+ * @subpackage Db_Table
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
  * @link
  * @since      File available since Release 0.1.0
- * @author     suzuki-mar
+ * @author     charlesvineyard
  */
 
 /**
  * @package    Setuco
- * @subpackage Model
- * @author     suzuki-mar
+ * @subpackage Db_Table
+ * @author      charlesvineyard
  */
-class Setuco_Model_Abstract
+class Setuco_Db_ConnectionFactory
 {
-    /**
-     * DAOクラスを生成するときに必要になる
-     *
-     * @var Zend_Db_Adapter_Pdo_Abstract
-     */
-    private $_adapter;
 
-    public function  __construct(Zend_Db_Adapter_Pdo_Abstract $adapter = null)
+    public static function create($environment = "development")
     {
-        if ($adapter === null) {
-            $this->_adapter = Setuco_Db_ConnectionFactory::create();
-        } else {
-            $this->_adapter = $adapter;
+        $configPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'application.ini';
+        $applicationConfig = new Zend_Config_Ini($configPath);
+        $dbConfig = $applicationConfig->testing->resources->db;
+        $dbName   = $dbConfig->params->dbname;
+
+        if ($environment === 'test') {
+            if (!preg_match("/_test/", $dbName)) {
+                $dbName .= '_test';
+            }
         }
+
+
+        $params = array(
+            'host'      => $dbConfig->params->host,
+            'username'  => $dbConfig->params->username,
+            'password'  => $dbConfig->params->password,
+            'dbname'    => $dbName,
+
+        );
+
+        $adapterName = strtoupper($dbConfig->adapter);
+        return Zend_Db::factory($adapterName, $params);
     }
 
-    /**
-     * DBのアダプターを取得する
-     *
-     * @return Zend_Db_Adapter_Pdo_Abstract
-     */
-    public function getDbAdapter()
-    {
-        return $this->_adapter;
-    }
-
-    /**
-     * 実行したSQLの結果を取得する
-     *
-     * @param  String $sql 実行するSQL
-     * @return PDO
-     * @author suzuki-mar
-     */
-    protected function _findExecuteResult($sql)
-    {
-        $connection = $this->getDbAdapter()->getConnection();
-        $statement = $connection->query($sql);
-        return $statement->fetchAll(PDO::FETCH_BOTH);
-    }
 }

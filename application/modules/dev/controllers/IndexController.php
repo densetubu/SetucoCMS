@@ -1,7 +1,7 @@
 <?php
 
 /**
- * インストーラのコントローラ
+ * 開発のサポートをするコントローラー
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -13,7 +13,7 @@
  * @link
  * @since      File available since Release 0.1.0
  * @author     suzuki-mar
- * @todo       フォーム処理をZenfFormに置き換える
+ * 
  */
 
 /**
@@ -47,7 +47,9 @@ class Dev_IndexController
 
     public function dbTestDataInsertAction()
     {
-        
+        $dbInitialize = new Dev_Model_DbInitialization();
+        $dbInitialize->truncateAllTables();
+        $dbInitialize->loadAllFixtureDatas();
     }
 
 }
