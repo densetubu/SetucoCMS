@@ -22,6 +22,18 @@ class DbInitializationTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertSame(0, $pageDao->fetchAll()->count());
     }
 
+    public function test_loadAllFixtureDatas_フィクスチャーデータを取得する()
+    {
+        $this->_service->truncateAllTables();
+
+        $categoryDao = new Common_Model_DbTable_Category($this->getAdapter());
+        $pageDao = new Common_Model_DbTable_Page($this->getAdapter());
+
+        $this->_service->loadAllFixtureDatas();
+
+        $this->assertNotSame(0, $categoryDao->fetchAll()->count());
+        $this->assertNotSame(0, $pageDao->fetchAll()->count());
+    }
     
 
 }
