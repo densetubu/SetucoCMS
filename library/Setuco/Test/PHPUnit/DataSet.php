@@ -56,7 +56,8 @@ class Setuco_Test_PHPUnit_DataSet extends PHPUnit_Extensions_Database_DataSet_Ab
      */
     public function addTables(array $tableNames)
     {
-        $fixtureInsList = $this->_createFixtureInstanceByTableName($tableNames);
+        $fixtureHolder  = new Setuco_Fixture_Holder();
+        $fixtureInsList = $fixtureHolder->createFixtureInstanceByTableName($tableNames);
 
         $fixtureDatas = array();
         foreach ($fixtureInsList as $tableName => $fixtureIns) {
@@ -77,56 +78,7 @@ class Setuco_Test_PHPUnit_DataSet extends PHPUnit_Extensions_Database_DataSet_Ab
         return $fixtureDatas;
     }
 
-    /**
-     * フィクスチャークラスのインスタンスを生成する
-     *
-     * @param array $tableNames テーブル名のリスト
-     * @return Setuco_Test_Fixture_Abstract
-     * @author suzuki-mar
-     */
-    private function _createFixtureInstanceByTableName(array $tableNames)
-    {
-        foreach ($tableNames as $tableName ) {
-            $fixturePath = $this->_getFixtureBasePath() . $tableName . '.php';
-
-            if (!file_exists($fixturePath)) {
-                throw new InvalidArgumentException("{$fixturePath}というフィクスチャーファイルはありません");
-            }
-
-            require_once $fixturePath;
-        }
-
-        $fixtureInsList = array();
-
-        foreach ($tableNames as $tableName) {
-            $className  = "Fixture_" . ucfirst($tableName);
-
-            if (!class_exists($className)) {
-                throw new InvalidArgumentException("{$className}というフィクスチャークラスはありません");
-            }
-
-            $fixtureIns = new $className();
-
-            if (!is_subclass_of($fixtureIns, 'Setuco_Test_Fixture_Abstract')) {
-                throw new InvalidArgumentException(
-                        "{$className}はフィクスチャークラスではありません Setuco_Test_Fixture_Abstractを継承してください");
-            }
-
-            $fixtureInsList[$tableName] = $fixtureIns;
-        }
-
-        return $fixtureInsList;
-    }
-
-    /**
-     * フィクスチャーのベースパスを取得する
-     *
-     * @return string フィクスチャーのベースパス
-     */
-    protected function _getFixtureBasePath()
-    {
-       return ROOT_DIR . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR;
-    }
+    
 
     /**
      * Creates an iterator over the tables in the data set. If $reverse is

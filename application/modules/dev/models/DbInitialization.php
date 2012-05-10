@@ -65,12 +65,48 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
                 $dao = new $className($this->getDbAdapter());
                 $dao->delete(true);
             }
-
         }
 
         //最後まで処理が通ったので成功とする
         return true;
     }
+
+    /**
+     * 全てのフィクスチャーデータをロードできたか
+     *
+     * @return boolean 全件読み込むことができたか
+     * @author suzuki-mar
+     */
+    public function loadAllFixtureDatas()
+    {
+
+        $fixtureHolder  = new Setuco_Fixture_Holder();
+        $fixtureInsList = $fixtureHolder->createFixtureInstanceByTableName($this->_getTableNameList());
+
+        foreach ($fixtureInsList as $name => $instance) {
+            $className = "Common_Model_DbTable_" . ucfirst($name);
+
+            //テーブルだけあってクラスが存在しない場合は処理しない
+            if (class_exists($className)) {
+                $dao = new $className($this->getDbAdapter());
+
+                foreach ($instance->getDatas() as $row) {
+                    
+                    try {
+                        $dao->insert($row);
+                    } catch(Exception $e) {
+                        var_dump($name, $e->getMessage());
+                        exit;
+                    }
+
+                }
+            }
+        }
+
+        //最後まで処理が通ったので成功とする
+        return true;
+    }
+
 
     /**
      * 全てのテーブル名を取得する
