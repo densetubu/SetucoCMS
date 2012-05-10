@@ -73,7 +73,6 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
     {
         return array(
                         'id'            => self::ACCOUNT_ID,
-                        'nickname'      => '検索する人',
                         'title'         => 'アカウントで検索して',
                         'account_id'    => Fixture_Account::TARGET_ID
                 );
@@ -83,9 +82,7 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
     {
         return array(
                         'id'            => self::ACCOUNT_ONLY_ID,
-                        'nickname'      => '検索する人',
                         'account_id'    => Fixture_Account::TARGET_ID,
-                        'category_name' => 'test',
                         'category_id'   => Fixture_Category::TEST_ID,
                 );
     }
