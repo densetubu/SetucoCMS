@@ -56,17 +56,17 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
 
     public function getDataOfContents()
     {
-        return array('id' => self::CONTENTS_ID, 'contents' => 'コンテンツで検索して');
+        return array('id' => self::CONTENTS_ID, 'title' => 'コンテンツで検索して', 'contents' => 'コンテンツで検索して');
     }
 
     public function getDataOfOutline()
     {
-        return array('id' => self::OUTLINE_ID, 'outline' => 'アウトラインで検索して');
+        return array('id' => self::OUTLINE_ID, 'title' => 'アウトラインで検索して', 'outline' => 'アウトラインで検索して');
     }
 
     public function getDataOfTag()
     {
-        return array('id' => self::TAG_ID);
+        return array('id' => self::TAG_ID, 'title' => 'タグで検索して');
     }
 
     public function getDataOfAccount()
@@ -84,17 +84,18 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
                         'id'            => self::ACCOUNT_ONLY_ID,
                         'account_id'    => Fixture_Account::TARGET_ID,
                         'category_id'   => Fixture_Category::TEST_ID,
+                        'title'         => 'アカウントだけで検索して',
                 );
     }
 
     public function getDataOfHtml_Tag()
     {
-        return array('id' => self::HTML_TAG_ID, 'contents' => '<p>hoge</p>');
+        return array('id' => self::HTML_TAG_ID, 'contents' => '<p>hoge</p>', 'title' => 'pタグがある');
     }
 
     public function getDataOfNotag()
     {
-        return array('id' => self::NOTAG_ID, 'contents' => 'ppp');
+        return array('id' => self::NOTAG_ID, 'contents' => 'ppp', 'title' => 'pタグはない');
     }
 
 }
