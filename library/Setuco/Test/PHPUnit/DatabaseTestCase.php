@@ -81,42 +81,14 @@ class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTes
     {
 
         if ($this->_connectionMock == null) {
-            $connection = $this->_createDbConnectionInstance();
-            $this->_connectionMock = $this->createZendDbConnection($connection, 'zfunittests');
+            $this->_connectionMock = $this->createZendDbConnection(
+                    Setuco_Db_ConnectionFactory::create('test'), 'zfunittests');
 
-            Zend_Db_Table_Abstract::setDefaultAdapter($connection);
+            Zend_Db_Table_Abstract::setDefaultAdapter(Setuco_Db_ConnectionFactory::create('test'));
         }
 
         return $this->_connectionMock;
     }
-
-    /**
-     * dbコネクションインスタンスを作成する
-     *
-     * @return Zend_Db_Adapter_Pdo_Abstract
-     */
-     private function _createDbConnectionInstance()
-     {
-         
-        $configPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs' . DIRECTORY_SEPARATOR . 'application.ini';
-        $applicationConfig = new Zend_Config_Ini($configPath);
-        $dbConfig = $applicationConfig->testing->resources->db;
-        $dbName   = $dbConfig->params->dbname . '_test';
-
-
-        $params = array(
-            'host'      => $dbConfig->params->host,
-            'username'  => $dbConfig->params->username,
-            'password'  => $dbConfig->params->password,
-            'dbname'    => $dbName,
-
-        );
-
-        $adapterName = strtoupper($dbConfig->adapter);
-        $connection = Zend_Db::factory($adapterName, $params);
-        
-        return $connection;
-     }
 
 
     protected function getDataSet()
