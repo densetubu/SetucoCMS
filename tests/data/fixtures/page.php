@@ -66,7 +66,7 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
 
     public function getDataOfTag()
     {
-        return array('id' => self::TAG_ID, 'title' => 'タグで検索して');
+        return array('id' => self::TAG_ID, 'title' => 'tag search');
     }
 
     public function getDataOfAccount()
