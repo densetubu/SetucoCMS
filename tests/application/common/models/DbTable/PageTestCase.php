@@ -39,7 +39,6 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         return $expectd;
     }
 
-
     public function testloadPagesByKeyword4Pager_キーワードから記事を検索する_検索するのはすべての項目()
     {
         $expects = array(
@@ -48,7 +47,9 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_createSearchResultExpectedData(Fixture_Page::OUTLINE_ID),
             $this->_createSearchResultExpectedData(Fixture_Page::TAG_ID),
             $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ID),
+            $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ONLY_ID),
         );
+
 
         $this->assertEquals($expects, $this->_dao->loadPagesByKeyword4Pager($this->_params));
     }
@@ -97,10 +98,12 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_createSearchResultExpectedData(Fixture_Page::CONTENTS_ID),
             $this->_createSearchResultExpectedData(Fixture_Page::OUTLINE_ID),
             $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ID),
+            $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ONLY_ID),
        );
 
        $params = $this->_params;
        $params->setDaoParams(array('targetColumns' => array('title', 'contents', 'outline')));
+
        $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
 
     }
@@ -109,6 +112,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     {
         $expects = array(
             $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ID),
+            $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ONLY_ID),
        );
 
        $params = $this->_params;
@@ -202,6 +206,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
         $params = $this->_params;
         $params->setDaoParams(array('keyword' => 'p'));
         $params->setDaoParams(array('tagIds' => array()));
+        $params->setDaoParams(array('targetColumns' => array('contents')));
 
         $this->assertRowDatas($expects, $this->_dao->loadPagesByKeyword4Pager($params));
     }
