@@ -21,10 +21,12 @@ class Fixture_Account extends Setuco_Test_Fixture_Abstract
      */
     public function getFixtureBase()
     {
+        $password = Setuco_Util_String::convertHash2Password('password');
+
         return array(
               'login_id'        => 'setuco',
               'nickname'        => 'setuco',
-              'password'        => 'pass',
+              'password'        => $password,
             );
     }
 
