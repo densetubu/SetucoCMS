@@ -12,7 +12,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
 
 
 
-class TagTest extends Setuco_Test_PHPUnit_DatabaseTestCase
+class Admin_Model_TagTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
 
     public function setup()
