@@ -67,7 +67,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
 
             $this->_createSearchResultExpectedData(Fixture_Page::ACCOUNT_ONLY_ID),
             $this->_createSearchResultExpectedData(Fixture_Page::HTML_TAG_ID),
-            $this->_createSearchResultExpectedData(Fixture_Page::NOTAG_ID),
+            $this->_createSearchResultExpectedData(Fixture_Page::NO_HTML_TAG_ID),
         );
 
         $params = $this->_params;
@@ -200,7 +200,7 @@ class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
     public function testloadPagesByKeyword4Pager_コンテンツの場合タグは検索しないか()
     {
         $expects = array(
-            $this->_createSearchResultExpectedData(Fixture_Page::NOTAG_ID),
+            $this->_createSearchResultExpectedData(Fixture_Page::NO_HTML_TAG_ID),
         );
 
         $params = $this->_params;
