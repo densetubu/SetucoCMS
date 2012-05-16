@@ -74,7 +74,12 @@
     </thead>
     <tbody>
     <?php foreach ($this->pages as $index => $page): ?>
-        <tr<?php echo $this->cycle(array('', ' class="check"'))->next() ?>>
+        <?php if ($index % 2 === 0): ?>
+        <tr class="list_item"><?php //list_itemは機能テストをするためにつけている ?>
+        <?php else: ?>
+        <tr class="check list_item">
+        <?php endif; ?>
+        
             <?php echo $this->partial('page-row.phtml', array('index' => $index, 'page' => $page, 'categoryForm' => $this->categoryForm, 'statusForm' => $this->statusForm)) ?>
         </tr>
     <?php endforeach ?>
