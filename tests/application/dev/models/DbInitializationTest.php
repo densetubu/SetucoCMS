@@ -1,8 +1,11 @@
 <?php
 
-require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+//bootstarapを複数回読み込まないようにするため
+if (!defined('BOOT_STRAP_FINSHED')) {
+    require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+}
 
-class DbInitializationTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
+class DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
     public function setup()
     {
