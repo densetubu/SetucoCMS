@@ -10,7 +10,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
     require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 }
 
-class PageTest extends Setuco_Test_PHPUnit_DatabaseTestCase
+class Common_DbTable_PageTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
 
     public function setup()

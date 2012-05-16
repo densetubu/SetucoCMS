@@ -11,7 +11,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
 }
 
 
-class TagTest extends Setuco_Test_PHPUnit_DatabaseTestCase
+class Common_DbTable_TagTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
 
     public function setup()
