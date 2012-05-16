@@ -4,10 +4,13 @@
  *
  * @author suzuki-mar
  */
-require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
+//bootstarapを複数回読み込まないようにするため
+if (!defined('BOOT_STRAP_FINSHED')) {
+    require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+}
 
-class PageTestCase extends Setuco_Test_PHPUnit_DatabaseTestCase
+class PageTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
 
     public function setup()
