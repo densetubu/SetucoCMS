@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SetucoCMS用にPHPUnit_Extensions_SeleniumTestCaseを継承したクラスです
  *
@@ -35,46 +36,57 @@
  * @author      suzuki-mar
  * @subpackage  Test_PHPUnit
  */
-
 class Setuco_Test_PHPUnit_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
 
-  private static $_loggedin = false;
-  private $_resetDb = false;
+    private static $_loggedin = false;
+    private $_resetDb = false;
 
+    protected function setUp()
+    {
+        $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create('test'));
 
-  protected function setUp()
-  {
-    $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create('test'));
+        //テストケースごとにDBをリセットする
+        if (!$this->_resetDb) {
+            $dbInitialization->truncateAllTables();
+            $dbInitialization->loadAllFixtureDatas();
+            $this->_resetDb = true;
+        }
 
-    //テストケースごとにDBをリセットする
-    if (!$this->_resetDb) {
-        $dbInitialization->truncateAllTables();
-        $dbInitialization->loadAllFixtureDatas();
-        $this->_resetDb = true;
+        $this->setBrowser("*chrome");
+        $this->setBrowserUrl("http://setucocms.localdomain/");
     }
 
-    $this->setBrowser("*chrome");
-    $this->setBrowserUrl("http://setucocms.localdomain/");
-  }
+    protected function _login()
+    {
+        if (self::$_loggedin) {
+            return;
+        }
 
-  protected function _login()
-  {
-    if (self::$_loggedin) {
-        return;
+        $this->open("/admin/page");
+
+        $this->open("/admin/login");
+        $this->type("id=password", "password");
+        $this->type("id=login_id", "admin");
+        $this->click("id=sub");
+        $this->waitForPageToLoad("30000");
+
+        self::$_loggedin = true;
     }
 
-    $this->open("/admin/page");
-    
-    $this->open("/admin/login");
-    $this->type("id=password", "password");
-    $this->type("id=login_id", "admin");
-    $this->click("id=sub");
-    $this->waitForPageToLoad("30000");
-
-    self::$_loggedin = true;
-
-  }
+    /**
+     * データの一覧が指定した件数あるか
+     * assert系のメソッドなのでアンスコは付けていない
+     *
+     * @param int $expectedCount　期待している行数 この数だとテスト成功
+     * @author suzuki-mar
+     */
+    protected function assertCountItemList($expectedCount)
+    {
+        $actualCount = intval($this->getXpathCount("//tr[@class='list_item']"));
+        $actualCount += intval($this->getXpathCount("//tr[@class='check list_item']"));
+        $this->assertSame($expectedCount, $actualCount);
+    }
 
 }
 
