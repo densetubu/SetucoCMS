@@ -38,6 +38,10 @@
 
 class Setuco_Test_PHPUnit_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+
+  private static $_loggedin = false;
+
+
   protected function setUp()
   {
     $this->setBrowser("*chrome");
@@ -46,11 +50,19 @@ class Setuco_Test_PHPUnit_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTe
 
   protected function _login()
   {
+    if (self::$_loggedin) {
+        return;
+    }
+
+    $this->open("/admin/page");
+    
     $this->open("/admin/login");
     $this->type("id=password", "password");
     $this->type("id=login_id", "admin");
     $this->click("id=sub");
     $this->waitForPageToLoad("30000");
+
+    self::$_loggedin = true;
 
   }
 
