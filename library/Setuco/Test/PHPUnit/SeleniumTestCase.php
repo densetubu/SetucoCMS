@@ -40,10 +40,20 @@ class Setuco_Test_PHPUnit_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTe
 {
 
   private static $_loggedin = false;
+  private $_resetDb = false;
 
 
   protected function setUp()
   {
+    $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create('test'));
+
+    //テストケースごとにDBをリセットする
+    if (!$this->_resetDb) {
+        $dbInitialization->truncateAllTables();
+        $dbInitialization->loadAllFixtureDatas();
+        $this->_resetDb = true;
+    }
+
     $this->setBrowser("*chrome");
     $this->setBrowserUrl("http://setucocms.localdomain/");
   }
