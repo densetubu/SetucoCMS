@@ -78,7 +78,7 @@ class CreateExpected
                 $data = $this->_pageFixture->getDataOfHtml_Tag();
                 break;
 
-            case Fixture_Page::NOTAG_ID:
+            case Fixture_Page::NO_HTML_TAG_ID:
                 $data = $this->_pageFixture->getDataOfNotag();
                 break;
 
