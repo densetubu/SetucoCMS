@@ -1,6 +1,6 @@
 <?php
 /**
- * 管理側のファイル管理用サービス
+ * 共通のファイル管理用サービス
  *
  * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * All Rights Reserved.
@@ -20,25 +20,64 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
- * @package    Admin
+ * @package    Common
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @author     akitsukada
+ * @author     suzuki-mar
  */
 
 /**
  * ファイル管理クラス
  *
- * @package    Admin
+ * @package    Common
  * @subpackage Model
- * @author     akitsukada
+ * @author     suzuki-mar
  */
-class Admin_Model_Media extends Common_Model_MediaAbstract
+abstract class Common_Model_MediaAbstract
 {
+    /**
+     * ファイルの新規登録中に作成する一時ファイルの名前
+     * (物理ファイル名でなくmediaテーブルのname属性の値)
+     */
+    const TEMP_FILE_NAME = 'tmpName';
+
+    /**
+     * ファイルの新規登録中に作成する一時ファイルの拡張子
+     */
+    const TEMP_FILE_EXTENSION = 'new';
+
+    /**
+     * PDFファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_PDF = '/images/admin/media/icn_pdf.gif';
+
+    /**
+     * TXTファイル用アイコンファイルのパス
+     */
+    const ICON_PATH_TXT = '/images/admin/media/icn_txt.gif';
+
+
+    /**
+     * メディア表のDAO
+     *
+     * @var Common_Model_DbTable_Media
+     */
+    protected $_mediaDao = null;
+
+    /**
+     * コンストラクター。DAOのインスタンスを初期化する
+     *
+     * @return void
+     * @author akitsukada
+     */
+    public function __construct()
+    {
+        $this->_mediaDao = new Common_Model_DbTable_Media();
+    }
 
     /**
      * Media表から、絞込み条件とページネーターのカレントページにしたがって
@@ -60,6 +99,70 @@ class Admin_Model_Media extends Common_Model_MediaAbstract
             $medias[$cnt] = $media;
         }
         return $medias; // サムネイルのパス情報を追加した配列をreturn
+    }
+
+    /**
+     * データベースから取得したMediaデータの、ファイル種別に応じてサムネイルのパス情報を付加する
+     *
+     * @param array $media DBから取得したファイル情報１件分
+     * @return array|false サムネイル情報付加済みの配列。処理に失敗したらfalse。
+     * @author akitsukada
+     */
+    protected function _addThumbPathInfo(array $media)
+    {
+        $fileName = "{$media['id']}.{$media['type']}";
+        $filePath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$fileName}";
+        $fileExists = file_exists($filePath);
+
+        $media['uploadUrl'] = Setuco_Data_Constant_Media::UPLOAD_DIR_PATH_FROM_BASE . $fileName;
+        $media = $this->_fixMediaPathInfo($media);
+
+        $media['thumbUrl'] = '';
+        $media['thumbWidth'] = 0;
+
+        switch ($media['type']) {
+            case 'pdf' :
+                $media['thumbUrl'] = self::ICON_PATH_PDF;
+                $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
+                break;
+            case 'txt' :
+                $media['thumbUrl'] = self::ICON_PATH_TXT;
+                $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH;
+                break;
+            case 'jpg' : // Fall Through 以下の３種類の場合はまとめて処理
+            case 'gif' :
+            case 'png' :
+                if ($media['thumbExists']) {
+                    $thumbName = "{$media['id']}.gif";
+                    $thumbPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $thumbName;
+                    $thumbImage = imagecreatefromgif($thumbPath);
+                    $thumbWidth = imagesx($thumbImage);
+                    $media['thumbWidth'] = Setuco_Data_Constant_Media::THUMB_WIDTH > $thumbWidth ?
+                            $thumbWidth : Setuco_Data_Constant_Media::THUMB_WIDTH;
+                }
+                $media['thumbUrl'] = Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE . $media['id'] . '.gif';
+                break;
+            default :
+                return false;
+        }
+        return $media;
+    }
+
+    protected function _fixMediaPathInfo($media)
+    {
+        $pathinfo = pathinfo($media['uploadUrl']);
+        $thumbFullPath = '';
+        if (Setuco_Util_Media::isImageExtension($pathinfo['extension'])) {
+            $thumbFullPath = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '/' . $pathinfo['filename'] . '.gif';
+        } elseif ($pathinfo['extension'] === 'pdf') {
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_PDF;
+        } elseif ($pathinfo['extension'] === 'txt') {
+            $thumbFullPath = APPLICATION_PATH . "/../public" . self::ICON_PATH_TXT;
+        }
+        $mediaFullPath = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . "/{$pathinfo['basename']}";
+        $media['mediaExists'] = file_exists($mediaFullPath);
+        $media['thumbExists'] = file_exists($thumbFullPath);
+        return $media;
     }
 
     /**
@@ -156,6 +259,18 @@ class Admin_Model_Media extends Common_Model_MediaAbstract
     }
 
     /**
+     * DBのMedia表から、指定した拡張子のレコードを数える
+     *
+     * @param    string $type 拡張子の文字列。指定しなければ全てを数える。
+     * @return   int カウント結果の件数
+     * @author   akitsukada
+     */
+    public function countMediasByType($type = null)
+    {
+        return $this->_mediaDao->countMediasByType($type);
+    }
+
+    /**
      * 受け取ったファイルの情報で、Media表の指定されたIDのレコードを更新する
      *
      * @param  array $updateData 更新対象のレコードを「カラム名 => 値」で表現した連想配列
@@ -165,6 +280,20 @@ class Admin_Model_Media extends Common_Model_MediaAbstract
     public function updateMediaInfo($id, $updateData)
     {
         return $this->_mediaDao->updateByPrimary($updateData, $id);
+    }
+
+    /**
+     * Media表からIDを指定してファイル一件のデータを取得する
+     *
+     * @param  int $id 取得したいファイル（メディア）のID
+     * @return mixed 取得したファイルのデータを格納した配列。取得失敗時はnullを返す。
+     * @author akitsukada
+     */
+    public function findMediaById($id)
+    {
+        $media = $this->_mediaDao->loadByPrimary($id);
+        $media = $this->_addThumbPathInfo($media);
+        return $media;
     }
 
     /**
@@ -185,6 +314,23 @@ class Admin_Model_Media extends Common_Model_MediaAbstract
         );
         $result = $this->_mediaDao->insert($newRec);
         return $result;
+    }
+
+    /**
+     * 全てのメディアデータを取得する
+     *
+     * @return array メディアデータのリスト
+     * @author suzuki-mar
+     */
+    public function findAllMedias()
+    {
+        $medias = $this->_mediaDao->loadAllMedias();
+
+        foreach ($medias as $cnt => $media) {
+            $media = $this->_addThumbPathInfo($media);
+            $medias[$cnt] = $media;
+        }
+        return $medias; // サムネイルのパス情報を追加した配列をreturn
     }
 
 }
