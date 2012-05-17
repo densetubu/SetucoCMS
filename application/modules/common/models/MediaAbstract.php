@@ -324,11 +324,16 @@ abstract class Common_Model_MediaAbstract
      */
     public function findAllMedias()
     {
-        $medias = $this->_mediaDao->loadAllMedias();
-
-        foreach ($medias as $cnt => $media) {
+        $medias = array();
+        foreach ($this->_mediaDao->loadAllMedias() as $cnt => $media) {
             $media = $this->_addThumbPathInfo($media);
-            $medias[$cnt] = $media;
+
+            //不正なメディアデータは弾く
+            if ($media === false) {
+                continue;
+            }
+
+            $medias[] = $media;
         }
         return $medias; // サムネイルのパス情報を追加した配列をreturn
     }
