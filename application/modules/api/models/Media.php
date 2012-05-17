@@ -1,4 +1,5 @@
 <?php
+
 /**
  * APIのファイル管理用サービス
  *
@@ -39,6 +40,7 @@
  */
 class Api_Model_Media extends Common_Model_MediaAbstract
 {
+
     /**
      * 全てのメディアデータの情報を取得する
      *
@@ -52,9 +54,9 @@ class Api_Model_Media extends Common_Model_MediaAbstract
     {
         $medias = $this->findAllMedias();
 
-        foreach($medias as &$media) {
-          $media['uploadUrl'] = $this->_fixUrlPath($media['uploadUrl']);
-          $media['thumbUrl'] = $this->_fixUrlPath($media['thumbUrl']);
+        foreach ($medias as &$media) {
+            $media['uploadUrl'] = $this->_fixUrlPath($media['uploadUrl']);
+            $media['thumbUrl'] = $this->_fixUrlPath($media['thumbUrl']);
         }
         unset($media);
 
@@ -67,9 +69,9 @@ class Api_Model_Media extends Common_Model_MediaAbstract
      * @param string $filePath 画像のファイルパス
      * @author suzuki-mar
      */
-    private function  _fixUrlPath($filePath)
+    private function _fixUrlPath($filePath)
     {
-       return "http://{$_SERVER['HTTP_HOST']}{$filePath}";
+        return "http://{$_SERVER['HTTP_HOST']}{$filePath}";
     }
 
 }
