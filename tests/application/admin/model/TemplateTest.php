@@ -18,7 +18,7 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
     {
         parent::setup();
 
-        $this->_template = new Admin_Model_Template($this->getAdapter());
+        $this->_template = new Admin_Model_TemplateMock($this->getAdapter());
     }
 
     public function test_registTemplate_テンプレートデータを登録する()
@@ -73,5 +73,15 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 
 }
 
-
-
+class Admin_Model_TemplateMock extends Admin_Model_Template
+{
+    /**
+     * テンプレートを保存するベースとなるパスを取得する
+     *
+     * @return string テンプレートのベースパス
+     */
+    protected function _getBasePath()
+    {
+        return TEST_DIR . '/data/template/';
+    }
+}
