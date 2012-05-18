@@ -13,9 +13,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
 
 class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
-    const CREATE_FILE_DIR = '/Users/suzukimasayuki/project/setucodev/tests/data/template/';
-
-
+ 
     public function setup()
     {
         parent::setup();
@@ -25,7 +23,7 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 
     public function test_registTemplate_テンプレートデータを登録する()
     {
-        $createdFile = self::CREATE_FILE_DIR . '3.html';
+        $createdFile = $this->_getCreateFileDirPath() . '3.html';
 
         if (file_exists($createdFile)) {
             unlink($createdFile);
@@ -39,10 +37,10 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertTrue($this->_template->registTemplate($params));
         $this->assertFileExists($createdFile);
 
-        $expectedFile = self::CREATE_FILE_DIR . 'first_expected.html';
+        $expectedFile = $this->_getCreateFileDirPath() . 'first_expected.html';
         $this->assertFileEquals($expectedFile, $createdFile);
 
-        $createdFile = self::CREATE_FILE_DIR . '4.html';
+        $createdFile = $this->_getCreateFileDirPath() . '4.html';
 
         if (file_exists($createdFile)) {
             unlink($createdFile);
@@ -56,9 +54,14 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertTrue($this->_template->registTemplate($params));
         $this->assertFileExists($createdFile);
 
-        $expectedFile = self::CREATE_FILE_DIR . 'second_expected.html';
+        $expectedFile = $this->_getCreateFileDirPath() . 'second_expected.html';
         $this->assertFileEquals($expectedFile, $createdFile);
 
+    }
+
+    private function _getCreateFileDirPath()
+    {
+       return TEST_DIR . '/data/template/';
     }
 
     public function test_findNextFileName_次の保存するファイル名を取得する()
