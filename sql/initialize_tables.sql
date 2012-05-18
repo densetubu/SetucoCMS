@@ -103,14 +103,15 @@ CREATE TABLE goal (
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
-CREATE TABLE `setucocms`.`template` (
+-- template table
+CREATE TABLE template　(
      id INT NOT NULL AUTO_INCREMENT ,
      account_id INT NOT NULL ,
      title VARCHAR( 255 ) NOT NULL ,
      file_name VARCHAR( 255 ) NOT NULL ,
      explanation TINYTEXT NOT NULL ,
 PRIMARY KEY ( `id` )
-)  CHARACTER SET utf8 COLLATE utf8_bin;
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 /*****************************************************
  * CREATE INDEX 
