@@ -50,7 +50,7 @@ class Api_MediaController extends Setuco_Controller_Action_ApiAbstract
      * 初期化処理
      *
      * @return void
-     * @author akitsukada
+     * @author suzuki-mar
      */
     public function init()
     {
