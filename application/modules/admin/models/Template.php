@@ -71,11 +71,10 @@ class Admin_Model_Template extends Setuco_Model_Abstract
         //要素があるままだとデータ登録時にエラーになってしまうので
         unset($registData['content']);
 
-
         $registeredId = $this->_templateDAO->insert($registData);
 
         if (is_numeric($registeredId)) {
-            if($this->_createTemplateFile($registeredId)) {
+            if($this->_createTemplateFile($registeredId, $content)) {
                 return true;
             }
         }
@@ -87,13 +86,14 @@ class Admin_Model_Template extends Setuco_Model_Abstract
     /**
      * テンプレートファイルを作成する
      *
-     * @param  int $registeredId テンプレートファイルのID
+     * @param  int      $registeredId テンプレートファイルのID
+     * @param  String   $content 登録した内容
      * @return boolean 作成に成功したかどうか
      */
-    private function _createTemplateFile($registeredId)
+    private function _createTemplateFile($registeredId, $content)
     {
         $fileName = "{$this->_getBasePath()}{$registeredId}.html";
-        return (file_put_contents($fileName, 'hogehoge') !== false);
+        return (file_put_contents($fileName, $content) !== false);
     }
 
     /**
@@ -113,10 +113,11 @@ class Admin_Model_Template extends Setuco_Model_Abstract
      * テンプレートを保存するベースとなるパスを取得する
      *
      * @return string テンプレートのベースパス
+     * @todo 実際のテンプレートがあるファイルの場所を見るよう変更する
      */
     protected function _getBasePath()
     {
-        return '/Users/suzukimasayuki/project/setucodev/tests/data/template/';
+        return APPLICATION_PATH . '/../public/js/template/';
     }
 
 }
