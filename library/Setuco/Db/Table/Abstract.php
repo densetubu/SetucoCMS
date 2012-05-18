@@ -286,4 +286,29 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         return intval($row['Auto_increment']);
     }
 
+    /**
+     * トランザクション処理を開始する
+     *
+     */
+    public function beginTransaction()
+    {
+        $this->_db->beginTransaction();
+    }
+
+    /**
+     * トランザクションをロールバックする
+     */
+    public function rollBack()
+    {
+        $this->_db->rollBack();
+    }
+
+    /**
+     * トランザクションをコミットする
+     */
+    public function commit()
+    {
+        $this->_db->commit();
+    }
+
 }
