@@ -57,6 +57,8 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $expectedFile = $this->_getCreateFileDirPath() . 'second_expected.html';
         $this->assertFileEquals($expectedFile, $createdFile);
 
+        $this->assertSame(4, $this->_template->countAll());
+
     }
 
     private function _getCreateFileDirPath()
@@ -81,6 +83,7 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 
         $fileName = $this->_getCreateFileDirPath() . '3.html';
         $this->assertFileNotExists($fileName);
+        $this->assertSame(2, $this->_template->countAll());
     }
 
 

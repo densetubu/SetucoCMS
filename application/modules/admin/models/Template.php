@@ -50,7 +50,6 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      * @author suzuki-mar
      * @todo registをregisterに変更する
      * @todo 例外の処理をちゃんとする
-     * @todo トランザクション処理をする
      */
     public function registTemplate(array $registData)
     {
@@ -61,16 +60,20 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
         //要素があるままだとデータ登録時にエラーになってしまうので
         unset($registData['content']);
 
+        $this->_templateDAO->beginTransaction();
         $registeredId = $this->_templateDAO->insert($registData);
 
         if (!is_numeric($registeredId)) {
+            $this->_templateDAO->rollBack();
             throw new Setuco_Exception('templateの登録に失敗してしまいました');
         }
 
         if (!$this->_createTemplateFile($registeredId, $content)) {
+            $this->_templateDAO->rollBack();
             throw new Setuco_Exception('templateの登録に失敗してしまいました');
         }
 
+        $this->_templateDAO->commit();
         return true;
     }
 
@@ -81,18 +84,22 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      * @return boolean 削除に成功したか
      * @author suzuki-mar
      * @todo 例外の処理をちゃんとする
-     * @todo トランザクション処理をする
      */
     public function deleteTemplate($id)
     {
+        $this->_templateDAO->beginTransaction();
+
         if (!$this->_templateDAO->deleteByPrimary($id)) {
+            $this->_templateDAO->rollBack();
             throw new Setuco_Exception('templateの削除に失敗してしまいました');
         }
 
         if (!unlink($this->_getTemplatePathById($id))) {
+            $this->_templateDAO->rollBack();
             throw new Setuco_Exception('templateの削除に失敗してしまいました');
         }
 
+        $this->_templateDAO->commit();
         return true;
     }
 
@@ -105,14 +112,14 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      * @return boolean 更新することができたか
      * @author suzuki-mar
      * @todo 例外の処理をちゃんとする
-     * @todo トランザクション処理をする
      */
     public function updateTemplate($id, array $updateDatas)
     {
         $content = $updateDatas['content'];
         unset($updateDatas['content']);
 
-        
+        $this->_templateDAO->beginTransaction();
+
         if (!$this->_templateDAO->updateByPrimary($updateDatas, $id)) {
            throw new Setuco_Exception('templateの更新に失敗してしまいました');
         }
@@ -121,7 +128,19 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
             throw new Setuco_Exception('templateの更新に失敗してしまいました');
         }
 
+        $this->_templateDAO->commit();
         return true;
+    }
+
+    /**
+     * データが全部で何件あるかをカウントする
+     *
+     * @return int データの件数
+     * @author suzuki-mar
+     */
+    public function countAll()
+    {
+        return $this->_templateDAO->countAll();
     }
 
     /**
