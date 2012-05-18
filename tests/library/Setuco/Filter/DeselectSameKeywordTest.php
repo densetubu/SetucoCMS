@@ -1,5 +1,9 @@
 <?php
-require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+
+//AllTestsなどでbootstrapをすでに読み込んでいるかもしれない
+if (!defined('BOOT_STRAP_FINSHED')) {
+    require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
+}
 
 /**
  * Setuco_Filter_DeselectSameKeywordのテストクラス
