@@ -27,12 +27,12 @@ class Fixture_Template extends Setuco_Test_Fixture_Abstract
 
     public function getDataOfTop()
     {
-        return array('id' => self::TOP_ID, 'file_name' => Fixture_Account::ADMIN_ID . '_1', 'title' => 'TOPページのテンプレート', 'explanation' => 'TOPページのテンプレートです');
+        return array('id' => self::TOP_ID, 'file_name' => self::TOP_ID, 'title' => 'TOPページのテンプレート', 'explanation' => 'TOPページのテンプレートです');
     }
 
     public function getDataOfUserCreate()
     {
-        return array('id' => self::USER_CREATE_ID, 'account_id' => Fixture_Account::GENERAL_ID, 'file_name' => Fixture_Account::GENERAL_ID . '_1', 'title' => '一般ユーザーのテンプレート', 'explanation' => '一般ユーザーが作成したテンプレートです');
+        return array('id' => self::USER_CREATE_ID, 'account_id' => Fixture_Account::GENERAL_ID, 'file_name' => self::USER_CREATE_ID, 'title' => '一般ユーザーのテンプレート', 'explanation' => '一般ユーザーが作成したテンプレートです');
     }
 }
 
