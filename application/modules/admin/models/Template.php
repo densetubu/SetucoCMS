@@ -39,20 +39,9 @@
  * @license
  * @author     charlesvineyard
  */
-class Admin_Model_Template extends Setuco_Model_Abstract
+class Admin_Model_Template extends Common_Model_TemplateAbstract
 {
 
-    /**
-     * @var Common_Model_Template
-     */
-    private $_templateDAO;
-
-
-    public function  __construct(Zend_Db_Adapter_Pdo_Abstract $adapter = null)
-    {
-        parent::__construct($adapter);
-        $this->_templateDAO = new Common_Model_DbTable_Template($adapter);
-    }
 
     /**
      * テンプレートデータを登録する
@@ -109,16 +98,6 @@ class Admin_Model_Template extends Setuco_Model_Abstract
         return "{$nextId}";
     }
 
-    /**
-     * テンプレートを保存するベースとなるパスを取得する
-     *
-     * @return string テンプレートのベースパス
-     * @todo 実際のテンプレートがあるファイルの場所を見るよう変更する
-     */
-    protected function _getBasePath()
-    {
-        return APPLICATION_PATH . '/../public/js/template/';
-    }
 
 }
 
