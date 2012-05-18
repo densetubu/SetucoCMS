@@ -42,7 +42,6 @@
 class Admin_Model_Template extends Common_Model_TemplateAbstract
 {
 
-
     /**
      * テンプレートデータを登録する
      *
@@ -50,10 +49,12 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      * @return 登録に成功したか
      * @author suzuki-mar
      * @todo registをregisterに変更する
+     * @todo 例外の処理をちゃんとする
+     * @todo トランザクション処理をする
      */
     public function registTemplate(array $registData)
     {
-        $registData['id']        = $this->_templateDAO->findNextAutoIncrementNumber();
+        $registData['id'] = $this->_templateDAO->findNextAutoIncrementNumber();
         $registData['file_name'] = $registData['id'];
 
         $content = $registData['content'];
@@ -62,15 +63,78 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
 
         $registeredId = $this->_templateDAO->insert($registData);
 
-        if (is_numeric($registeredId)) {
-            if($this->_createTemplateFile($registeredId, $content)) {
-                return true;
-            }
+        if (!is_numeric($registeredId)) {
+            throw new Setuco_Exception('templateの登録に失敗してしまいました');
         }
 
-        throw new Setuco_Exception('templateの登録に失敗してしまいました');
+        if (!$this->_createTemplateFile($registeredId, $content)) {
+            throw new Setuco_Exception('templateの登録に失敗してしまいました');
+        }
+
+        return true;
     }
 
+    /**
+     * テンプレートデータを削除する
+     *
+     * @param int $id 削除するレコードのID
+     * @return boolean 削除に成功したか
+     * @author suzuki-mar
+     * @todo 例外の処理をちゃんとする
+     * @todo トランザクション処理をする
+     */
+    public function deleteTemplate($id)
+    {
+        if (!$this->_templateDAO->deleteByPrimary($id)) {
+            throw new Setuco_Exception('templateの削除に失敗してしまいました');
+        }
+
+        if (!unlink($this->_getTemplatePathById($id))) {
+            throw new Setuco_Exception('templateの削除に失敗してしまいました');
+        }
+
+        return true;
+    }
+
+
+    /**
+     * テンプレートデータを更新する
+     *
+     * @param int $id 更新するレコードのID
+     * @param array $updateDatas 更新するデータ
+     * @return boolean 更新することができたか
+     * @author suzuki-mar
+     * @todo 例外の処理をちゃんとする
+     * @todo トランザクション処理をする
+     */
+    public function updateTemplate($id, array $updateDatas)
+    {
+        $content = $updateDatas['content'];
+        unset($updateDatas['content']);
+
+        
+        if (!$this->_templateDAO->updateByPrimary($updateDatas, $id)) {
+           throw new Setuco_Exception('templateの更新に失敗してしまいました');
+        }
+
+        if (!$this->_createTemplateFile($id, $content)) {
+            throw new Setuco_Exception('templateの更新に失敗してしまいました');
+        }
+
+        return true;
+    }
+
+    /**
+     * IDからテンプレートのパスを取得する
+     *
+     * @param int $id テンプレートのパスを取得するID
+     * @return string テンプレートのパス
+     * @author suzuki-mar
+     */
+    protected function _getTemplatePathById($id)
+    {
+        return "{$this->_getBasePath()}{$id}.html";
+    }
 
     /**
      * テンプレートファイルを作成する
@@ -81,8 +145,7 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      */
     private function _createTemplateFile($registeredId, $content)
     {
-        $fileName = "{$this->_getBasePath()}{$registeredId}.html";
-        return (file_put_contents($fileName, $content) !== false);
+        return (file_put_contents($this->_getTemplatePathById($registeredId), $content) !== false);
     }
 
     /**
@@ -97,7 +160,6 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
         $nextId = $this->_templateDAO->findNextAutoIncrementNumber();
         return "{$nextId}";
     }
-
 
 }
 

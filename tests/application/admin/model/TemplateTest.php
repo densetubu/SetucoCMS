@@ -68,7 +68,41 @@ class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
     {
         $this->assertSame("3", $this->_template->findNextFileName());
     }
-    
+
+    public function test_deleteRegistData_テンプレートデータを削除する_テンプレートファイルも()
+    {
+        $params['account_id']   =  Fixture_Account::ADMIN_ID;
+        $params['title']        = '管理者のテンプレート';
+        $params['explanation']  = '管理者専用のテンプレート';
+        $params['content']      = '管理しましょう';
+        $this->_template->registTemplate($params);
+
+        $this->assertTrue($this->_template->deleteTemplate(3));
+
+        $fileName = $this->_getCreateFileDirPath() . '3.html';
+        $this->assertFileNotExists($fileName);
+    }
+
+
+    public function test_updateRegistData_テンプレートデータを削除する_テンプレートファイルの内容も変更する()
+    {
+        $params['account_id']   =  Fixture_Account::ADMIN_ID;
+        $params['title']        = '管理者のテンプレート';
+        $params['explanation']  = '管理者専用のテンプレート';
+        $params['content']      = '管理しましょう';
+        $this->_template->registTemplate($params);
+
+        $params['account_id']   =  Fixture_Account::ADMIN_ID;
+        $params['title']        = '管理者の変更したテンプレート';
+        $params['explanation']  = '管理者専用のテンプレート';
+        $params['content']      = '変更しましょう';
+        $this->assertTrue($this->_template->updateTemplate(3, $params));
+
+        $fileName = $this->_getCreateFileDirPath() . '3.html';
+
+        $expectedFile = $this->_getCreateFileDirPath() . 'update_expected.html';
+        $this->assertFileEquals($expectedFile, $fileName);
+    }
 
 
 }
@@ -82,6 +116,6 @@ class Admin_Model_TemplateMock extends Admin_Model_Template
      */
     protected function _getBasePath()
     {
-        return TEST_DIR . '/data/template/';
+        return TEST_DIR . 'data/template/';
     }
 }
