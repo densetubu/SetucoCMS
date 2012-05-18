@@ -1,17 +1,16 @@
 <?php
 /* 
- * accountテーブルのフィクスチャークラス
+ * templateテーブルのフィクスチャークラス
  */
 
-class Fixture_Account extends Setuco_Test_Fixture_Abstract
+class Fixture_Template extends Setuco_Test_Fixture_Abstract
 {
-    const ADMIN_ID = 1;
-    const GENERAL_ID = 2;
-    const TARGET_ID = 3;
+    const TOP_ID = 1;
+    const USER_CREATE_ID = 2;
 
     public function getColumns()
     {
-        return array('id', 'login_id', 'nickname', 'password');
+        return array('id', 'account_id', 'title', 'file_name', 'explanation');
     }
 
     /**
@@ -21,28 +20,21 @@ class Fixture_Account extends Setuco_Test_Fixture_Abstract
      */
     public function getFixtureBase()
     {
-        $password = Setuco_Util_String::convertHash2Password('password');
-
         return array(
-              'login_id'        => 'setuco',
-              'nickname'        => 'setuco',
-              'password'        => $password,
+              'account_id'      => Fixture_Account::ADMIN_ID,
             );
     }
 
-    public function getDataOfAdmin()
+    public function getDataOfTop()
     {
-        return array('id' => self::ADMIN_ID, 'login_id' => 'admin', 'nickname' => 'setuco');
-    }
-    
-    public function getDataOfGeneral()
-    {
-        return array('id' => self::GENERAL_ID, 'login_id' => 'user', 'nickname' => 'setuo');
+        return array('id' => self::TOP_ID, 'file_name' => Fixture_Account::ADMIN_ID . '_1', 'title' => 'TOPページのテンプレート', 'explanation' => 'TOPページのテンプレートです');
     }
 
-    public function getDataOfTarget()
+    public function getDataOfUserCreate()
     {
-        return array('id' => self::TARGET_ID, 'login_id' => 'search', 'nickname' => '検索する人');
+        return array('id' => self::USER_CREATE_ID, 'account_id' => Fixture_Account::GENERAL_ID, 'file_name' => Fixture_Account::GENERAL_ID . '_1', 'title' => '一般ユーザーのテンプレート', 'explanation' => '一般ユーザーが作成したテンプレートです');
     }
 }
+
+
 
