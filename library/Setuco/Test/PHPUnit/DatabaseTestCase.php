@@ -36,7 +36,7 @@
  * @subpackage  Test_PHPUnit
  */
 
-class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase
+abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_DatabaseTestCase
 {
     protected $_connectionMock = null;
     protected $_isDataSetup = false;
