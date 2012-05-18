@@ -1,4 +1,5 @@
 <?php
+
 /**
  * エディタのテンプレートを管理するサービスクラスです。
  *
@@ -38,21 +39,75 @@
  * @license
  * @author     charlesvineyard
  */
-class Admin_Model_Template
+class Admin_Model_Template extends Setuco_Model_Abstract
 {
+
+    /**
+     * @var Common_Model_Template
+     */
+    private $_templateDAO;
+
+
+    public function  __construct(Zend_Db_Adapter_Pdo_Abstract $adapter = null)
+    {
+        parent::__construct($adapter);
+        $this->_templateDAO = new Common_Model_DbTable_Template($adapter);
+    }
+
+    /**
+     * テンプレートデータを登録する
+     *
+     * @param array $registData 登録するデータ
+     * @return 登録に成功したか
+     * @author suzuki-mar
+     * @todo registをregisterに変更する
+     */
+    public function registTemplate(array $registData)
+    {
+        $registData['id']        = $this->_templateDAO->findNextAutoIncrementNumber();
+        $registData['file_name'] = $registData['id'];
+
+        $content = $registData['content'];
+        //要素があるままだとデータ登録時にエラーになってしまうので
+        unset($registData['content']);
+
+
+        $registeredId = $this->_templateDAO->insert($registData);
+
+        if (is_numeric($registeredId)) {
+            if($this->_createTemplateFile($registeredId)) {
+                return true;
+            }
+        }
+
+        throw new Setuco_Exception('templateの登録に失敗してしまいました');
+    }
+
+
     /**
      * テンプレートファイルを作成する
      *
-     * @param  String $saveFileName セーブするファイル名
+     * @param  int $registeredId テンプレートファイルのID
      * @return boolean 作成に成功したかどうか
      */
-    public function create($saveFileName)
+    private function _createTemplateFile($registeredId)
     {
-        $basePath = "{$this->_getBasePath()}{$saveFileName}.html";
-
-        return (file_put_contents($basePath, 'hogehoge') !== false);
+        $fileName = "{$this->_getBasePath()}{$registeredId}.html";
+        return (file_put_contents($fileName, 'hogehoge') !== false);
     }
 
+    /**
+     * 次のファイル名を取得する
+     * ファイル名はレコードID
+     *
+     * @param $int ファイル名を取得するアカウントID
+     * 
+     */
+    public function findNextFileName()
+    {
+        $nextId = $this->_templateDAO->findNextAutoIncrementNumber();
+        return "{$nextId}";
+    }
 
     /**
      * テンプレートを保存するベースとなるパスを取得する
@@ -61,14 +116,8 @@ class Admin_Model_Template
      */
     protected function _getBasePath()
     {
-       return '/Users/suzukimasayuki/project/setucodev/tests/data/template/';
+        return '/Users/suzukimasayuki/project/setucodev/tests/data/template/';
     }
 
-
-    
-
-    
-
-    
 }
 
