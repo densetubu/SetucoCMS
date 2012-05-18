@@ -75,6 +75,16 @@ class Common_Model_DbTable_Template extends Setuco_Db_Table_Abstract
         
     }
 
+    /**
+     * 全てのレコードを配列で返す
+     *
+     * @return array 全てのレコードの配列
+     * @author suzuki-mar
+     */
+    public function loadAllTemplates()
+    {
+      return $this->fetchAll()->toArray();
+    }
 
 
 
