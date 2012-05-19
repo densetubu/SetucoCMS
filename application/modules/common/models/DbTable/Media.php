@@ -92,4 +92,15 @@ class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
         return $this->fetchAll($select)->toArray();
     }
 
+    /**
+     * 全てのレコードを配列で返す
+     *
+     * @return array 全てのレコードの配列
+     * @author suzuki-mar
+     */
+    public function loadAllMedias()
+    {
+      return $this->fetchAll()->toArray();
+    }
+
 }

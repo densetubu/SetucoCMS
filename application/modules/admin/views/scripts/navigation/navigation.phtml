@@ -28,9 +28,12 @@
  * @version
  * @since      File available since Release 0.1.0
  * @param      array $navInfos ナビゲーション情報の配列
- * @author     charlesvineyard
+ * @param      bool[option] $isDisplayNav ナビゲーションを表示するか
+ * @author     charlesvineyard suzuki-mar
  */
 ?>
+
+<?php if ($this->isDisplayNav): ?>
 <!-- gNav START -->
 <ul id="gNav">
 <?php foreach ($this->navInfos as $navigation): ?>
@@ -59,3 +62,4 @@
 <?php endforeach ?>
 </ul>
 <!-- gNav END -->
+<?php endif; ?>

@@ -216,29 +216,16 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('searchForm', $searchForm);
         }
 
-        $keyword = $searchForm->getValue('query');
-        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
-        $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
-        //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
-
-        //検索パラメーターの引数オブジェクトを生成する
-        $keyword = $searchForm->getValue('query');
-        $targets = (array) $searchForm->getValue('targets');
-        $refinements = $this->_makeRefinements($searchForm);
-        $pageParamIns = new Common_Model_Page_Param(
-            $keyword,
-            $this->_getPageNumber(),
-            $this->_getPageLimit(),
-            $targets,
-            $refinements,
-            $sortColumn,
-            $sortOrder/*,
-            $searchType*/
-        );
+        $pageParamIns = $this->_createPageParamInstance($searchForm);
+        
+        //検索条件を指定していない
+        if (!$pageParamIns->isSettingSearchCondition()) {
+            
+        }
 
         $pages = $this->_pageService->searchPages($pageParamIns);
 
-        $this->view->params = $this->_makeQueryString($targets);
+        $this->view->params = $this->_makeQueryString((array) $searchForm->getValue('targets'));
 
         $pages = self::adjustPages($pages);
 
@@ -253,6 +240,41 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
         $this->_pageTitle = "ページの編集・削除";
 
+    }
+
+    /**
+     * Page_Paramインスタンスを生成します
+     *
+     * @param Setuco_Form $form 入力した値が入っているフォームクラス
+     * @return Common_Model_Page_Param パラメーターを設定した物
+     * @author suzuki-mar
+     */
+    private function _createPageParamInstance(Setuco_Form $form)
+    {
+        $keyword = $form->getValue('query');
+        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
+        $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
+        //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
+
+        //検索パラメーターの引数オブジェクトを生成する
+        $keyword = $form->getValue('query');
+        $targets = (array) $form->getValue('targets');
+        $refinements = $this->_makeRefinements($form);
+        $tagIds = $this->_tagService->findTagIdsByKeyword($keyword);
+
+        $pageParamIns = new Common_Model_Page_Param(
+            $keyword,
+            $tagIds,
+            $this->_getPageNumber(),
+            $this->_getPageLimit(),
+            $targets,
+            $refinements,
+            $sortColumn,
+            $sortOrder/*,
+            $searchType*/
+        );
+
+        return $pageParamIns;
     }
 
     /**
