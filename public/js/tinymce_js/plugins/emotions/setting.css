@@ -1,0 +1,35 @@
+#iconList{
+	width:300px;
+	margin:0 auto;
+	margin:0 0 20px 0;
+	padding:0;
+}
+
+#iconList li{
+	float:left;
+	list-style:none;
+	margin:0;
+	display:block;
+	width:18px;
+	height:18px;
+}
+
+.attentionMsg{
+	clear:both;
+}
+
+/* For modern browsers */
+.cf:before,
+.cf:after {
+	content:"";
+	display:table;
+}
+
+.cf:after {
+	clear:both;
+}
+
+/* For IE 6/7 (trigger hasLayout) */
+.cf {
+	zoom:1;
+}
