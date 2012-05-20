@@ -41,13 +41,6 @@ class Install_InstallController
 {
 
     /**
-     *データベースハンドラ
-     *
-     * @var 
-     */
-    protected $dbh;
-
-    /**
      * アクションの共通設定
      * @author Takayuki Otake
      */
@@ -59,7 +52,7 @@ class Install_InstallController
     }
 
     /**
-     * 入力フォームから初期設定をするアクション
+     * 入力フォームを表示するアクション
      *
      * @author Takayuki Otake
      * @return void
@@ -80,7 +73,7 @@ class Install_InstallController
     }
 
     /**
-     * 入力フォームから初期設定をするアクション
+     * 入力内容の確認をするアクション
      *
      * @author Takayuki Otake
      * @return void
@@ -113,17 +106,25 @@ class Install_InstallController
         }
 
         $inputValues = $this->_getAllParams();
+        if (preg_match("/^http(s):\/\//", $inputValues['site_url']) === false) {
+            $inputValues['site_url'] = 'http://' . $inputValues['site_url'];
+        }
 
         if (false === $this->_initializeFormValidator->isValid($inputValues)) {
             return $this->_helper->redirector('index', 'install', null);
         }
 
-        $this->_initialize($inputValues);
+        $inputValues['site_id'] = 1;
+        //TODO: 例外キャッチでindexActionへ遷移
+        $dbService = new Install_Model_Db($inputValues);
+        $dbService->setupSchema();
+        $dbService->updateSite($inputValues);
+        $dbService->updateAccount($inputValues);
 
-        $inputValues = $this->_initializeFormValidator->getValues();
+        Install_Model_Config::updateApplicationConfig($inputValues);
 
         //二重送信防止
-        return $this->_helper->redirector('finish', 'install', null);
+        $this->_helper->redirector('finish', 'install', null);
     }
 
     /**
@@ -141,87 +142,6 @@ class Install_InstallController
 
         $this->view->siteInfos = $siteInfos;
         Zend_Session::destroy();
-    }
-
-    /**
-     * データベースと設定ファイルの初期化
-     *
-     * @param array $validData 設定ファイルとデータベースの設定パラメータ
-     * @author Takayuki Otake
-     * @return void
-     */
-    public function _initialize($validData)
-    {
-        $validData = $this->_initializeFormValidator->getValues();
-        if (preg_match("/^http(s):\/\//", $validData['site_url']) === false) {
-            $validData['site_url'] .= 'http://';
-        }
-
-        Install_Model_Config::updateApplicationConfig($validData);
-
-        try{
-            $this->_dbConnect($validData);
-            $this->dbh->query("SET NAMES utf8");
-            $querys = $this->_getInitializeTablesSql();
-            foreach ($querys as $query){
-                if (!empty($query)){
-                    $this->dbh->query($query);
-                }
-            }
-
-            $sth = $this->dbh->prepare('
-                UPDATE site SET name = ?, url = ?, comment = ? WHERE id = ?
-                ');
-            $sth->execute(array(
-                $validData['site_name'], 
-                $validData['site_url'], 
-                $validData['site_comment'],
-                1
-            ));
-            
-            $sth = null;
-
-            $sth = $this->dbh->prepare('
-                UPDATE account set login_id = ?, password = SHA1(?)
-                ');
-            $sth->execute(array(
-                $validData['account_id'], 
-                $validData['account_pass']));
-
-        } catch (Zend_Exception $pe) {
-            $dbh = null;
-            throw new Setuco_Exception(
-                'update文の実行に失敗しました。' . $pe->getMessage()
-            );
-        } catch (Exception $e) {
-            throw new Setuco_Exception(
-                'エラーが発生しました。', $e->getMessage()
-            );
-        }
-        $dbh = null;
-
-
-        $this->_helper->redirector('finish', 'install', null);
-    }
-
-    /**
-     * データベースに接続する関数
-     *
-     * @author Takayuki Otake
-     * @return boolean
-     */
-    private function _dbConnect($params)
-    {
-        try {
-            $this->dbh = new PDO(
-                "mysql:host={$params['db_host']}; dbname={$params['db_name']}",
-                $params['db_user'],
-                $params['db_pass']
-            );
-        } catch (PDOException $e) {
-            return false;
-        }
-        return true;
     }
 
     /**
