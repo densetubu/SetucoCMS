@@ -60,7 +60,6 @@ class Api_MediaController extends Setuco_Controller_Action_ApiAbstract
 
     }
 
-
     /**
      * メディア情報のリストをJSON形式で表示する
      *
@@ -72,4 +71,26 @@ class Api_MediaController extends Setuco_Controller_Action_ApiAbstract
         $this->view->infos = $this->_media->findAllMediaInfos();
     }
    
+    /**
+     * 画像情報のリストをJSON形式で表示する
+     *
+     * @return void
+     * @author suzuki-mar
+     */
+    public function imageAction()
+    {
+        $this->view->infos = $this->_media->findImageMediaInfos();
+    }
+
+    /**
+     * 画像情報以外のリストをJSON形式で表示する
+     *
+     * @return void
+     * @author suzuki-mar
+     */
+    public function etcAction()
+    {
+        $this->view->infos = $this->_media->findEtcMediaInfos();
+    }
+
 }
