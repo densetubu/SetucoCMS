@@ -324,8 +324,32 @@ abstract class Common_Model_MediaAbstract
      */
     public function findAllMedias()
     {
+        return $this->_addModelDatas($this->_mediaDao->loadAllMedias());
+    }
+
+    /**
+     * 画像のメディアデータを取得する
+     *
+     * @return array 画像のメディアデータのリスト
+     * @author suzuki-mar
+     */
+    public function findImageMedias()
+    {
+        return $this->_addModelDatas($this->_mediaDao->loadImageMedias());
+    }
+
+    /**
+     * レコードにサムネなどのデータを追加する
+     *
+     * @param $targetData サムネのデータを追加する配列
+     * @return
+     * @author suzuki-mar
+     */
+    protected function _addModelDatas($targetDatas)
+    {
         $medias = array();
-        foreach ($this->_mediaDao->loadAllMedias() as $cnt => $media) {
+
+        foreach ($targetDatas as $cnt => $media) {
             $media = $this->_addThumbPathInfo($media);
 
             //不正なメディアデータは弾く
@@ -335,7 +359,9 @@ abstract class Common_Model_MediaAbstract
 
             $medias[] = $media;
         }
-        return $medias; // サムネイルのパス情報を追加した配列をreturn
-    }
 
+
+
+        return $medias;
+    }
 }

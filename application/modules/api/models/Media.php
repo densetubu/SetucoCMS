@@ -46,21 +46,60 @@ class Api_Model_Media extends Common_Model_MediaAbstract
      *
      * ファイルパスはフルパス(URL)
      *
-     * @author suzuki-mar
      * @return array 全てのメディアデータ情報
+     * @author suzuki-mar
      * @todo httpsに対応させる
      */
     public function findAllMediaInfos()
     {
         $medias = $this->findAllMedias();
+        return $this->_fixAllUrlPath($medias);
+    }
 
-        foreach ($medias as &$media) {
+    /**
+     * 画像のメディアデータの情報を取得する
+     *
+     * ファイルパスはフルパス(URL)
+     *
+     * @return array 画像のメディアデータ
+     * @author suzuki-mar
+     */
+    public function findImageMediaInfos()
+    {
+        $medias = $this->findImageMedias();
+        return $this->_fixAllUrlPath($medias);
+    }
+
+    /**
+     * 画像以外のメディアデータを取得する
+     *
+     * ファイルパスはフルパス(URL)に変更している
+     *
+     * @return array 画像以外のメディアデータのリスト
+     * @author suzuki-mar
+     */
+    public function findEtcMediaInfos()
+    {
+        $medias = $this->_addModelDatas($this->_mediaDao->loadEtcMedias());
+        return $this->_fixAllUrlPath($medias);
+    }
+
+    /**
+     * データのURLをフルパス(URL)にする
+     *
+     * @param array $targetDatas URLを修正するデータ
+     * @return array データをURLに修正した物
+     * @author suzuki-mar
+     */
+    private function  _fixAllUrlPath(array $targetDatas)
+    {
+        foreach ($targetDatas as &$media) {
             $media['uploadUrl'] = $this->_fixUrlPath($media['uploadUrl']);
             $media['thumbUrl'] = $this->_fixUrlPath($media['thumbUrl']);
         }
         unset($media);
 
-        return $medias;
+        return $targetDatas;
     }
 
     /**
