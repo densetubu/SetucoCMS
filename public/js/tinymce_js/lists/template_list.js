@@ -2,9 +2,5 @@
 // There templates will be displayed as a dropdown in all media dialog if the "template_external_list_url"
 // option is defined in TinyMCE init.
 
-var tinyMCETemplateList = [
-	// Name, URL, Description
-	["Simple snippet", "../../../public/js/tinymce_js/templates/snippet1.htm", "Simple HTML snippet."],
-	["Layout", "templates/layout1.htm", "HTML Layout."]
-];
-
+var templateList = new ApiDataList("/api/template");
+var tinyMCETemplateList = templateList.getTinyMCEListDataByMapList(["title", "url", "explanation"]);
