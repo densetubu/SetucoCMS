@@ -81,4 +81,60 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->assertEquals($expected, $this->_media->findAllMediaInfos());
     }
 
+    public function test_findImageMediaInfos()
+    {
+        $expected = array(
+            $this->_getExpectedOfJpeg(),
+            $this->_getExpectedOfPng(),
+        );
+
+        $this->assertEquals($expected, $this->_media->findImageMediaInfos());
+    }
+
+    public function test_findEtcMediasInfos_画像以外のデータを取得する()
+    {
+        $expected = array(
+            $this->_getExpectedOfPdf(),
+        );
+
+        $this->assertEquals($expected, $this->_media->findEtcMediaInfos());
+    }
+
+
+    public function test_findImageMedias_画像のデータを取得する()
+    {
+        $expected = array(
+            array(
+                'id' => '1',
+                'name' => 'image.jpeg',
+                'type' => 'jpg',
+                'create_date' => '2012-04-11 08:42:09',
+                'update_date' => '2012-04-11 08:42:09',
+                'comment' => '2012-04-11 08:42:09にアップロード',
+                'uploadUrl' => '/media/upload/1.jpg',
+                'mediaExists' => true,
+                'thumbExists' => false,
+                'thumbUrl' => '/media/thumbnail/1.gif',
+                'thumbWidth' => 0,
+            ),
+            array(
+                'id' => '2',
+                'name' => 'image.png',
+                'type' => 'png',
+                'create_date' => '2012-04-11 08:42:09',
+                'update_date' => '2012-04-11 08:42:09',
+                'comment' => '2012-04-11 08:42:09にアップロード',
+                'uploadUrl' => '/media/upload/2.png',
+                'mediaExists' => false,
+                'thumbExists' => false,
+                'thumbUrl' => '/media/thumbnail/2.gif',
+                'thumbWidth' => 0,
+            ),
+        );
+
+        $this->assertEquals($expected, $this->_media->findImageMedias());
+    }
+
+
+
 }
