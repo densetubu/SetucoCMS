@@ -22,8 +22,8 @@ class Common_DbTable_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 
     public function test_findFileNamesByAccountId_指定したアカウントIDのファイル名一覧を取得する()
     {
-        $this->assertEquals(array('1_1'), $this->_dao->findFileNamesByAccountId(Fixture_Account::ADMIN_ID));
-        $this->assertEquals(array('2_1'), $this->_dao->findFileNamesByAccountId(Fixture_Account::GENERAL_ID));
+        $this->assertEquals(array('1'), $this->_dao->findFileNamesByAccountId(Fixture_Account::ADMIN_ID));
+        $this->assertEquals(array('2'), $this->_dao->findFileNamesByAccountId(Fixture_Account::GENERAL_ID));
     }
 
     public function test_findNextAutoIncrementNumber_AutoIncrement_次のAutoIncrementの値を取得する()
