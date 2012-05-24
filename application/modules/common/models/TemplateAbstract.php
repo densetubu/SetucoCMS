@@ -69,7 +69,7 @@ abstract class Common_Model_TemplateAbstract extends Setuco_Model_Abstract
      */
     protected function _getBasePath()
     {
-        return APPLICATION_PATH . '/../public/js/template/';
+        return APPLICATION_PATH . '/../public/upload/template/';
     }
 
 
