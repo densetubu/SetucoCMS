@@ -1,13 +1,17 @@
 <?php
 /* 
- * goalテーブルのフィクスチャークラス
+ * mediaテーブルのフィクスチャークラス
  */
 
-class Fixture_Goal extends Setuco_Test_Fixture_Abstract
+class Fixture_Media extends Setuco_Test_Fixture_Abstract
 {
+
+    const ID_JPEG = 1;
+    const ID_PNG  = 2;
+
     public function getColumns()
     {
-        return array('id', 'page_count', 'target_month');
+        return array('id', 'name', 'type', 'create_date', 'update_date', 'comment');
     }
 
     /**
@@ -18,18 +22,20 @@ class Fixture_Goal extends Setuco_Test_Fixture_Abstract
     public function getFixtureBase()
     {
         return array(
-              'page_count'        => 1,
+              'create_date'        => "2012-04-11 08:42:09",
+              'update_date'        => "2012-04-11 08:42:09",
+              'comment'            => "2012-04-11 08:42:09にアップロード",
             );
     }
 
-    public function getDataOfFirst()
+    public function getDataOfJPEG()
     {
-        return array('id' => 1, 'target_month' => "2012-03-01");
+        return array('id' => self::ID_JPEG,  'name' => 'image.jpeg', 'type' => 'jpeg');
     }
 
     public function getDataOfSecond()
     {
-        return array('id' => 2, 'target_month' => "2012-04-01");
+        return array('id' => self::ID_PNG,  'name' => 'image.png', 'type' => 'png');
     }
     
 }
