@@ -45,11 +45,10 @@ class Dev_IndexController
 
     }
 
-    public function dbTestDataInsertAction()
+    public function initializationAction()
     {
-        $dbInitialize = new Dev_Model_DbInitialization();
-        $dbInitialize->truncateAllTables();
-        $dbInitialize->loadAllFixtureDatas();
+        Setuco_Test_Util::initDb();
+        Setuco_Test_Util::initFile();
     }
 
 }
