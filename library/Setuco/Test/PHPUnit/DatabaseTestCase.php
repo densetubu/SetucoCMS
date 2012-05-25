@@ -65,6 +65,8 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
     {
         if (!$this->_isLoadFixture) {
             parent::setUp();
+
+            Setuco_Test_Util::initFile();
             $this->_isLoadFixture = true;
         }
 
@@ -74,7 +76,8 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
 
             $this->_createExpected = new CreateExpected();
         }
-        
+
+       
     }
 
     protected function getConnection()
