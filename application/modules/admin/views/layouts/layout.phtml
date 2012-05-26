@@ -60,26 +60,41 @@ $this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
 
          <script>
 
-        $(function(){
-            jQuery( '#create_date' ) . datetimepicker();
-            jQuery( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+		
 
 
-            //templateデータの取得方法
-            jQuery.getJSON("/api/template", function(json) {
-                console.log(json);
-            });
+		$(function(){
+            $( '#create_date' ) . datetimepicker();
+            $( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
 
             //templateデータの取得方法
-            jQuery.getJSON("/api/media", function(json) {
-                console.log(json);
-            });
+            $.getJSON("/api/media", function(json) {
+				//console.log(tinyMCEImageList);
 
+				$.each(json, function(i, data){
+					tinyMCEImageList[i] = [data.name, data.uploadUrl];
+				});
+				
+				
+				console.log(tinyMCEImageList);
+            });
+			
+
+
+			$(function (){
+				//templateデータの取得方法
+				jQuery.getJSON("/api/media", function(json) {
+					
+									
+				});
+				
+			});
+			
+			
         });
-
-
-
-
+		
+		
+		
         
 tinyMCE.init({
 		// General options
@@ -107,7 +122,7 @@ tinyMCE.init({
 		// Drop lists for link/image/media/template dialogs
 		template_external_list_url : "lists/template_list.js",
 		external_link_list_url : "lists/link_list.js",
-		external_image_list_url : "lists/image_list.js",
+		external_image_list_url : "/js/tinymce_js/lists/image_list.js",
 		media_external_list_url : "lists/media_list.js",
 
 		// Style formats

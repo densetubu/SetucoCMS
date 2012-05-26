@@ -14,8 +14,28 @@
 	height:18px;
 }
 
+.title{
+	text-align:center;
+	margin:0 0 20px 0;
+}
 .attentionMsg{
 	clear:both;
+	text-align:center;
+	margin:0 0 20px 0;
+}
+
+
+#WrapIcons{
+	margin:0 auto;
+	width:300px;
+}
+
+#mce_34_ifr{
+	height:420px !important;
+}
+
+#mce_34{
+	height:420px;
 }
 
 /* For modern browsers */
