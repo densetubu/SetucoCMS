@@ -63,14 +63,47 @@ $this->headScript()->prependFile($this->baseUrl('/js/setuco/api_data_list.js'));
 
          <script>
 
+<<<<<<< HEAD
         $(function(){
             jQuery( '#create_date' ) . datetimepicker();
             jQuery( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+=======
+		
+
+
+		$(function(){
+            $( '#create_date' ) . datetimepicker();
+            $( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+
+            //templateデータの取得方法
+            $.getJSON("/api/media", function(json) {
+				//console.log(tinyMCEImageList);
+
+				$.each(json, function(i, data){
+					tinyMCEImageList[i] = [data.name, data.uploadUrl];
+				});
+				
+				
+				console.log(tinyMCEImageList);
+            });
+			
+
+
+			$(function (){
+				//templateデータの取得方法
+				jQuery.getJSON("/api/media", function(json) {
+					
+									
+				});
+				
+			});
+			
+			
+>>>>>>> 8d6ada5... エディタで挿入できる絵文字の数を増やしました（altが調整できてないです)
         });
-
-
-
-
+		
+		
+		
         
 tinyMCE.init({
 		// General options
@@ -96,10 +129,17 @@ tinyMCE.init({
 		content_css : "css/content.css",
 
 		// Drop lists for link/image/media/template dialogs
+<<<<<<< HEAD
 		template_external_list_url : "/js/tinymce_js/lists/template_list.js",
 		external_link_list_url : "/lists/link_list.js",
 		external_image_list_url : "/js/tinymce_js/lists/image_list.js",
 		media_external_list_url : "/js/tinymce_js/lists/media_list.js",
+=======
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "/js/tinymce_js/lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+>>>>>>> 8d6ada5... エディタで挿入できる絵文字の数を増やしました（altが調整できてないです)
 
 		// Style formats
 		style_formats : [
