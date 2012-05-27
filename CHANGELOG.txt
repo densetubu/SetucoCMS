@@ -38,3 +38,9 @@ Version 1.3.0 (2012/03/17)
     - Change of nickname, Change of nickname (name displayed as a producer) can be performed.
     - Creation of subaccount, New account can be created.
     - Inspection of subaccount, The list of the created subaccount can be displayed. 
+
+--------------------------------------------
+Version 1.3.1 (2012/05/27)
+--------------------------------------------
+- Tag
+     - Fixed the problem that a system error when you edit the tags, and you attempt to save an existing tag.
