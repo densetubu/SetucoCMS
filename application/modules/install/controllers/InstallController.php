@@ -3,7 +3,22 @@
 /**
  * インストーラのコントローラ
  *
- * LICENSE: ライセンスに関する情報
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
  * @package    Install
@@ -26,13 +41,6 @@ class Install_InstallController
 {
 
     /**
-     *データベースハンドラ
-     *
-     * @var 
-     */
-    protected $dbh;
-
-    /**
      * アクションの共通設定
      * @author Takayuki Otake
      */
@@ -44,7 +52,7 @@ class Install_InstallController
     }
 
     /**
-     * 入力フォームから初期設定をするアクション
+     * 入力フォームを表示するアクション
      *
      * @author Takayuki Otake
      * @return void
@@ -53,107 +61,74 @@ class Install_InstallController
     {
         $inputValues = $this->_getAllParams();
 
-        $template = 'index';
-        if ($this->_request->isPost()) {
-            $this->_setSession($inputValues);
-            if (!$this->_initializeFormValidator->isValid($inputValues)) {
-                $template = 'index';
-            } else {
-                if ($this->_getParam('submit')) {
-                    $template = 'confirm';
-                } else if ($this->_getParam('commit')) {
-                    $this->_initialize($inputValues);
-                    $this->_helper->redirector('finish', 'install', null); 
-                }
+        $defaultValues = $this->_getDefaultValues();
+        foreach ($defaultValues as $key => $value) {
+            if (empty($inputValues[$key])) {
+                $inputValues[$key] = $defaultValues[$key];
             }
-            $inputValues = $this->_initializeFormValidator->getValues();
-            $this->view->errorForm = $this->_initializeFormValidator;
-        } else {
-            $template = 'index';
         }
-
-        if ($template == 'index') {
-            $defaultValues = $this->_getDefaultValues();
-            foreach ($defaultValues as $key => $value) {
-                if (empty($inputValues[$key])) {
-                    $inputValues[$key] = $defaultValues[$key];
-                }
-            }
-            unset($defaultValues);
-        }
+        unset($defaultValues);
 
         $this->view->inputValues = $inputValues;
-        return $this->render($template);
-
     }
 
     /**
-     * データベースと設定ファイルの初期化
+     * 入力内容の確認をするアクション
      *
-     * @param array $validData 設定ファイルとデータベースの設定パラメータ
      * @author Takayuki Otake
      * @return void
      */
-    public function _initialize($validData)
+    public function confirmAction()
     {
-        $validData = $this->_initializeFormValidator->getValues();
-        if (preg_match("/^http(s):\/\//", $validData['site_url']) === false) {
-            $validData['site_url'] .= 'http://';
+        $inputValues = $this->_getAllParams();
+        $this->_setSession($inputValues);
+
+        if (false === $this->_request->isPost()) {
+            return $this->_helper->redirector('index', 'install', null);
         }
 
-        $fhr = fopen('../application/configs/application-sample.ini', 'r');
-        $fhw = fopen('../application/configs/application.ini', 'w');
-        while ($line = fgets($fhr)){
-            $key = '';
-            if (preg_match("/resources\.db\.params\.(.*?)(\s+)?\=(\s+)?\"(.*?)\"/", $line, $matches)){
-                if ($matches[1] === 'host'){
-                    $key = 'db_host';
-                } elseif ($matches[1] === 'username') {
-                    $key = 'db_user';
-                } elseif ($matches[1] === 'password') {
-                    $key = 'db_pass';
-                } elseif ($matches[1] === 'dbname') {
-                    $key = 'db_name';
-                }
-
-                if (!empty($key)){
-                    $line = str_replace($matches[4], $validData[$key], $line);
-                }
-            }
-            fwrite($fhw, $line);
+        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+            return $this->_helper->redirector('index', 'install', null);
         }
-        fclose($fhr);
-        fclose($fhw);
 
-        try{
-            $this->_dbConnect($validData);
-            $this->dbh->query("SET NAMES utf8");
-            $querys = $this->_getInitializeTablesSql();
-            foreach ($querys as $query){
-                if (!empty($query)){
-                    $this->dbh->query($query);
-                }
-            }
+        $this->view->inputValues = $inputValues;
+    }
 
-            $sth = $this->dbh->prepare('UPDATE site SET name = ?, url = ?, comment = ? WHERE id = ?');
-            $sth->execute(array($validData['site_name'], $validData['site_url'], $validData['site_comment'], 1));
-
-            $sql = "UPDATE account set login_id = '{$validData['account_id']}', password = SHA1('{$validData['account_pass']}')";
-            $this->dbh->query($sql);
-        } catch (Zend_Exception $pe) {
-            $dbh = null;
-            throw new Setuco_Exception('update文の実行に失敗しました。' . $pe->getMessage());
-        } catch (Exception $e) {
-            throw new Setuco_Exception('エラーが発生しました。', $e->getMessage());
+    /**
+     * 入力したデータから初期化の実行をするアクション
+     *
+     * @author Takayuki Otake
+     */
+    public function actionAction()
+    {
+        if (false === $this->_request->isPost()) {
+            return $this->_helper->redirector('index', 'install', null);
         }
-        $dbh = null;
 
+        $inputValues = $this->_getAllParams();
+        if (preg_match("/^http(s):\/\//", $inputValues['site_url']) === false) {
+            $inputValues['site_url'] = 'http://' . $inputValues['site_url'];
+        }
 
+        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+            return $this->_helper->redirector('index', 'install', null);
+        }
+
+        $inputValues['site_id'] = 1;
+        //TODO: 例外キャッチでindexActionへ遷移
+        $dbService = new Install_Model_Db($inputValues);
+        $dbService->setupSchema();
+        $dbService->updateSite($inputValues);
+        $dbService->updateAccount($inputValues);
+
+        Install_Model_Config::updateApplicationConfig($inputValues);
+
+        //二重送信防止
         $this->_helper->redirector('finish', 'install', null);
     }
 
     /**
-     * セットアップ終了アクション
+     * セットアップ終了ページ
      *
      * @author Takayuki Otake
      * @return void
@@ -167,23 +142,6 @@ class Install_InstallController
 
         $this->view->siteInfos = $siteInfos;
         Zend_Session::destroy();
-    }
-
-    /**
-     * データベースに接続する関数
-     *
-     * @author Takayuki Otake
-     * @return boolean
-     */
-    private function _dbConnect($params)
-    {
-        try {
-            $this->dbh = new PDO("mysql:host={$params['db_host']}; dbname={$params['db_name']}",
-                    $params['db_user'], $params['db_pass']);
-        } catch (PDOException $e) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -222,9 +180,10 @@ class Install_InstallController
         foreach ($values as $key => $value) {
             if (preg_match("/pass/", $key)) {
                 unset($this->_session->$key);
-            } else {
-                $this->_session->$key = $values[$key];
+                continue;
             }
+
+            $this->_session->$key = $values[$key];
         }
     }
 
@@ -253,15 +212,19 @@ class Install_InstallController
     {
         $form = new Setuco_Form();
 
-        $adminAccountIdElement = new Zend_Form_Element_Text('account_id', array(
+        $adminAccountIdElement = new Zend_Form_Element_Text(
+            'account_id',
+            array(
                     'id' => 'account_id',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountIdValidators(),
                     'filters' => array('StringTrim')
-                    ));
+                ));
         $form->addElement($adminAccountIdElement);
 
-        $adminAccountPassElement = new Zend_Form_Element_Text('account_pass', array(
+        $adminAccountPassElement = new Zend_Form_Element_Text(
+            'account_pass',
+            array(
                     'id' => 'account_pass',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountPasswordValidators(),
@@ -269,7 +232,9 @@ class Install_InstallController
                     ));
         $form->addElement($adminAccountPassElement);
 
-        $adminAccountPassCheckElement = new Zend_Form_Element_Text('account_pass_check', array(
+        $adminAccountPassCheckElement = new Zend_Form_Element_Text(
+            'account_pass_check', 
+            array(
                     'id' => 'account_pass_check',
                     'required' => 'true',
                     'validators' => $this->_makeAdminAccountPasswordValidators(),
@@ -277,7 +242,9 @@ class Install_InstallController
                     ));
         $form->addElement($adminAccountPassCheckElement);
 
-        $siteNameElement = new Zend_Form_Element_Text('site_name', array(
+        $siteNameElement = new Zend_Form_Element_Text(
+            'site_name',
+            array(
                     'id' => 'site_name',
                     'required' => 'true',
                     'validators' => $this->_makeSiteNameValidators(),
@@ -285,7 +252,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteNameElement);
 
-        $siteCommentElement = new Zend_Form_Element_Text('site_comment', array(
+        $siteCommentElement = new Zend_Form_Element_Text(
+            'site_comment', 
+            array(
                     'id' => 'site_comment',
                     'required' => 'true',
                     'validators' => $this->_makeSiteCommentValidators(),
@@ -293,7 +262,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteCommentElement);
 
-        $siteUrlElement = new Zend_Form_Element_Text('site_url', array(
+        $siteUrlElement = new Zend_Form_Element_Text(
+            'site_url', 
+            array(
                     'id' => 'site_url',
                     'required' => 'true',
                     'validators' => $this->_makeSiteUrlValidators(),
@@ -301,7 +272,9 @@ class Install_InstallController
                     ));
         $form->addElement($siteUrlElement);
 
-        $dbHostElement = new Zend_Form_Element_Text('db_host', array(
+        $dbHostElement = new Zend_Form_Element_Text(
+            'db_host', 
+            array(
                     'id' => 'db_host',
                     'required' => 'true',
                     'validators' => $this->_makeDbHostValidators(),
@@ -309,7 +282,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbHostElement);
 
-        $dbNameElement = new Zend_Form_Element_Text('db_name', array(
+        $dbNameElement = new Zend_Form_Element_Text(
+            'db_name', 
+            array(
                     'id' => 'db_name',
                     'required' => 'true',
                     'validators' => $this->_makeDbNameValidators(),
@@ -317,7 +292,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbNameElement);
 
-        $dbUserElement = new Zend_Form_Element_Text('db_user', array(
+        $dbUserElement = new Zend_Form_Element_Text(
+            'db_user', 
+            array(
                     'id' => 'db_user',
                     'required' => 'true',
                     'validators' => $this->_makeDbUserValidators(),
@@ -325,7 +302,9 @@ class Install_InstallController
                     ));
         $form->addElement($dbUserElement);
 
-        $dbPassElement = new Zend_Form_Element_Text('db_pass', array(
+        $dbPassElement = new Zend_Form_Element_Text(
+            'db_pass', 
+            array(
                     'id' => 'db_pass',
                     'required' => 'true',
                     'validators' => $this->_makeDbPassValidators(),
@@ -354,7 +333,9 @@ class Install_InstallController
                     )
                 );
         $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイト名は%max%文字以下で入力してください。');
+        $stringLength->setMessage(
+            'サイト名は%max%文字以下で入力してください。'
+        );
         $siteNameValidators[] = array($stringLength, true);
 
         return $siteNameValidators;
@@ -374,7 +355,9 @@ class Install_InstallController
                     )
                 );
         $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('サイトの説明は%max%文字以下で入力しだください。');
+        $stringLength->setMessage(
+            'サイトの説明は%max%文字以下で入力しだください。'
+        );
         $commentValidators[] = array($stringLength, true);
 
         return $commentValidators;
@@ -389,7 +372,9 @@ class Install_InstallController
     private function _makeAdminAccountIdValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('管理者アカウントのログインIDを入力してください');
+        $notEmpty->setMessage(
+            '管理者アカウントのログインIDを入力してください'
+        );
         $idValidators[] = array($notEmpty, true);
 
         return $idValidators;
@@ -404,7 +389,9 @@ class Install_InstallController
     private function _makeAdminAccountPasswordValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('管理者アカウントのパスワードを入力してください。');
+        $notEmpty->setMessage(
+            '管理者アカウントのパスワードを入力してください。'
+        );
         $passValidators[] = array($notEmpty);
 
         $stringLength = new Zend_Validate_StringLength(
@@ -413,7 +400,9 @@ class Install_InstallController
                     'max' => 30
                     )
                 );
-        $stringLength->setMessage('パスワードは%min%文字以上%max%文字以下で入力してください。');
+        $stringLength->setMessage(
+            'パスワードは%min%文字以上%max%文字以下で入力してください。'
+        );
         $passValidators[] = array($stringLength);
 
         $confirmCheck = new Setuco_Validate_Match(
@@ -421,7 +410,9 @@ class Install_InstallController
                     'check_key' => 'account_pass_check'
                     )
                 );
-        $confirmCheck->setMessage('パスワードとパスワード確認が一致しません。');
+        $confirmCheck->setMessage(
+            'パスワードとパスワード確認が一致しません。'
+        );
         $passValidators[] = $confirmCheck;
 
         $passwordCheck = new Setuco_Validate_Password();
@@ -439,7 +430,9 @@ class Install_InstallController
     private function _makeSiteUrlValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('接続するデータベースのアドレスを入力してください。');
+        $notEmpty->setMessage(
+            '接続するデータベースのアドレスを入力してください。'
+        );
         $urlValidators[] = array($notEmpty, true);
 
         return $urlValidators;
@@ -454,7 +447,9 @@ class Install_InstallController
     private function _makeDbHostValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('接続するデータベースのアドレスを入力してください。');
+        $notEmpty->setMessage(
+            '接続するデータベースのアドレスを入力してください。'
+        );
         $hostValidators[] = array($notEmpty, true);
 
         return $hostValidators;
@@ -515,23 +510,29 @@ class Install_InstallController
     {
 
         $query = '';
-        $comment_flg = false;
-        $fp = fopen('../sql/initialize_tables.sql', 'r');
+        $commentFlag = false;
+        $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
+        // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
         while ( $line = fgets($fp) ){
-            // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
-            if ( $comment_flg === true ){
-                if ( preg_match("/\*\//", $line) ){
-                    $comment_flg = false;
-                }
-            } else {
-                if ( preg_match("/\/\*/", $line) ){
-                    $comment_flg = true;
-                } elseif ( preg_match("/^\-\-/", $line) ){
-                    // コメント行は無視する
-                } else {
-                    $query .= $line;
-                }
+            // コメント行は無視する
+            if ( preg_match("/\/\*/", $line) ){
+                $commentFlag = true;
+                continue;
             }
+            if ( $commentFlag === true ){
+                if ( preg_match("/\*\//", $line) ){
+                    $commentFlag = false;
+                }
+                continue;
+            }
+
+            if ( preg_match("/^\-\-/", $line) ){
+                continue;
+            }
+
+
+            $query .= $line;
+            
         }
         fclose($fp);
 
