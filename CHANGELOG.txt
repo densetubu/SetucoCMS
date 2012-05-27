@@ -10,3 +10,9 @@ Version 1.2.0 (2012/02/26)
 
 - Other
     - Transpose dojo to jQuery in the library use part of Javascript (except for a part). 
+
+--------------------------------------------
+Version 1.2.1 (2012/05/27)
+--------------------------------------------
+- Tag
+     - Fixed the problem that a system error when you edit the tags, and you attempt to save an existing tag.
