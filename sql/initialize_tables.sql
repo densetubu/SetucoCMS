@@ -104,7 +104,7 @@ CREATE TABLE goal (
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- template table
-CREATE TABLE template　(
+CREATE TABLE template (
      id INT NOT NULL AUTO_INCREMENT ,
      account_id INT NOT NULL ,
      title VARCHAR( 255 ) NOT NULL ,
