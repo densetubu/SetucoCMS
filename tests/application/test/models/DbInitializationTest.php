@@ -24,7 +24,7 @@ class Test_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTest
 
     public function setup()
     {
-        $this->_service = new Test_Model_DbInitialization($this->getAdapter());
+        $this->_service = new Test_Model_DbInitialization('test');
         $this->_categoryDao = new Common_Model_DbTable_Category($this->getAdapter());
         $this->_pageDao = new Common_Model_DbTable_Page($this->getAdapter());
         $this->_accountDao = new Common_Model_DbTable_Account($this->getAdapter());
@@ -104,7 +104,6 @@ class Test_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTest
     {
         $this->_service->truncateAllTables();
         $this->_service->loadAllFixtureDatas();
-
         $this->assertNotSame(0, $this->_categoryDao->fetchAll()->count());
         $this->assertNotSame(0, $this->_pageDao->fetchAll()->count());
     }
