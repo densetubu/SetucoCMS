@@ -42,6 +42,95 @@
 class Dev_Model_DbInitialization extends Setuco_Model_Abstract
 {
 
+    
+
+    /**
+     * 全てのテーブルを削除する
+     *
+     * @author suzuki-mar
+     */
+    public function dropAllTables()
+    {
+        if ($this->emptyDb()) {
+            throw new RuntimeException("すでに全てのテーブルは削除されています");
+        }
+
+
+        //外部キーなどの関係で最後に削除する必要があるテーブルリスト
+        $laterTableNames = array('account', 'category');
+        $firstTableNames = $this->findAllTableNames();
+
+        foreach ($firstTableNames as $key => $name) {
+            if (in_array($name, $laterTableNames)) {
+                unset($firstTableNames[$key]);
+            }
+        }
+
+        $this->_dropTables($firstTableNames);
+        $this->_dropTables($laterTableNames);
+    }
+
+    /**
+     * 指定したテーブル名を削除する
+     *
+     * @param array $names テーブル名
+     * @author suzuki-mar
+     */
+    private function _dropTables(array $tableNames)
+    {
+        $sql = 'DROP TABLE ';
+
+        foreach ($tableNames as $name) {
+            $sql .= "`{$name}`, ";
+        }
+
+        $sql = substr($sql, 0, -2);
+
+        $this->getDbAdapter()->exec($sql);
+    }
+
+
+    /**
+     * DBがからかどうか
+     *
+     * @return DBがからかどうか
+     * @author suzuki-mar
+     */
+    public function emptyDb()
+    {
+        return (!$this->existsTable());
+    }
+
+    /**
+     * DBにテーブルが存在してるか
+     *
+     * @return DBにテーブルが存在してるか
+     * @author suzuki-mar
+     */
+     public function existsTable()
+     {
+        $tableNames = $this->findAllTableNames();
+        return (!empty($tableNames)); 
+     }
+
+
+    /**
+     * DBを空にして初期化をする
+     *
+     * @author suzuki-mar
+     */
+    public function initializeDb()
+    {
+        if ($this->existsTable()) {
+            $this->dropAllTables();
+        }
+
+
+        foreach ($this->_getSchemas() as $sql) {
+            $this->getDbAdapter()->exec($sql);
+        }
+    }
+
     /**
      * 全てのDBを空にする
      *
@@ -50,7 +139,7 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
      */
     public function truncateAllTables()
     {
-        foreach ($this->_getTableNameList() as $name) {
+        foreach ($this->findAllTableNames() as $name) {
             $className = "Common_Model_DbTable_" . ucfirst($name);
 
             //テーブルだけあってクラスが存在しない場合は処理しない
@@ -72,9 +161,8 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
      */
     public function loadAllFixtureDatas()
     {
-
-        $fixtureHolder  = new Setuco_Fixture_Holder();
-        $fixtureInsList = $fixtureHolder->createFixtureInstanceByTableName($this->_getTableNameList());
+        $fixtureHolder = new Setuco_Fixture_Holder();
+        $fixtureInsList = $fixtureHolder->createFixtureInstanceByTableName($this->findAllTableNames());
 
         foreach ($fixtureInsList as $name => $instance) {
             $className = "Common_Model_DbTable_" . ucfirst($name);
@@ -84,14 +172,13 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
                 $dao = new $className($this->getDbAdapter());
 
                 foreach ($instance->getDatas() as $row) {
-                    
+
                     try {
                         $dao->insert($row);
-                    } catch(Exception $e) {
+                    } catch (Exception $e) {
                         var_dump($name, $e->getMessage());
                         exit;
                     }
-
                 }
             }
         }
@@ -102,21 +189,49 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
 
 
     /**
-     * 全てのテーブル名を取得する
+     * スキーマファイルをパースしてSQLを返すメソッド
      *
-     * @return array テーブル名のリスト
      * @author suzuki-mar
+     * @return Array String $querys
+     * @todo Installモジュールのサービスと併合する
      */
-    private function _getTableNameList()
-    {        
-        $names = array();
-        foreach($this->_findExecuteResult('show tables') as $rows) {
-            $names[] = $rows[0];
+    private function _getSchemas()
+    {
+        $comment_flg = false;
+        $query = '';
+
+        $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
+        while ($line = fgets($fp)) {
+            // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
+            if ($comment_flg === true) {
+
+                if (preg_match("/\*\//", $line)) {
+                    $comment_flg = false;
+                }
+            } else {
+
+                if (preg_match("/\/\*/", $line)) {
+                    $comment_flg = true;
+                } elseif (preg_match("/^\-\-/", $line)) {
+                    // コメント行なのでなにもしない
+                } else {
+                    $query .= $line;
+                }
+            }
+        }
+        fclose($fp);
+
+        foreach (explode(";", $query) as $query) {
+            $query = trim($query);
+
+            if (empty($query)) {
+                continue;
+            }
+
+            $querys[] = $query;
         }
 
-        return $names;
+        return $querys;
     }
-
-    
 }
 
