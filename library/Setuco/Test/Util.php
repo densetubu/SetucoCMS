@@ -60,8 +60,8 @@ class Setuco_Test_Util
     public static function initDb($environment = 'test')
     {
         $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create($environment));
-        $dbInitialization->truncateAllTables();
-        $dbInitialization->loadAllFixtureDatas();
+       $dbInitialization->truncateAllTables();
+       $dbInitialization->loadAllFixtureDatas();
     }
 
 }
