@@ -7,6 +7,20 @@ if (!defined('BOOT_STRAP_FINSHED')) {
 
 class Dev_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
+    private function _initDb()
+    {
+        if ($this->_service->emptyDb()) {
+            $this->_service->initializeDb();
+        }
+    }
+
+    private function _dropDb()
+    {
+        if ($this->_service->existsTable()) {
+            $this->_service->dropAllTables();
+        }
+    }
+
 
     public function setup()
     {
@@ -32,12 +46,12 @@ class Dev_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestC
         $this->_service->initializeDb();
     }
 
+    
+
+
     public function test_dropAllTables_すでにテーブルがなかったら例外が発生する()
     {
-        if ($this->_service->emptyDb()) {
-            $this->_service->initializeDb();
-        }
-
+        $this->_initDb();
         $this->_service->dropAllTables();
 
         $this->setExpectedException('RuntimeException');
@@ -47,49 +61,34 @@ class Dev_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestC
 
     public function test_emptyDb_DBにテーブルがなかったらtrueを返す()
     {
-        if ($this->_service->existsTable()) {
-            $this->_service->dropAllTables();
-        }
-        
+        $this->_dropDb();
         $this->assertTrue($this->_service->emptyDb());
     }
 
     public function test_emptyDb_DBにテーブルが存在したらfalseを返す()
     {
-        if ($this->_service->existsTable()) {
-            $this->_service->dropAllTables();
-        }
-
+        $this->_dropDb();
         $this->_service->initializeDb();
         $this->assertFalse($this->_service->emptyDb());
     }
 
     public function test_existsDb_DBにテーブルが存在したらtrueを返す()
     {
-        if ($this->_service->existsTable()) {
-            $this->_service->dropAllTables();
-        }
-
+        $this->_dropDb();
         $this->_service->initializeDb();
         $this->assertTrue($this->_service->existsTable());
     }
 
     public function test_existsDb_DBにテーブルが存在しなかったらfalseを返す()
     {
-        if ($this->_service->emptyDb()) {
-            $this->_service->initializeDb();
-        }
-
+        $this->_initDb();
         $this->_service->dropAllTables();
         $this->assertFalse($this->_service->existsTable());
     }
 
     public function test_initializeDb_DBを初期化する()
     {
-        if ($this->_service->existsTable()) {
-            $this->_service->dropAllTables();
-        }
-
+        $this->_dropDb();
         $this->_service->initializeDb();
         $this->assertTrue($this->_service->existsTable());
     }
