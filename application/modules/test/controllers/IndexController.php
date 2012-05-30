@@ -21,7 +21,7 @@
  *
  * @author suzuki-mar
  */
-class Dev_IndexController
+class Test_IndexController
     extends Setuco_Controller_Action_Abstract
 {
 
@@ -63,7 +63,7 @@ class Dev_IndexController
      */
     public function initializationDbAction()
     {
-        $dbInit = new Dev_Model_DbInitialization();
+        $dbInit = new Test_Model_DbInitialization();
         $dbInit->dropAllTables();
         $dbInit->initializeDb();
     }

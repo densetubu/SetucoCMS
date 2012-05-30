@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
- * @package    Dev
+ * @package    Test
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -33,16 +33,26 @@
 
 /**
  * @category   Setuco
- * @package    Dev
+ * @package    Test
  * @subpackage Model
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @author     suzuki-mar
+ * @todo       Setuco_Model_Abstractとの親子関係を削除したほうがいいかもしれない その場合はCommonModelにDB全体を管理するクラスを作成する
+ * @todo       Testライブラリーに移動したほうがいいかもしれない
  */
-class Dev_Model_DbInitialization extends Setuco_Model_Abstract
+class Test_Model_DbInitialization extends Setuco_Model_Abstract
 {
+    /**
+     * @param string[option] $environment 接続するDB環境 通常はdevelopment
+     */
+    public function  __construct($environment = 'development')
+    {
+        $adapter = Setuco_Db_ConnectionFactory::create($environment);
+        
+        parent::__construct($adapter);
+    }
 
-    
 
     /**
      * 全てのテーブルを削除する

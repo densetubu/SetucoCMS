@@ -1,6 +1,6 @@
 <?php
 /**
- * Devパッケージのブートストラップ
+ * Testパッケージのブートストラップ
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -14,7 +14,7 @@
  * @author     charlesvineyard
  */
 
-class Dev_Bootstrap extends Zend_Application_Module_Bootstrap
+class Test_Bootstrap extends Zend_Application_Module_Bootstrap
 {
     
 }

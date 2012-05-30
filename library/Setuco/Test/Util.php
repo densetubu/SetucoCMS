@@ -45,7 +45,7 @@ class Setuco_Test_Util
      */
     public static function initFile()
     {
-        $fileInit = new Dev_Model_FileInitialization();
+        $fileInit = new Test_Model_FileInitialization();
         $fileInit->deleteUploadFile();
         $fileInit->copyFixtureFile();
     }
@@ -59,7 +59,7 @@ class Setuco_Test_Util
      */
     public static function initDb($environment = 'test')
     {
-        $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create($environment));
+       $dbInitialization = new Test_Model_DbInitialization(Setuco_Db_ConnectionFactory::create($environment));
        $dbInitialization->truncateAllTables();
        $dbInitialization->loadAllFixtureDatas();
     }

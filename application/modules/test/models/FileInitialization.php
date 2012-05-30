@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
- * @package    Dev
+ * @package    Test
  * @subpackage Model
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
@@ -32,14 +32,14 @@
 
 /**
  * @category   Setuco
- * @package    Dev
+ * @package    Test
  * @subpackage Model
  * @copyright  Copyright (c) 2010 SetucoCMS Project.
  * @license
  * @author     suzuki-mar
  */
 
-class Dev_Model_FileInitialization
+class Test_Model_FileInitialization
 {
 
     private $_dirPaths = array();

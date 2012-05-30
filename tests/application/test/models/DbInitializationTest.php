@@ -5,7 +5,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
     require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 }
 
-class Dev_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestCase
+class Test_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
     private function _initDb()
     {
@@ -24,7 +24,7 @@ class Dev_DbTable_DbInitializationTest extends Setuco_Test_PHPUnit_DatabaseTestC
 
     public function setup()
     {
-        $this->_service = new Dev_Model_DbInitialization($this->getAdapter());
+        $this->_service = new Test_Model_DbInitialization($this->getAdapter());
         $this->_categoryDao = new Common_Model_DbTable_Category($this->getAdapter());
         $this->_pageDao = new Common_Model_DbTable_Page($this->getAdapter());
         $this->_accountDao = new Common_Model_DbTable_Account($this->getAdapter());

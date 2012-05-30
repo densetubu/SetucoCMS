@@ -5,13 +5,13 @@ if (!defined('BOOT_STRAP_FINSHED')) {
     require_once '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 }
 
-class Dev_DbTable_FileInitializationTest extends Setuco_Test_PHPUnit_TestCase
+class Test_DbTable_FileInitializationTest extends Setuco_Test_PHPUnit_TestCase
 {
 
     public function setup()
     {
         parent::setup();
-        $this->_service = new Dev_Model_FileInitialization();
+        $this->_service = new Test_Model_FileInitialization();
     }
 
     public function test_getFilePathList_ファイルパスを取得する()

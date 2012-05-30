@@ -1,6 +1,6 @@
 <?php
 /**
- * devのエラーコントローラー
+ * testモジュールのエラーコントローラー
  *
  * LICENSE: ライセンスに関する情報
  *
@@ -22,7 +22,7 @@
  * @subpackage Controller
  * @author     suzuki-mar
  */
-class Dev_ErrorController extends Setuco_Controller_Action_ErrorAbstract
+class Test_ErrorController extends Setuco_Controller_Action_ErrorAbstract
 {
     /**
      * エラー画面を表示する
