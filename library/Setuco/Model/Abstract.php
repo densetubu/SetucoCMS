@@ -77,4 +77,26 @@ class Setuco_Model_Abstract
         $statement = $connection->query($sql);
         return $statement->fetchAll(PDO::FETCH_BOTH);
     }
+
+    /**
+     * すべてのテーブル名を取得する
+     *
+     * @return array テーブル名の一覧
+     * @author suzuki-mar
+     */
+    public function findAllTableNames()
+    {
+        $sth = $this->getDbAdapter()->query('show tables');
+        $searchResult = $sth->fetchAll(PDO::FETCH_NUM);
+
+        $names = array();
+        foreach($searchResult as $row) {
+            foreach($row as $value) {
+                $names[] = $value;
+            }
+        }
+
+        return $names;
+    }
+
 }
