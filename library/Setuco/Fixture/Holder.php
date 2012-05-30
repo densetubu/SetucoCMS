@@ -34,9 +34,25 @@
  * @package     Setuco
  * @subpackage  Fixture
  * @author      suzuki-mar
+ * @todo クラスをTestパッケージに移動する
  */
 class Setuco_Fixture_Holder
 {
+    /**
+     * @var DBの接続環境
+     */
+    private $_dbEnviroment;
+
+
+    /**
+     * @param $enviroment 実行環境 デフォルトはdevelopment
+     */
+    public function  __construct($enviroment = 'development')
+    {
+        $this->_dbEnviroment = $enviroment;
+    }
+
+
     /**
      * フィクスチャークラスのインスタンスを生成する
      *
@@ -55,6 +71,10 @@ class Setuco_Fixture_Holder
 
             require_once $fixturePath;
         }
+
+        //存在しないテーブルのフィクスチャーは除外する フィクスチャーのSQLを実行するとエラーになるので
+        $dbInit = new Test_Model_DbInitialization($this->_dbEnviroment);
+        $tableNames = array_intersect($dbInit->findAllTableNames(), $tableNames);
 
         $fixtureInsList = array();
 
