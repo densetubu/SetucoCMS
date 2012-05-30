@@ -54,11 +54,12 @@ class Setuco_Test_Util
     /**
      * DBを初期化する
      *
+     * @param string[option] $environment 実行する環境 デフォルトだとテストになる
      * @author suzuki-mar
      */
-    public static function initDb()
+    public static function initDb($environment = 'test')
     {
-        $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create('test'));
+        $dbInitialization = new Dev_Model_DbInitialization(Setuco_Db_ConnectionFactory::create($environment));
         $dbInitialization->truncateAllTables();
         $dbInitialization->loadAllFixtureDatas();
     }

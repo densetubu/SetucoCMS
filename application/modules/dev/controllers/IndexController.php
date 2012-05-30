@@ -47,7 +47,7 @@ class Dev_IndexController
 
     public function initializationAction()
     {
-        Setuco_Test_Util::initDb();
+        Setuco_Test_Util::initDb('development');
         Setuco_Test_Util::initFile();
     }
 
