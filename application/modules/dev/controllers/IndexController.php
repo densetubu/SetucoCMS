@@ -45,10 +45,27 @@ class Dev_IndexController
 
     }
 
-    public function initializationAction()
+    /**
+     * テストデータを入れる画面
+     *
+     * @author suzuki-mar
+     */
+    public function insertTestDataAction()
     {
         Setuco_Test_Util::initDb('development');
         Setuco_Test_Util::initFile();
+    }
+
+    /**
+     * DBを初期化する
+     *
+     * @author suzuki-mar
+     */
+    public function initializationDbAction()
+    {
+        $dbInit = new Dev_Model_DbInitialization();
+        $dbInit->dropAllTables();
+        $dbInit->initializeDb();
     }
 
 }
