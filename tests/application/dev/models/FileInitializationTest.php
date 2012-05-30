@@ -21,7 +21,7 @@ class Dev_DbTable_FileInitializationTest extends Setuco_Test_PHPUnit_TestCase
 
     public function test_copyFixtureFile_ファイルをコピーする()
     {
-        
+
         foreach ($this->_getFileNames() as $fileName) {
             $targetPath = ROOT_DIR . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $this->_getJpegFileName();
 
@@ -51,31 +51,65 @@ class Dev_DbTable_FileInitializationTest extends Setuco_Test_PHPUnit_TestCase
             $targetPath = ROOT_DIR . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $this->_getJpegFileName();
             $this->assertFileNotExists($targetPath);
         }
-        
     }
 
     private function _getFileNames()
     {
-       return array(
-            $this->_getThumbnailFileName(),
+        return array(
+            $this->_getThumbnailJpegFileName(),
+            $this->_getThumbnailPngFileName(),
             $this->_getJpegFileName(),
-            $this->_getTemplateFileName()
-        ); 
+            $this->_getPngFileName(),
+            $this->_getPdfFileName(),
+            $this->_getTemplateAdminFileName(),
+            $this->_getTemplateUserFileName(),
+        );
     }
-    
+
+    private function _getBaseFilePath()
+    {
+        return substr(Setuco_Data_Constant_Media::UPLOAD_DIR_PATH_FROM_BASE, 1);
+    }
+
+    private function _getBaseThumbnailPath()
+    {
+        return substr(Setuco_Data_Constant_Media::THUMB_DIR_PATH_FROM_BASE, 1);
+    }
+
+
     private function _getJpegFileName()
     {
-        return 'media' . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR . '1.jpg';
+        return $this->_getBaseFilePath() . Fixture_Media::ID_JPEG . '.jpg';
     }
 
-    private function _getThumbnailFileName()
+    private function _getThumbnailJpegFileName()
     {
-        return 'media' . DIRECTORY_SEPARATOR . 'thumbnail' . DIRECTORY_SEPARATOR . '1.gif';
+        return $this->_getBaseThumbnailPath() . Fixture_Media::ID_JPEG . '.gif';
     }
 
-    private function _getTemplateFileName()
+    private function _getPngFileName()
     {
-        return 'template' . DIRECTORY_SEPARATOR . '1.html';
+        return $this->_getBaseFilePath() .  Fixture_Media::ID_PNG . '.png';
+    }
+
+    private function _getThumbnailPngFileName()
+    {
+        return $this->_getBaseThumbnailPath() .  Fixture_Media::ID_PNG . '.gif';
+    }
+
+    private function _getPdfFileName()
+    {
+        return $this->_getBaseFilePath() . Fixture_Media::ID_PDF . '.pdf';
+    }
+
+    private function _getTemplateAdminFileName()
+    {
+        return Setuco_Data_Constant_Template::BASE_NAME . Fixture_Template::TOP_ID . '.html';
+    }
+
+    private function _getTemplateUserFileName()
+    {
+        return Setuco_Data_Constant_Template::BASE_NAME . Fixture_Template::USER_CREATE_ID . '.html';
     }
 
 }
