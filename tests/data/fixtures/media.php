@@ -23,9 +23,9 @@ class Fixture_Media extends Setuco_Test_Fixture_Abstract
     public function getFixtureBase()
     {
         return array(
-              'create_date'        => "2012-04-11 08:42:09",
-              'update_date'        => "2012-04-11 08:42:09",
-              'comment'            => "2012-04-11 08:42:09にアップロード",
+              'create_date'        => $this->nowDateTime(),
+              'update_date'        => $this->nowDateTime(),
+              'comment'            => "{$this->nowDateTime()}にアップロード",
             );
     }
 
