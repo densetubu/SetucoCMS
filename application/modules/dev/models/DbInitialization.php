@@ -43,13 +43,6 @@ class Dev_Model_DbInitialization extends Setuco_Model_Abstract
 {
 
     /**
-     * カテゴリーDAO
-     *
-     * @var Common_Model_DbTable_Category
-     */
-    private $_dao;
-
-    /**
      * 全てのDBを空にする
      *
      * @return boolean 全てからにできたか
