@@ -126,6 +126,24 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
     }
 
     /**
+     * 配列に指定した要素が存在するか
+     *
+     * @param mixed $expected さがす要素
+     * @param array $values $expectedを探す配列
+     * @author suzuki-mar
+     */
+    public function assertArrayHasElement($expected, $actuals)
+    {
+        foreach ($actuals as $value) {
+            if ($expected === $value) {
+                return $this->assertTrue(true);
+            }
+        }
+
+        return $this->assertTrue(false);
+    }
+
+    /**
      * DBのレコード配列をIDの昇順でソートする
      *
      * @param array $rows ソートするID
