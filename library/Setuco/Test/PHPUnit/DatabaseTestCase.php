@@ -114,13 +114,18 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
     /**
      * DBのレコード配列を比較する
      *
-     * @param array $expected 期待値
+     * @param array $expected 期待値     
      * @param array $actual  実際の値
+     * @param array[option] $exceptionColumns 比較しないカラム create_dateとupdate_dateは最初から除外している
+     * @author suzuki-mar
      */
     protected function assertRowDatas($expected, $actual)
     {
         $expected = $this->_sortRowsById($expected);
         $actual = $this->_sortRowsById($actual);
+
+        $expected = $this->_exceptionRows($expected);
+        $actual = $this->_exceptionRows($actual);
 
         return $this->assertEquals($expected, $actual);
     }
@@ -159,6 +164,38 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
         array_multisort($rows, SORT_ASC, $ids);
 
         return $rows;
+    }
+
+    /**
+     * create_dateなどの比較することが難しいカラムを指定して除外する
+     *
+     * @param  array $rows カラムを除外するレコード配列
+     * @return array 比較しないカラムを除外した物
+     * @author suzuki-mar
+     */
+    protected function _exceptionRows($rows)
+    {
+        foreach ($rows as &$row) {
+
+            foreach ($row as $key => $value) {
+
+                if (in_array($key, $this->_getExceptionAssertColumns())) {
+                    unset($row[$key]);
+                }
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * 比較しないカラム
+     *
+     * @return array 比較しないカラム名
+     */
+    protected function _getExceptionAssertColumns()
+    {
+        return array('create_date', 'update_date');
     }
 
 }
