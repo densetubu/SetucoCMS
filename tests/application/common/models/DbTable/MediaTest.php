@@ -18,6 +18,11 @@ class Common_DbTable_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->_dao = new Common_Model_DbTable_Media($this->getAdapter());
     }
 
+    protected function _getExceptionAssertColumns()
+    {
+        return array_merge(parent::_getExceptionAssertColumns(), array('comment'));
+    }
+
     public function test_loadImageMedias_画像のレコードを取得する()
     {
 
@@ -40,7 +45,7 @@ class Common_DbTable_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             ),
         );
 
-        $this->assertEquals($expected, $this->_dao->loadImageMedias());
+        $this->assertRowDatas($expected, $this->_dao->loadImageMedias());
     }
 
     public function test_loadEtcMedias_画像以外のレコードを取得する()
@@ -56,7 +61,7 @@ class Common_DbTable_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
               ),
         );
 
-        $this->assertEquals($expected, $this->_dao->loadEtcMedias());
+        $this->assertRowDatas($expected, $this->_dao->loadEtcMedias());
 
     }
 

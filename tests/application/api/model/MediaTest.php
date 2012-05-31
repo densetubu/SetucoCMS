@@ -19,24 +19,38 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
         $this->_media = new Api_Model_Media($this->getAdapter());
     }
 
-    private function _getExpectedOfJpeg()
+    protected function _getExceptionAssertColumns()
     {
-        return array(
+        return array_merge(parent::_getExceptionAssertColumns(), array('comment'));
+    }
+
+    private function _getExpectedOfJpegRow()
+    {
+       return array(
             'id' => '1',
             'name' => 'image.jpeg',
             'type' => 'jpg',
             'create_date' => '2012-04-11 08:42:09',
             'update_date' => '2012-04-11 08:42:09',
             'comment' => '2012-04-11 08:42:09にアップロード',
-            'uploadUrl' => 'http://setucocms.localdomain/media/upload/1.jpg',
+            'uploadUrl' => '/media/upload/1.jpg',
             'mediaExists' => true,
-            'thumbExists' => false,
-            'thumbUrl' => 'http://setucocms.localdomain/media/thumbnail/1.gif',
-            'thumbWidth' => 0,
+            'thumbExists' => true,
+            'thumbUrl' => '/media/thumbnail/1.gif',
+            'thumbWidth' => Setuco_Data_Constant_Media::THUMB_WIDTH,
         );
     }
 
-    private function _getExpectedOfPng()
+    private function _getExpectedOfJpeg()
+    {
+        $data = $this->_getExpectedOfJpegRow();
+        $data['uploadUrl'] = 'http://setucocms.localdomain/media/upload/1.jpg';
+        $data['thumbUrl'] = 'http://setucocms.localdomain/media/thumbnail/1.gif';
+
+        return $data;
+    }
+
+    private function _getExpectedOfPngRow()
     {
         return array(
             'id' => '2',
@@ -45,12 +59,22 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             'create_date' => '2012-04-11 08:42:09',
             'update_date' => '2012-04-11 08:42:09',
             'comment' => '2012-04-11 08:42:09にアップロード',
-            'uploadUrl' => 'http://setucocms.localdomain/media/upload/2.png',
-            'mediaExists' => false,
-            'thumbExists' => false,
-            'thumbUrl' => 'http://setucocms.localdomain/media/thumbnail/2.gif',
-            'thumbWidth' => 0,
+            'uploadUrl' => '/media/upload/2.png',
+            'mediaExists' => true,
+            'thumbExists' => true,
+            'thumbUrl' => '/media/thumbnail/2.gif',
+            'thumbWidth' => Setuco_Data_Constant_Media::THUMB_WIDTH,
         );
+    }
+
+
+    private function _getExpectedOfPng()
+    {
+        $data = $this->_getExpectedOfPngRow();
+        $data['uploadUrl'] = 'http://setucocms.localdomain/media/upload/2.png';
+        $data['thumbUrl'] = 'http://setucocms.localdomain/media/thumbnail/2.gif';
+
+        return $data;
     }
 
     private function _getExpectedOfPdf()
@@ -63,10 +87,10 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             'update_date' => '2012-04-11 08:42:09',
             'comment' => '2012-04-11 08:42:09にアップロード',
             'uploadUrl' => 'http://setucocms.localdomain/media/upload/3.pdf',
-            'mediaExists' => false,
+            'mediaExists' => true,
             'thumbExists' => true,
             'thumbUrl' => 'http://setucocms.localdomain/images/admin/media/icn_pdf.gif',
-            'thumbWidth' => 65,
+            'thumbWidth' => Setuco_Data_Constant_Media::THUMB_WIDTH,
         );
     }
 
@@ -78,7 +102,7 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectedOfPdf(),
         );
 
-        $this->assertEquals($expected, $this->_media->findAllMediaInfos());
+        $this->assertRowDatas($expected, $this->_media->findAllMediaInfos());
     }
 
     public function test_findImageMediaInfos()
@@ -88,7 +112,7 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectedOfPng(),
         );
 
-        $this->assertEquals($expected, $this->_media->findImageMediaInfos());
+        $this->assertRowDatas($expected, $this->_media->findImageMediaInfos());
     }
 
     public function test_findEtcMediasInfos_画像以外のデータを取得する()
@@ -97,44 +121,17 @@ class Api_Model_MediaTest extends Setuco_Test_PHPUnit_DatabaseTestCase
             $this->_getExpectedOfPdf(),
         );
 
-        $this->assertEquals($expected, $this->_media->findEtcMediaInfos());
+        $this->assertRowDatas($expected, $this->_media->findEtcMediaInfos());
     }
-
 
     public function test_findImageMedias_画像のデータを取得する()
     {
         $expected = array(
-            array(
-                'id' => '1',
-                'name' => 'image.jpeg',
-                'type' => 'jpg',
-                'create_date' => '2012-04-11 08:42:09',
-                'update_date' => '2012-04-11 08:42:09',
-                'comment' => '2012-04-11 08:42:09にアップロード',
-                'uploadUrl' => '/media/upload/1.jpg',
-                'mediaExists' => true,
-                'thumbExists' => false,
-                'thumbUrl' => '/media/thumbnail/1.gif',
-                'thumbWidth' => 0,
-            ),
-            array(
-                'id' => '2',
-                'name' => 'image.png',
-                'type' => 'png',
-                'create_date' => '2012-04-11 08:42:09',
-                'update_date' => '2012-04-11 08:42:09',
-                'comment' => '2012-04-11 08:42:09にアップロード',
-                'uploadUrl' => '/media/upload/2.png',
-                'mediaExists' => false,
-                'thumbExists' => false,
-                'thumbUrl' => '/media/thumbnail/2.gif',
-                'thumbWidth' => 0,
-            ),
+            $this->_getExpectedOfJpegRow(),
+            $this->_getExpectedOfPngRow(),
         );
 
-        $this->assertEquals($expected, $this->_media->findImageMedias());
+        $this->assertRowDatas($expected, $this->_media->findImageMedias());
     }
-
-
 
 }
