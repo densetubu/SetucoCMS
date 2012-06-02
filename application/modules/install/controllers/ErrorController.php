@@ -2,7 +2,22 @@
 /**
  * インストーラのエラーコントローラー
  *
- * LICENSE: ライセンスに関する情報
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
  * @package    Install
@@ -11,8 +26,8 @@
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
  * @version
- * @since      File available since Release 0.1.0
- * @author     suzuki-mar
+ * @since      File available since Release 1.2.0
+ * @author     Takayuki Otake
  */
 
 /**
@@ -20,7 +35,7 @@
  *
  * @package    Install
  * @subpackage Controller
- * @author     suzuki-mar
+ * @author     Takayuki Otake
  */
 class Install_ErrorController extends Setuco_Controller_Action_ErrorAbstract
 {
@@ -28,7 +43,7 @@ class Install_ErrorController extends Setuco_Controller_Action_ErrorAbstract
      * エラー画面を表示する
      *
      * @return void
-     * @author suzuki-mar
+     * @author Takayuki Otake
      */
     public function errorAction()
     {
