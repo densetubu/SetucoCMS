@@ -1,13 +1,13 @@
 <?php
 /* 
- * designテーブルのフィクスチャークラス
+ * free-spaceテーブルのフィクスチャークラス
  */
 
-class Fixture_Design extends Setuco_Test_Fixture_Abstract
+class Fixture_Free_Space extends Setuco_Test_Fixture_Abstract
 {
     public function getColumns()
     {
-        return array('id', 'design_name');
+        return array('id', 'content');
     }
 
     /**
@@ -18,7 +18,7 @@ class Fixture_Design extends Setuco_Test_Fixture_Abstract
     public function getFixtureBase()
     {
         return array(
-              'design_name'        => 'default',
+              'content'        => 'フリースペース',
             );
     }
 

@@ -1,0 +1,6 @@
+<phpunit>
+    <php>
+        <server name="HTTP_HOST" value="setucocms.localdomain" />
+        <server name="REMOTE_ADDR" value="127.0.0.1" />
+    </php>
+</phpunit>

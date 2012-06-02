@@ -56,8 +56,8 @@ class Fixture_Page extends Setuco_Test_Fixture_Abstract
               'status'          => Setuco_Data_Constant_Page::STATUS_DRAFT,
               'category_id'     => null,
               'account_id'      => Fixture_Account::ADMIN_ID,
-              'create_date'     => '2012-04-03 08:48:44',
-              'update_date'     => '2012-04-03 08:48:44',
+              'create_date'     => $this->nowDateTime(),
+              'update_date'     => $this->nowDateTime(),
             );
     }
 

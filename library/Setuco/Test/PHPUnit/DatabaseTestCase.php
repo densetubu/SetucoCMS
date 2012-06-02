@@ -65,6 +65,8 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
     {
         if (!$this->_isLoadFixture) {
             parent::setUp();
+
+            Setuco_Test_Util::initFile();
             $this->_isLoadFixture = true;
         }
 
@@ -74,7 +76,8 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
 
             $this->_createExpected = new CreateExpected();
         }
-        
+
+       
     }
 
     protected function getConnection()
@@ -111,15 +114,38 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
     /**
      * DBのレコード配列を比較する
      *
-     * @param array $expected 期待値
+     * @param array $expected 期待値     
      * @param array $actual  実際の値
+     * @param array[option] $exceptionColumns 比較しないカラム create_dateとupdate_dateは最初から除外している
+     * @author suzuki-mar
      */
     protected function assertRowDatas($expected, $actual)
     {
         $expected = $this->_sortRowsById($expected);
         $actual = $this->_sortRowsById($actual);
 
+        $expected = $this->_exceptionRows($expected);
+        $actual = $this->_exceptionRows($actual);
+
         return $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * 配列に指定した要素が存在するか
+     *
+     * @param mixed $expected さがす要素
+     * @param array $values $expectedを探す配列
+     * @author suzuki-mar
+     */
+    public function assertArrayHasElement($expected, $actuals)
+    {
+        foreach ($actuals as $value) {
+            if ($expected === $value) {
+                return $this->assertTrue(true);
+            }
+        }
+
+        return $this->assertTrue(false);
     }
 
     /**
@@ -138,6 +164,38 @@ abstract class Setuco_Test_PHPUnit_DatabaseTestCase extends Zend_Test_PHPUnit_Da
         array_multisort($rows, SORT_ASC, $ids);
 
         return $rows;
+    }
+
+    /**
+     * create_dateなどの比較することが難しいカラムを指定して除外する
+     *
+     * @param  array $rows カラムを除外するレコード配列
+     * @return array 比較しないカラムを除外した物
+     * @author suzuki-mar
+     */
+    protected function _exceptionRows($rows)
+    {
+        foreach ($rows as &$row) {
+
+            foreach ($row as $key => $value) {
+
+                if (in_array($key, $this->_getExceptionAssertColumns())) {
+                    unset($row[$key]);
+                }
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * 比較しないカラム
+     *
+     * @return array 比較しないカラム名
+     */
+    protected function _getExceptionAssertColumns()
+    {
+        return array('create_date', 'update_date');
     }
 
 }

@@ -68,13 +68,35 @@ class Setuco_Model_Abstract
      * 実行したSQLの結果を取得する
      *
      * @param  String $sql 実行するSQL
-     * @return PDO
+     * @param  string[option] $pdoMode デフォルトは PDO::FETCH_BOTH
+     * @return array 指定したPDOのモード
      * @author suzuki-mar
      */
-    protected function _findExecuteResult($sql)
+    protected function _findExecuteResult($sql, $pdoMode = PDO::FETCH_BOTH)
     {
         $connection = $this->getDbAdapter()->getConnection();
         $statement = $connection->query($sql);
-        return $statement->fetchAll(PDO::FETCH_BOTH);
+        return $statement->fetchAll($pdoMode);
     }
+
+    /**
+     * すべてのテーブル名を取得する
+     *
+     * @return array テーブル名の一覧
+     * @author suzuki-mar
+     */
+    public function findAllTableNames()
+    {
+        $searchResult = $this->_findExecuteResult('show tables', PDO::FETCH_NUM);
+
+        $names = array();
+        foreach($searchResult as $row) {
+            foreach($row as $value) {
+                $names[] = trim($value);
+            }
+        }
+
+        return $names;
+    }
+
 }

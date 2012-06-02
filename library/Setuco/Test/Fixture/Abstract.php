@@ -82,5 +82,16 @@ abstract class Setuco_Test_Fixture_Abstract
 
        return $datas;
     }
+
+    /**
+     * 現在の日時を返す
+     *
+     * @return string 現在の日時
+     * @author suzuki-mar
+     */
+    public function nowDateTime()
+    {
+        return date("Y-m-d H:i:s");
+    }
 }
 
