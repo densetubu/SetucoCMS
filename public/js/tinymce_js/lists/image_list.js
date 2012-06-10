@@ -2,10 +2,10 @@
 // There images will be displayed as a dropdown in all image dialogs if the "external_link_image_url"
 // option is defined in TinyMCE init.
 //
-
 var tinyMCEImageList = new Array(
 	// Name, URL
 	["Logo 1", "/js/tinymce_js/media/logo.jpg"],
 	["Logo 2", "/js/tinymce_js/media/logo.jpg"]
 );
+
 
