@@ -26,3 +26,7 @@ http://sourceforge.jp/projects/setucocms
 - Dojo Toolkit 1.5.0
   Copyright (c) 2005-2010, The Dojo Foundation All rights reserved.
   http://dojotoolkit.org/
+
+- jQuery 1.7.1
+  Copyright (c) 2012 jQuery Foundation
+  http://jquery.org/

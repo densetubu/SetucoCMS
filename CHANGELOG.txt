@@ -38,3 +38,11 @@ Version 1.3.0 (2012/03/17)
     - Change of nickname, Change of nickname (name displayed as a producer) can be performed.
     - Creation of subaccount, New account can be created.
     - Inspection of subaccount, The list of the created subaccount can be displayed. 
+
+--------------------------------------------
+Version 1.4.0 (2012/06/17)
+--------------------------------------------
+- Login
+    - Fixed the bug does not disappear when you press the OK flash message at login and logout
+- Design
+    - Revamped the logo of SetucoCMS
