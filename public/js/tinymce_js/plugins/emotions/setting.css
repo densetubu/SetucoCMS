@@ -13,6 +13,9 @@
 	width:18px;
 	height:18px;
 }
+#iconList li img{
+	border:none;
+}
 
 .title{
 	text-align:center;

@@ -47,6 +47,8 @@ $this->headScript()->prependFile($this->baseUrl('js/jquery-ui-1.8.18.custom/js/j
 $this->headScript()->prependFile($this->baseUrl('js/jquery-1.7.1.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 $this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
+$this->headScript()->prependFile($this->baseUrl('js/setuco/api_data_list.js'));
+
 ?>
 <?php echo $this->doctype() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
@@ -60,14 +62,18 @@ $this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
 
          <script>
 
-        $(function(){
-            jQuery( '#create_date' ) . datetimepicker();
-            jQuery( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+		
+
+
+		$(function(){
+            $( '#create_date' ) . datetimepicker();
+            $( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+			
         });
 		
 		
-		
-        
+
+
 tinyMCE.init({
 		// General options
 		mode : "exact",
@@ -92,10 +98,10 @@ tinyMCE.init({
 		content_css : "css/content.css",
 
 		// Drop lists for link/image/media/template dialogs
-		template_external_list_url : "/js/tinymce_js/lists/template_list.js",
-		external_link_list_url : "/lists/link_list.js",
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
 		external_image_list_url : "/js/tinymce_js/lists/image_list.js",
-		media_external_list_url : "/js/tinymce_js/lists/media_list.js",
+		media_external_list_url : "lists/media_list.js",
 
 		// Style formats
 		style_formats : [
@@ -114,6 +120,8 @@ tinyMCE.init({
 			staffid : "991234"
 		}
 	});
+	
+
 </script>
     </head>
     <body class="soria">
