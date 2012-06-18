@@ -16839,6 +16839,6 @@ tinymce.onAddEditor.add(function(tinymce, ed) {
 		ed.onInit.add(function() {
 			ed.selection.onSetContent.add(convert);
 		});
-	}
+	}	
 });
 
