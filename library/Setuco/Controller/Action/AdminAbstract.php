@@ -75,8 +75,13 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
     public function init()
     {
         parent::init();
-        $this->_navigation = $this->_initNavigation();
-        $this->_initHeader();
+        
+        //HTMLリクエストの場合だけ値を設定する
+        if ($this->_isHTMLRequest()) {
+            $this->_navigation = $this->_initNavigation();
+            $this->_initHeader();
+        }
+
     }
 
 
@@ -124,10 +129,12 @@ abstract class Setuco_Controller_Action_AdminAbstract extends Setuco_Controller_
      */
     public function postDispatch()
     {
-       
-        $this->view->headTitle(($this->_pageTitle === null)
+        //HTMLリクエストの場合だけ値を設定する
+        if ($this->_isHTMLRequest()) {
+            $this->view->headTitle(($this->_pageTitle === null)
             ? $this->_chooseHeadTitle() : $this->_pageTitle,
             Zend_View_Helper_Placeholder_Container_Abstract::SET);
+        }
     }
 
     /**

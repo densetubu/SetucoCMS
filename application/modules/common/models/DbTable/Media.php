@@ -1,4 +1,5 @@
 <?php
+
 /**
  * mediaテーブルのDbTable(DAO)クラスです。
  *
@@ -37,13 +38,13 @@
  */
 class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
 {
+
     /**
      * テーブル名
      *
      * @var string
      */
     protected $_name = 'media';
-
     /**
      * プライマリーキーのカラム名
      *
@@ -76,7 +77,8 @@ class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
      * @return Selectオブジェクトの実行(fetchAll)結果
      * @author akitsukada
      */
-    public function loadMedias4Pager($sortColumn, $order, $pageNumber, $limit, $targetExt, $tmpFileExt)
+    public function loadMedias4Pager($sortColumn, $order, $pageNumber, $limit,
+            $targetExt, $tmpFileExt)
     {
         $select = $this->select()
                         ->order("{$sortColumn} {$order}")
@@ -90,6 +92,43 @@ class Common_Model_DbTable_Media extends Setuco_Db_Table_Abstract
         }
 
         return $this->fetchAll($select)->toArray();
+    }
+
+    /**
+     * 画像のレコードを配列で返す
+     *
+     * @return array 画像のレコードの配列
+     * @author suzuki-mar
+     */
+    public function loadImageMedias()
+    {
+        $select = $this->select();
+        $select->where('type IN (?)', Setuco_Data_Constant_Media::IMAGE_FILE_EXTENSIONS());
+        return $this->fetchAll($select)->toArray();
+    }
+
+    /**
+     * 画像以外のレコードを配列で返す
+     * 
+     * @return array 画像以外のレコードの配列
+     * @author suzuki-mar
+     */
+    public function loadEtcMedias()
+    {
+        $select = $this->select();
+        $select->where('type NOT IN (?)', Setuco_Data_Constant_Media::IMAGE_FILE_EXTENSIONS());
+        return $this->fetchAll($select)->toArray();
+    }
+
+    /**
+     * 全てのレコードを配列で返す
+     *
+     * @return array 全てのレコードの配列
+     * @author suzuki-mar
+     */
+    public function loadAllMedias()
+    {
+        return $this->fetchAll()->toArray();
     }
 
 }

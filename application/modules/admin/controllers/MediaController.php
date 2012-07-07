@@ -101,12 +101,15 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
     public function init()
     {
         parent::init();
+
         for ($inputID = 1; $inputID <= self::FILE_COUNT_MAX; $inputID++) {
             $this->_fileInputIDs[] = $this->_fileInputID_base . (string) $inputID;
         }
         $this->_media = new Admin_Model_Media();
         $this->_setPageLimit(self::PAGE_LIMIT);
+
     }
+
 
     /**
      * ファイルのアップロードフォームやアップロードしてあるファイルの一覧を表示するページ
@@ -152,7 +155,7 @@ class Admin_MediaController extends Setuco_Controller_Action_AdminAbstract
         // ファイル情報の取得とファイルの存在確認
         $medias = $this->_media->findMedias(
                         $sortColumn, $order, $currentPage, $this->_getPageLimit(), $fileType);
-        #var_dump($medias); exit;
+        
         $this->view->medias = $medias;
 
         // アップロードできる最大サイズをviewに教える
