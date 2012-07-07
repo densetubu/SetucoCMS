@@ -106,6 +106,7 @@ class Install_InstallController
      * 入力したデータから初期化の実行をするアクション
      *
      * @author Takayuki Otake
+     * @todo   例外キャッチで入力ページへ戻る
      */
     public function actionAction()
     {
@@ -122,14 +123,19 @@ class Install_InstallController
             return $this->_helper->redirector('index', 'install', null);
         }
 
-        $inputValues['site_id'] = 1;
-        //TODO: 例外キャッチでindexActionへ遷移
-        $dbService = new Install_Model_Db($inputValues);
-        $dbService->setupSchema();
-        $dbService->updateSite($inputValues);
-        $dbService->updateAccount($inputValues);
-
         Install_Model_Config::updateApplicationConfig($inputValues);
+
+        $dbInit = new Install_Model_DbInitialization(APPLICATION_ENV);
+        $dbInit->initializeDb();
+        $dbInit->updateAccount(array(
+            'login_id' => $inputValues['account_id'],
+            'password' => $inputValues['account_pass']
+        ));
+        $dbInit->updateSite(array(
+            'name'    => $inputValues['site_name'],
+            'comment' => $inputValues['site_comment'],
+            'url'     => $inputValues['site_url'],
+        ));
 
         //二重送信防止
         $this->_helper->redirector('finish', 'install', null);
@@ -512,43 +518,4 @@ class Install_InstallController
         return $passValidators;
     }
 
-    /**
-     * データベーススキーマ取得
-     * 
-     * @author Takayuki Otake
-     * @return String
-     */
-    function _getInitializeTablesSql()
-    {
-
-        $query = '';
-        $commentFlag = false;
-        $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
-        // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
-        while ( $line = fgets($fp) ){
-            // コメント行は無視する
-            if ( preg_match("/\/\*/", $line) ){
-                $commentFlag = true;
-                continue;
-            }
-            if ( $commentFlag === true ){
-                if ( preg_match("/\*\//", $line) ){
-                    $commentFlag = false;
-                }
-                continue;
-            }
-
-            if ( preg_match("/^\-\-/", $line) ){
-                continue;
-            }
-
-
-            $query .= $line;
-            
-        }
-        fclose($fp);
-
-        $querys = explode(";", $query);
-        return $querys;
-    }
 }
