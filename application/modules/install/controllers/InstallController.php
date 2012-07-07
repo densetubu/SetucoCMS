@@ -194,16 +194,11 @@ class Install_InstallController
      */
     private function _getDefaultValues()
     {
-        if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') {
-            $addr = $_SERVER['HTTP_HOST'];
+        if ($_SERVER['SERVER_ADDR'] == '::1') {
+            $addr = 'localhost';
         } else {
-            if ($_SERVER['SERVER_ADDR'] == '::1') {
-                $addr = 'localhost';
-            } else {
-                $addr = $_SERVER['SERVER_ADDR'];
-            }
+            $addr = $_SERVER['SERVER_ADDR'];
         }
-
         return array(
                 'account_id' => '',
                 'site_url' => 'http://' . $addr . $this->view->baseUrl('/'),
