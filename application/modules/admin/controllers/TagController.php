@@ -180,16 +180,19 @@ class Admin_TagController extends Setuco_Controller_Action_AdminAbstract
         $stringLength->setEncoding("UTF-8");
         $validators[] = array($stringLength, true);
 
-        if ($isEditing != true) {
-            $noRecordExists = new Zend_Validate_Db_NoRecordExists(
-                array(
-                    'table' => 'tag',
-                    'field' => 'name'
-                )
-            );
-            $noRecordExists->setMessage('「%value%」は既に登録されています。');
-            $validators[] = array($noRecordExists, true);
+        $noRecordExistsOption = array(
+                'table' => 'tag',
+                'field' => 'name'
+        );
+
+        if ($isEditing) {
+            $noRecordExistsOption['exclude'] = array('field' => 'id', 'value' => $this->_getParam('id'));
         }
+
+        $noRecordExists = new Zend_Validate_Db_NoRecordExists($noRecordExistsOption);
+        $noRecordExists->setMessage('「%value%」は既に登録されています。');
+        $validators[] = array($noRecordExists, true);
+
 
         return $validators;
     }

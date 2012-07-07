@@ -1,5 +1,4 @@
 <?php
-
 /**
  * インストーラのコントローラ
  *
@@ -26,14 +25,15 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since      File available since Release 0.1.0
- * @author     Takayuki Otake suzuki-mar
- * @todo       フォーム処理をZenfFormに置き換える
+ * @since      File available since Release 1.2.0
+ * @author     Takayuki Otake 
  */
 
 /**
- * Description of InstallController
+ * インストールをするコントローラ
  *
+ * @package    Install
+ * @subpackage Controller
  * @author Takayuki Otake
  */
 class Install_InstallController
