@@ -8,6 +8,17 @@ $(function() {
         $(this).bind("submit",function() {
             var submit_buttons = $(":submit, :image",this);
             submit_buttons.attr("disabled", true);
+
+            //ページ内に存在する全てのボタンを無効化させる
+            $('button').each(function (i) {
+                $(this).attr("disabled", true);
+            });
+            $('input').each(function (i) {
+                if ($(this).attr('type') === 'submit' || $(this).attr('type') === 'button') {
+                    $(this).attr("disabled", true);
+                }
+            });
+
             setTimeout(function(){
                 submit_buttons.attr("disabled", false);
             },timeout);
