@@ -115,6 +115,8 @@ class Install_InstallController
             return $this->_helper->redirector('index', 'install', null);
         }
 
+        Install_Model_Config::updateApplicationConfig($inputValues);
+
         $dbInit = new Install_Model_DbInitialization(APPLICATION_ENV);
         $dbInit->initializeDb();
         $dbInit->updateAccount(array(
@@ -126,8 +128,6 @@ class Install_InstallController
             'comment' => $inputValues['site_comment'],
             'url'     => $inputValues['site_url'],
         ));
-
-        Install_Model_Config::updateApplicationConfig($inputValues);
 
         //二重送信防止
         $this->_helper->redirector('finish', 'install', null);
