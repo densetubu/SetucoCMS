@@ -78,6 +78,14 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     const FORMAT_DATE_TEXT_BOX = 'YYYY-MM-dd THH:mm:ss hh:MM';
 
     /**
+     * 日付テキストボックスのvalue属性のフォーマット
+     * (画面に表示されるものではない)
+     *
+     * @var string
+     */
+    const FORMAT_DATE_TEXT_BOX_VIEW = 'YYYY年MM月dd日 hh:MM';
+
+    /**
      * 指定なしのvalue属性
      *
      * @var string
@@ -562,6 +570,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->view->form = $this->_getParam('form', $this->_createForm());
 
         $this->view->createDate = Zend_Date::now()->toString();
+        
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
@@ -728,14 +737,15 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'create_date',
             array(
                 'id' => 'create_date',
-                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
+                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX_VIEW),
                 'filters' => array(
                     'StringTrim'
                 ),
                 'validators' => $this->_makeCreateDateValidators(),
             )
         );
-        
+
+
         $form->setMinimalDecoratorElements(array(
             'sub_open1',
             'sub_draft1',
