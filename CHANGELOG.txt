@@ -46,3 +46,10 @@ Version 1.4.0 (2012/06/17)
     - Fixed the bug does not disappear when you press the OK flash message at login and logout
 - Design
     - Revamped the logo of SetucoCMS
+
+--------------------------------------------
+Version 1.4.1 (2012/08/03)
+--------------------------------------------
+- Installer
+    - Fixed tha bug text form value of "database user" in place of "database password".
+    - Change of "site url"`s default value, ip address to host domain.
