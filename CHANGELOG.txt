@@ -16,3 +16,10 @@ Version 1.2.1 (2012/05/27)
 --------------------------------------------
 - Tag
      - Fixed the problem that a system error when you edit the tags, and you attempt to save an existing tag.
+
+--------------------------------------------
+Version 1.2.2 (2012/08/01)
+--------------------------------------------
+- Installer
+    - Fixed tha bug text form value of "database user" in place of "database password".
+    - Change of "site url"`s default value, ip address to host domain.

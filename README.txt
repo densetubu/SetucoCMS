@@ -11,6 +11,9 @@ Released on 2012/02/26
 SetucoCMS version 1.2.1
 Released on 2012/05/27
 
+SetucoCMS version 1.2.2
+Released on 2012/08/01
+
 You can see CHANGELOG.txt to see detailed change history.
 
 --------------------------------------------
