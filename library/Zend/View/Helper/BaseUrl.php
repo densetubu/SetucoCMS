@@ -53,6 +53,20 @@ class Zend_View_Helper_BaseUrl extends Zend_View_Helper_Abstract
         // Get baseUrl
         $baseUrl = $this->getBaseUrl();
 
+        // トップディレクトリのindex.phpへのアクセスに対応
+        if (strpos($_SERVER['PHP_SELF'], '/public') === false) { // もう少し柔軟な感じに...
+            $fh = opendir(APPLICATION_PATH . '/../public');
+            while (false !== ($publicFile = readdir($fh))) {
+                if (strpos($publicFile, '.') === 0) {
+                    continue;
+                }
+                if (preg_match("|^/?$publicFile|", $file)) {
+                    $file = '/public/' . ltrim($file, '/\\');
+                }
+            }
+            closedir($fh);
+        }
+
         // Remove trailing slashes
         if (null !== $file) {
             $file = '/' . ltrim($file, '/\\');
