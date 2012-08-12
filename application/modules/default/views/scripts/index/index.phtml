@@ -36,11 +36,11 @@
 <div class="entry">
 
     <div class="entryHead">
-        <h2><span>フリースペース</span></h2>
+        <h2><span><?php echo $this->escape($this->freeSpace['title']) ?></span></h2>
     </div>
 
     <div class="entryBody">
-        <p><?php echo $this->spaceContent ?></p>
+        <p><?php echo $this->escape($this->freeSpace['content']) ?></p>
     </div>
 
 </div>

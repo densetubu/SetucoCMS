@@ -82,7 +82,7 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
         //新着ページを取得する
         $this->view->newPages = $this->_pageService->findLastUpdatedPages(Setuco_Data_Constant_Module_Default::LIMIT_GET_NEW_PAGE);
 
-        $this->view->spaceContent = $this->_freeSpaceService->findContent();
+        $this->view->freeSpace = $this->_freeSpaceService->getFreeSpaceInfo();
     }
 
 

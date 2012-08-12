@@ -63,13 +63,20 @@
             <dl id="inputArea">
                 <dt>
                     <label for="content">
+                        <span class="required">[必須]</span>タイトル
+                    </label>
+                </dt>
+                <dd>
+                    <input type="text" id="title" name="title" value="<?php echo $this->escape($this->freeSpaces['title']) ?>" />
+                </dd>
+                <dt>
+                    <label for="content">
                         <span class="required">[必須]</span>コンテンツ
                     </label>
                 </dt>
                 <dd>
                     <textarea id="content" name="content" rows="20"><?php echo $this->escape($this->freeSpaces['content']) ?></textarea>
                 </dd>
-
             </dl>
             <p class="defaultOver">
                 <input type="submit" id="sub" name="sub" value="フリースペースを変更" />

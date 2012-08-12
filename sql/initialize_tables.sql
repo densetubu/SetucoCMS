@@ -62,6 +62,7 @@ CREATE TABLE page (
 -- free_space table
 CREATE TABLE `setucocms`.`free_space` (
     id      INT NOT NULL AUTO_INCREMENT,
+    title  TEXT NOT NULL,
     content TEXT NOT NULL,
     PRIMARY KEY ( `id` )
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
@@ -147,10 +148,11 @@ VALUES
      now());
 
 INSERT INTO free_space
-    (id, content)
+    (id, title, content)
 VALUES (
     NULL,
-    'テスト運用中。フリーエリアです。');
+    'フリースペース',
+    'フリースペースです。コンテンツを設定してください。');
 
 
 INSERT INTO ambition 

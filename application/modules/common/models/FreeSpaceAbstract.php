@@ -62,9 +62,9 @@ abstract class Common_Model_FreeSpaceAbstract
      * @return string フリースペースの内容
      * @author suzuki-mar
      */
-    public function findContent()
+    public function getFreeSpaceInfo()
     {
-        $result = $this->_freeSpaceDao->loadNewContent();
+        $result = $this->_freeSpaceDao->fetchRow()->toArray();
 
         return $result;
 

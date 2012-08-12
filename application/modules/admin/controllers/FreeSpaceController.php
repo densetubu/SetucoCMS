@@ -70,7 +70,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * サイト情報を表示するアクションです
+     * フリースペースを表示するアクションです
      *
      * @return void
      * @author suzuki-mar
@@ -78,8 +78,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
      */
     public function indexAction()
     {
-        $freeSpaces = array();
-        $freeSpaces['content'] = $this->_freeSpaceService->findContent();
+        $freeSpaces = $this->_freeSpaceService->getFreeSpaceInfo();
 
         //空文字以外の入力したものは、入力したものをデフォルト値にする
         if ($this->_hasParam('inputValues')) {
@@ -122,7 +121,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
-     * サイト情報の更新処理のアクションです。
+     * フリースペースの更新処理のアクションです。
      * indexアクションに遷移します
      *
      * @return void
@@ -166,6 +165,14 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = new Setuco_Form();
 
+        $titleElement = new Zend_Form_Element_Text('title', array(
+                    'id' => 'title',
+                    'required' => true,
+                    'validators' => $this->_makeTitleValiDators(),
+                    'filters' => array('StringTrim')
+                ));
+        $form->addElement($titleElement);
+
         $contentElement = new Zend_Form_Element_Text('content', array(
                     'id' => 'content',
                     'required' => true,
@@ -178,6 +185,31 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
     }
 
     /**
+     * タイトルのバリデートルールを生成する
+     *
+     * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
+     * @author ErinaMikami
+     */
+    private function _makeTitleValiDators()
+    {
+
+        $notEmpty = new Zend_Validate_NotEmpty();
+        $notEmpty->setMessage('タイトルを入力してください。');
+        $titleValidators[] = array($notEmpty, true);
+
+        $stringLength = new Zend_Validate_StringLength(
+                        array(
+                            'max' => 100
+                        )
+        );
+        $stringLength->setEncoding("UTF-8");
+        $stringLength->setMessage('タイトルは%max%文字以下で入力してください。');
+        $titleValidators[] = array($stringLength, true);
+
+        return $titleValidators;
+    }
+
+    /**
      * コンテンツのバリデートルールを生成する
      *
      * @return array バリデートルールの配列 Zend_Validate_xxx　が要素に入っている
@@ -187,7 +219,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
     {
 
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('フリースペースを入力してください。');
+        $notEmpty->setMessage('コンテンツを入力してください。');
         $contentValidators[] = array($notEmpty, true);
 
         $stringLength = new Zend_Validate_StringLength(
@@ -196,7 +228,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
                         )
         );
         $stringLength->setEncoding("UTF-8");
-        $stringLength->setMessage('フリースペースは%max%文字以下で入力してください。');
+        $stringLength->setMessage('コンテンツは%max%文字以下で入力してください。');
         $contentValidators[] = array($stringLength, true);
 
         return $contentValidators;
