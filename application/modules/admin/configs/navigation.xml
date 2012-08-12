@@ -80,6 +80,35 @@
                 </directory_index>
             </pages>
         </directory>
+        <site>
+            <id>site</id>
+            <title>サイト情報の編集</title>
+            <label>サイト全般</label>
+            <module>admin</module>
+            <controller>site</controller>
+            <action>index</action>
+            <order>20</order>
+            <type>Setuco_Navigation_Page</type>
+            <src>images/admin/gNav/h_menu_customize.jpg</src>
+            <pages>
+                <site_index>
+                    <id>site_index</id>
+                    <title>サイト情報の編集</title>
+                    <label>サイト情報の編集</label>
+                    <module>admin</module>
+                    <controller>site</controller>
+                    <action>index</action>
+                </site_index>
+                <free-space_index>
+                    <id>free-space_index</id>
+                    <title>フリースペースの編集</title>
+                    <label>フリースペースの編集</label>
+                    <module>admin</module>
+                    <controller>free-space</controller>
+                    <action>index</action>
+                </free-space_index>
+            </pages>
+        </site>
         <category>
             <id>category</id>
             <title>カテゴリーの追加・編集・削除</title>
@@ -87,7 +116,7 @@
             <module>admin</module>
             <controller>category</controller>
             <action>index</action>
-            <order>20</order>
+            <order>30</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/admin/gNav/h_menu_category.jpg</src>
             <pages>
@@ -108,7 +137,7 @@
             <module>admin</module>
             <controller>tag</controller>
             <action>index</action>
-            <order>30</order>
+            <order>40</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/admin/gNav/h_menu_tag.jpg</src>
             <pages>
@@ -129,7 +158,7 @@
             <module>admin</module>
             <controller>media</controller>
             <action>index</action>
-            <order>40</order>
+            <order>50</order>
             <type>Setuco_Navigation_Page</type>
             <src>images/admin/gNav/h_menu_file.jpg</src>
             <pages>
@@ -143,27 +172,6 @@
                 </media_index>
             </pages>
         </media>
-        <site>
-            <id>site</id>
-            <title>サイト情報の編集</title>
-            <label>サイト全般</label>
-            <module>admin</module>
-            <controller>site</controller>
-            <action>index</action>
-            <order>50</order>
-            <type>Setuco_Navigation_Page</type>
-            <src>images/admin/gNav/h_menu_site.jpg</src>
-            <pages>
-                <site_index>
-                    <id>site_index</id>
-                    <title>サイト情報の編集</title>
-                    <label>サイト情報の編集</label>
-                    <module>admin</module>
-                    <controller>site</controller>
-                    <action>index</action>
-                </site_index>
-            </pages>
-        </site>
         <account>
             <id>account</id>
             <title>マイアカウントの編集</title>
@@ -201,26 +209,5 @@
                 </account_form>
             </pages>
         </account>
-        <free-space>
-            <id>free-space</id>
-            <title>フリースペースの編集</title>
-            <label>フリースペース</label>
-            <module>admin</module>
-            <controller>free-space</controller>
-            <action>index</action>
-            <order>70</order>
-            <type>Setuco_Navigation_Page</type>
-            <src>images/admin/gNav/h_menu_account.jpg</src>
-            <pages>
-                <free-space_index>
-                    <id>free-space_index</id>
-                    <title>フリースペースの編集</title>
-                    <label>フリースペースの編集</label>
-                    <module>admin</module>
-                    <controller>free-space</controller>
-                    <action>index</action>
-                </free-space_index>
-            </pages>
-        </free-space>
     </nav>
 </config>

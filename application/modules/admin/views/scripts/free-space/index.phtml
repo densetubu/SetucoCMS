@@ -50,8 +50,7 @@
             <div class="hAreaR">
                 <div class="hArea">
                     <h3>
-                        フリースペースの編集
-<!--                        <img src="<?php echo $this->baseUrl('/images/admin/site/h_site.jpg') ?>" width="122" height="18" alt="フリースペースの編集" />-->
+                        <img src="<?php echo $this->baseUrl('/images/admin/free-space/h_free-space.jpg') ?>" width="159" height="18" alt="フリースペースの編集" />
                     </h3>
                 </div>
             </div>
@@ -61,15 +60,14 @@
         <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
 
         <form action="<?php echo $this->baseUrl('/admin/free-space/update') ?>" method="post">
-            <dl id="siteForm" class="editArea">
+            <dl id="inputArea">
                 <dt>
                     <label for="content">
-                        <span class="required">[必須]</span>フリースペース
+                        <span class="required">[必須]</span>コンテンツ
                     </label>
                 </dt>
                 <dd>
-                    <textarea id="content" name="content"><?php echo $this->escape($this->freeSpaces['content']) ?></textarea><br />
-                    <span>フリースペースエリアに表示されます。</span>
+                    <textarea id="content" name="content" rows="20"><?php echo $this->escape($this->freeSpaces['content']) ?></textarea>
                 </dd>
 
             </dl>
