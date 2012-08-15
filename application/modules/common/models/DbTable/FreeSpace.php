@@ -26,7 +26,7 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @version
  * @link
- * @since      File available since Release 0.1.0
+ * @since      File available since Release 1.5.0
  * @author     charlesvineyard
  */
 
