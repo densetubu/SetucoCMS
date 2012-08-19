@@ -1,4 +1,5 @@
 <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : ''     ?>
+<?php if ($this->error) echo '<p style="color:red;">' . $this->error . '</p>' ?>
 <form method="post">
     <dl>
         <dt>
