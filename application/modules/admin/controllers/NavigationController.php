@@ -44,17 +44,25 @@ class Admin_NavigationController extends Setuco_Controller_Action_AdminAbstract
      * ナビゲーションのアクションです。
      * 
      * @return void
-     * @author charlesvineyard
+     * @author charlesvineyard suzuki-mar
+     * @todo HTMLレスポンスではない場合は実行しないようにする
      */
     public function navigationAction()
     {
-        $navInfos =  array();
-        foreach ($this->_navigation as $parentNavPage) {
-            $childNavInfos = $this->_createChildNavInfos($parentNavPage);
-            $navInfos[] = $this->_createNavInfo($parentNavPage, $childNavInfos);
+
+        if ($this->_isHTMLRequest()) {
+            $navInfos =  array();
+            foreach ($this->_navigation as $parentNavPage) {
+                $childNavInfos = $this->_createChildNavInfos($parentNavPage);
+                $navInfos[] = $this->_createNavInfo($parentNavPage, $childNavInfos);
+            }
+            $this->view->navInfos = $navInfos;
+            $this->_helper->viewRenderer->setResponseSegment('navigation');
+
+            //HTMLのレスポンスだけはナビゲーションを表示する
+            $this->view->isDisplayNav = true;
         }
-        $this->view->navInfos = $navInfos;
-        $this->_helper->viewRenderer->setResponseSegment('navigation');
+
     }
     
     /**

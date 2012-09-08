@@ -256,4 +256,45 @@ abstract class Setuco_Db_Table_Abstract extends Zend_Db_Table_Abstract
         return $this;
     }
 
+    /**
+     * AutoIncrementの次の値を取得する
+     *
+     * @return int AutoIncrementの次の値
+     * @author suzuki-mar
+     */
+    public function findNextAutoIncrementNumber()
+    {
+        $pdo = $this->getAdapter()->getConnection();
+
+        $sth = $pdo->prepare("SHOW TABLE STATUS WHERE Name = '{$this->_name}'");
+        $sth->execute();
+        $row = $sth->fetch(PDO::FETCH_ASSOC);
+        return intval($row['Auto_increment']);
+    }
+
+    /**
+     * トランザクション処理を開始する
+     *
+     */
+    public function beginTransaction()
+    {
+        $this->_db->beginTransaction();
+    }
+
+    /**
+     * トランザクションをロールバックする
+     */
+    public function rollBack()
+    {
+        $this->_db->rollBack();
+    }
+
+    /**
+     * トランザクションをコミットする
+     */
+    public function commit()
+    {
+        $this->_db->commit();
+    }
+
 }

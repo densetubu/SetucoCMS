@@ -83,8 +83,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $frontController->registerPlugin(new Setuco_Controller_Plugin());
         //エラーコントローラーを制御するプラグインを登録する
         $frontController->registerPlugin(new Setuco_Controller_Plugin_ErrorHandler());
-
     }
+
 
     /**
      * ビューを初期化
@@ -96,9 +96,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $view = new Zend_View();
         Zend_Dojo::enableView($view);
-        $view->dojo()->enable()
-            ->setCdnBase(Zend_Dojo::CDN_BASE_GOOGLE)
-            ->addStyleSheetModule('dijit.themes.soria');
+       // $view->dojo()->enable()
+           // ->setCdnBase(Zend_Dojo::CDN_BASE_GOOGLE)
+           // ->addStyleSheetModule('dijit.themes.soria');
 
         $doctypeHelper = new Zend_View_Helper_Doctype();
         $doctypeHelper->doctype('XHTML1_STRICT');

@@ -1,0 +1,86 @@
+<?php
+/**
+ * フリースペース更新画面
+ *
+ * Copyright (c) 2010-2011 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * All Rights Reserved.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category   Setuco
+ * @package    Admin
+ * @subpackage View_Script_Site
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 1.5.0
+ * @param      array            $freeSpaces   フリースペースデータ
+ * @param      array[option]    $flashMessages アクションの実行結果
+ * @param      Setuco_Form      $errorForm エラーメッセージを表示するフォームクラス
+ * @author     suzuki-mar
+ */
+?>
+
+<!-- topicPath START -->
+<div id="topicPath">
+    <p>
+        <a href="<?php echo $this->baseUrl('/admin') ?>">トップ</a>
+        <img src="<?php echo $this->baseUrl('/images/admin/share/topicPath.gif') ?>" width="6" height="11" alt="の中の" />
+    </p>
+    <p>フリースペースの編集</p>
+</div>
+<!-- topicpath END -->
+
+    <!-- section START -->
+    <div class="section">
+        <div class="hAreaL">
+            <div class="hAreaR">
+                <div class="hArea">
+                    <h3>
+                        <img src="<?php echo $this->baseUrl('/images/admin/free-space/h_free-space.jpg') ?>" width="159" height="18" alt="フリースペースの編集" />
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <?php echo $this->partial('action-message.phtml', array('flashMessages' => $this->flashMessages)) ?>
+        <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : '' ?>
+
+        <form action="<?php echo $this->baseUrl('/admin/free-space/update') ?>" method="post">
+            <dl id="inputArea">
+                <dt>
+                    <label for="content">
+                        <span class="required">[必須]</span>タイトル
+                    </label>
+                </dt>
+                <dd>
+                    <input type="text" id="title" name="title" value="<?php echo $this->escape($this->freeSpaces['title']) ?>" />
+                </dd>
+                <dt>
+                    <label for="content">
+                        <span class="required">[必須]</span>コンテンツ
+                    </label>
+                </dt>
+                <dd>
+                    <textarea id="content" name="content" rows="20"><?php echo $this->escape($this->freeSpaces['content']) ?></textarea>
+                </dd>
+            </dl>
+            <p class="defaultOver">
+                <input type="submit" id="sub" name="sub" value="フリースペースを変更" />
+            </p>
+        </form>
+    </div>
+    <!-- section END -->

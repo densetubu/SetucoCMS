@@ -38,9 +38,18 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=utf-8')
                  ->appendName('copyright', 'SetucoCMS')
                  ->appendHttpEquiv('imagetoolbar', 'no');
 $this->headTitle('SetucoCMS')->setSeparator(':');
+
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
+$this->headLink()->prependStylesheet($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.css'));
+$this->headLink()->prependStylesheet($this->baseUrl('js/jquery-ui-1.8.18.custom/css/ui-lightness/jquery-ui-1.8.18.custom.css'));
+$this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-sliderAccess.js'));
+$this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.js'));
+$this->headScript()->prependFile($this->baseUrl('js/jquery-ui-1.8.18.custom/js/jquery-ui-1.8.18.custom.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/jquery-1.7.1.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
+$this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
+$this->headScript()->prependFile($this->baseUrl('js/setuco/api_data_list.js'));
+
 ?>
 <?php echo $this->doctype() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
@@ -51,6 +60,70 @@ $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
         <?php echo $this->headScript() . "\n" ?>
         <?php echo $this->headLink() . "\n" ?>
         <?php echo $this->headStyle() . "\n" ?>
+
+         <script>
+
+		
+
+
+		$(function(){
+            $( '#create_date' ) . datetimepicker();
+            $( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
+			
+        });
+		
+		
+
+
+tinyMCE.init({
+		// General options
+		mode : "exact",
+		elements : "page_contents",
+		theme : "advanced",
+		plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave",
+		language : "ja",
+		width:"652px",
+		height:"300px",
+
+		// Theme options
+		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,|,link,unlink,media,image,|preview",
+		theme_advanced_buttons2 : "bullist,numlist,|,search,replace,|,outdent,indent,blockquote,|tablecontrols,|,hr,visualaid,|,charmap,emotions,iespell,|,fullscreen,|,undo,redo,|,template,styleprops,code",
+		theme_advanced_buttons3 : "",
+		theme_advanced_buttons4 : "",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : true,
+
+		// Example content CSS (should be your site CSS)
+		content_css : "css/content.css",
+
+		// Drop lists for link/image/media/template dialogs
+		template_external_list_url : "lists/template_list.js",
+		external_link_list_url : "lists/link_list.js",
+		external_image_list_url : "/js/tinymce_js/lists/image_list.js",
+		media_external_list_url : "lists/media_list.js",
+
+		// Style formats
+		style_formats : [
+			{title : 'Bold text', inline : 'b'},
+			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+			{title : 'Example 1', inline : 'span', classes : 'example1'},
+			{title : 'Example 2', inline : 'span', classes : 'example2'},
+			{title : 'Table styles'},
+			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		],
+
+		// Replace values for the template plugin
+		template_replace_values : {
+			username : "Some User",
+			staffid : "991234"
+		}
+	});
+	
+
+</script>
     </head>
     <body class="soria">
 

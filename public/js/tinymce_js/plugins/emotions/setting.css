@@ -1,0 +1,58 @@
+#iconList{
+	width:300px;
+	margin:0 auto;
+	margin:0 0 20px 0;
+	padding:0;
+}
+
+#iconList li{
+	float:left;
+	list-style:none;
+	margin:0;
+	display:block;
+	width:18px;
+	height:18px;
+}
+#iconList li img{
+	border:none;
+}
+
+.title{
+	text-align:center;
+	margin:0 0 20px 0;
+}
+.attentionMsg{
+	clear:both;
+	text-align:center;
+	margin:0 0 20px 0;
+}
+
+
+#WrapIcons{
+	margin:0 auto;
+	width:300px;
+}
+
+#mce_34_ifr{
+	height:420px !important;
+}
+
+#mce_34{
+	height:420px;
+}
+
+/* For modern browsers */
+.cf:before,
+.cf:after {
+	content:"";
+	display:table;
+}
+
+.cf:after {
+	clear:both;
+}
+
+/* For IE 6/7 (trigger hasLayout) */
+.cf {
+	zoom:1;
+}

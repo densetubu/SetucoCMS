@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//Dli XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/Dli/xhtml1-transitional.dli">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{#emotions_dlg.title}</title>
+<script type="text/javascript" src="../../tiny_mce_popup.js"></script>
+<script type="text/javascript" src="js/emotions.js"></script>
+<link rel="stylesheet" href="setting.css" />
+</head>
+<body style="display: none" role="application" aria-labelledby="app_title">
+<span style="display:none;" id="app_title">{#emotions_dlg.title}</span>
+<div id="WrapIcons">
+<div class="title">{#emotions_dlg.title}:</div>
+
+<ul id="iconList" class="cf">
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cool}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-cool.gif','emotions_dlg.cool');"><img src="img/smiley-cool.gif" width="18" height="18" border="0" alt="{#emotions_dlg.cool}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cry}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-cry.gif','emotions_dlg.cry');"><img src="img/smiley-cry.gif" width="18" height="18" alt="{#emotions_dlg.cry}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.embarassed}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-embarassed.gif','emotions_dlg.embarassed');"><img src="img/smiley-embarassed.gif" width="18" height="18" alt="{#emotions_dlg.embarassed}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.foot_in_mouth}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-foot-in-mouth.gif','emotions_dlg.foot_in_mouth');"><img src="img/smiley-foot-in-mouth.gif" width="18" height="18" alt="{#emotions_dlg.foot_in_mouth}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.frown}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-frown.gif','emotions_dlg.frown');"><img src="img/smiley-frown.gif" width="18" height="18" alt="{#emotions_dlg.frown}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-innocent.gif','emotions_dlg.innocent');"><img src="img/smiley-innocent.gif" width="18" height="18" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.kiss}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-kiss.gif','emotions_dlg.kiss');"><img src="img/smiley-kiss.gif" width="18" height="18" alt="{#emotions_dlg.kiss}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.laughing}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-laughing.gif','emotions_dlg.laughing');"><img src="img/smiley-laughing.gif" width="18" height="18" alt="{#emotions_dlg.laughing}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.money_mouth}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-money-mouth.gif','emotions_dlg.money_mouth');"><img src="img/smiley-money-mouth.gif" width="18" height="18" alt="{#emotions_dlg.money_mouth}. {#emotions_dlg.usage}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sealed}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-sealed.gif','emotions_dlg.sealed');"><img src="img/smiley-sealed.gif" width="18" height="18" alt="{#emotions_dlg.sealed}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.smile}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-smile.gif','emotions_dlg.smile');"><img src="img/smiley-smile.gif" width="18" height="18" alt="{#emotions_dlg.smile}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.surprised}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-surprised.gif','emotions_dlg.surprised');"><img src="img/smiley-surprised.gif" width="18" height="18" alt="{#emotions_dlg.surprised}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.tongue_out}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-tongue-out.gif','emotions_dlg.tongue_out');"><img src="img/smiley-tongue-out.gif" width="18" height="18" alt="{#emotions_dlg.tongue-out}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.undecided}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-undecided.gif','emotions_dlg.undecided');"><img src="img/smiley-undecided.gif" width="18" height="18" alt="{#emotions_dlg.undecided}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.wink}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-wink.gif','emotions_dlg.wink');"><img src="img/smiley-wink.gif" width="18" height="18" alt="{#emotions_dlg.wink}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.yell}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smiley-yell.gif','emotions_dlg.yell');"><img src="img/smiley-yell.gif" width="18" height="18" alt="{#emotions_dlg.yell}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cool}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('pout.gif','emotions_dlg.cool');"><img src="img/pout.gif" width="16" height="16" alt="{#emotions_dlg.cool}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cool}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('bearing.gif','emotions_dlg.cool');"><img src="img/bearing.gif" width="16" height="16" alt="{#emotions_dlg.cool}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.angry}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('angry.gif','emotions_dlg.embarassed');"><img src="img/angry.gif" width="16" height="16" alt="{#emotions_dlg.embarassed}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('happy01.gif','emotions_dlg.innocent');"><img src="img/happy01.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('happy02.gif','emotions_dlg.innocent');"><img src="img/happy02.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.yell}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('delicious.gif','emotions_dlg.yell');"><img src="img/delicious.gif" width="16" height="16" alt="{#emotions_dlg.yell}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cry}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('despair.gif','emotions_dlg.cry');"><img src="img/despair.gif" width="16" height="16" alt="{#emotions_dlg.cry}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sealed}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('shock.gif','emotions_dlg.sealed');"><img src="img/shock.gif" width="16" height="16" alt="{#emotions_dlg.sealed}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('wink.gif','emotions_dlg.innocent');"><img src="img/wink.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('wobbly.gif','emotions_dlg.innocent');"><img src="img/wobbly.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('catface.gif','emotions_dlg.innocent');"><img src="img/catface.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.money_mouth}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('confident.gif','emotions_dlg.money_mouth');"><img src="img/confident.gif" width="16" height="16" alt="{#emotions_dlg.money_mouth}. {#emotions_dlg.usage}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('think.gif','emotions_dlg.innocent');"><img src="img/think.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('bleah.gif','emotions_dlg.innocent');"><img src="img/bleah.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.kiss}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('coldsweats01.gif','emotions_dlg.kiss');"><img src="img/coldsweats01.gif" width="16" height="16" alt="{#emotions_dlg.kiss}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.laughing}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('coldsweats02.gif','emotions_dlg.laughing');"><img src="img/coldsweats02.gif" width="16" height="16" alt="{#emotions_dlg.laughing}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.surprised}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('crying.gif','emotions_dlg.surprised');"><img src="img/crying.gif" width="16" height="16" alt="{#emotions_dlg.surprised}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('smile.gif','emotions_dlg.innocent');"><img src="img/smile.gif" width="16" height="16" alt="{#emotions_dlg.innocent}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.smile}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('lovely.gif','emotions_dlg.lovely');"><img src="img/lovely.gif" width="16" height="16" alt="{#emotions_dlg.smile}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cool}. {#emotions_dlg.usage}" href="javascript:EmotionsDialog.insert('gawk.gif','emotions_dlg.cool');"><img src="img/gawk.gif" width="16" height="16" alt="{#emotions_dlg.cool}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.24hours}. {#emotions_dlg.24hours}" href="javascript:EmotionsDialog.insert('24hours.gif','emotions_dlg.24hours');"><img src="img/24hours.gif" width="16" height="16" alt="{#emotions_dlg.24hours}. {#emotions_dlg.usage}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.airplane}. {#emotions_dlg.airplane}" href="javascript:EmotionsDialog.insert('airplane.gif','emotions_dlg.airplane');"><img src="img/airplane.gif" width="16" height="16" alt="{#emotions_dlg.airplane}. {#emotions_dlg.airplane}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.annoy}. {#emotions_dlg.annoy}" href="javascript:EmotionsDialog.insert('annoy.gif','emotions_dlg.annoy');"><img src="img/annoy.gif" width="16" height="16" alt="{#emotions_dlg.annoy}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.apple}. {#emotions_dlg.apple}" href="javascript:EmotionsDialog.insert('apple.gif','emotions_dlg.apple');"><img src="img/apple.gif" width="16" height="16" alt="{#emotions_dlg.apple}. {#emotions_dlg.usage}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.appli01}. {#emotions_dlg.appli01}" href="javascript:EmotionsDialog.insert('appli01.gif','emotions_dlg.appli01');"><img src="img/appli01.gif" width="16" height="16" alt="{#emotions_dlg.appli01}. {#emotions_dlg.appli01}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.appli02}. {#emotions_dlg.appli02}" href="javascript:EmotionsDialog.insert('appli02.gif','emotions_dlg.innocent');"><img src="img/appli02.gif" width="16" height="16" alt="{#emotions_dlg.appli02}. {#emotions_dlg.appli02}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.aquarius}. {#emotions_dlg.aquarius}" href="javascript:EmotionsDialog.insert('aquarius.gif','emotions_dlg.aquarius');"><img src="img/aquarius.gif" width="16" height="16" alt="{#emotions_dlg.aquarius}. {#emotions_dlg.aquarius}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.aries}. {#emotions_dlg.aries}" href="javascript:EmotionsDialog.insert('aries.gif','emotions_dlg.aries');"><img src="img/aries.gif" width="16" height="16" alt="{#emotions_dlg.aries}. {#emotions_dlg.aries}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.art}" href="javascript:EmotionsDialog.insert('art.gif','emotions_dlg.art');"><img src="img/art.gif" width="16" height="16" alt="{#emotions_dlg.art}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.atm}" href="javascript:EmotionsDialog.insert('atm.gif','emotions_dlg.atm');"><img src="img/atm.gif" width="16" height="16" alt="{#emotions_dlg.atm}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bag}" href="javascript:EmotionsDialog.insert('bag.gif','emotions_dlg.bag');"><img src="img/bag.gif" width="16" height="16" alt="{#emotions_dlg.innocent}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ban}" href="javascript:EmotionsDialog.insert('ban.gif','emotions_dlg.ban');"><img src="img/ban.gif" width="16" height="16" alt="{#emotions_dlg.ban}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.banana}" href="javascript:EmotionsDialog.insert('banana.gif','emotions_dlg.banana');"><img src="img/banana.gif" width="16" height="16" alt="{#emotions_dlg.banana}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bank}" href="javascript:EmotionsDialog.insert('bank.gif','emotions_dlg.bank');"><img src="img/bank.gif" width="16" height="16" alt="{#emotions_dlg.bank}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bar}" href="javascript:EmotionsDialog.insert('bar.gif','emotions_dlg.bar');"><img src="img/bar.gif" width="16" height="16" alt="{#emotions_dlg.bar}" /></a></li>
+
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.baseball}" href="javascript:EmotionsDialog.insert('baseball.gif','emotions_dlg.baseball');"><img src="img/baseball.gif" width="16" height="16" alt="{#emotions_dlg.baseball}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.basketball}" href="javascript:EmotionsDialog.insert('basketball.gif','emotions_dlg.basketball');"><img src="img/basketball.gif" width="16" height="16" alt="{#emotions_dlg.basketball}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.beer}" href="javascript:EmotionsDialog.insert('beer.gif','emotions_dlg.beer');"><img src="img/beer.gif" width="16" height="16" alt="{#emotions_dlg.beer}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bell}" href="javascript:EmotionsDialog.insert('bell.gif','emotions_dlg.bell');"><img src="img/bell.gif" width="16" height="16" alt="{#emotions_dlg.bell}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bicycle}" href="javascript:EmotionsDialog.insert('bicycle.gif','emotions_dlg.bicycle');"><img src="img/bicycle.gif" width="16" height="16" alt="{#emotions_dlg.bicycle}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.birthday}" href="javascript:EmotionsDialog.insert('birthday.gif','emotions_dlg.birthday');"><img src="img/birthday.gif" width="16" height="16" alt="{#emotions_dlg.birthday}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bomb}" href="javascript:EmotionsDialog.insert('bomb.gif','emotions_dlg.bomb');"><img src="img/bomb.gif" width="16" height="16" alt="{#emotions_dlg.bomb}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.laughing}" href="javascript:EmotionsDialog.insert('book.gif','emotions_dlg.laughing');"><img src="img/book.gif" width="16" height="16" alt="{#emotions_dlg.laughing}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bottle}" href="javascript:EmotionsDialog.insert('bottle.gif','emotions_dlg.bottle');"><img src="img/bottle.gif" width="16" height="16" alt="{#emotions_dlg.bottle}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.boutique}" href="javascript:EmotionsDialog.insert('boutique.gif','emotions_dlg.bread');"><img src="img/boutique.gif" width="16" height="16" alt="{#emotions_dlg.boutique}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bread}" href="javascript:EmotionsDialog.insert('bread.gif','emotions_dlg.bread');"><img src="img/bread.gif" width="16" height="16" alt="{#emotions_dlg.bread}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bud}" href="javascript:EmotionsDialog.insert('bud.gif','emotions_dlg.bud');"><img src="img/bud.gif" width="16" height="16" alt="{#emotions_dlg.bud}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.building}" href="javascript:EmotionsDialog.insert('building.gif','emotions_dlg.building');"><img src="img/building.gif" width="16" height="16" alt="{#emotions_dlg.building}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bullettrain}" href="javascript:EmotionsDialog.insert('bullettrain.gif','emotions_dlg.bullettrain');"><img src="img/bullettrain.gif" width="16" height="16" alt="{#emotions_dlg.bullettrain}" /></a></li>
+
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.bus}" href="javascript:EmotionsDialog.insert('bus.gif','emotions_dlg.bus');"><img src="img/bus.gif" width="16" height="16" alt="{#emotions_dlg.bus}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.by-d}" href="javascript:EmotionsDialog.insert('by-d.gif','emotions_dlg.by-d');"><img src="img/by-d.gif" width="16" height="16" alt="{#emotions_dlg.by-d}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cafe}" href="javascript:EmotionsDialog.insert('cafe.gif','emotions_dlg.cafe');"><img src="img/cafe.gif" width="16" height="16" alt="{#emotions_dlg.cafe}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cake}" href="javascript:EmotionsDialog.insert('cafe.gif','emotions_dlg.cake');"><img src="img/cake.gif" width="16" height="16" alt="{#emotions_dlg.cake}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.camera}" href="javascript:EmotionsDialog.insert('camera.gif','emotions_dlg.camera');"><img src="img/camera.gif" width="16" height="16" alt="{#emotions_dlg.camera}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cancer}" href="javascript:EmotionsDialog.insert('cancer.gif','emotions_dlg.cancer');"><img src="img/cancer.gif" width="16" height="16" alt="{#emotions_dlg.cancer}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.capricornus}" href="javascript:EmotionsDialog.insert('capricornus.gif','emotions_dlg.capricornus');"><img src="img/capricornus.gif" width="16" height="16" alt="{#emotions_dlg.capricornus}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.car}" href="javascript:EmotionsDialog.insert('car.gif','emotions_dlg.car');"><img src="img/car.gif" width="16" height="16" alt="{#emotions_dlg.car}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.carouselpony}" href="javascript:EmotionsDialog.insert('carouselpony.gif','emotions_dlg.carouselpony');"><img src="img/carouselpony.gif" width="16" height="16" alt="{#emotions_dlg.carouselpony}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cat}" href="javascript:EmotionsDialog.insert('cat.gif','emotions_dlg.cat');"><img src="img/cat.gif" width="16" height="16" alt="{#emotions_dlg.cat}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cd}" href="javascript:EmotionsDialog.insert('cd.gif','emotions_dlg.cd');"><img src="img/cd.gif" width="16" height="16" alt="{#emotions_dlg.cd}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.chair}" href="javascript:EmotionsDialog.insert('chair.gif','emotions_dlg.chair');"><img src="img/chair.gif" width="16" height="16" alt="{#emotions_dlg.chair}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cherry}" href="javascript:EmotionsDialog.insert('cherry.gif','emotions_dlg.cherry');"><img src="img/cherry.gif" width="16" height="16" alt="{#emotions_dlg.cherry}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cherryblossom}" href="javascript:EmotionsDialog.insert('cherryblossom.gif','emotions_dlg.cherryblossom');"><img src="img/cherryblossom.gif" width="16" height="16" alt="{#emotions_dlg.cherryblossom}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.chick}" href="javascript:EmotionsDialog.insert('chick.gif','emotions_dlg.chick');"><img src="img/chick.gif" width="16" height="16" alt="{#emotions_dlg.chick}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.clear}" href="javascript:EmotionsDialog.insert('clear.gif','emotions_dlg.clear');"><img src="img/clear.gif" width="16" height="16" alt="{#emotions_dlg.clear}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.clip}" href="javascript:EmotionsDialog.insert('clip.gif','emotions_dlg.clip');"><img src="img/clip.gif" width="16" height="16" alt="{#emotions_dlg.clip}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.clock}" href="javascript:EmotionsDialog.insert('clock.gif','emotions_dlg.clock');"><img src="img/clock.gif" width="16" height="16" alt="{#emotions_dlg.clock}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cloud}" href="javascript:EmotionsDialog.insert('cloud.gif','emotions_dlg.cloud');"><img src="img/cloud.gif" width="16" height="16" alt="{#emotions_dlg.cloud}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.clover}" href="javascript:EmotionsDialog.insert('clover.gif','emotions_dlg.clover');"><img src="img/clover.gif" width="16" height="16" alt="{#emotions_dlg.clover}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.club}" href="javascript:EmotionsDialog.insert('club.gif','emotions_dlg.club');"><img src="img/club.gif" width="16" height="16" alt="{#emotions_dlg.club}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.copyright}" href="javascript:EmotionsDialog.insert('copyright.gif','emotions_dlg.copyright');"><img src="img/copyright.gif" width="16" height="16" alt="{#emotions_dlg.copyright}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.crown}" href="javascript:EmotionsDialog.insert('crown.gif','emotions_dlg.crown');"><img src="img/crown.gif" width="16" height="16" alt="{#emotions_dlg.crown}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.cute}" href="javascript:EmotionsDialog.insert('cute.gif','emotions_dlg.cute');"><img src="img/cute.gif" width="16" height="16" alt="{#emotions_dlg.cute}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.danger}" href="javascript:EmotionsDialog.insert('danger.gif','emotions_dlg.danger');"><img src="img/danger.gif" width="16" height="16" alt="{#emotions_dlg.danger}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.dash}" href="javascript:EmotionsDialog.insert('dash.gif','emotions_dlg.dash');"><img src="img/dash.gif" width="16" height="16" alt="{#emotions_dlg.dash}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.diamond}" href="javascript:EmotionsDialog.insert('diamond.gif','emotions_dlg.diamond');"><img src="img/diamond.gif" width="16" height="16" alt="{#emotions_dlg.diamond}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.denim}" href="javascript:EmotionsDialog.insert('denim.gif','emotions_dlg.denim');"><img src="img/denim.gif" width="16" height="16" alt="{#emotions_dlg.denim}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.dog}" href="javascript:EmotionsDialog.insert('dog.gif','emotions_dlg.dog');"><img src="img/dog.gif" width="16" height="16" alt="{#emotions_dlg.dog}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.dollar}" href="javascript:EmotionsDialog.insert('dollar.gif','emotions_dlg.dollar');"><img src="img/dollar.gif" width="16" height="16" alt="{#emotions_dlg.dollar}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.door}" href="javascript:EmotionsDialog.insert('door.gif','emotions_dlg.door');"><img src="img/door.gif" width="16" height="16" alt="{#emotions_dlg.door}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.down}" href="javascript:EmotionsDialog.insert('down.gif','emotions_dlg.down');"><img src="img/down.gif" width="16" height="16" alt="{#emotions_dlg.down}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.downwardleft}" href="javascript:EmotionsDialog.insert('downwardleft.gif','emotions_dlg.downwardleft');"><img src="img/downwardleft.gif" width="16" height="16" alt="{#emotions_dlg.downwardleft}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.downwardright}" href="javascript:EmotionsDialog.insert('downwardright.gif','emotions_dlg.downwardright');"><img src="img/downwardright.gif" width="16" height="16" alt="{#emotions_dlg.downwardright}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.upwardleft}" href="javascript:EmotionsDialog.insert('upwardleft.gif','emotions_dlg.upwardleft');"><img src="img/upwardleft.gif" width="16" height="16" alt="{#emotions_dlg.upwardleft}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.upwardright}" href="javascript:EmotionsDialog.insert('upwardright.gif','emotions_dlg.upwardright');"><img src="img/upwardright.gif" width="16" height="16" alt="{#emotions_dlg.upwardright}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.d-point}" href="javascript:EmotionsDialog.insert('d-point.gif','emotions_dlg.d-point');"><img src="img/d-point.gif" width="16" height="16" alt="{#emotions_dlg.d-point}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.drama}" href="javascript:EmotionsDialog.insert('drama.gif','emotions_dlg.drama');"><img src="img/drama.gif" width="16" height="16" alt="{#emotions_dlg.drama}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ear}" href="javascript:EmotionsDialog.insert('ear.gif','emotions_dlg.ear');"><img src="img/ear.gif" width="16" height="16" alt="{#emotions_dlg.ear}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.empty}" href="javascript:EmotionsDialog.insert('empty.gif','emotions_dlg.empty');"><img src="img/empty.gif" width="16" height="16" alt="{#emotions_dlg.empty}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.enter}" href="javascript:EmotionsDialog.insert('enter.gif','emotions_dlg.enter');"><img src="img/enter.gif" width="16" height="16" alt="{#emotions_dlg.enter}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.event}" href="javascript:EmotionsDialog.insert('event.gif','emotions_dlg.event');"><img src="img/event.gif" width="16" height="16" alt="{#emotions_dlg.event}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.eye}" href="javascript:EmotionsDialog.insert('eye.gif','emotions_dlg.eye');"><img src="img/eye.gif" width="16" height="16" alt="{#emotions_dlg.eye}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.eyeglass}" href="javascript:EmotionsDialog.insert('eyeglass.gif','emotions_dlg.eyeglass');"><img src="img/eyeglass.gif" width="16" height="16" alt="{#emotions_dlg.eyeglass}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.fastfood}" href="javascript:EmotionsDialog.insert('smfastfood.gif','emotions_dlg.fastfood');"><img src="img/fastfood.gif" width="16" height="16" alt="{#emotions_dlg.fastfood}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.faxto}" href="javascript:EmotionsDialog.insert('faxto.gif','emotions_dlg.faxto');"><img src="img/faxto.gif" width="16" height="16" alt="{#emotions_dlg.faxto}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.fish}" href="javascript:EmotionsDialog.insert('fish.gif','emotions_dlg.fish');"><img src="img/fish.gif" width="16" height="16" alt="{#emotions_dlg.fish}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.flag}" href="javascript:EmotionsDialog.insert('flag.gif','emotions_dlg.flag');"><img src="img/flag.gif" width="16" height="16" alt="{#emotions_dlg.flag}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.flair}" href="javascript:EmotionsDialog.insert('flair.gif','emotions_dlg.flair');"><img src="img/flair.gif" width="16" height="16" alt="{#emotions_dlg.flair}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.foot}" href="javascript:EmotionsDialog.insert('foot.gif','emotions_dlg.foot');"><img src="img/foot.gif" width="16" height="16" alt="{#emotions_dlg.foot}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.free}" href="javascript:EmotionsDialog.insert('free.gif','emotions_dlg.free');"><img src="img/free.gif" width="16" height="16" alt="{#emotions_dlg.free}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.freedial}" href="javascript:EmotionsDialog.insert('freedial.gif','emotions_dlg.freedial');"><img src="img/freedial.gif" width="16" height="16" alt="{#emotions_dlg.freedial}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.fuji}" href="javascript:EmotionsDialog.insert('fuji.gif','emotions_dlg.fuji');"><img src="img/fuji.gif" width="16" height="16" alt="{#emotions_dlg.fuji}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.full}" href="javascript:EmotionsDialog.insert('full.gif','emotions_dlg.full');"><img src="img/full.gif" width="16" height="16" alt="{#emotions_dlg.full}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.fullmoon}" href="javascript:EmotionsDialog.insert('fullmoon.gif','emotions_dlg.fullmoon');"><img src="img/fullmoon.gif" width="16" height="16" alt="{#emotions_dlg.fullmoon}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.game}" href="javascript:EmotionsDialog.insert('game.gif','emotions_dlg.game');"><img src="img/game.gif" width="16" height="16" alt="{#emotions_dlg.game}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.gasstation}" href="javascript:EmotionsDialog.insert('gasstation.gif','emotions_dlg.gasstation');"><img src="img/gasstation.gif" width="16" height="16" alt="{#emotions_dlg.gasstation}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.gemini}" href="javascript:EmotionsDialog.insert('gemini.gif','emotions_dlg.gemini');"><img src="img/gemini.gif" width="16" height="16" alt="{#emotions_dlg.gemini}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.golf}" href="javascript:EmotionsDialog.insert('golf.gif','emotions_dlg.golf');"><img src="img/golf.gif" width="16" height="16" alt="{#emotions_dlg.golf}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.good}" href="javascript:EmotionsDialog.insert('good.gif','emotions_dlg.good');"><img src="img/good.gif" width="16" height="16" alt="{#emotions_dlg.good}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.hairsalon}" href="javascript:EmotionsDialog.insert('hairsalon.gif','emotions_dlg.hairsalon');"><img src="img/hairsalon.gif" width="16" height="16" alt="{#emotions_dlg.hairsalon}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.innocent}" href="javascript:EmotionsDialog.insert('heart.gif','emotions_dlg.heart');"><img src="img/heart.gif" width="16" height="16" alt="{#emotions_dlg.heart}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.heart01}" href="javascript:EmotionsDialog.insert('heart01.gif','emotions_dlg.heart01');"><img src="img/heart01.gif" width="16" height="16" alt="{#emotions_dlg.heart01}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.heart02}" href="javascript:EmotionsDialog.insert('heart02.gif','emotions_dlg.heart02');"><img src="img/heart02.gif" width="16" height="16" alt="{#emotions_dlg.heart02}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.heart03}" href="javascript:EmotionsDialog.insert('heart03.gif','emotions_dlg.heart03');"><img src="img/heart03.gif" width="16" height="16" alt="{#emotions_dlg.heart03}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.heart04}" href="javascript:EmotionsDialog.insert('heart04.gif','emotions_dlg.heart04');"><img src="img/heart04.gif" width="16" height="16" alt="{#emotions_dlg.heart04}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.horse}" href="javascript:EmotionsDialog.insert('horse.gif','emotions_dlg.horse');"><img src="img/horse.gif" width="16" height="16" alt="{#emotions_dlg.horse}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.hospital}" href="javascript:EmotionsDialog.insert('hospital.gif','emotions_dlg.hospital');"><img src="img/hospital.gif" width="16" height="16" alt="{#emotions_dlg.hospital}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.hotel}" href="javascript:EmotionsDialog.insert('hotel.gif','emotions_dlg.hotel');"><img src="img/hotel.gif" width="16" height="16" alt="{#emotions_dlg.hotel}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.house}" href="javascript:EmotionsDialog.insert('house.gif','emotions_dlg.house');"><img src="img/house.gif" width="16" height="16" alt="{#emotions_dlg.house}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.id}" href="javascript:EmotionsDialog.insert('id.gif','emotions_dlg.id');"><img src="img/id.gif" width="16" height="16" alt="{#emotions_dlg.id}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.impact}" href="javascript:EmotionsDialog.insert('impact.gif','emotions_dlg.impact');"><img src="img/impact.gif" width="16" height="16" alt="{#emotions_dlg.impact}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.info01}" href="javascript:EmotionsDialog.insert('info01.gif','emotions_dlg.info01');"><img src="img/info01.gif" width="16" height="16" alt="{#emotions_dlg.info01}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.info02}" href="javascript:EmotionsDialog.insert('info02.gif','emotions_dlg.info02');"><img src="img/info02.gif" width="16" height="16" alt="{#emotions_dlg.info02}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.japanesetea}" href="javascript:EmotionsDialog.insert('japanesetea.gif','emotions_dlg.japanesetea');"><img src="img/japanesetea.gif" width="16" height="16" alt="{#emotions_dlg.japanesetea}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.karaoke}" href="javascript:EmotionsDialog.insert('karaoke.gif','emotions_dlg.karaoke');"><img src="img/karaoke.gif" width="16" height="16" alt="{#emotions_dlg.karaoke}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.key}" href="javascript:EmotionsDialog.insert('key.gif','emotions_dlg.key');"><img src="img/key.gif" width="16" height="16" alt="{#emotions_dlg.key}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.kissmark}" href="javascript:EmotionsDialog.insert('kissmark.gif','emotions_dlg.kissmark');"><img src="img/kissmark.gif" width="16" height="16" alt="{#emotions_dlg.kissmark}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.leftright}" href="javascript:EmotionsDialog.insert('leftright.gif','emotions_dlg.leftright');"><img src="img/leftright.gif" width="16" height="16" alt="{#emotions_dlg.leftright}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.leo}" href="javascript:EmotionsDialog.insert('leo.gif','emotions_dlg.leo');"><img src="img/leo.gif" width="16" height="16" alt="{#emotions_dlg.leo}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.libra}" href="javascript:EmotionsDialog.insert('libra.gif','emotions_dlg.libra');"><img src="img/libra.gif" width="16" height="16" alt="{#emotions_dlg.libra}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.loveletter}" href="javascript:EmotionsDialog.insert('loveletter.gif','emotions_dlg.loveletter');"><img src="img/loveletter.gif" width="16" height="16" alt="{#emotions_dlg.loveletter}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.mail}" href="javascript:EmotionsDialog.insert('mail.gif','emotions_dlg.mail');"><img src="img/mail.gif" width="16" height="16" alt="{#emotions_dlg.mail}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.mailto}" href="javascript:EmotionsDialog.insert('mailto.gif','emotions_dlg.mailto');"><img src="img/mailto.gif" width="16" height="16" alt="{#emotions_dlg.mailto}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.maple}" href="javascript:EmotionsDialog.insert('maple.gif','emotions_dlg.maple');"><img src="img/maple.gif" width="16" height="16" alt="{#emotions_dlg.maple}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.memo}" href="javascript:EmotionsDialog.insert('memo.gif','emotions_dlg.memo');"><img src="img/memo.gif" width="16" height="16" alt="{#emotions_dlg.memo}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.mist}" href="javascript:EmotionsDialog.insert('mist.gif','emotions_dlg.mist');"><img src="img/mist.gif" width="16" height="16" alt="{#emotions_dlg.mist}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.mobaq}" href="javascript:EmotionsDialog.insert('mobaq.gif','emotions_dlg.mobaq');"><img src="img/mobaq.gif" width="16" height="16" alt="{#emotions_dlg.mobaq}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.mobilephone}" href="javascript:EmotionsDialog.insert('mobilephone.gif','emotions_dlg.mobilephone');"><img src="img/mobilephone.gif" width="16" height="16" alt="{#emotions_dlg.mobilephone}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.moneybag}" href="javascript:EmotionsDialog.insert('moneybag.gif','emotions_dlg.moneybag');"><img src="img/moneybag.gif" width="16" height="16" alt="{#emotions_dlg.moneybag}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.moon1}" href="javascript:EmotionsDialog.insert('moon1.gif','emotions_dlg.moon1');"><img src="img/moon1.gif" width="16" height="16" alt="{#emotions_dlg.moon1}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.moon2}" href="javascript:EmotionsDialog.insert('moon2.gif','emotions_dlg.moon2');"><img src="img/moon2.gif" width="16" height="16" alt="{#emotions_dlg.moon2}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.moon3}" href="javascript:EmotionsDialog.insert('moon3.gif','emotions_dlg.moon3');"><img src="img/moon3.gif" width="16" height="16" alt="{#emotions_dlg.moon3}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.motorsports}" href="javascript:EmotionsDialog.insert('motorsports.gif','emotions_dlg.motorsports');"><img src="img/motorsports.gif" width="16" height="16" alt="{#emotions_dlg.motorsports}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.movie}" href="javascript:EmotionsDialog.insert('movie.gif','emotions_dlg.movie');"><img src="img/movie.gif" width="16" height="16" alt="{#emotions_dlg.movie}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.music}" href="javascript:EmotionsDialog.insert('music.gif','emotions_dlg.music');"><img src="img/music.gif" width="16" height="16" alt="{#emotions_dlg.music}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.new}" href="javascript:EmotionsDialog.insert('new.gif','emotions_dlg.new');"><img src="img/new.gif" width="16" height="16" alt="{#emotions_dlg.new}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.newmoon}" href="javascript:EmotionsDialog.insert('newmoon.gif','emotions_dlg.newmoon');"><img src="img/newmoon.gif" width="16" height="16" alt="{#emotions_dlg.newmoon}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ng}" href="javascript:EmotionsDialog.insert('ng.gif','emotions_dlg.ng');"><img src="img/ng.gif" width="16" height="16" alt="{#emotions_dlg.ng}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.night}" href="javascript:EmotionsDialog.insert('night.gif','emotions_dlg.night');"><img src="img/night.gif" width="16" height="16" alt="{#emotions_dlg.night}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.noodle}" href="javascript:EmotionsDialog.insert('noodle.gif','emotions_dlg.noodle');"><img src="img/noodle.gif" width="16" height="16" alt="{#emotions_dlg.noodle}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.nosmoking}" href="javascript:EmotionsDialog.insert('nosmoking.gif','emotions_dlg.nosmoking');"><img src="img/nosmoking.gif" width="16" height="16" alt="{#emotions_dlg.nosmoking}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.note}" href="javascript:EmotionsDialog.insert('note.gif','emotions_dlg.note');"><img src="img/note.gif" width="16" height="16" alt="{#emotions_dlg.note}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.notes}" href="javascript:EmotionsDialog.insert('notes.gif','emotions_dlg.notes');"><img src="img/notes.gif" width="16" height="16" alt="{#emotions_dlg.notes}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ok}" href="javascript:EmotionsDialog.insert('ok.gif','emotions_dlg.ok');"><img src="img/ok.gif" width="16" height="16" alt="{#emotions_dlg.ok}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.paper}" href="javascript:EmotionsDialog.insert('paper.gif','emotions_dlg.paper');"><img src="img/paper.gif" width="16" height="16" alt="{#emotions_dlg.paper}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.on}" href="javascript:EmotionsDialog.insert('on.gif','emotions_dlg.on');"><img src="img/on.gif" width="16" height="16" alt="{#emotions_dlg.on}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.end}" href="javascript:EmotionsDialog.insert('end.gif','emotions_dlg.end');"><img src="img/end.gif" width="16" height="16" alt="{#emotions_dlg.end}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.soon}" href="javascript:EmotionsDialog.insert('soon.gif','emotions_dlg.soon');"><img src="img/soon.gif" width="16" height="16" alt="{#emotions_dlg.soon}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.zero}" href="javascript:EmotionsDialog.insert('zero.gif','emotions_dlg.zero');"><img src="img/zero.gif" width="16" height="16" alt="{#emotions_dlg.zero}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.one}" href="javascript:EmotionsDialog.insert('one.gif','emotions_dlg.one');"><img src="img/one.gif" width="16" height="16" alt="{#emotions_dlg.one}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.two}" href="javascript:EmotionsDialog.insert('two.gif','emotions_dlg.two');"><img src="img/two.gif" width="16" height="16" alt="{#emotions_dlg.two}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.three}" href="javascript:EmotionsDialog.insert('three.gif','emotions_dlg.three');"><img src="img/three.gif" width="16" height="16" alt="{#emotions_dlg.three}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.four}" href="javascript:EmotionsDialog.insert('four.gif','emotions_dlg.four');"><img src="img/four.gif" width="16" height="16" alt="{#emotions_dlg.four}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.five}" href="javascript:EmotionsDialog.insert('five.gif','emotions_dlg.five');"><img src="img/five.gif" width="16" height="16" alt="{#emotions_dlg.five}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.six}" href="javascript:EmotionsDialog.insert('six.gif','emotions_dlg.six');"><img src="img/six.gif" width="16" height="16" alt="{#emotions_dlg.six}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.seven}" href="javascript:EmotionsDialog.insert('seven.gif','emotions_dlg.seven');"><img src="img/seven.gif" width="16" height="16" alt="{#emotions_dlg.seven}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.eight}" href="javascript:EmotionsDialog.insert('eight.gif','emotions_dlg.eight');"><img src="img/eight.gif" width="16" height="16" alt="{#emotions_dlg.eight}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.nine}" href="javascript:EmotionsDialog.insert('nine.gif','emotions_dlg.nine');"><img src="img/nine.gif" width="16" height="16" alt="{#emotions_dlg.nine}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.parking}" href="javascript:EmotionsDialog.insert('parking.gif','emotions_dlg.parking');"><img src="img/parking.gif" width="16" height="16" alt="{#emotions_dlg.parking}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pass}" href="javascript:EmotionsDialog.insert('pass.gif','emotions_dlg.pass');"><img src="img/pass.gif" width="16" height="16" alt="{#emotions_dlg.pass}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pc}" href="javascript:EmotionsDialog.insert('pc.gif','emotions_dlg.pc');"><img src="img/pc.gif" width="16" height="16" alt="{#emotions_dlg.pc}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pen}" href="javascript:EmotionsDialog.insert('pen.gif','emotions_dlg.pen');"><img src="img/pen.gif" width="16" height="16" alt="{#emotions_dlg.pen}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pencil}" href="javascript:EmotionsDialog.insert('pencil.gif','emotions_dlg.pencil');"><img src="img/pencil.gif" width="16" height="16" alt="{#emotions_dlg.pencil}"/></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.penguin}" href="javascript:EmotionsDialog.insert('penguin.gif','emotions_dlgpenguinsealed');"><img src="img/penguin.gif" width="16" height="16" alt="{#emotions_dlg.penguin}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.phoneto}" href="javascript:EmotionsDialog.insert('phoneto.gif','emotions_dlg.phoneto');"><img src="img/phoneto.gif" width="16" height="16" alt="{#emotions_dlg.phoneto}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pig}" href="javascript:EmotionsDialog.insert('pig.gif','emotions_dlg.pig');"><img src="img/pig.gif" width="16" height="16" alt="{#emotions_dlg.pig}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pisces}" href="javascript:EmotionsDialog.insert('pisces.gif','emotions_dlg.pisces');"><img src="img/pisces.gif" width="16" height="16" alt="{#emotions_dlg.pisces}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pocketbell}" href="javascript:EmotionsDialog.insert('pocketbell.gif','emotions_dlg.pocketbell');"><img src="img/pocketbell.gif" width="16" height="16" alt="{#emotions_dlg.pocketbell}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.postoffice}" href="javascript:EmotionsDialog.insert('postoffice.gif','emotions_dlg.postoffice');"><img src="img/postoffice.gif" width="16" height="16" alt="{#emotions_dlg.postoffice}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.pouch}" href="javascript:EmotionsDialog.insert('pouch.gif','emotions_dlg.pouch');"><img src="img/pouch.gif" width="16" height="16" alt="{#emotions_dlg.pouch}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.present}" href="javascript:EmotionsDialog.insert('present.gif','emotions_dlg.present');"><img src="img/present.gif" width="16" height="16" alt="{#emotions_dlg.present}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.embarassed}" href="javascript:EmotionsDialog.insert('.gif','emotions_dlg.embarassed');"><img src="img/punch.gif" width="16" height="16" alt="{#emotions_dlg.embarassed}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.rain}" href="javascript:EmotionsDialog.insert('rain.gif','emotions_dlg.rain');"><img src="img/rain.gif" width="16" height="16" alt="{#emotions_dlg.rain}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.recycle}" href="javascript:EmotionsDialog.insert('recycle.gif','emotions_dlg.recycle');"><img src="img/recycle.gif" width="16" height="16" alt="{#emotions_dlg.recycle}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.restaurant}" href="javascript:EmotionsDialog.insert('restaurant.gif','emotions_dlg.restaurant');"><img src="img/restaurant.gif" width="16" height="16" alt="{#emotions_dlg.restaurant}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ribbon}" href="javascript:EmotionsDialog.insert('restaurant.gif','emotions_dlg.ribbon');"><img src="img/ribbon.gif" width="16" height="16" alt="{#emotions_dlg.ribbon}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.riceball}" href="javascript:EmotionsDialog.insert('riceball.gif','emotions_dlg.riceball');"><img src="img/riceball.gif" width="16" height="16" alt="{#emotions_dlg.riceball}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ring}" href="javascript:EmotionsDialog.insert('ring.gif','emotions_dlg.ring');"><img src="img/ring.gif" width="16" height="16" alt="{#emotions_dlg.ring}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.r-mark}" href="javascript:EmotionsDialog.insert('r-mark.gif','emotions_dlg.r-mark');"><img src="img/r-mark.gif" width="16" height="16" alt="{#emotions_dlg.r-mark}" /></a></li>
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.rock}" href="javascript:EmotionsDialog.insert('rock.gif','emotions_dlg.rock');"><img src="img/rock.gif" width="16" height="16" alt="{#emotions_dlg.rock}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.rouge}" href="javascript:EmotionsDialog.insert('rouge.gif','emotions_dlg.rouge');"><img src="img/rouge.gif" width="16" height="16" alt="{#emotions_dlg.rouge}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.run}" href="javascript:EmotionsDialog.insert('run.gif','emotions_dlg.run');"><img src="img/run.gif" width="16" height="16" alt="{#emotions_dlg.run}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.rvcar}" href="javascript:EmotionsDialog.insert('rvcar.gif','emotions_dlg.rvcar');"><img src="img/rvcar.gif" width="16" height="16" alt="{#emotions_dlg.rvcar}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sad}" href="javascript:EmotionsDialog.insert('sad.gif','emotions_dlg.sad');"><img src="img/sad.gif" width="16" height="16" alt="{#emotions_dlg.sad}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sagittarius}" href="javascript:EmotionsDialog.insert('sagittarius.gif','emotions_dlg.sagittarius');"><img src="img/sagittarius.gif" width="16" height="16" alt="{#emotions_dlg.sagittarius}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sandclock}" href="javascript:EmotionsDialog.insert('sandclock.gif','emotions_dlg.sandclock');"><img src="img/sandclock.gif" width="16" height="16" alt="{#emotions_dlg.sandclock}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.school}" href="javascript:EmotionsDialog.insert('school.gif','emotions_dlg.school');"><img src="img/school.gif" width="16" height="16" alt="{#emotions_dlg.school}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.scissors}" href="javascript:EmotionsDialog.insert('scissors.gif','emotions_dlg.scissors');"><img src="img/scissors.gif" width="16" height="16" alt="{#emotions_dlg.scissors}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.scorpius}" href="javascript:EmotionsDialog.insert('scorpius.gif','emotions_dlg.scorpius');"><img src="img/scorpius.gif" width="16" height="16" alt="{#emotions_dlg.scorpius}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.search}" href="javascript:EmotionsDialog.insert('search.gif','emotions_dlg.search');"><img src="img/search.gif" width="16" height="16" alt="{#emotions_dlg.search}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.secret}" href="javascript:EmotionsDialog.insert('secret.gif','emotions_dlg.secret');"><img src="img/secret.gif" width="16" height="16" alt="{#emotions_dlg.secret}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.shadow}" href="javascript:EmotionsDialog.insert('shadow.gif','emotions_dlg.shadow');"><img src="img/shadow.gif" width="16" height="16" alt="{#emotions_dlg.shadow}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sharp}" href="javascript:EmotionsDialog.insert('sharp.gif','emotions_dlg.sharp');"><img src="img/sharp.gif" width="16" height="16" alt="{#emotions_dlg.sharp}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.shine}" href="javascript:EmotionsDialog.insert('shine.gif','emotions_dlg.shine');"><img src="img/shine.gif" width="16" height="16" alt="{#emotions_dlg.shine}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ship}" href="javascript:EmotionsDialog.insert('ship.gif','emotions_dlg.ship');"><img src="img/ship.gif" width="16" height="16" alt="{#emotions_dlg.ship}"/></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.shoe}" href="javascript:EmotionsDialog.insert('shoe.gif','emotions_dlg.shoe');"><img src="img/shoe.gif" width="16" height="16" alt="{#emotions_dlg.shoe}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sign01}" href="javascript:EmotionsDialog.insert('sign01.gif','emotions_dlg.sign01');"><img src="img/sign01.gif" width="16" height="16" alt="{#emotions_dlg.sign01}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sign02}" href="javascript:EmotionsDialog.insert('sign02.gif','emotions_dlg.sign02');"><img src="img/sign02.gif" width="16" height="16" alt="{#emotions_dlg.sign02}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sign03}" href="javascript:EmotionsDialog.insert('sign03.gif','emotions_dlg.sign03');"><img src="img/sign03.gif" width="16" height="16" alt="{#emotions_dlg.sign03}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sign04}" href="javascript:EmotionsDialog.insert('sign04.gif','emotions_dlg.sign04');"><img src="img/sign04.gif" width="16" height="16" alt="{#emotions_dlg.sign04}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sign05}" href="javascript:EmotionsDialog.insert('sign05.gif','emotions_dlg.sign05');"><img src="img/sign05.gif" width="16" height="16" alt="{#emotions_dlg.sign05}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.signaler}" href="javascript:EmotionsDialog.insert('signaler.gif','emotions_dlg.signaler');"><img src="img/signaler.gif" width="16" height="16" alt="{#emotions_dlg.signaler}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ski}" href="javascript:EmotionsDialog.insert('ski.gif','emotions_dlg.ski');"><img src="img/ski.gif" width="16" height="16" alt="{#emotions_dlg.ski}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.slate}" href="javascript:EmotionsDialog.insert('slate.gif','emotions_dlg.slate');"><img src="img/slate.gif" width="16" height="16" alt="{#emotions_dlg.slate}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sleepy}" href="javascript:EmotionsDialog.insert('sleepy.gif','emotions_dlg.sleepy');"><img src="img/sleepy.gif" width="16" height="16" alt="{#emotions_dlg.sleepy}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.smoking}" href="javascript:EmotionsDialog.insert('smoking.gif','emotions_dlg.smoking');"><img src="img/smoking.gif" width="16" height="16" alt="{#emotions_dlg.smoking}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.snail}" href="javascript:EmotionsDialog.insert('snail.gif','emotions_dlg.snail');"><img src="img/snail.gif" width="16" height="16" alt="{#emotions_dlg.snail}" /></a></li>
+
+
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.snow}" href="javascript:EmotionsDialog.insert('snow.gif','emotions_dlg.snow');"><img src="img/snow.gif" width="16" height="16" alt="{#emotions_dlg.snow}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.snowboard}" href="javascript:EmotionsDialog.insert('snowboard.gif','emotions_dlg.snowboard');"><img src="img/snowboard.gif" width="16" height="16" alt="{#emotions_dlg.snowboard}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.soccer}" href="javascript:EmotionsDialog.insert('soccer.gif','emotions_dlg.soccer');"><img src="img/soccer.gif" width="16" height="16" alt="{#emotions_dlg.soccer}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.spa}" href="javascript:EmotionsDialog.insert('spa.gif','emotions_dlg.spa');"><img src="img/spa.gif" width="16" height="16" alt="{#emotions_dlg.spa}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.spade}" href="javascript:EmotionsDialog.insert('spade.gif','emotions_dlg.spade');"><img src="img/spade.gif" width="16" height="16" alt="{#emotions_dlg.spade}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sports}" href="javascript:EmotionsDialog.insert('sports.gif','emotions_dlg.sports');"><img src="img/sports.gif" width="16" height="16" alt="{#emotions_dlg.sports}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sprinkle}" href="javascript:EmotionsDialog.insert('sprinkle.gif','emotions_dlg.sprinkle');"><img src="img/sprinkle.gif" width="16" height="16" alt="{#emotions_dlg.sprinkle}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.subway}" href="javascript:EmotionsDialog.insert('subway.gif','emotions_dlg.subway');"><img src="img/subway.gif" width="16" height="16" alt="{#emotions_dlg.subway}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sun}" href="javascript:EmotionsDialog.insert('sun.gif','emotions_dlg.sun');"><img src="img/sun.gif" width="16" height="16" alt="{#emotions_dlg.sun}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sweat01}" href="javascript:EmotionsDialog.insert('sweat01.gif','emotions_dlg.sweat01');"><img src="img/sweat01.gif" width="16" height="16" alt="{#emotions_dlg.sweat01}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.sweat02}" href="javascript:EmotionsDialog.insert('sweat02.gif','emotions_dlg.sweat02');"><img src="img/sweat02.gif" width="16" height="16" alt="{#emotions_dlg.sweat02}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.taurus}" href="javascript:EmotionsDialog.insert('taurus.gif','emotions_dlg.taurus');"><img src="img/taurus.gif" width="16" height="16" alt="{#emotions_dlg.taurus}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.telephone}" href="javascript:EmotionsDialog.insert('telephone.gif','emotions_dlg.telephone');"><img src="img/telephone.gif" width="16" height="16" alt="{#emotions_dlg.telephone}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.tennis}" href="javascript:EmotionsDialog.insert('tennis.gif','emotions_dlg.tennis');"><img src="img/tennis.gif" width="16" height="16" alt="{#emotions_dlg.tennis}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.ticket}" href="javascript:EmotionsDialog.insert('thunder.gif','emotions_dlg.ticket');"><img src="img/ticket.gif" width="16" height="16" alt="{#emotions_dlg.ticket}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.thunder}" href="javascript:EmotionsDialog.insert('thunder.gif','emotions_dlg.thunder');"><img src="img/thunder.gif" width="16" height="16" alt="{#emotions_dlg.thunder}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.tm}" href="javascript:EmotionsDialog.insert('tm.gif','emotions_dlg.tm');"><img src="img/tm.gif" width="16" height="16" alt="{#emotions_dlg.tm}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.toilet}" href="javascript:EmotionsDialog.insert('toilet.gif','emotions_dlg.toilet');"><img src="img/toilet.gif" width="16" height="16" alt="{#emotions_dlg.toilet}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.train}" href="javascript:EmotionsDialog.insert('train.gif','emotions_dlg.train');"><img src="img/train.gif" width="16" height="16" alt="{#emotions_dlg.train}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.t-shirt}" href="javascript:EmotionsDialog.insert('t-shirt.gif','emotions_dlg.t-shirt');"><img src="img/t-shirt.gif" width="16" height="16" alt="{#emotions_dlg.t-shirt}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.tulip}" href="javascript:EmotionsDialog.insert('tulip.gif','emotions_dlg.tulip');"><img src="img/tulip.gif" width="16" height="16" alt="{#emotions_dlg.tulip}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.tv}" href="javascript:EmotionsDialog.insert('tv.gif','emotions_dlg.tv');"><img src="img/tv.gif" width="16" height="16" alt="{#emotions_dlg.tv}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.typhoon}" href="javascript:EmotionsDialog.insert('typhoon.gif','emotions_dlg.typhoon');"><img src="img/typhoon.gif" width="16" height="16" alt="{#emotions_dlg.typhoon}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.up}" href="javascript:EmotionsDialog.insert('up.gif','emotions_dlg.up');"><img src="img/up.gif" width="16" height="16" alt="{#emotions_dlg.up}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.updown}" href="javascript:EmotionsDialog.insert('updown.gif','emotions_dlg.updown');"><img src="img/updown.gif" width="16" height="16" alt="{#emotions_dlg.updown}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.virgo}" href="javascript:EmotionsDialog.insert('virgo.gif','emotions_dlg.virgo');"><img src="img/virgo.gif" width="16" height="16" alt="{#emotions_dlg.virgo}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.watch}" href="javascript:EmotionsDialog.insert('watch.gif','emotions_dlg.watch');"><img src="img/watch.gif" width="16" height="16" alt="{#emotions_dlg.watch}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.wave}" href="javascript:EmotionsDialog.insert('wave.gif','emotions_dlg.wave');"><img src="img/wave.gif" width="16" height="16" alt="{#emotions_dlg.wave}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.weep}" href="javascript:EmotionsDialog.insert('weep.gif','emotions_dlg.weep');"><img src="img/weep.gif" width="16" height="16" alt="{#emotions_dlg.weep}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.wheelchair}" href="javascript:EmotionsDialog.insert('wheelchair.gif','emotions_dlg.wheelchair');"><img src="img/wheelchair.gif" width="16" height="16" alt="{#emotions_dlg.wheelchair}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.wine}" href="javascript:EmotionsDialog.insert('wine.gif','emotions_dlg.wine');"><img src="img/wine.gif" width="16" height="16" alt="{#emotions_dlg.wine}" /></a></li>
+
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.wrench}" href="javascript:EmotionsDialog.insert('wrench.gif','emotions_dlg.wrench');"><img src="img/wrench.gif" width="16" height="16" alt="{#emotions_dlg.wrench}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.xmas}" href="javascript:EmotionsDialog.insert('xmas.gif','emotions_dlg.xmas');"><img src="img/xmas.gif" width="16" height="16" alt="{#emotions_dlg.xmas}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.yacht}" href="javascript:EmotionsDialog.insert('yacht.gif','emotions_dlg.yacht');"><img src="img/yacht.gif" width="16" height="16" alt="{#emotions_dlg.yacht}" /></a></li>
+<li><a class="emoticon_link" role="button" title="{#emotions_dlg.yen}" href="javascript:EmotionsDialog.insert('yen.gif','emotions_dlg.yen');"><img src="img/yen.gif" width="16" height="16" alt="{#emotions_dlg.yen}" /></a></li>
+
+
+
+</ul>
+
+<!--<div class="attentionMsg">{#emotions_dlg.usage}</div>-->
+
+</div>
+</body>
+</html>

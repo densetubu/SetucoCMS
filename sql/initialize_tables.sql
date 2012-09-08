@@ -59,6 +59,14 @@ CREATE TABLE page (
     FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE SET NULL
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
+-- free_space table
+CREATE TABLE `setucocms`.`free_space` (
+    id      INT NOT NULL AUTO_INCREMENT,
+    title  TEXT NOT NULL,
+    content TEXT NOT NULL,
+    PRIMARY KEY ( `id` )
+) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- page_media table 
 CREATE TABLE page_media (
     page_id INT NOT NULL,
@@ -103,6 +111,17 @@ CREATE TABLE goal (
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
+-- template table
+CREATE TABLE template　(
+     id INT NOT NULL AUTO_INCREMENT ,
+     account_id INT NOT NULL ,
+     title VARCHAR( 255 ) NOT NULL ,
+     file_name VARCHAR( 255 ) NOT NULL ,
+     explanation TINYTEXT NOT NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+
+
 
 /*****************************************************
  * CREATE INDEX 
@@ -136,6 +155,14 @@ VALUES
      'サイトの説明を設定してください。',
      'サイトのキーワードを設定してください。',
      now());
+
+INSERT INTO free_space
+    (id, title, content)
+VALUES (
+    NULL,
+    'フリースペース',
+    'フリースペースです。コンテンツを設定してください。');
+
 
 INSERT INTO ambition 
     (ambition)

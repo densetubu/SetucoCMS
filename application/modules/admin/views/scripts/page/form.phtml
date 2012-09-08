@@ -27,7 +27,7 @@
  * @link
  * @version
  * @since      File available since Release 0.1.0
- * @param
+ * @param      string $createDate ページの作成日時
  * @author     charlesvineyard
  */
 ?>
@@ -119,12 +119,8 @@
             <dd>
                 <?php echo $this->form->getElement('create_date') . "\n" ?>
             </dd>
-            <dt>
-                <label for="create_time">作成時刻</label>
-            </dt>
-            <dd>
-                <?php echo $this->form->getElement('create_time') . "\n" ?>
-            </dd>
+
+
         </dl>
         <ul class="inputStraight defaultOver">
             <li><?php echo $this->form->getElement('sub_draft2') ?></li>
