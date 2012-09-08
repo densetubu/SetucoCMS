@@ -290,6 +290,7 @@ class Zend_Controller_Action_Helper_ContextSwitch extends Zend_Controller_Action
              */
             require_once 'Zend/Layout.php';
             $layout = Zend_Layout::getMvcInstance();
+
             if (null !== $layout) {
                 $layout->disableLayout();
             }
