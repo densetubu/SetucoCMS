@@ -507,7 +507,8 @@ dl#inputArea dt {
     margin-top: 20px;
     margin-bottom: 3px;
 }
-dl#inputArea input {
+dl#inputArea input ,
+dl#inputArea textarea {
     font-size: 100%;
     padding: 4px;
     width: 100%;

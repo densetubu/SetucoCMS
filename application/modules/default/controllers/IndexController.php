@@ -67,6 +67,7 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
         parent::init();
 
         $this->_pageService = new Default_Model_Page();
+        $this->_freeSpaceService = new Default_Model_FreeSpace();
 
     }
 
@@ -74,12 +75,16 @@ class IndexController extends Setuco_Controller_Action_DefaultAbstract
      * トップページのアクションです
      *
      * @return void
-     * @author suzuki-mar
+     * @author suzuki-mar ErinaMikami
      */
     public function indexAction()
     {
         //新着ページを取得する
         $this->view->newPages = $this->_pageService->findLastUpdatedPages(Setuco_Data_Constant_Module_Default::LIMIT_GET_NEW_PAGE);
+
+        $freeSpace = $this->_freeSpaceService->findFreeSpaceInfo();
+        $freeSpace['content'] = nl2br($freeSpace['content']);
+        $this->view->freeSpace = $freeSpace;
     }
 
 
