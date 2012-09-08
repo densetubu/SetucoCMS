@@ -20,6 +20,9 @@ Released on 2012/03/17
 SetucoCMS version 1.4.0
 Released on 2012/06/17
 
+SetucoCMS version 1.5.0
+Released on 2012/09/08
+
 You can see CHANGELOG.txt to see detailed change history.
 
 --------------------------------------------

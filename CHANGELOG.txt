@@ -48,8 +48,9 @@ Version 1.4.0 (2012/06/17)
     - Revamped the logo of SetucoCMS
 
 --------------------------------------------
-Version 1.4.1 (2012/08/01)
+Version 1.5.0 (2012/09/08)
 --------------------------------------------
-- Installer
-    - Fixed tha bug text form value of "database user" in place of "database password".
-    - Change of "site url"`s default value, ip address to host domain.
+- Page management function
+    - Editor - page creation screen, calendar, time display has been transformed into a stylish and easy to use.
+- Customization features
+    - I will be able to manage the free space from the screen edit page.
