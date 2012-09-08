@@ -60,9 +60,9 @@ abstract class Common_Model_FreeSpaceAbstract
      * フリースペースの内容を取得する
      *
      * @return string フリースペースの内容
-     * @author suzuki-mar
+     * @author suzuki-mar ErinaMikami
      */
-    public function getFreeSpaceInfo()
+    public function findFreeSpaceInfo()
     {
         $result = $this->_freeSpaceDao->fetchRow()->toArray();
 

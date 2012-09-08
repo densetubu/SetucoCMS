@@ -73,12 +73,12 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
      * フリースペースを表示するアクションです
      *
      * @return void
-     * @author suzuki-mar
+     * @author suzuki-mar ErinaMikami
      * @todo 入力エラーの場合にDBに保存してあるデータを取得するメソッドを親に作成する
      */
     public function indexAction()
     {
-        $freeSpaces = $this->_freeSpaceService->getFreeSpaceInfo();
+        $freeSpaces = $this->_freeSpaceService->findFreeSpaceInfo();
 
         //空文字以外の入力したものは、入力したものをデフォルト値にする
         if ($this->_hasParam('inputValues')) {
@@ -125,7 +125,7 @@ class Admin_FreeSpaceController extends Setuco_Controller_Action_AdminAbstract
      * indexアクションに遷移します
      *
      * @return void
-     * @author suzuki-mar
+     * @author suzuki-mar ErinaMikami
      */
     public function updateAction()
     {
