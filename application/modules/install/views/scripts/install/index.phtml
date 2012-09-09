@@ -31,6 +31,7 @@
  */
 ?>
 <?php echo (isset($this->errorForm)) ? $this->partial('error-message.phtml', array('errorForm' => $this->errorForm)) : ''     ?>
+<?php if ($this->error) echo '<p style="color:red;">' . $this->error . '</p>' ?>
 <form method="post" action="<?php echo $this->baseUrl('/install/install/confirm') ?>">
     <dl>
         <dt>

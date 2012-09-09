@@ -69,6 +69,7 @@ class Install_InstallController
         }
         unset($defaultValues);
 
+        $this->view->error = $this->_getParam('error');
         $this->view->inputValues = $inputValues;
     }
 
@@ -117,17 +118,21 @@ class Install_InstallController
 
         Install_Model_Config::updateApplicationConfig($inputValues);
 
-        $dbInit = new Install_Model_DbInitialization(APPLICATION_ENV);
-        $dbInit->initializeDb();
-        $dbInit->updateAccount(array(
-            'login_id' => $inputValues['account_id'],
-            'password' => $inputValues['account_pass']
-        ));
-        $dbInit->updateSite(array(
-            'name'    => $inputValues['site_name'],
-            'comment' => $inputValues['site_comment'],
-            'url'     => $inputValues['site_url'],
-        ));
+        try {
+            $dbInit = new Install_Model_DbInitialization(APPLICATION_ENV);
+            $dbInit->initializeDb();
+            $dbInit->updateAccount(array(
+                'login_id' => $inputValues['account_id'],
+                'password' => $inputValues['account_pass']
+            ));
+            $dbInit->updateSite(array(
+                'name'    => $inputValues['site_name'],
+                'comment' => $inputValues['site_comment'],
+                'url'     => $inputValues['site_url'],
+            ));
+        } catch (Exception $e) {
+            $this->_helper->redirector('index', 'install', null, array('error' => 'データベースの接続に失敗しました。データベースの接続情報を確認してください。'));
+        }
 
         //二重送信防止
         $this->_helper->redirector('finish', 'install', null);
