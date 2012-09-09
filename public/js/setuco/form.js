@@ -22,5 +22,5 @@ setTimeout(function() {
 
     $("form").disableDoubleSubmit();
 
-}, 500);
+}, 1000);
 
