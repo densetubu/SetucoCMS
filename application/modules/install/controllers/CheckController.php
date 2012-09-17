@@ -3,7 +3,19 @@
 /**
  * 設置する環境が整っているか確認をするコントローラ
  *
- * LICENSE: ライセンスに関する情報
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category   Setuco
  * @package    Install
@@ -11,11 +23,15 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since      File available since Release 0.1.0
+ * @subpackage Controller
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @since      File available since Release 1.6.0
  * @author     Takayuki Otake
  */
 
-/*
+/**
  * SetucoCMSを設置する環境が整っているか確認をするコントローラ
  *
  * @package    Install
@@ -31,62 +47,45 @@ class Install_CheckController extends Setuco_Controller_Action_Abstract
      */
     public function indexAction()
     {
-        $all_ok = true;
-        $required_ok = true;
+        $allOk = true;
+        $requiredOk = true;
 
-        // PHP Extension
-        if (false === ($php_extensions['pdo'] = extension_loaded('pdo'))) {
-            $all_ok = false;
-            $required_ok = false;
+        $dirErrors = array();
+        if (!Setuco_Util_Media::isWritableUploadDir()) {
+            $dirErrors[] = Setuco_Data_Constant_Media::MEDIA_UPLOAD_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (false === ($php_extensions['mysql'] = extension_loaded('mysql'))) {
-            $all_ok = false;
-            $required_ok = false;
+        if (!Setuco_Util_Media::isWritableThumbDir()) {
+            $dirErrors['upload_thumb'] = Setuco_Data_Constant_Media::MEDIA_THUMB_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (false === ($php_extensions['mbstring'] = extension_loaded('mbstring'))) {
-            $all_ok = false;
-            $required_ok = false;
+        if (!Setuco_Util_Config::isWritableConfigDir()) {
+            $dirErrors['configs'] = Setuco_Data_Constant_Config::CONFIG_DIR_FULLPATH() . '　が存在しないか、書き込みできません。';
         }
-        if (false === ($php_extensions['gd'] = extension_loaded('gd'))) {
-            $all_ok = false;
+        if (count($dirErrors) > 0) {
+            $this->view->dirErrors = $dirErrors;
         }
-        $this->view->extensions = $php_extensions;
 
-        // is directory writable
-        $isWritable = array(
-            'configs' => $this->_isWritable('configs/'),
-            'media' => $this->_isWritable('../public/media/'),
-        );
-        if (in_array(false, $isWritable)) {
-            $all_ok = false;
+        $requiredPhpExtensions = Setuco_Util_Environment::checkRequiredPhpExtensions();
+        foreach ($requiredPhpExtensions as $ext => $loaded) {
+            if (!$loaded) {
+                $allOk = false;
+                $requiredOk = false;
+            }
         }
-        $this->view->isWritable = $isWritable;
-
-        // inclued apache modules
-        $ap_modules = apache_get_modules();
-        if (false === ($apache_modules['mod_rewrite'] = array_search('mod_rewrite', $ap_modules))) {
-            $all_ok = false;
-            $required_ok = false;
-        }
-        $this->view->apache_modules = $apache_modules;
+        $this->view->phpExtensions = $requiredPhpExtensions;
 
 
-        $this->view->all_ok = $all_ok;
-        $this->view->required_ok = $required_ok;
+        $requiredApacheModules = Setuco_Util_Environment::checkRequiredApacheModules();
+        foreach ($requiredApacheModules as $module => $loaded) {
+            if (!$loaded) {
+                $all_ok = false;
+                $required_ok = false;
+            }
+        }
+        $this->view->apacheModules = $requiredApacheModules;
+
+
+        $this->view->allOk = $allOk;
+        $this->view->requiredOk = $requiredOk;
     }
 
-    /**
-     * ファイルやディレクトリに書き込み権限があるかどうか調べる
-     *
-     * @param String $filename 
-     * @author Takayuki Otake
-     */
-     private function _isWritable($filename)
-     {
-         $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . $filename;
-         return is_writable($path);
-     }
-
 }
-
-
