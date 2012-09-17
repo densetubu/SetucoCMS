@@ -118,8 +118,7 @@ PRIMARY KEY ( `id` )
  *****************************************************/
 
 -- page_tag_tag_id_index index
-CREATE INDEX page_tag_tag_id_index
-ON page_tag(tag_id);
+-- CREATE INDEX page_tag_tag_id_index ON page_tag(tag_id);
 
 
 /*****************************************************
