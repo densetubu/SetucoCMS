@@ -750,12 +750,13 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'create_date',
             array(
                 'id' => 'create_date',
-                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
                 'filters' => array(
                     'StringTrim'
                 ),
-                'validators' => $this->_makeCreateDateValidators(),
+                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
+			    'validators' => $this->_makeCreateDateValidators(),
             )
+			
         );
         
         $form->setMinimalDecoratorElements(array(
