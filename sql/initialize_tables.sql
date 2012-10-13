@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS page (
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- free_space table
-CREATE TABLE IF NOT EXISTS `setucocms`.`free_space` (
+CREATE TABLE IF NOT EXISTS free_space (
     id      INT NOT NULL AUTO_INCREMENT,
     title  TEXT NOT NULL,
     content TEXT NOT NULL,
