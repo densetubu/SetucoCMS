@@ -138,9 +138,9 @@ ON page_tag(tag_id);
 
 -- insert statements
 INSERT IGNORE INTO account 
-    (login_id, nickname, password)
+    (id, login_id, nickname, password)
 VALUES
-    ('admin', '管理者', SHA1('password'));
+    (1, 'admin', '管理者', SHA1('password'));
 
 INSERT IGNORE INTO category 
     (id, name, parent_id)
@@ -148,9 +148,10 @@ VALUES
     (-1, 'no_parent', null);
 
 INSERT IGNORE INTO site 
-    (name, url, comment, keyword, open_date)
+    (id, name, url, comment, keyword, open_date)
 VALUES
-    ('サイト名を設定してください',
+    (1,
+     'サイト名を設定してください',
      'http://example.com/',
      'サイトの説明を設定してください。',
      'サイトのキーワードを設定してください。',
@@ -159,19 +160,19 @@ VALUES
 INSERT IGNORE INTO free_space
     (id, title, content)
 VALUES (
-    NULL,
+    1,
     'フリースペース',
     'フリースペースです。コンテンツを設定してください。');
 
 
 INSERT IGNORE INTO ambition 
-    (ambition)
+    (id, ambition)
 VALUES
-    ('目標を設定してください。');
+    (1, '目標を設定してください。');
 
 INSERT IGNORE INTO goal 
-    (page_count, target_month)
+    (id, page_count, target_month)
 VALUES
-    (10, cast(date_format(now(), '%Y-%m-1') as date));
+    (1, 10, cast(date_format(now(), '%Y-%m-1') as date));
 
 commit;
