@@ -3,7 +3,7 @@
  *****************************************************/
 
 -- account table
-CREATE TABLE account (
+CREATE TABLE IF NOT EXISTS account (
     id       INT AUTO_INCREMENT NOT NULL,
     login_id VARCHAR(255) NOT NULL,
     nickname VARCHAR(255) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE account (
 ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- tag table 
-CREATE TABLE tag (
+CREATE TABLE IF NOT EXISTS tag (
     id      INT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255) NOT NULL,
     PRIMARY KEY(id),
@@ -23,7 +23,7 @@ CREATE TABLE tag (
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- media table 
-CREATE TABLE media (
+CREATE TABLE IF NOT EXISTS media (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
     type        TEXT NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE media (
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- category table
-CREATE TABLE category (
+CREATE TABLE IF NOT EXISTS category (
     id          INT AUTO_INCREMENT NOT NULL,
     name        VARCHAR(255) NOT NULL,
     parent_id   INT DEFAULT -1,
@@ -44,7 +44,7 @@ CREATE TABLE category (
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 -- page table
-CREATE TABLE page (
+CREATE TABLE IF NOT EXISTS page (
     id          INT AUTO_INCREMENT NOT NULL,
     title       TEXT NOT NULL,
     contents    TEXT NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE page (
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- free_space table
-CREATE TABLE `setucocms`.`free_space` (
+CREATE TABLE IF NOT EXISTS `setucocms`.`free_space` (
     id      INT NOT NULL AUTO_INCREMENT,
     title  TEXT NOT NULL,
     content TEXT NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `setucocms`.`free_space` (
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- page_media table 
-CREATE TABLE page_media (
+CREATE TABLE IF NOT EXISTS page_media (
     page_id INT NOT NULL,
     media_id INT NOT NULL,
     PRIMARY KEY(media_id,page_id),
@@ -77,7 +77,7 @@ CREATE TABLE page_media (
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- page_tag table 
-CREATE TABLE page_tag (
+CREATE TABLE IF NOT EXISTS page_tag (
     page_id     INT NOT NULL,
     tag_id      INT NOT NULL,
     PRIMARY KEY(page_id,tag_id),
@@ -86,7 +86,7 @@ CREATE TABLE page_tag (
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- site table 
-CREATE TABLE site (
+CREATE TABLE IF NOT EXISTS site (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
     url         TEXT NOT NULL,
@@ -97,14 +97,14 @@ CREATE TABLE site (
 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- ambition table
-CREATE TABLE ambition (
+CREATE TABLE IF NOT EXISTS ambition (
     id          INT AUTO_INCREMENT NOT NULL,
     ambition    TEXT NOT NULL,
     PRIMARY KEY(id)
 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 -- goal table
-CREATE TABLE goal (
+CREATE TABLE IF NOT EXISTS goal (
     id           INT AUTO_INCREMENT NOT NULL,
     page_count   INT NOT NULL,
     target_month DATE NOT NULL UNIQUE,
@@ -112,7 +112,7 @@ CREATE TABLE goal (
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- template table
-CREATE TABLE template　(
+CREATE TABLE IF NOT EXISTS template (
      id INT NOT NULL AUTO_INCREMENT ,
      account_id INT NOT NULL ,
      title VARCHAR( 255 ) NOT NULL ,
@@ -137,17 +137,17 @@ ON page_tag(tag_id);
  *****************************************************/
 
 -- insert statements
-INSERT INTO account 
+INSERT IGNORE INTO account 
     (login_id, nickname, password)
 VALUES
     ('admin', '管理者', SHA1('password'));
 
-INSERT INTO category 
+INSERT IGNORE INTO category 
     (id, name, parent_id)
 VALUES
     (-1, 'no_parent', null);
 
-INSERT INTO site 
+INSERT IGNORE INTO site 
     (name, url, comment, keyword, open_date)
 VALUES
     ('サイト名を設定してください',
@@ -156,7 +156,7 @@ VALUES
      'サイトのキーワードを設定してください。',
      now());
 
-INSERT INTO free_space
+INSERT IGNORE INTO free_space
     (id, title, content)
 VALUES (
     NULL,
@@ -164,12 +164,12 @@ VALUES (
     'フリースペースです。コンテンツを設定してください。');
 
 
-INSERT INTO ambition 
+INSERT IGNORE INTO ambition 
     (ambition)
 VALUES
     ('目標を設定してください。');
 
-INSERT INTO goal 
+INSERT IGNORE INTO goal 
     (page_count, target_month)
 VALUES
     (10, cast(date_format(now(), '%Y-%m-1') as date));
