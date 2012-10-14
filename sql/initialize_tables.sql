@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS page_tag (
     page_id     INT NOT NULL,
     tag_id      INT NOT NULL,
     PRIMARY KEY(page_id,tag_id),
+    INDEX (tag_id),
     FOREIGN KEY(page_id) REFERENCES page(id) ON DELETE CASCADE,
     FOREIGN KEY(tag_id) REFERENCES tag(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_bin;
@@ -120,16 +121,6 @@ CREATE TABLE IF NOT EXISTS template (
      explanation TINYTEXT NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
-
-
-
-/*****************************************************
- * CREATE INDEX 
- *****************************************************/
-
--- page_tag_tag_id_index index
-CREATE INDEX page_tag_tag_id_index
-ON page_tag(tag_id);
 
 
 /*****************************************************
