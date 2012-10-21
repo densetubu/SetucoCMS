@@ -146,7 +146,7 @@ class Install_Model_DbInitialization extends Setuco_Model_Abstract
         $fp = fopen(APPLICATION_PATH . '/../sql/initialize_tables.sql', 'r');
         while ($line = fgets($fp)) {
             // MySQLスキーマのファイル内を走査しつつ、コメントは除外して抽出
-            if ($comment_flg === true) {
+            if ($comment_flg) {
 
                 if (preg_match("/\*\//", $line)) {
                     $comment_flg = false;

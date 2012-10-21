@@ -83,11 +83,11 @@ class Install_InstallController
         $inputValues = $this->_getAllParams();
         $this->_setSession($inputValues);
 
-        if (false === $this->_request->isPost()) {
+        if (!$this->_request->isPost()) {
             return $this->_helper->redirector('index', 'install', null);
         }
 
-        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+        if (!$this->_initializeFormValidator->isValid($inputValues)) {
             return $this->_helper->redirector('index', 'install', null);
         }
 
@@ -102,16 +102,16 @@ class Install_InstallController
      */
     public function actionAction()
     {
-        if (false === $this->_request->isPost()) {
+        if (!$this->_request->isPost()) {
             return $this->_helper->redirector('index', 'install', null);
         }
 
         $inputValues = $this->_getAllParams();
-        if (preg_match("/^http(s):\/\//", $inputValues['site_url']) === false) {
+        if (!preg_match("/^http(s):\/\//", $inputValues['site_url'])) {
             $inputValues['site_url'] = 'http://' . $inputValues['site_url'];
         }
 
-        if (false === $this->_initializeFormValidator->isValid($inputValues)) {
+        if (!$this->_initializeFormValidator->isValid($inputValues)) {
             return $this->_helper->redirector('index', 'install', null);
         }
 
