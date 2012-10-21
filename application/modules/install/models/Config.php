@@ -49,7 +49,7 @@ class Install_Model_Config
      */
     public function updateApplicationConfig($params = array())
     {
-        if (empty($params) || false === is_array($params)) {
+        if (empty($params) || !is_array($params)) {
             return false;
         }
 
