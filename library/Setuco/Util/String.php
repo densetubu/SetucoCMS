@@ -101,4 +101,21 @@ class Setuco_Util_String
         $firstString = strtolower($firstString);
         return $firstString . substr($string, 1);
     }
+
+
+    /**
+     * パスワードをハッシュ値にする
+     *
+     * どこでも使用できるようにするために、staticメソッドにしている
+     *
+     * @param string $password ハッシュ化する文字列
+     * @return string ハッシュ化した文字列
+     * @author suzuki-mar
+     */
+    public static function convertHash2Password($password)
+    {
+        return hash('sha1', $password);
+    }
+
+
 }

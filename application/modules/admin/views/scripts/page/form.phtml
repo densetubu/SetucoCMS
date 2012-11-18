@@ -117,6 +117,8 @@
                 <label for="create_date">作成日</label>
             </dt>
             <dd>
+                <?php echo "日時:{$this->createDate}" #必要なくなったら削除してください ?>
+                <?php var_dump($this->createDate); #必要なくなったら削除してください ?>
                 <?php echo $this->form->getElement('create_date') . "\n" ?>
             </dd>
 

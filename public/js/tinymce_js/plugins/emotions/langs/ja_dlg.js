@@ -252,5 +252,4 @@ tinyMCE.addI18n('ja.emotions_dlg',
 	yacht:"ヨット",
 	yen:"円",
 
-
 });

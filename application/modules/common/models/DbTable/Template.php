@@ -86,6 +86,4 @@ class Common_Model_DbTable_Template extends Setuco_Db_Table_Abstract
       return $this->fetchAll()->toArray();
     }
 
-
-
 }

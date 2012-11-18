@@ -11,10 +11,10 @@ CREATE TABLE account (
     PRIMARY KEY(id),
     UNIQUE(login_id),
     UNIQUE(nickname)
-) 
+)
 ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
--- tag table 
+-- tag table
 CREATE TABLE tag (
     id      INT AUTO_INCREMENT NOT NULL,
     name    VARCHAR(255) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE tag (
     UNIQUE(name)
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
--- media table 
+-- media table
 CREATE TABLE media (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE `setucocms`.`free_space` (
     PRIMARY KEY ( `id` )
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- page_media table 
+-- page_media table
 CREATE TABLE page_media (
     page_id INT NOT NULL,
     media_id INT NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE page_media (
     FOREIGN KEY(media_id) REFERENCES media(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
--- page_tag table 
+-- page_tag table
 CREATE TABLE page_tag (
     page_id     INT NOT NULL,
     tag_id      INT NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE page_tag (
     FOREIGN KEY(tag_id) REFERENCES tag(id) ON DELETE CASCADE
 ) CHARACTER SET utf8 COLLATE utf8_bin;
 
--- site table 
+-- site table
 CREATE TABLE site (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
@@ -124,7 +124,7 @@ PRIMARY KEY ( `id` )
 
 
 /*****************************************************
- * CREATE INDEX 
+ * CREATE INDEX
  *****************************************************/
 
 -- page_tag_tag_id_index index
@@ -137,17 +137,17 @@ ON page_tag(tag_id);
  *****************************************************/
 
 -- insert statements
-INSERT INTO account 
+INSERT INTO account
     (login_id, nickname, password)
 VALUES
     ('admin', '管理者', SHA1('password'));
 
-INSERT INTO category 
+INSERT INTO category
     (id, name, parent_id)
 VALUES
     (-1, 'no_parent', null);
 
-INSERT INTO site 
+INSERT INTO site
     (name, url, comment, keyword, open_date)
 VALUES
     ('サイト名を設定してください',
@@ -164,12 +164,12 @@ VALUES (
     'フリースペースです。コンテンツを設定してください。');
 
 
-INSERT INTO ambition 
+INSERT INTO ambition
     (ambition)
 VALUES
     ('目標を設定してください。');
 
-INSERT INTO goal 
+INSERT INTO goal
     (page_count, target_month)
 VALUES
     (10, cast(date_format(now(), '%Y-%m-1') as date));

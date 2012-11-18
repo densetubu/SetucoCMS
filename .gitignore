@@ -10,3 +10,4 @@ Thumbs.db
 application/configs/application.ini
 .DS_Store
 *~
+public/template/

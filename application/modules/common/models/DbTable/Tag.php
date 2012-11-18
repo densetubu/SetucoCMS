@@ -119,6 +119,7 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
 
     /**
      * タグ名をキーワード検索し、該当するタグのIDを返す。
+     * 複数キーワードに対応している
      *
      * @param string $tagName 検索したいキーワード
      * @return array|null 合致するタグのIDを格納した配列。該当するタグがなければ空の配列。
@@ -129,15 +130,24 @@ class Common_Model_DbTable_Tag extends Setuco_Db_Table_Abstract
         $keyword = $this->escapeLikeString($keyword);
         $select = $this->select()->from(array('t' => $this->_name), 'id');
         $columnExpr = $this->getBsReplacedExpression('name');
-        $select->where("{$columnExpr} LIKE ?", "%{$keyword}%");
+
+        $where = Setuco_Sql_Generator::createMultiLike4Keyword($keyword, $columnExpr, 'OR');
+        $bind  = Setuco_Sql_Generator::createMultiLikeTargets($keyword);
+        
+        $select->where($where);
+        $select->bind($bind);
+
+
         $rowset = $this->fetchAll($select);
         if ($rowset->count() == 0) {
             return array();
         }
+        
         $tagIds = array();
         foreach ($rowset->toArray() as $cnt => $tag) {
             array_push($tagIds, (int)$tag['id']);
         }
+        
         return $tagIds;
     }
 

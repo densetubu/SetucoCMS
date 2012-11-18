@@ -3,6 +3,7 @@
 define('ROOT_DIR', '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..');
 define('LIB_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR);
 define('APPLICATION_PATH', ROOT_DIR . DIRECTORY_SEPARATOR . 'application');
+define('TEST_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR);
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

@@ -112,7 +112,7 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
         $content = $updateDatas['content'];
         unset($updateDatas['content']);
 
-        
+
         if (!$this->_templateDAO->updateByPrimary($updateDatas, $id)) {
            throw new Setuco_Exception('templateの更新に失敗してしまいました');
         }
@@ -153,7 +153,7 @@ class Admin_Model_Template extends Common_Model_TemplateAbstract
      * ファイル名はレコードID
      *
      * @param $int ファイル名を取得するアカウントID
-     * 
+     *
      */
     public function findNextFileName()
     {

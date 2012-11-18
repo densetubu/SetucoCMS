@@ -40,7 +40,7 @@
 abstract class Common_Model_TemplateAbstract extends Setuco_Model_Abstract
 {
     /**
-     * @var Common_Model_Template
+     * @var Common_Model_DbTable_Template
      */
     protected $_templateDAO;
 
