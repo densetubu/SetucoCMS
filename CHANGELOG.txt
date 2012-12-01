@@ -51,3 +51,9 @@ Version 1.3.2 (2012/08/03)
 - Installer
     - Fixed tha bug text form value of "database user" in place of "database password".
     - Change of "site url"`s default value, ip address to host domain.
+
+--------------------------------------------
+Version 1.3.3 (2012/12/01)
+--------------------------------------------
+- Installer
+    - Print error message when failed to database connection.
