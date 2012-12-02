@@ -53,6 +53,8 @@ class Install_InstallController
     {
         $inputValues = $this->_getAllParams();
 
+        $this->view->error = $this->_getParam('error');
+
         $template = 'index';
         if ($this->_request->isPost()) {
             $this->_setSession($inputValues);
@@ -142,7 +144,7 @@ class Install_InstallController
             $this->dbh->query($sql);
         } catch (Zend_Exception $pe) {
             $dbh = null;
-            throw new Setuco_Exception('update文の実行に失敗しました。' . $pe->getMessage());
+            $this->_helper->redirector('index', 'install', null, array('error' => $pe->getMessage()));
         } catch (Exception $e) {
             throw new Setuco_Exception('エラーが発生しました。', $e->getMessage());
         }
@@ -181,7 +183,7 @@ class Install_InstallController
             $this->dbh = new PDO("mysql:host={$params['db_host']}; dbname={$params['db_name']}",
                     $params['db_user'], $params['db_pass']);
         } catch (PDOException $e) {
-            return false;
+            throw new Setuco_Exception('データベースの接続に失敗しました。データベースの接続情報を再確認してください。');
         }
         return true;
     }
