@@ -1322,5 +1322,4 @@ function extendRemove(target, props) {
 
 $.timepicker = new Timepicker(); // singleton instance
 $.timepicker.version = "1.0.0";
-
 })(jQuery);

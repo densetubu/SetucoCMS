@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS account (
     PRIMARY KEY(id),
     UNIQUE(login_id),
     UNIQUE(nickname)
-) 
+)
 ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
 
 -- tag table 
@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS tag (
     UNIQUE(name)
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_general_ci;
 
--- media table 
-CREATE TABLE IF NOT EXISTS media (
+-- media table
+CREATE TABLE media (
     id          INT AUTO_INCREMENT NOT NULL,
     name        TEXT NOT NULL,
     type        TEXT NOT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS free_space (
     PRIMARY KEY ( `id` )
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
--- page_media table 
+-- page_media table
 CREATE TABLE IF NOT EXISTS page_media (
     page_id INT NOT NULL,
     media_id INT NOT NULL,
@@ -121,6 +121,7 @@ CREATE TABLE IF NOT EXISTS template (
      explanation TINYTEXT NOT NULL ,
 PRIMARY KEY ( `id` )
 ) ENGINE=INNODB CHARACTER SET utf8 COLLATE utf8_bin;
+
 
 
 /*****************************************************

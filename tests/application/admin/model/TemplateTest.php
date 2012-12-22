@@ -13,7 +13,7 @@ if (!defined('BOOT_STRAP_FINSHED')) {
 
 class Admin_Model_TemplateTest extends Setuco_Test_PHPUnit_DatabaseTestCase
 {
- 
+
     public function setup()
     {
         parent::setup();

@@ -117,7 +117,9 @@
                 <label for="create_date">作成日</label>
             </dt>
             <dd>
-                <?php echo $this->form->getElement('create_date') . "\n" ?>
+                <?php $dateElement = $this->form->getElement('create_date'); ?>
+                <?php $dateElement->setValue($this->createDate); ?>
+                <?php echo $dateElement . "\n" ?>
             </dd>
 
 

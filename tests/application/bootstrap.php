@@ -1,8 +1,9 @@
 <?php
 
-define('ROOT_DIR', '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..');
+define('ROOT_DIR', substr(preg_replace("/tests.*$/", '', __DIR__), 0, -1));
 define('LIB_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR);
 define('APPLICATION_PATH', ROOT_DIR . DIRECTORY_SEPARATOR . 'application');
+
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

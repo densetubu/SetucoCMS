@@ -44,6 +44,7 @@ $this->headLink()->prependStylesheet($this->baseUrl('js/timepicker/jquery-ui-tim
 $this->headLink()->prependStylesheet($this->baseUrl('js/jquery-ui-1.8.18.custom/css/ui-lightness/jquery-ui-1.8.18.custom.css'));
 $this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-sliderAccess.js'));
 $this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.js'));
+$this->headScript()->prependFile($this->baseUrl('js/jquery-ui-1.8.18.custom/development-bundle/ui/i18n/jquery.ui.datepicker-ja.js'));
 $this->headScript()->prependFile($this->baseUrl('js/jquery-ui-1.8.18.custom/js/jquery-ui-1.8.18.custom.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/admin.js'));
 $this->headScript()->prependFile($this->baseUrl('js/setuco/form.js'));
@@ -57,24 +58,22 @@ $this->headScript()->prependFile($this->baseUrl('js/setuco/api_data_list.js'));
     <head>
         <?php echo $this->headMeta() . "\n" ?>
         <?php echo $this->headTitle() . "\n" ?>
-        <?php echo $this->dojo() . "\n" ?>
         <?php echo $this->headScript() . "\n" ?>
         <?php echo $this->headLink() . "\n" ?>
         <?php echo $this->headStyle() . "\n" ?>
 
          <script>
 
-		
-
-
 		$(function(){
-            $( '#create_date' ) . datetimepicker();
-            $( '#create_date' ) . datetimepicker( 'option', 'dateFormat', 'yy-m-d' );
-			
-        });
-		
-		
+		   $( '#create_date' ) . datetimepicker();	
 
+            $('#create_date' ) . datetimepicker({
+				changeYear: true,
+				changeMonth:true,
+				dateFormat:'yy/m/d',
+				});
+
+        });
 
 tinyMCE.init({
 		// General options
@@ -88,7 +87,7 @@ tinyMCE.init({
 
 		// Theme options
 		theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontsizeselect,forecolor,backcolor,removeformat,|,link,unlink,media,image,|preview",
-		theme_advanced_buttons2 : "bullist,numlist,|,search,replace,|,outdent,indent,blockquote,|tablecontrols,|,hr,visualaid,|,charmap,emotions,iespell,|,fullscreen,|,undo,redo,|,template,styleprops,code",
+		theme_advanced_buttons2 : "bullist,numlist,|,search,replace,|,outdent,indent,blockquote,|tablecontrols,|,hr,visualaid,|,charmap,emotions,iespell,|,fullscreen,|,undo,redo,|,styleprops,code",
 		theme_advanced_buttons3 : "",
 		theme_advanced_buttons4 : "",
 		theme_advanced_toolbar_location : "top",
@@ -169,6 +168,5 @@ tinyMCE.init({
 
         </div>
         <!-- container END -->
-
     </body>
 </html>

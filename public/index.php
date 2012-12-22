@@ -11,7 +11,13 @@ defined('APPLICATION_ENV')
 
 //Define SetucoCMS version
 defined('APPLICATION_VERSION') || define('APPLICATION_VERSION', '0.1.0');    
-    
+
+
+// Define path to root directory
+defined('ROOT_DIR')
+    || define('ROOT_DIR', realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . '..'));
+
+
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),

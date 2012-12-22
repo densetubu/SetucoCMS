@@ -70,7 +70,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     private $_tagService;
 
     /**
-     * 日付テキストボックスのvalue属性のフォーマット
+     * データとして所持しておく日付のフォーマット
+     * Zend_Dbのフォーマット
      * (画面に表示されるものではない)
      *
      * @var string
@@ -78,12 +79,9 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     const FORMAT_DATE_TEXT_BOX = 'YYYY-MM-dd THH:mm:ss hh:MM';
 
     /**
-     * 日付テキストボックスのvalue属性のフォーマット
-     * (画面に表示されるものではない)
-     *
-     * @var string
+     * 画面表示用の日付フォーマット
      */
-    const FORMAT_DATE_TEXT_BOX_VIEW = 'YYYY年MM月dd日 hh:MM';
+    const FORMAT_DATE_DISPLAY = 'Y/m/d H:i';
 
     /**
      * 指定なしのvalue属性
@@ -205,9 +203,30 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
         $this->_helper->viewRenderer('form');
         $this->view->form = $form;
 
-        $this->view->createDate = $page['create_date'];
+        $this->_setCreatedDateForView($page['create_date']);
 
         $this->_showFlashMessages();
+    }
+
+
+
+    /**
+     * 日付を表示用の日付のフォーマットに変更したものを取得する
+     * 変更する日付がない場合は、現在時刻を取得する
+     *
+     * @param string[option] $createdDate フォーマットを変更する日付文字列　
+     * @return 表示用にフォーマットを変更した日付
+     * @author suzuki-mar
+     */
+    private function _setCreatedDateForView($createdDate = null)
+    {
+        if ($createdDate === null) {
+          $time = time();
+        } else {
+          $time = strtotime($createdDate);
+        }
+
+        $this->view->createDate = date(self::FORMAT_DATE_DISPLAY, $time);
     }
 
     /**
@@ -224,29 +243,16 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             $this->_setParam('searchForm', $searchForm);
         }
 
-        $keyword = $searchForm->getValue('query');
-        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
-        $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
-        //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
-
-        //検索パラメーターの引数オブジェクトを生成する
-        $keyword = $searchForm->getValue('query');
-        $targets = (array) $searchForm->getValue('targets');
-        $refinements = $this->_makeRefinements($searchForm);
-        $pageParamIns = new Common_Model_Page_Param(
-            $keyword,
-            $this->_getPageNumber(),
-            $this->_getPageLimit(),
-            $targets,
-            $refinements,
-            $sortColumn,
-            $sortOrder/*,
-            $searchType*/
-        );
+        $pageParamIns = $this->_createPageParamInstance($searchForm);
+        
+        //検索条件を指定していない
+        if (!$pageParamIns->isSettingSearchCondition()) {
+            
+        }
 
         $pages = $this->_pageService->searchPages($pageParamIns);
 
-        $this->view->params = $this->_makeQueryString($targets);
+        $this->view->params = $this->_makeQueryString((array) $searchForm->getValue('targets'));
 
         $pages = self::adjustPages($pages);
 
@@ -261,6 +267,41 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
 
         $this->_pageTitle = "ページの編集・削除";
 
+    }
+
+    /**
+     * Page_Paramインスタンスを生成します
+     *
+     * @param Setuco_Form $form 入力した値が入っているフォームクラス
+     * @return Common_Model_Page_Param パラメーターを設定した物
+     * @author suzuki-mar
+     */
+    private function _createPageParamInstance(Setuco_Form $form)
+    {
+        $keyword = $form->getValue('query');
+        $sortColumn = $this->_getParam('sort', self::DEFAULT_SORT_COLUMN);
+        $sortOrder = $this->_getParam('order', self::DEFAULT_ORDER);
+        //$searchType = $this->_getParam('search_type', self::DEFAULT_SEARCH_TYPE);
+
+        //検索パラメーターの引数オブジェクトを生成する
+        $keyword = $form->getValue('query');
+        $targets = (array) $form->getValue('targets');
+        $refinements = $this->_makeRefinements($form);
+        $tagIds = $this->_tagService->findTagIdsByKeyword($keyword);
+
+        $pageParamIns = new Common_Model_Page_Param(
+            $keyword,
+            $tagIds,
+            $this->_getPageNumber(),
+            $this->_getPageLimit(),
+            $targets,
+            $refinements,
+            $sortColumn,
+            $sortOrder/*,
+            $searchType*/
+        );
+
+        return $pageParamIns;
     }
 
     /**
@@ -569,8 +610,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $this->view->form = $this->_getParam('form', $this->_createForm());
 
-        $this->view->createDate = Zend_Date::now()->toString();
-        
+        $this->_setCreatedDateForView();
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
@@ -737,7 +777,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             'create_date',
             array(
                 'id' => 'create_date',
-                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX_VIEW),
+                'value' => $nowDate->toString(self::FORMAT_DATE_TEXT_BOX),
                 'filters' => array(
                     'StringTrim'
                 ),
@@ -745,7 +785,7 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
             )
         );
 
-
+        
         $form->setMinimalDecoratorElements(array(
             'sub_open1',
             'sub_draft1',
@@ -1005,7 +1045,8 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     {
         $form = $this->_createUpdateForm();
         $post = $_POST;
-        
+
+
         $post['create_date'] = $this->_formatCreateDate4Db($post['create_date']);
 
         if (! $this->_isValidPageForm($form, $post)) {
@@ -1034,17 +1075,22 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
      * ページを作成した日付をDBに保存する形式に変更する
      *
      * @param string $createDate ページを編集した日付 (フォームに送信されたデータ)
-     * @return string DBに保存する形式に変更した物
+     * @return Zend_Date DBに保存する形式に変更したDateオブジェクト
      * @author suzuki-mar
      */
     private function _formatCreateDate4Db($createDate)
     {
-        $nowDate = Zend_Date::now();
 
-        $createDate = Setuco_Util_String::getDefaultIfEmpty(
-            $createDate, $nowDate->toString(self::FORMAT_DATE_TEXT_BOX));
+        if (empty($createDate)) {
+            $nowDate = Zend_Date::now();
+            $formattedDate = $nowDate->toString(self::FORMAT_DATE_TEXT_BOX);
+        } else {
+            $time = strtotime($createDate);
+            $date = new Zend_Date($time, self::FORMAT_DATE_TEXT_BOX);
+            $formattedDate =  $date->toString();
+        }
 
-        return new Zend_Date($createDate . '00', self::FORMAT_DATE_TEXT_BOX);
+        return new Zend_Date($formattedDate, self::FORMAT_DATE_TEXT_BOX);
     }
 
     /**

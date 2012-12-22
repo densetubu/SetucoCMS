@@ -1,0 +1,81 @@
+<?php
+/**
+ * インストーラの development 用エラーページ
+ *
+ * LICENSE: ライセンスに関する情報
+ *
+ * @category   Setuco
+ * @package    Install
+ * @subpackage View_Script_Error
+ * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
+ * @link
+ * @version
+ * @since      File available since Release 0.1.0
+ * @param      string    $message       メッセージ
+ * @param      Exception $exception     例外
+ * @param      array     $requestParams 全てのリクエストパラメータ
+ * @author     suzuki-mar charlesvineyard ErinaMikami
+ */
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="content-style-type" content="text/css" />
+        <meta http-equiv="content-script-type" content="text/javascript" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl('/css/style.css') ?>" media="screen" />
+        <title>エラーページ｜サイト名</title>
+    </head>
+    <body id="errorPage">
+
+        <!-- wrapper START -->
+        <div id="wrapper">
+
+            <!-- content START -->
+            <div id="content">
+
+                <!-- mainContent START -->
+                <div id="mainContent">
+
+                    <!-- entry START -->
+                    <div class="entry">
+
+                        <div class="entryHead">
+                            <h2><span>An error occurred</span></h2>
+                        </div>
+
+                        <div class="entryBody">
+
+                          <h3><?php echo $this->message ?></h3>
+
+                          <?php if (isset($this->exception)): ?>
+
+                          <h4>Exception information:</h4>
+                          <p>
+                              Message: <?php echo $this->exception->getMessage() ?>
+                          </p>
+
+                          <h4>Stack trace:</h4>
+                          <pre><?php echo $this->exception->getTraceAsString() ?></pre>
+
+                          <h4>Request Parameters:</h4>
+                          <p><?php echo var_export($this->requestParams, true) ?></p>
+                          <?php endif ?>
+
+                        </div>
+
+                    </div>
+                    <!-- entry END -->
+
+                </div>
+                <!-- mainContent END -->
+
+            </div>
+            <!-- content END -->
+
+        </div>
+        <!-- container END -->
+
+    </body>
+</html>

@@ -68,13 +68,15 @@ class Admin_Model_Account
     /**
     * アカウントを新規追加する
     *
-    * @author kkyouhei 
+    * @author kkyouhei suzuki-mar
     */
     public function registAccount($registData)
     {
-        $registData['password'] = hash('sha1', $registData['password']);
+        $registData['password'] = Setuco_Util_String::convertHash2Password($registData['password']);
         return $this->_accountDao->insert($registData);
     }
+
+
 
     /**
      * アカウント情報をロードします。
