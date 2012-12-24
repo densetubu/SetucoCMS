@@ -44,6 +44,7 @@ Version 1.4.0 (2012/06/17)
 --------------------------------------------
 - Login
     - Fixed the bug does not disappear when you press the OK flash message at login and logout
+
 - Design
     - Revamped the logo of SetucoCMS
 
@@ -52,6 +53,7 @@ Version 1.5.0 (2012/09/08)
 --------------------------------------------
 - Page management function
     - Editor - page creation screen, calendar, time display has been transformed into a stylish and easy to use.
+    
 - Customization features
     - I will be able to manage the free space from the screen edit page.
 
@@ -61,3 +63,13 @@ Version 1.5.1 (2012/12/01)
 - Fixed bug on installation
     - Fixed bug in SQL syntax error
     - Print error message when failed to database connection.
+
+--------------------------------------------
+Version 1.5.2 (2012/12/22)
+--------------------------------------------
+- Page management function
+    - Fixed a problem where the input form of the posting date of the article editor is not displayed correctly
+- Other
+    - Correction data to be created and run multiple times in SQL extra for installation
+    - Adding a function to prevent to prevent multiple form submission
+
