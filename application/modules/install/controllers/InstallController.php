@@ -46,7 +46,7 @@ class Install_InstallController
     /**
      * 入力フォームから初期設定をするアクション
      *
-     * @author Takayuki Otake
+     * @author Takayuki Otake suzuki_mar
      * @return void
      */
     public function indexAction()
@@ -57,13 +57,14 @@ class Install_InstallController
 
         $template = 'index';
         if ($this->_request->isPost()) {
+
             $this->_setSession($inputValues);
             if (!$this->_initializeFormValidator->isValid($inputValues)) {
                 $template = 'index';
             } else {
-                if ($this->_getParam('submit')) {
+                if ($this->_getParam('next_action') === 'confirm') {
                     $template = 'confirm';
-                } else if ($this->_getParam('commit')) {
+                } else if ($this->_getParam('next_action') === 'install') {
                     $this->_initialize($inputValues);
                     $this->_helper->redirector('finish', 'install', null); 
                 }
