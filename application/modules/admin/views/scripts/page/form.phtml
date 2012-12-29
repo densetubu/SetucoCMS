@@ -37,8 +37,14 @@
 ->requireModule('dijit._editor.plugins.Print')
 ->requireModule('dijit._editor.plugins.NewPage');
 
-$this->headScript()->appendFile('/js/setuco/tinymce_setting.js');
-$this->headScript()->appendFile('/js/setuco/datetimepicker.js');
+
+$this->headScript()->appendFile($this->baseUrl('js/setuco/api_data_list.js'));
+$this->headScript()->appendFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
+$this->headScript()->appendFile($this->baseUrl('js/jquery-ui-1.8.18.custom/development-bundle/ui/i18n/jquery.ui.datepicker-ja.js'));
+$this->headScript()->appendFile($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.js'));
+$this->headScript()->appendFile($this->baseUrl('/js/setuco/tinymce_setting.js'));
+$this->headScript()->appendFile($this->baseUrl('/js/setuco/datetimepicker.js'));
+
 ?>
 <!-- topicPath START -->
 <div id="topicPath">
