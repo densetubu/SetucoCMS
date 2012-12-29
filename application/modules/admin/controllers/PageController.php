@@ -609,12 +609,11 @@ class Admin_PageController extends Setuco_Controller_Action_AdminAbstract
     public function formAction()
     {
         $this->view->form = $this->_getParam('form', $this->_createForm());
-
         $this->_setCreatedDateForView();
 
         //フラッシュメッセージを設定する
         $this->_showFlashMessages();
-    }
+	}
 
     /**
      * ページ更新用フォームを作成します。

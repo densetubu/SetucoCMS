@@ -42,8 +42,6 @@ $this->headTitle('SetucoCMS')->setSeparator(':');
 $this->headLink()->prependStylesheet($this->baseUrl('css/base.css'));
 $this->headLink()->prependStylesheet($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.css'));
 $this->headLink()->prependStylesheet($this->baseUrl('js/jquery-ui-1.8.18.custom/css/ui-lightness/jquery-ui-1.8.18.custom.css'));
-$this->headScript()->prependFile($this->baseUrl('js/setuco/tinymce_setting.js'));
-$this->headScript()->prependFile($this->baseUrl('js/setuco/datetimepicker.js'));
 $this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-sliderAccess.js'));
 $this->headScript()->prependFile($this->baseUrl('js/timepicker/jquery-ui-timepicker-addon.js'));
 $this->headScript()->prependFile($this->baseUrl('js/jquery-ui-1.8.18.custom/development-bundle/ui/i18n/jquery.ui.datepicker-ja.js'));
@@ -53,8 +51,8 @@ $this->headScript()->prependFile($this->baseUrl('js/setuco/form.js'));
 $this->headScript()->prependFile($this->baseUrl('js/jquery-1.7.1.min.js'));
 $this->headScript()->prependFile($this->baseUrl('js/tinymce_js/tiny_mce.js'));
 $this->headScript()->prependFile($this->baseUrl('js/setuco/api_data_list.js'));
-
 ?>
+
 <?php echo $this->doctype() . "\n" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
     <head>

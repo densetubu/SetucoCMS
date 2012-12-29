@@ -35,7 +35,10 @@
 ->requireModule('dijit._editor.plugins.FullScreen')
 ->requireModule('dijit._editor.plugins.ViewSource')
 ->requireModule('dijit._editor.plugins.Print')
-->requireModule('dijit._editor.plugins.NewPage')
+->requireModule('dijit._editor.plugins.NewPage');
+
+$this->headScript()->appendFile('/js/setuco/tinymce_setting.js');
+$this->headScript()->appendFile('/js/setuco/datetimepicker.js');
 ?>
 <!-- topicPath START -->
 <div id="topicPath">
