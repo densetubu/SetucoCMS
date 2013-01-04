@@ -535,7 +535,47 @@ body#installPage span.required {
 .postBtn{
 	float:left;
 	margin:0 10px 0 0;
+}
 
+
+body#installPage dd {
+	position:relative;
+}
+
+.balErr{
+	position:absolute;
+	top:-40px;
+	left:200px;
+	z-index:9999;
+	list-style:none;
+	background: transparent; /* 背景をリセット */
+	-ms-filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#e20000',EndColorStr='#af0000');
+	filter: progid:DXImageTransform.Microsoft.Gradient(StartColorStr='#e20000',EndColorStr='#af0000');
+	background: -moz-linear-gradient(top, #e20000, #af0000);
+	background: -webkit-gradient(linear, left top, left bottom, from(#e20000), to(#af0000));
+	border:solid 1px #c70000;
+	padding:5px;
+	color:#ffffff;
+	visibility:hidden;
+}
+
+
+.balErr:before  {
+	content: "";
+	position: absolute;
+	bottom: -15px;
+	left: 20px;
+	border-width: 0 0 15px 25px;
+	border-style: solid solid;
+	border-color: transparent #af0000;
+	display: block;
+	width: 0;
+}
+
+
+.balErr li{
+	margin:0 0 10px 0;
+	font-size:80%;
 }
 
 
