@@ -35,37 +35,40 @@
 	</dl>
 	<p>
 		詳細な変更履歴は下記のファイルをご覧ください。<br>
-		/CHANGELOG_ja.txt
-	</p>
+		<a href="../CHANGELOG_ja.txt" target="_blank">/CHANGELOG_ja.txt</a></p>
 </div>
 
 
 <div class="block">
 	<h2 class="h2style">システム要件</h2>
 	<h3 class="h3style">サーバー</h3>
-	<dl>
-		<dt>OS非依存</dt>
-		<dd>Apache2</dd>
-		<dd>PHP 5.2.4 以降</dd>
-		<dd>MySQL5.1 以降</dd>
-	</dl>
+	<h4 class="h4style">OS非依存</h4>
+	<ul>
+		<li>Apache2</li>
+		<li>PHP 5.2.4 以降</li>
+		<li>MySQL5.1 以降</li>
+	</ul>
 	
 	<h3 class="h3style">クライアント</h3>
-	<dl>
-		<dt>推奨ブラウザ</dt>
-		<dd>IE8以上</dd>
-		<dd>Firefox3.6以上</dd>
-		<dd>GoogleChrome10以上</dd>
-	</dl>
+	<h4 class="h4style">推奨ブラウザ</h4>
+	<ul>
+		<li>IE8以上</li>
+		<li>Firefox3.6以上</li>
+		<li>GoogleChrome10以上</li>
+	</ul>
 </div>
 
 
 <div class="block">
 	<h2 class="h2style">インストール手順</h2>
+	
 	<h3 class="h3style">1.ダウンロードしてきたSetucoCMS_1.5.2.zipを解凍します</h3>
-	<h3 class="h3style">2.[SetucoCMS_1.5.2/public]ディレクトリ内にある.htaccess.sampleをコピーします</h3>
+	
+	<h3 id="step2" class="h3style">2.[SetucoCMS_1.5.2/public]ディレクトリ内にある.htaccess.sampleをコピーします</h3>
 	<p>内容の変更は基本的には不要です。<br>(FTPにアップ後、名前を<span class="attention">.htaccess</span>に変更します)</p>
-	<h3 class="h3style">4.ステップ2で作った[.htaccessのコピー]の名前を.htaccessにします</h3>
+	
+	<h3 id="step3" class="h3style">3.解凍してできたSetucoCMS_1.5.2の中身をFTPソフトを使ってアップロードします</h3>
+	<h3 class="h3style">4.<a href="#step2">ステップ2</a>で作った[.htaccessのコピー]の名前を.htaccessにします</h3>
 	<h3 class="h3style">5.ディレクトリの属性を変更します</h3>
 	<p>以下の4つのディレクトリの属性を777にします。</p>
 	<ul>
@@ -77,16 +80,29 @@
 	
 	<h3 class="h3style">6.公開ディレクトリの設定</h3>
 	<p>使用しているサーバーなどによって、多少設定方法が異なりますが、ご自分の環境にあてはめて進めてください。</p>
-	</p>ステップ3のFTPでアップロードしたフォルダの中にある、publicディレクトリにアクセスした際のURLが<span class="attention">http://example.com/</span>になるように設定します。</p>
+	</p><a href="#step3">ステップ3</a>の、FTPでアップロードしたフォルダの中にあるpublicディレクトリにアクセスした際のURLが、<span class="attention">http://example.com/</span>になるように設定します。</p>
 	
 	<h4 class="h4style">独自ドメインを取得されている方</h4>
 	<p>レンタルサーバーの管理画面に独自ドメインを設定するメニューがあるので、そちらに移動します。</p>
+	
 	<p>独自ドメインの設定項目の中に、<span class="attention">公開フォルダ設定</span>という設定項目がありますので、サーバーのルートディレクトリから、ステップ3でアップしたpublicディレクトリまでのパスを入力します。</p>
 	
 	<dl>
 		<dt>(例)</dt>
 		<dd>/home/users/2/co.jp-testserver/web/public</dd>
 	</dl>
+
+	
+	<div class="photoBlock">
+		<a href="common/iamges/img_06.jpg"><img src="common/iamges/img_06-min.jpg" width="270" height="215" alt="ロリポップの管理画面"></a>
+		<p>レンタルサーバー「ロリポップ」の説明(クリックで拡大します)</p>
+	</div>	
+
+
+	<div class="photoBlock center">
+		<a href="common/iamges/img_06-2.jpg"><img src="common/iamges/img_06-2-min.jpg" width="270" height="214" alt="ヘテミルの管理画面"></a>
+		<p>レンタルサーバー「ヘテミル」の説明(クリックで拡大します)</p>
+	</div>	
 
 	<p>
 	設定が完了したら、独自ドメインの後に[/install]を付けたURLにアクセスします。<br>
@@ -106,25 +122,44 @@
 	<p>http://サイトのURL/public/install</p>
 	
 	<h4 class="h4style">VirtualHostの設定をする方</h4>
-	<p><a href="#VirtualHostSetting">VirtualHostの設定</a>を参考に設定をしてください。</p>
+	<p><a href="#VirtualHostSetting">VirtualHostの設定</a>を参考に設定します。</p>
 
 	<h3 class="h3style">7.データエースの作成</h3>
-	<p>SetucoCMSをインストールするデータベースを作成します。<br>SetucoCMSでの推奨環境は<span class="attention">MySQL</span>ですので、データベースを作成する場合は<span class="attention">phpmyadmin</span>にアクセスして行います。</p>
-	<p>レンラルサーバーを利用している場合は、レンタルサーバーの管理画面に<span class="attention">データベースを使用する</span>といったメニューがありますので、そちらから<span class="attention">phpmyadmin</span>にアクセスしてインストール用のデータベースを作成してください。</p>
+	<p>SetucoCMSをインストールするデータベースを作成します。<br>SetucoCMSでの推奨環境は<span class="attention">MySQL</span>ですので、データベースを作成する場合は<span class="attention">phpmyadmin</span>にアクセスします。</p>
+	<p>レンラルサーバーを利用している場合は、レンタルサーバーの管理画面に<span class="attention">データベースを使用する</span>などのメニューがありますので、そちらから<span class="attention">phpmyadmin</span>にアクセスしてインストール用のデータベースを作成します。</p>
 
 
 	<h3 class="h3style">8.インストール</h3>
 
 	<p>インストール画面にアクセスして、<span class="attention">セットアップに進む =></span>をクリックすると、インストールに必要な情報の入力が求められます。<br>これらをすべて入力後、<span class="attention">設定を確認する</span>ボタンを押し先に進みます。</p>
+	
+	
+	<div class="photoBlock">
+		<a href="common/iamges/img_install-01.jpg"><img src="common/iamges/img_install-01-min.jpg" width="270" height="153" alt="インストーラーにアクセス"></a>
+		<p>画像[2-1]インストーラーにアクセスした画面(クリックで拡大します)</p>
+	</div>	
+	<div class="photoBlock center">
+		<a href="common/iamges/img_install-02.jpg"><img src="common/iamges/img_install-02-min.jpg" width="270" height="153" alt="入力項目"></a>
+		<p>画像[2-2]入力画面(クリックで拡大します)</p>
+	</div>
+	<div class="photoBlock">
+		<a href="common/iamges/img_install-03.jpg"><img src="common/iamges/img_install-03-min.jpg" width="270" height="153" alt="入力項目確認画面"></a>
+		<p>[画像2-3]入力項目確認画面(クリックで拡大します)</p>
+	</div>	
+	<div class="photoBlock">
+		<a href="common/iamges/img_install-04.jpg"><img src="common/iamges/img_install-04-min.jpg" width="270" height="153" alt="エラー画面"></a>
+		<p>[画像2-4]インストーラーのエラー画面(クリックで拡大します)</p>
+	</div>	
+
 	<dl>
 		<dt>注意</dt>
 		<dd><span class="attention">[必須] データベースサーバーホスト</span>がデフォルトでは<span class="attention">localhost</span>になっていますが、レンタルサーバーによっては変更が必要な場合がありますのでご確認ください。</dd>
 	</dl>
-	<p>入力したデータに問題がなければ画像1のように<span class="attention">入力情報確認</span>画面が表示されます。<br>問題に不備がある場合は画像2のようにエラーが表示されます。</p>
+	<p>入力したデータに問題がなければ画像2-3のように<span class="attention">入力情報確認</span>画面が表示されます。<br>問題に不備がある場合は画像2-4のようにエラーが表示されます。</p>
 	<p>この場合は入力情報を確認してください。</p>
-	<p><span class="attention">入力情報確認</span>画面の情報に問題がなければ、<span class="attention">送信</span>を押してください。</p>
-	<p><span class="attention">設定完了！</span>画面が表示されればインストールは成功です。</p>
-	<p>[閲覧側]、<span class="attention">管理側</span>画面に移動してサイト制作をお楽しみください。</p>
+	<p><span class="attention">入力情報確認</span>画面の情報に問題がなければ、<span class="attention">送信</span>を押してください。<br>
+	<span class="attention">設定完了！</span>画面が表示されればインストールは成功です。</p>
+	<p><span class="attention">閲覧側</span>、<span class="attention">管理側</span>画面に移動してサイト制作をお楽しみください。</p>
 	
 
 </div>

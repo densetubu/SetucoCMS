@@ -7,15 +7,21 @@ body{
 }
 
 a{
-	text-decoration:none;
+	text-decoration:underline;
 	color:#00a0e9;
+}
+
+a:hover{
+	color:#F03;	
 }
 
 p{
 	margin:0 0 10px 0;
+	clear:both;
 }
 
 dl,ul{
+	clear:both;
 	margin:0 0 20px 0;
 }
 
@@ -95,6 +101,24 @@ content style
 	margin:0 auto 30px auto;
 }
 
+.photoBlock{
+	margin:0 0 20px 0;
+	width:270px;
+	float:left;
+	border:solid 1px #cccccc;
+}
+
+.photoBlock img{
+	border-bottom:solid 1px #cccccc;
+}
+
+.photoBlock p{
+	padding: 0 10px;	
+}
+
+.photoBlock.center{
+	margin:0 10px;
+}
 
 #footer{
 	width:100%;
