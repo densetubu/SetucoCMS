@@ -1,0 +1,76 @@
+html, body, div, span, applet, object, iframe,  
+h1, h2, h3, h4, h5, h6, p,  
+blockquote, pre, a, abbr, acronym, address, big,  
+cite, code, del, dfn, em, font, img,  
+ins, kbd, q, s, samp, small, strike,  
+strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,  
+fieldset, form, label, legend,  
+table, caption, tbody, tfoot, thead, tr, th, td,  
+center, u, b, i{  
+margin:0;  
+padding:0;  
+border:0;  
+outline:0;  
+font-weight:normal;  
+font-style:normal;  
+font-size:100%;  
+font-family:inherit;  
+vertical-align:baseline;
+}
+
+body{  
+line-height:1.5;
+font-size:14px;
+font-family::"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}  
+
+
+:focus{  
+outline:0;
+}  
+ol, ul{  
+list-style:none;  
+}  
+table{  
+border-collapse:collapse;  
+border-spacing:0  
+}  
+blockquote:before, blockquote:after, q:before, q:after{  
+content:"";
+}  
+blockquote, q{  
+quotes:"" "";
+}  
+input, textarea{  
+margin:0;  
+padding:0;
+}  
+hr{  
+margin:0;  
+padding:0;  
+border:0;  
+color:#000;  
+background-color:#000;  
+height:1px;
+}
+
+
+.clearfix:after{
+content: ".";
+display: block;
+height: 0;
+font-size:0;
+clear: both;
+visibility:hidden;
+}
+.clearfix{
+display: inline-block;
+}
+/* Hides from IE Mac */
+* html .clearfix{
+height: 1%;
+}
+.clearfix{
+display:block;
+}
+/* End Hack */

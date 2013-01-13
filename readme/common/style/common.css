@@ -1,0 +1,106 @@
+@charset "utf-8";
+/*-----------------------------------
+all style
+-----------------------------------*/
+body{
+	background:url(../iamges/bg_back.png) repeat 0 0;
+}
+
+a{
+	text-decoration:none;
+	color:#00a0e9;
+}
+
+p{
+	margin:0 0 10px 0;
+}
+
+dl,ul{
+	margin:0 0 20px 0;
+}
+
+li{
+	list-style-type:disc;	
+	margin:0 0 0 20px;
+
+}
+
+dt{
+	display:list-item;
+	list-style-type:disc;
+	margin:0 0 0 20px;
+	font-weight:bold;
+}
+
+
+dd{
+	margin:0 0 5px 20px;	
+}
+
+h1{
+	background:url(../iamges/bg_h1.png) 0 0 no-repeat;
+	width:870px;
+	height:55px;
+	text-indent:-9999px;
+	margin:0 auto 30px auto;
+}
+
+.h2style{
+	background:url(../iamges/bg_h2.png) 0 35px no-repeat;
+	width:840px;
+	margin:0 0 5px 0;
+	padding:0 0 10px 10px;
+	font-size:24px;
+	font-weight:bold;
+}
+
+.h3style{
+	background:url(../iamges/bg_h3.png) 0 0 no-repeat;
+	height:33px;
+	line-height:33px;
+	font-size:20px;
+	font-weight:bold;
+	margin:20px 0 10px 0;
+	padding:0 0 0 10px;
+}
+
+.h4style{
+	background:url(../iamges/bg_h4.png) 0 9px no-repeat;
+	margin:10px 0 5px 0;
+	padding:0 0 0 20px;
+	font-size:18px;
+	font-weight:bold;
+	
+}
+
+
+.attention{
+	color:#1979bc;
+	font-weight:bold;
+}
+
+/*-----------------------------------
+content style
+-----------------------------------*/
+
+#wrap{
+	width:900px;
+	margin:0 auto;
+	padding:30px 0 0 0;
+	background:#ffffff;
+}
+
+.block{
+	width:840px;
+	margin:0 auto 30px auto;
+}
+
+
+#footer{
+	width:100%;
+}
+
+address{
+	float:right;
+	margin:5px;
+}

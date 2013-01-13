@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">  
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="author" content="SetucoCMS Project">
+<meta name="copyright" content="SetucoCMS Project"> 
+<link rel="stylesheet" href="common/style/reset.css">
+<link rel="stylesheet" href="common/style/common.css">
+<meta name="description" content="SetucoCMSのReadmeです。インストールの際に参考にしてください。">
+<title>SetucoCMS Readme</title>
+</head>
+<body>
+
+<div id="wrap">
+<h1>Readme</h1>
+<div class="block">
+	<h2 class="h2style">リリース情報</h2>
+	<dl>
+		<dt>SetucoCMS バージョン 1.0.0</dt>
+		<dd>2011/03/04 リリース</dd>
+		<dt>SetucoCMS バージョン 1.1.0</dt>
+		<dd>2011/12/30 リリース</dd>
+		<dt>SetucoCMS バージョン 1.2.0</dt>
+		<dd>2012/02/26 リリース</dd>
+		<dt>SetucoCMS バージョン 1.3.0</dt>
+		<dd>2012/03/17 リリース</dd>
+		<dt>SetucoCMS バージョン 1.4.0</dt>
+		<dd>2012/06/17 リリース</dd>
+		<dt>SetucoCMS バージョン 1.5.0</dt>
+		<dd>2012/09/08 リリース</dd>
+		<dt>SetucoCMS バージョン 1.5.1</dt>
+		<dd>2012/12/01 リリース</dd>
+	</dl>
+	<p>
+		詳細な変更履歴は下記のファイルをご覧ください。<br>
+		/CHANGELOG_ja.txt
+	</p>
+</div>
+
+
+<div class="block">
+	<h2 class="h2style">システム要件</h2>
+	<h3 class="h3style">サーバー</h3>
+	<dl>
+		<dt>OS非依存</dt>
+		<dd>Apache2</dd>
+		<dd>PHP 5.2.4 以降</dd>
+		<dd>MySQL5.1 以降</dd>
+	</dl>
+	
+	<h3 class="h3style">クライアント</h3>
+	<dl>
+		<dt>推奨ブラウザ</dt>
+		<dd>IE8以上</dd>
+		<dd>Firefox3.6以上</dd>
+		<dd>GoogleChrome10以上</dd>
+	</dl>
+</div>
+
+
+<div class="block">
+	<h2 class="h2style">インストール手順</h2>
+	<h3 class="h3style">1.ダウンロードしてきたSetucoCMS_1.5.2.zipを解凍します</h3>
+	<h3 class="h3style">2.[SetucoCMS_1.5.2/public]ディレクトリ内にある.htaccess.sampleをコピーします</h3>
+	<p>内容の変更は基本的には不要です。<br>(FTPにアップ後、名前を<span class="attention">.htaccess</span>に変更します)</p>
+	<h3 class="h3style">4.ステップ2で作った[.htaccessのコピー]の名前を.htaccessにします</h3>
+	<h3 class="h3style">5.ディレクトリの属性を変更します</h3>
+	<p>以下の4つのディレクトリの属性を777にします。</p>
+	<ul>
+		<li>/public/</li>
+		<li>/public/media/</li>
+		<li>/application/</li>
+		<li>/application/configs/</li>
+	</ul>
+	
+	<h3 class="h3style">6.公開ディレクトリの設定</h3>
+	<p>使用しているサーバーなどによって、多少設定方法が異なりますが、ご自分の環境にあてはめて進めてください。</p>
+	</p>ステップ3のFTPでアップロードしたフォルダの中にある、publicディレクトリにアクセスした際のURLが<span class="attention">http://example.com/</span>になるように設定します。</p>
+	
+	<h4 class="h4style">独自ドメインを取得されている方</h4>
+	<p>レンタルサーバーの管理画面に独自ドメインを設定するメニューがあるので、そちらに移動します。</p>
+	<p>独自ドメインの設定項目の中に、<span class="attention">公開フォルダ設定</span>という設定項目がありますので、サーバーのルートディレクトリから、ステップ3でアップしたpublicディレクトリまでのパスを入力します。</p>
+	
+	<dl>
+		<dt>(例)</dt>
+		<dd>/home/users/2/co.jp-testserver/web/public</dd>
+	</dl>
+
+	<p>
+	設定が完了したら、独自ドメインの後に[/install]を付けたURLにアクセスします。<br>
+	するとブラウザ上にインストール画面が表示されます。
+	</p>
+	<dl>
+		<dt>(例)</dt>
+		<dd>http://独自ドメイン名/install</dd>
+	</dl>
+	
+	<p>設定が反映されるまでに1時間ほどかかる場合がありますので、表示されない場合はしばらくたってから再度お試しください。</p>	
+	
+	
+	<h4 class="h4style">独自ドメインを持っていない方</h4>
+	<p>独自ドメインを持っていない方は、アップロードしたディレクトリに<span class="attention">public/install</span>をつけてサイトにアクセスするとインストール画面が表示されます。</p>
+
+	<p>http://サイトのURL/public/install</p>
+	
+	<h4 class="h4style">VirtualHostの設定をする方</h4>
+	<p><a href="#VirtualHostSetting">VirtualHostの設定</a>を参考に設定をしてください。</p>
+
+	<h3 class="h3style">7.データエースの作成</h3>
+	<p>SetucoCMSをインストールするデータベースを作成します。<br>SetucoCMSでの推奨環境は<span class="attention">MySQL</span>ですので、データベースを作成する場合は<span class="attention">phpmyadmin</span>にアクセスして行います。</p>
+	<p>レンラルサーバーを利用している場合は、レンタルサーバーの管理画面に<span class="attention">データベースを使用する</span>といったメニューがありますので、そちらから<span class="attention">phpmyadmin</span>にアクセスしてインストール用のデータベースを作成してください。</p>
+
+
+	<h3 class="h3style">8.インストール</h3>
+
+	<p>インストール画面にアクセスして、<span class="attention">セットアップに進む =></span>をクリックすると、インストールに必要な情報の入力が求められます。<br>これらをすべて入力後、<span class="attention">設定を確認する</span>ボタンを押し先に進みます。</p>
+	<dl>
+		<dt>注意</dt>
+		<dd><span class="attention">[必須] データベースサーバーホスト</span>がデフォルトでは<span class="attention">localhost</span>になっていますが、レンタルサーバーによっては変更が必要な場合がありますのでご確認ください。</dd>
+	</dl>
+	<p>入力したデータに問題がなければ画像1のように<span class="attention">入力情報確認</span>画面が表示されます。<br>問題に不備がある場合は画像2のようにエラーが表示されます。</p>
+	<p>この場合は入力情報を確認してください。</p>
+	<p><span class="attention">入力情報確認</span>画面の情報に問題がなければ、<span class="attention">送信</span>を押してください。</p>
+	<p><span class="attention">設定完了！</span>画面が表示されればインストールは成功です。</p>
+	<p>[閲覧側]、<span class="attention">管理側</span>画面に移動してサイト制作をお楽しみください。</p>
+	
+
+</div>
+
+<div id="VirtualHostSetting" class="block">
+	<h2 class="h2style">VirtualHostの設定</h2>
+	<p>インストール時に必要であればVirtualHostの設定を行います。<br>設定ファイルに以下を追加します。</p>
+<pre><code>
+&lt;VirtualHost *:80&gt;
+	 DocumentRoot &quot;/path/to/SetucoCMS/public&quot;
+	 ServerName localhost
+	 &lt;Directory &quot;/path/to/SetucoCMS/public&quot;&gt;
+		 Options Indexes MultiViews FollowSymLinks
+		 AllowOverride All
+		 Order allow,deny
+		 Allow from all
+	 &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+</code></pre>
+
+	<h3 class="h3style">.htaccessの設定</h3>
+	<p>インストールの手順の際、.htaccessは編集不要と説明しましたが、VirtualHotを設定した場合には編集する必要があります。</p>
+	<ol>
+		<li><span class="attention">SetucoCMS_1.5.2/public</span>ディレクトリ内にある<span class="attention">.htaccess.sample</span>をコピーします</li>
+		<li>コピーしてできた<span class="attention">.htaccess.sampleのコピー</span>を<span class="attention">.htaccess</span>に名前の変更します</li>
+		<li><span class="attention">.htaccess</span>の中に<span class="attention">#RewriteBase /setucocms</span>という記述がありますので、先頭の<span class="attention">[#]</span>を外します。</li>
+		<li><span class="attention">/setucocms</span>のパスを、VirtualHostの設定で指定した<span class="attention">DocumentRoot</span>のパスと同じにします。</li>
+	</ol>
+	<p>以上で終了です。</p>
+</div>
+
+<div class="block">
+	<h2 class="h2style">お問い合わせ／フィードバック</h2>
+	<p>何かお気づきの点などありましたら下記の連絡先までお願いいたします。</p>
+	<dl>
+		<dt>SetucoCMS-public ML</dt>
+		<dd>setucocms-public@lists.sourceforge.jp</dd>
+	</dl>
+</div>
+
+<div class="block">
+	<h2 class="h2style">ライセンス</h2>
+	<p>ライセンス情報は下記のファイルをご覧ください。<br>/docs/COPYING.txt</p>
+</div>
+
+<div id="footer" class="clearfix">
+	<address>Copyright © 2012 SetucoCMS Project AllRight reserved.</address>
+</div>
+
+</div>
+
+</body>
+</html>
