@@ -191,7 +191,7 @@ div.entry {
     padding: 1.2em;
 }
 div.entry p.backTop {
-    margin-top: 15px;
+    margin-top: 30px;
     text-align: right;
 }
 div.entry table td {
@@ -324,7 +324,10 @@ div.entryBody div.entryPhoto p a:hover img{
 /*-- ENTRY SocislButton style -----------------------------------*/
 /*---------------------------------------------------------------*/
 div.entry div.socialButton {
-    margin-top: 20px;
+    margin-top: 30px;
+}
+div.socialButton ul {
+    zoom: 100%;
 }
 div.socialButton ul:after {
     content: ".";
