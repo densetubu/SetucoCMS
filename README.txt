@@ -3,54 +3,86 @@ README
 ============
 
 --------------------------------------------
-RELEASE INFORMATION
+リリース情報
 --------------------------------------------
-SetucoCMS version 1.0.0
-Released on 2011/03/04
+SetucoCMS バージョン 1.0.0
+2011/03/04 リリース
 
-SetucoCMS version 1.1.0
-Released on 2011/12/30
+SetucoCMS バージョン 1.1.0
+2011/12/30 リリース
 
-SetucoCMS version 1.2.0
-Released on 2012/02/26
+SetucoCMS バージョン 1.2.0
+2012/02/26 リリース
 
-SetucoCMS version 1.3.0
-Released on 2012/03/17
+SetucoCMS バージョン 1.3.0
+2012/03/17 リリース
 
-SetucoCMS version 1.4.0
-Released on 2012/06/17
+SetucoCMS バージョン 1.4.0
+2012/06/17 リリース
 
-SetucoCMS version 1.5.0
-Released on 2012/09/08
+SetucoCMS バージョン 1.5.0
+2012/09/08 リリース
 
-SetucoCMS version 1.5.1
-Released on 2012/12/01
+SetucoCMS バージョン 1.5.1
+2012/12/01 リリース
 
-SetucoCMS version 1.5.2
-Released on 2012/12/22
+SetucoCMS バージョン 1.5.2
+2012/12/22 リリース
 
-You can see CHANGELOG.txt to see detailed change history.
+SetucoCMS バージョン 1.5.3
+2013/02/03 リリース
+
+詳細な変更履歴は下記のファイルをご覧ください。
+/CHANGELOG_ja.txt
 
 --------------------------------------------
-SETTING
+システム要件
 --------------------------------------------
-This directory should be used to place project specfic documentation including
-but not limited to project notes, generated API/phpdoc documentation, or
-manual files generated or hand written.  Ideally, this directory would remain
-in your development environment only and should not be deployed with your
-application to it's final production location.
+SetutcoCMS 要件:
+PHP 5.2.4 以降
+MySQL Server 5.1 以降
 
-Setting Up Your VHOST
+
+--------------------------------------------
+セッティング
+--------------------------------------------
+
+.htaccessの設定
 ---------------------
+public/ディレクトリにある「.htaccess.sample」を「.htaccess」にファイル名を変えてコピーします
+VirtualHostの設定をした場合は.htaccessの設定はここで終わりです
 
-The following is a sample VHOST you might want to consider for your project.
+そうでない場合は.htaccessの編集をします
+「#RewriteBase」の行頭の「#」を取り除いて、パラメーターをアプリケーションのパスに書き換えてください
+
+設置するアドレスが http://example.com/setucocms/ の場合の例
+
+public/ディレクトリがwebルートになるように設定をします
+
+    RewriteBase /setucocms/public
+
+
+ディレクトリの権限
+---------------------
+一部のディレクトリは、画像などのファイルアップロードやインストーラー用に書き込み権限が必要になります
+WEBサーバーに書き込み権限を与えるようにパーミッションの設定をします
+パーミッションについてよくわからない場合は権限を「777」 に設定してください
+
+コマンドの場合は以下のように設定します
+$ chmod 777 public/media application/configs/
+
+
+VirtualHostの設定
+---------------------
+インストール時に必要であればVirtualHostの設定を行います。
+設定ファイルに以下を追加します。
 
 <VirtualHost *:80>
    DocumentRoot "/path/to/SetucoCMS/public"
    ServerName localhost
 
    <Directory "/path/to/SetucoCMS/public">
-       Options FollowSymLinks
+       Options Indexes MultiViews FollowSymLinks
        AllowOverride All
        Order allow,deny
        Allow from all
@@ -58,21 +90,39 @@ The following is a sample VHOST you might want to consider for your project.
 
 </VirtualHost>
 
---------------------------------------------
-SYSTEM REQUIREMENTS
---------------------------------------------
-SetutcoCMS requires:
-PHP 5.2.4 or later
-MySQL Server 5.1 or later
+VirtualHostを設定した場合、.htaccessを以下のように書き換えてください
+
+#RewriteBase /setucocmsという記述がありますので、先頭の[#]を外します
+/setucocmsのパスを、VirtualHostの設定で指定したDocumentRootのパスと同じにします
+
+
+データベースの作成
+---------------------
+SetucoCMSでの推奨環境はMySQLです
+phpmyadminなどを利用して、SetucoCMSをインストールするデータベースを作成します
+
+レンタルサーバーを利用している場合は、レンタルサーバーの管理画面にデータベースを使用するなどのメニューがありますので、そちらからphpmyadminにアクセスしてインストール用のデータベースを作成します
+
+
+インストーラへアクセス
+---------------------
+設定が完了したらインストーラへアクセスしましょう
+設置したURLの末尾に install/ をつけてアクセスします
+
+    http://example.com/install/
+
+データベースやサイト情報に関する設定はここから始まります
+
 
 --------------------------------------------
-QUESTIONS AND FEEDBACK
+お問い合わせ／フィードバック
 --------------------------------------------
-To the following where to make contact please if there are some any suggestions.
-SetucoCMS-public ML:setucocms-public@lists.sourceforge.jp
+何かお気づきの点などありましたら下記の連絡先までお願いいたします。
+Mail: setucocms@gmail.com
+Twitter: https://twitter.com/setucocms
 
 --------------------------------------------
-LICENSE
+ライセンス
 --------------------------------------------
-The files in this archive are released under the SetucoCMS license.
-see /docs/COPYING.txt
+ライセンス情報は下記のファイルをご覧ください。
+/docs/COPYING.txt

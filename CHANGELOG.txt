@@ -1,75 +1,83 @@
 ============
-CHANGELOG
+変更履歴
 ============
 
 --------------------------------------------
-Version 1.0.0 (2011/03/04)
+バージョン 1.0.0 (2011/03/04)
 --------------------------------------------
-- initial release
+- 初期リリース
 
 --------------------------------------------
-Version 1.1.0 (2011/12/30)
+バージョン 1.1.0 (2011/12/30)
 --------------------------------------------
-- Page management function
-    - Correspond to search by two or more keywords by the search service by the side of management and an inspection.
-    - Correct so that a sort function may become effective also on the screen after search.
+- ページ管理機能
+    - 管理側、閲覧側の検索機能で複数のキーワードでの検索に対応
+    - 検索後の画面でもソート機能が有効になるように修正
 
-- Inspection side (theme: simple)
-    - Attach a list mark and space to a list tag, and adjust appearance to it.
-    - A continuous long alphanumeric character corrects the problem overflowing on the screen.
+- 閲覧側（テーマ：シンプル）
+    - リストタグに、リストマークと余白をつけて見た目を調整
+    - 連続する長い英数字が画面上はみ出してしまっていた問題を修正
 
-- Other
-    - Correct so that session data can be updated by arbitrary data.
-    - Correct license information.
-
---------------------------------------------
-Version 1.2.0 (2012/02/26)
---------------------------------------------
-- Initial setup
-    - Add an installer. SetucoCMS can be installed now from on a browser.
-
-- Other
-    - Transpose dojo to jQuery in the library use part of Javascript (except for a part). 
+- その他
+    - セッションデータを任意のデータで更新できるように修正
+    - ライセンス情報を修正
 
 --------------------------------------------
-Version 1.3.0 (2012/03/17)
+バージョン 1.2.0 (2012/02/26)
 --------------------------------------------
-- Account management function
-    - Change of nickname, Change of nickname (name displayed as a producer) can be performed.
-    - Creation of subaccount, New account can be created.
-    - Inspection of subaccount, The list of the created subaccount can be displayed. 
+- 初期セットアップ
+    - インストーラを追加。ブラウザ上からSetucoCMSがインストールできるようになりました。
+
+- その他
+    - Javascriptのライブラリ使用箇所でdojoをjQueryに置き換え（一部を除く）
 
 --------------------------------------------
-Version 1.4.0 (2012/06/17)
+バージョン 1.3.0 (2012/03/17)
 --------------------------------------------
-- Login
-    - Fixed the bug does not disappear when you press the OK flash message at login and logout
+- アカウント管理機能
+    - ニックネームの変更	ニックネーム（制作者として表示される名前）の変更ができます。
+    - サブアカウントの作成	新しいアカウントを作成することができます。
+    - サブアカウントの閲覧	作成したサブアカウントの一覧を表示できます。
 
-- Design
-    - Revamped the logo of SetucoCMS
+--------------------------------------------
+バージョン 1.4.0 (2012/06/17)
+--------------------------------------------
+- ログイン
+    - ログイン・ログアウト時のフラッシュメッセージがOKを押しても消えないバグを修正
+- デザイン
+    - SetucoCMSのロゴを刷新
 
 --------------------------------------------
-Version 1.5.0 (2012/09/08)
+バージョン 1.5.0 (2012/09/08)
 --------------------------------------------
-- Page management function
-    - Editor - page creation screen, calendar, time display has been transformed into a stylish and easy to use.
+- ページ管理機能
+    - ページ作成画面のエディタ、カレンダー、時刻表示が使いやすくお洒落に生まれ変わりました。
+
+- カスタマイズ機能
+    - トップページのフリースペースを管理画面から編集できるようになりました。
+
+--------------------------------------------
+バージョン 1.5.1 (2012/12/01)
+--------------------------------------------
+- SQLの実行が正しくできない致命的不具合の修正
+    - 文法エラーの解消と複数回実行でエラーが出ないよう修正
+    - 接続出来ないデータベース情報を入力した時に適切なエラーメッセージを表示するよう修正
+
+--------------------------------------------
+バージョン 1.5.2 (2012/12/22)
+--------------------------------------------
+- ページ管理機能
+    - エディタの記事投稿の日付の入力フォームが正しく表示されない問題を修正
     
-- Customization features
-    - I will be able to manage the free space from the screen edit page.
+- その他
+    - インストール用のSQLで複数回実行すると余計にデータが作成されるのを修正
+    - フォーム送信を複数回できないように防止する機能の追加
 
 --------------------------------------------
-Version 1.5.1 (2012/12/01)
+バージョン 1.5.3 (2013/02/03)
 --------------------------------------------
-- Fixed bug on installation
-    - Fixed bug in SQL syntax error
-    - Print error message when failed to database connection.
-
---------------------------------------------
-Version 1.5.2 (2012/12/22)
---------------------------------------------
-- Page management function
-    - Fixed a problem where the input form of the posting date of the article editor is not displayed correctly
-- Other
-    - Correction data to be created and run multiple times in SQL extra for installation
-    - Adding a function to prevent to prevent multiple form submission
+- ページ管理機能
+    - エディタのリファクタリング（動作に影響のないソースコードの改善）
+- 初期セットアップ
+    - インストール画面で送信が正常に動かない、確認画面から戻れないバグを修正
 
