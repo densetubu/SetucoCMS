@@ -321,6 +321,28 @@ div.entryBody div.entryPhoto p a:hover img{
 }
 
 /*---------------------------------------------------------------*/
+/*-- ENTRY SocislButton style -----------------------------------*/
+/*---------------------------------------------------------------*/
+div.entry div.socialButton {
+    margin-top: 20px;
+}
+div.socialButton ul:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: left;
+}
+div.socialButton ul li{
+    float: left;
+}
+div.socialButton ul li.line{
+    margin-left: 25px;
+}
+
+/*---------------------------------------------------------------*/
 /*-- ENTRY PARTS style ------------------------------------------*/
 /*---------------------------------------------------------------*/
 div.entryBody p.entryMoreRead {

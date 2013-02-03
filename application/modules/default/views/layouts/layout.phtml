@@ -42,7 +42,7 @@ if (empty($this->pageTitle)) {
 
 ?>
 <?php echo $this->doctype() . "\n" ?>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="ja" xml:lang="ja">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta http-equiv="content-style-type" content="text/css" />
@@ -62,7 +62,13 @@ if (empty($this->pageTitle)) {
         <script type="text/javascript" src="<?php echo $this->baseUrl('/js/jquery-1.7.1.min.js') ?>"></script>
         <script type="text/javascript" src="<?php echo $this->baseUrl('/js/setuco/form.js') ?>"></script>
 
-        <?php echo $this->headTitle() . "\n" ?>
+        <meta property="og:title" content="<?php echo $this->pageTitle . " | " . $this->siteInfos['name']; ?>" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="<?php echo $this->serverUrl(true); ?>" />
+        <meta property="og:site_name" content="<?php echo $this->siteInfos['name']; ?>" />
+        <meta property="og:description" content="<?php echo $this->escape($this->siteInfos['comment']) ?>" />
+
+        <?php echo $this->headTitle() . "\n"; ?>
     </head>
     <body>
 
