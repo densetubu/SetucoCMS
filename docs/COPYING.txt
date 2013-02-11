@@ -1,24 +1,22 @@
 ============================================
-Copyright and License Notice about SetucoCMS
+SetucoCMSの著作権、ライセンスに関するご注意
 ============================================
 
-Most of the files included in SetucoCMS package are licensed under
-the "GNU PUBLIC LICENSE VERSION 2.0".
-see /docs/GPLv2.txt
+SetucoCMSのパッケージは "GNU PUBLIC LICENSE VERSION 2.0".の元で配布されています。
+/docs/GPLv2.txt
 
 Copyright (c) 2010 SetucoCMS Project All rights reserved.
 http://sourceforge.jp/projects/setucocms
 
 
 --------------------------------------------
-This software contains the library and resource to which the third party has the copyright.
-Special Thanks!
+本ソフトウェアは、第三者が著作権を保有するライブラリ・リソース(画像等)を含んでおります。
 
-- Setuco Character making
-  densetubu
+- 設子キャラクターメイキング
+  電設部
   http://penguin.jec.ac.jp/
 
-- Setuco Illustration
+- 設子イラスト
   Copyright (c) 2010,Toshi. All rights reserved.
 
 - Zend Framework 1.10

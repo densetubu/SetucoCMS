@@ -1,0 +1,75 @@
+============
+CHANGELOG
+============
+
+--------------------------------------------
+Version 1.0.0 (2011/03/04)
+--------------------------------------------
+- initial release
+
+--------------------------------------------
+Version 1.1.0 (2011/12/30)
+--------------------------------------------
+- Page management function
+    - Correspond to search by two or more keywords by the search service by the side of management and an inspection.
+    - Correct so that a sort function may become effective also on the screen after search.
+
+- Inspection side (theme: simple)
+    - Attach a list mark and space to a list tag, and adjust appearance to it.
+    - A continuous long alphanumeric character corrects the problem overflowing on the screen.
+
+- Other
+    - Correct so that session data can be updated by arbitrary data.
+    - Correct license information.
+
+--------------------------------------------
+Version 1.2.0 (2012/02/26)
+--------------------------------------------
+- Initial setup
+    - Add an installer. SetucoCMS can be installed now from on a browser.
+
+- Other
+    - Transpose dojo to jQuery in the library use part of Javascript (except for a part). 
+
+--------------------------------------------
+Version 1.3.0 (2012/03/17)
+--------------------------------------------
+- Account management function
+    - Change of nickname, Change of nickname (name displayed as a producer) can be performed.
+    - Creation of subaccount, New account can be created.
+    - Inspection of subaccount, The list of the created subaccount can be displayed. 
+
+--------------------------------------------
+Version 1.4.0 (2012/06/17)
+--------------------------------------------
+- Login
+    - Fixed the bug does not disappear when you press the OK flash message at login and logout
+
+- Design
+    - Revamped the logo of SetucoCMS
+
+--------------------------------------------
+Version 1.5.0 (2012/09/08)
+--------------------------------------------
+- Page management function
+    - Editor - page creation screen, calendar, time display has been transformed into a stylish and easy to use.
+    
+- Customization features
+    - I will be able to manage the free space from the screen edit page.
+
+--------------------------------------------
+Version 1.5.1 (2012/12/01)
+--------------------------------------------
+- Fixed bug on installation
+    - Fixed bug in SQL syntax error
+    - Print error message when failed to database connection.
+
+--------------------------------------------
+Version 1.5.2 (2012/12/22)
+--------------------------------------------
+- Page management function
+    - Fixed a problem where the input form of the posting date of the article editor is not displayed correctly
+- Other
+    - Correction data to be created and run multiple times in SQL extra for installation
+    - Adding a function to prevent to prevent multiple form submission
+

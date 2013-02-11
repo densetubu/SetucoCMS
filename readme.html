@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Style-Type" content="text/css">
 <meta name="author" content="SetucoCMS Project">
 <meta name="copyright" content="SetucoCMS Project"> 
-<link rel="stylesheet" href="common/style/reset.css">
-<link rel="stylesheet" href="common/style/common.css">
+<link rel="stylesheet" href="docs/readme/common/style/reset.css">
+<link rel="stylesheet" href="docs/readme/common/style/common.css">
 <meta name="description" content="SetucoCMSのReadmeです。インストールの際に参考にしてください。">
 <title>SetucoCMS Readme</title>
 </head>
@@ -15,38 +15,24 @@
 
 <div id="wrap">
 <h1>Readme</h1>
+<div class="block">
+	<h2 class="h2style">はじめに</h2>
+	<p>SetucoCMSをダウンロード頂きありがとうございます。</p>
+	<p>SetucoCMSのコンセプトは"自由"<br>個人・グループでサイトを制作する人に自由さと楽しさを感じてもらいたい。そんな想いを込めた国産オープンソースCMSです。</p>
+	
+	<p>我々は「開発するだけのプロジェクト」ではなくて、「モノづくりの大切さを知る、楽しむ、伝えるプロジェクト」を目指して活動しています。</p>
+	<p>日本電子専門学校電設部有志により2010/03/09に設立してから、多くの方の支えによって活動を続けてきました。</p>
+	<p>これからも多くの方との繋がりを大切にし、共に学んでいきたいと考えています。<br>ぜひ、少しでもご興味を持って頂けたなら、ご意見・ご感想・雑談など、何でもお気軽に話しかけてください。</p>
+	
+	<p>謝辞 - <a href="http://setucocms.org/page/show/id/6" target="_blank">SetucoCMSプロジェクト</a></p>
+</div>
 
 
 <div class="block">
 	<h2 class="h2style">機能一覧</h2>
 	<p>SetucoCMSの機能一覧をまとめたページがあります。<br>インストールや使用の際にご活用ください。</p>
-		<a href="http://sourceforge.jp/projects/setucocms/wiki/%E6%A9%9F%E8%83%BD%E4%B8%80%E8%A6%A7">機能一覧(外部リンク)</a>
+		<a href="http://sourceforge.jp/projects/setucocms/wiki/%E6%A9%9F%E8%83%BD%E4%B8%80%E8%A6%A7" target="_blank">機能一覧(外部リンク)</a>
 </div>
-
-
-<div class="block">
-	<h2 class="h2style">リリース情報</h2>
-	<dl>
-		<dt>SetucoCMS バージョン 1.0.0</dt>
-		<dd>2011/03/04 リリース</dd>
-		<dt>SetucoCMS バージョン 1.1.0</dt>
-		<dd>2011/12/30 リリース</dd>
-		<dt>SetucoCMS バージョン 1.2.0</dt>
-		<dd>2012/02/26 リリース</dd>
-		<dt>SetucoCMS バージョン 1.3.0</dt>
-		<dd>2012/03/17 リリース</dd>
-		<dt>SetucoCMS バージョン 1.4.0</dt>
-		<dd>2012/06/17 リリース</dd>
-		<dt>SetucoCMS バージョン 1.5.0</dt>
-		<dd>2012/09/08 リリース</dd>
-		<dt>SetucoCMS バージョン 1.5.1</dt>
-		<dd>2012/12/01 リリース</dd>
-	</dl>
-	<p>
-		詳細な変更履歴は下記のファイルをご覧ください。<br>
-		<a href="../CHANGELOG_ja.txt" target="_blank">/CHANGELOG_ja.txt</a></p>
-</div>
-
 
 <div class="block">
 	<h2 class="h2style">システム要件</h2>
@@ -71,15 +57,15 @@
 <div class="block">
 	<h2 class="h2style">インストール手順</h2>
 	
-	<h3 class="h3style">1.ダウンロードしてきたSetucoCMS_1.5.2.zipを解凍します</h3>
+	<h3 class="h3style">1.ダウンロードしてきたzipファイル(tar.gzファイル)を解凍します</h3>
 	
-	<h3 id="step2" class="h3style">2.[SetucoCMS_1.5.2/public]ディレクトリ内にある.htaccess.sampleをコピーします</h3>
-	<p>内容の変更は基本的には不要です。<br>(FTPにアップ後、名前を<span class="attention">.htaccess</span>に変更します)</p>
+	<h3 id="step2" class="h3style">2.[SetucoCMS_○○○/public]ディレクトリ内にある.htaccess.sampleをコピーします</h3>
+	<p>"○○○"はバージョンです。ダウンロードしたバージョンを当てはめてください。(例)1.5.2<br>内容の変更は基本的には不要です。<br>(FTPにアップ後、名前を<span class="attention">.htaccess</span>に変更します)</p>
 	
-	<h3 id="step3" class="h3style">3.解凍してできたSetucoCMS_1.5.2の中身をFTPソフトを使ってアップロードします</h3>
+	<h3 id="step3" class="h3style">3.解凍してできたディレクトリの中身をFTPソフトを使ってアップロードします</h3>
 	<h3 class="h3style">4.<a href="#step2">ステップ2</a>で作った[.htaccessのコピー]の名前を.htaccessにします</h3>
 	<h3 class="h3style">5.ディレクトリの属性を変更します</h3>
-	<p>以下の4つのディレクトリの属性を777にします。</p>
+	<p>画像などのファイルアップロードやインストーラー用に必要な書き込み権限を設定します。<br>以下の4つのディレクトリの属性を777にしてください。</p>
 	<ul>
 		<li>/public/</li>
 		<li>/public/media/</li>
@@ -103,14 +89,14 @@
 
 	
 	<div class="photoBlock">
-		<a href="common/iamges/img_06.jpg"><img src="common/iamges/img_06-min.jpg" width="270" height="215" alt="ロリポップの管理画面"></a>
+		<a href="docs/readme/common/images/img_06.jpg"><img src="docs/readme/common/images/img_06-min.jpg" width="270" height="215" alt="ロリポップの管理画面"></a>
 		<p>画像1-1:レンタルサーバー「ロリポップ」の説明(クリックで拡大します)</p>
 	</div>	
 
 
 	<div class="photoBlock center">
-		<a href="common/iamges/img_06-2.jpg"><img src="common/iamges/img_06-2-min.jpg" width="270" height="214" alt="ヘテミルの管理画面"></a>
-		<p>画像1-2:レンタルサーバー「ヘテミル」の説明(クリックで拡大します)</p>
+		<a href="docs/readme/common/images/img_06-2.jpg"><img src="docs/readme/common/images/img_06-2-min.jpg" width="270" height="214" alt="ヘテミルの管理画面"></a>
+		<p>画像1-2:レンタルサーバー「ヘテムル」の説明(クリックで拡大します)</p>
 	</div>	
 
 	<p>
@@ -133,9 +119,9 @@
 	<h4 class="h4style">VirtualHostの設定をする方</h4>
 	<p><a href="#VirtualHostSetting">VirtualHostの設定</a>を参考に設定します。</p>
 
-	<h3 class="h3style">7.データエースの作成</h3>
-	<p>SetucoCMSをインストールするデータベースを作成します。<br>SetucoCMSでの推奨環境は<span class="attention">MySQL</span>ですので、データベースを作成する場合は<span class="attention">phpmyadmin</span>にアクセスします。</p>
-	<p>レンラルサーバーを利用している場合は、レンタルサーバーの管理画面に<span class="attention">データベースを使用する</span>などのメニューがありますので、そちらから<span class="attention">phpmyadmin</span>にアクセスしてインストール用のデータベースを作成します。</p>
+	<h3 class="h3style">7.データベースの作成</h3>
+	<p>SetucoCMSをインストールするデータベースを作成します。<br>SetucoCMSでの推奨環境は<span class="attention">MySQL</span>ですので、データベースを作成する場合は<span class="attention">phpMyAdmin等</span>にアクセスします。</p>
+	<p>レンタルサーバーを利用している場合は、レンタルサーバーの管理画面に<span class="attention">データベースを使用する</span>などのメニューがありますので、そちらから<span class="attention">phpMyAdmin等</span>にアクセスしてインストール用のデータベースを作成します。</p>
 
 
 	<h3 class="h3style">8.インストール</h3>
@@ -144,19 +130,19 @@
 	
 	
 	<div class="photoBlock">
-		<a href="common/iamges/img_install-01.jpg"><img src="common/iamges/img_install-01-min.jpg" width="270" height="153" alt="インストーラーにアクセス"></a>
+		<a href="docs/readme/common/images/img_install-01.jpg"><img src="docs/readme/common/images/img_install-01-min.jpg" width="270" height="153" alt="インストーラーにアクセス"></a>
 		<p>画像[2-1]:インストーラーにアクセスした画面(クリックで拡大します)</p>
 	</div>	
 	<div class="photoBlock center">
-		<a href="common/iamges/img_install-02.jpg"><img src="common/iamges/img_install-02-min.jpg" width="270" height="153" alt="入力項目"></a>
+		<a href="docs/readme/common/images/img_install-02.jpg"><img src="docs/readme/common/images/img_install-02-min.jpg" width="270" height="153" alt="入力項目"></a>
 		<p>画像[2-2]:入力画面(クリックで拡大します)</p>
 	</div>
 	<div class="photoBlock">
-		<a href="common/iamges/img_install-03.jpg"><img src="common/iamges/img_install-03-min.jpg" width="270" height="153" alt="入力項目確認画面"></a>
+		<a href="docs/readme/common/images/img_install-03.jpg"><img src="docs/readme/common/images/img_install-03-min.jpg" width="270" height="153" alt="入力項目確認画面"></a>
 		<p>[画像2-3]:入力項目確認画面(クリックで拡大します)</p>
 	</div>	
 	<div class="photoBlock">
-		<a href="common/iamges/img_install-04.jpg"><img src="common/iamges/img_install-04-min.jpg" width="270" height="153" alt="エラー画面"></a>
+		<a href="docs/readme/common/images/img_install-04.jpg"><img src="docs/readme/common/images/img_install-04-min.jpg" width="270" height="153" alt="エラー画面"></a>
 		<p>[画像2-4]:インストーラーのエラー画面(クリックで拡大します)</p>
 	</div>	
 
@@ -204,16 +190,42 @@
 	<h2 class="h2style">お問い合わせ／フィードバック</h2>
 	<p>何かお気づきの点などありましたら下記の連絡先までお願いいたします。</p>
 	<dl>
-		<dt><a href="http://lists.sourceforge.jp/mailman/listinfo/setucocms-public">SetucoCMS-public ML</a></dt>
-		<dd>setucocms-public@lists.sourceforge.jp</dd>
+		<dt>E-mail</dt>
+		<dd>setucocms@gmail.com</dd>
+		<dt>Twitter公式アカウント</dt>
+		<dd><a href="https://twitter.com/setucocms" target="_blank">@SetucoCMS</a></dd>
 	</dl>
 </div>
 
 <div class="block">
 	<h2 class="h2style">ライセンス</h2>
 	<p>ライセンス情報は下記のファイルをご覧ください。<br>
-			<a href="../docs/COPYING.txt">/docs/COPYING.txt</a></p>
+			<a href="docs/COPYING.txt">/docs/COPYING.txt</a></p>
 </div>
+
+<div class="block">
+	<h2 class="h2style">リリース情報</h2>
+	<dl>
+		<dt>SetucoCMS バージョン 1.0.0</dt>
+		<dd>2011/03/04 リリース</dd>
+		<dt>SetucoCMS バージョン 1.1.0</dt>
+		<dd>2011/12/30 リリース</dd>
+		<dt>SetucoCMS バージョン 1.2.0</dt>
+		<dd>2012/02/26 リリース</dd>
+		<dt>SetucoCMS バージョン 1.3.0</dt>
+		<dd>2012/03/17 リリース</dd>
+		<dt>SetucoCMS バージョン 1.4.0</dt>
+		<dd>2012/06/17 リリース</dd>
+		<dt>SetucoCMS バージョン 1.5.0</dt>
+		<dd>2012/09/08 リリース</dd>
+		<dt>SetucoCMS バージョン 1.5.1</dt>
+		<dd>2012/12/01 リリース</dd>
+	</dl>
+	<p>
+		詳細な変更履歴は下記のファイルをご覧ください。<br>
+		<a href="CHANGELOG.txt" target="_blank">CHANGELOG_ja.txt</a></p>
+</div>
+
 
 <div id="footer" class="clearfix">
 	<address>Copyright © 2012 SetucoCMS Project AllRight reserved.</address>

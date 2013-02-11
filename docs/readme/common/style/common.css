@@ -3,7 +3,7 @@
 all style
 -----------------------------------*/
 body{
-	background:url(../iamges/bg_back.png) repeat 0 0;
+	background:url(../images/bg_back.png) repeat 0 0;
 }
 
 a{
@@ -44,7 +44,7 @@ dd{
 }
 
 h1{
-	background:url(../iamges/bg_h1.png) 0 0 no-repeat;
+	background:url(../images/bg_h1.png) 0 0 no-repeat;
 	width:870px;
 	height:55px;
 	text-indent:-9999px;
@@ -52,7 +52,7 @@ h1{
 }
 
 .h2style{
-	background:url(../iamges/bg_h2.png) 0 35px no-repeat;
+	background:url(../images/bg_h2.png) 0 35px no-repeat;
 	width:840px;
 	margin:0 0 5px 0;
 	padding:0 0 10px 10px;
@@ -61,7 +61,7 @@ h1{
 }
 
 .h3style{
-	background:url(../iamges/bg_h3.png) 0 0 no-repeat;
+	background:url(../images/bg_h3.png) 0 0 no-repeat;
 	height:33px;
 	line-height:33px;
 	font-size:20px;
@@ -71,7 +71,7 @@ h1{
 }
 
 .h4style{
-	background:url(../iamges/bg_h4.png) 0 9px no-repeat;
+	background:url(../images/bg_h4.png) 0 9px no-repeat;
 	margin:10px 0 5px 0;
 	padding:0 0 0 20px;
 	font-size:18px;
