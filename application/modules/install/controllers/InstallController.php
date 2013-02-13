@@ -1,5 +1,4 @@
 <?php
-
 /**
  * インストーラのコントローラ
  *
@@ -26,15 +25,16 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since      File available since Release 0.1.0
- * @author     Takayuki Otake suzuki-mar
- * @todo       フォーム処理をZenfFormに置き換える
+ * @since      File available since Release 1.2.0
+ * @author     suzuki-mar, Takayuki Otake 
  */
 
 /**
- * Description of InstallController
+ * インストールをするコントローラ
  *
- * @author Takayuki Otake
+ * @package    Install
+ * @subpackage Controller
+ * @author suzuki-mar, Takayuki Otake
  */
 class Install_InstallController
     extends Setuco_Controller_Action_InstallAbstract
@@ -42,6 +42,7 @@ class Install_InstallController
 
     /**
      * アクションの共通設定
+     * 
      * @author Takayuki Otake
      */
     function init()
@@ -49,12 +50,12 @@ class Install_InstallController
         parent::init();
         $this->_session = new Zend_Session_Namespace('Setuco_Install_Service');
         $this->_initializeFormValidator = $this->_createInitializeFormValidator();
-    }
+    }   
 
     /**
      * 入力フォームを表示するアクション
      *
-     * @author Takayuki Otake
+     * @author Takayuki Otake, suzuki-mar
      * @return void
      */
     public function indexAction()

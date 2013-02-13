@@ -26,7 +26,7 @@
  * @license    http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @copyright  Copyright (c) 2010 SetucoCMS Project.(http://sourceforge.jp/projects/setucocms)
  * @link
- * @since      File available since Release 0.1.3
+ * @since      File available since Release 1.6.1
  * @author     Takayuki Otake
  */
 
