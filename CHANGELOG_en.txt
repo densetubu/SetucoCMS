@@ -81,4 +81,10 @@ Version 1.5.3 (2013/02/03)
 - Initial Setup
      - Send the installation screen does not operate normally, fixed a bug that I can not go back from the confirmation screen
 
+--------------------------------------------
+Version 1.5.4 (2013/02/23)
+--------------------------------------------
+- Page management function
+     - Fixed bug, saved draft when save on public
+
 
