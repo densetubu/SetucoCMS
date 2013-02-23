@@ -191,7 +191,7 @@ div.entry {
     padding: 1.2em;
 }
 div.entry p.backTop {
-    margin-top: 15px;
+    margin-top: 30px;
     text-align: right;
 }
 div.entry table td {
@@ -318,6 +318,31 @@ div.entryBody div.entryPhoto p a img{
 }
 div.entryBody div.entryPhoto p a:hover img{
     border: solid 1px #33cc33;
+}
+
+/*---------------------------------------------------------------*/
+/*-- ENTRY SocislButton style -----------------------------------*/
+/*---------------------------------------------------------------*/
+div.entry div.socialButton {
+    margin-top: 30px;
+}
+div.socialButton ul {
+    zoom: 100%;
+}
+div.socialButton ul:after {
+    content: ".";
+    display: block;
+    visibility: hidden;
+    height: 0.1px;
+    font-size: 0.1em;
+    line-height: 0;
+    clear: left;
+}
+div.socialButton ul li{
+    float: left;
+}
+div.socialButton ul li.line{
+    margin-left: 25px;
 }
 
 /*---------------------------------------------------------------*/
