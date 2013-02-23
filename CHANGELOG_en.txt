@@ -57,34 +57,9 @@ Version 1.5.0 (2012/09/08)
 - Customization features
     - I will be able to manage the free space from the screen edit page.
 
---------------------------------------------
-Version 1.5.1 (2012/12/01)
---------------------------------------------
-- Fixed bug on installation
-    - Fixed bug in SQL syntax error
-    - Print error message when failed to database connection.
 
 --------------------------------------------
-Version 1.5.2 (2012/12/22)
+Version 1.6.0 (2013/02/23)
 --------------------------------------------
-- Page management function
-    - Fixed a problem where the input form of the posting date of the article editor is not displayed correctly
-- Other
-    - Correction data to be created and run multiple times in SQL extra for installation
-    - Adding a function to prevent to prevent multiple form submission
-
---------------------------------------------
-Version 1.5.3 (2013/02/03)
---------------------------------------------
-- Page management function
-     - Refactoring(improvement of source code that does not affect the behavior) editor
-- Initial Setup
-     - Send the installation screen does not operate normally, fixed a bug that I can not go back from the confirmation screen
-
---------------------------------------------
-Version 1.5.4 (2013/02/23)
---------------------------------------------
-- Page management function
-     - Fixed bug, saved draft when save on public
-
-
+- Inspection side 
+    - I have set up a social buttons on each page. Corresponding Twitter, Hatena Bookmark, Facebook, Google+, to Line.
