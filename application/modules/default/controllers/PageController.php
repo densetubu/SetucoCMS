@@ -124,7 +124,7 @@ class PageController extends Setuco_Controller_Action_DefaultAbstract
         $keyword = Zend_Filter::filterStatic($keyword, 'FullWidthStringTrim', array (), 'Setuco_Filter');
         $currentPage = $this->_getPageNumber();
 
-        $searchParamIns = new Common_Model_Page_Param($keyword, $currentPage, self::LIMIT_PAGE_SEARCH, null,
+        $searchParamIns = new Common_Model_Page_Param($keyword, array(), $currentPage, self::LIMIT_PAGE_SEARCH, null,
                     array('status' => Setuco_Data_Constant_Page::STATUS_RELEASE));
 
         $searchResultCount = $this->_pageService->countPagesByKeyword($searchParamIns);
