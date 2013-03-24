@@ -63,3 +63,10 @@ Version 1.6.0 (2013/02/23)
 --------------------------------------------
 - Inspection side 
     - I have set up a social buttons on each page. Corresponding Twitter, Hatena Bookmark, Facebook, Google+, to Line.
+
+--------------------------------------------
+Version 1.6.1 (2013/03/24)
+--------------------------------------------
+- Inspection side 
+    - FIxed the bug cannot use keyword search.
+
