@@ -336,8 +336,6 @@ class Install_InstallController
 
         $dbPassElement = new Zend_Form_Element_Text('db_pass', array(
                     'id' => 'db_pass',
-                    'required' => 'true',
-                    'validators' => $this->_makeDbPassValidators(),
                     'filters' => array('StringTrim')
                     ));
         $form->addElement($dbPassElement);
@@ -497,21 +495,6 @@ class Install_InstallController
         $userValidators[] = array($notEmpty);
 
         return $userValidators;
-    }
-
-    /**
-     * データベース接続パスワードのバリデータ
-     *
-     * @author Takayuki Otake
-     * @return Zend_Form
-     */
-    private function _makeDbPassValidators()
-    {
-        $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('');
-        $passValidators[] = array($notEmpty);
-
-        return $passValidators;
     }
 
     /**
