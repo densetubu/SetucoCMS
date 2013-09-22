@@ -168,12 +168,12 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
             return false;
         }
 
-        //複数選択の[]の部分がURLエンコードしている
-        $queryString = urldecode($_SERVER['QUERY_STRING']);
-
-        if ($queryString == null) {
+        if (!isset($_SERVER['QUERY_STRING']) || is_null($_SERVER['QUERY_STRING'])) {
             return false;
         }
+
+        //複数選択の[]の部分がURLエンコードしている
+        $queryString = urldecode($_SERVER['QUERY_STRING']);
 
         $controller = $this->_getParam('controller');
         $action     = $this->_getParam('action');
