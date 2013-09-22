@@ -491,7 +491,7 @@ class Install_InstallController
     private function _makeDbUserValidators()
     {
         $notEmpty = new Zend_Validate_NotEmpty();
-        $notEmpty->setMessage('');
+        $notEmpty->setMessage('データベースの接続ユーザーを入力してください。');
         $userValidators[] = array($notEmpty);
 
         return $userValidators;
