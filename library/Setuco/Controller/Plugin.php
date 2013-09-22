@@ -44,7 +44,7 @@ class Setuco_Controller_Plugin extends Zend_Controller_Plugin_Abstract
      * @return void
      * @author Yuu Yamanaka, charlesvineyard
      */
-    public function dispatchLoopStartup()
+    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
     {
         if ($this->getRequest()->getModuleName() == 'admin') {
             if ($this->_isLoginControllerRequested()) {
