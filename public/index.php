@@ -10,7 +10,7 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 //Define SetucoCMS version
-defined('APPLICATION_VERSION') || define('APPLICATION_VERSION', '0.1.0');    
+defined('APPLICATION_VERSION') || define('APPLICATION_VERSION', '1.6.1');    
 
 
 // Define path to root directory
