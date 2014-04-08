@@ -169,7 +169,7 @@ abstract class Setuco_Controller_Action_Abstract extends Zend_Controller_Action
         }
 
         //複数選択の[]の部分がURLエンコードしている
-        $queryString = urldecode($_SERVER['QUERY_STRING']);
+        $queryString = isset($_SERVER['QUERY_STRING']) ? urldecode($_SERVER['QUERY_STRING']) : null;
 
         if ($queryString == null) {
             return false;
